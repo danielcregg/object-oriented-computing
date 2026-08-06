@@ -1,0 +1,25 @@
+<p>Here is a demonstration of a Mermaid diagram:</p>
+
+<div class="mermaid">
+    graph TD;
+    A[Start] --&gt; B{Is it?} -- Yes --&gt; C[OK];
+    C --&gt; D[End];
+    B -- No --&gt; E[Really?];
+    E --&gt; D;
+</div>
+
+<p>The diagram above should be rendered by the browser using the Mermaid.js library loaded from a CDN.</p>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
+
+<script>
+    // Basic initialization - tells Mermaid to find elements with class="mermaid" and render them
+    mermaid.initialize({
+        startOnLoad: true
+    });
+
+    // Optional: Re-run rendering if needed, though startOnLoad usually suffices
+    // window.addEventListener('load', function() {
+    //  mermaid.run();
+    // });
+</script>

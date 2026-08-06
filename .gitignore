@@ -1,0 +1,13 @@
+# Office/OneDrive temp files
+~$*
+*.tmp
+desktop.ini
+Thumbs.db
+
+# Local build output
+build/
+node_modules/
+__pycache__/
+
+# SDD scratch workspace (plan execution artifacts, never repo content)
+.superpowers/

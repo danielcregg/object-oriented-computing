@@ -15,11 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate question bank splits + safety audit
+      - name: Safety audit
         run: |
           set -euo pipefail
-          python3 scripts/split_question_bank.py
-          git diff --exit-code -- 'weeks/*/questions.xml'
           python3 scripts/safety_audit.py
 
       - name: Set up Node

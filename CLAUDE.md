@@ -13,11 +13,8 @@ are read-only archives.
   starter repo, and a synced snapshot of the starter repo's README (the
   canonical lab instructions). Edits made here must be pushed to the starter
   repo too. Weeks without labs say so explicitly.
-- `weeks/week-05-mcq1|week-09-mcq2|week-13-mcq3/` — assessment weeks. Each
-  holds `questions.xml` (Moodle XML for that MCQ, split from the full export).
-- `module/question-bank/` — the full 2025–26 Moodle question-bank export
-  (canonical; includes shared/sample banks). Regenerate the per-week splits
-  with `python scripts/split_question_bank.py`.
+- `weeks/week-05-mcq1|week-09-mcq2|week-13-mcq3/` — assessment weeks.
+  MCQ question content lives in Moodle only — never commit it here.
 - `module/` — syllabus, future-improvements, Moodle course-page HTML assets,
   `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint),
   and `schedule-table/` (builder template for the Moodle schedule table).

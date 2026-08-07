@@ -49,7 +49,6 @@ flow has no lecture week of its own; schedule it per delivery.
 - [Future improvements](module/future-improvements.md)
 - [Moodle course-page assets](module/moodle-assets/README.md)
 - [Schedule-table builder template](module/schedule-table/README.md)
-- [Question bank (full 2025–26 export)](module/question-bank/README.md)
 
 ## Related repos
 

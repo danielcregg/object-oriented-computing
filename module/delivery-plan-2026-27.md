@@ -38,8 +38,7 @@ require three moves to align with this structure:
 - Inheritance: move from MCQ3 to MCQ2
 - Retire or review Structure + Introduction questions currently in MCQ1 that test dropped material
 
-After re-exporting the full Moodle bank and updating `module/question-bank/full-export-2026-27.xml`,
-re-split the questions with `python scripts/split_question_bank.py`. When the export filename changes for the new year, also update `SRC` in `scripts/split_question_bank.py` (or pass `--src`) and the filename references in `module/question-bank/README.md`.
+After re-mapping the categories in Moodle, re-export the bank to the private question-bank folder kept outside this repo (question content is never committed here).
 
 - **MCQ 1** (week 5): Introduction, Classes and Objects, Methods, Arrays
 - **MCQ 2** (week 9): Strings, Encapsulation, Inheritance

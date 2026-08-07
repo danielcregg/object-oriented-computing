@@ -16,7 +16,10 @@ source: "java_strings.pptx"
 
 # Java Strings
 
-![](img/slide01-1.png)
+<!-- no-compile -->
+```java
+"Hello, World!"
+```
 
 ---
 
@@ -40,7 +43,12 @@ source: "java_strings.pptx"
 - Most commonly used class in Java programming
 - Since Java 9, every character in a string is stored in an 8-bit byte array with an additional coder field to indicate the encoding.
 
-![](img/slide03-1.png)
+```java
+String str1 = "Hello";
+String str2 = new String("Hello");
+char[] charArray = {'J', 'a', 'v', 'a'};
+String str3 = new String(charArray);
+```
 
 ---
 
@@ -57,7 +65,21 @@ source: "java_strings.pptx"
 - From StringBuilder:
   - String s5 = sb.toString();
 
-![](img/slide04-1.png)
+---
+
+## Creating Strings (continued)
+
+```java
+// String literal (uses String pool)
+String s1 = "Hello";
+
+// Using new keyword
+String s2 = new String("World");
+
+// From char array
+char[] chars = {'J','a','v','a'};
+String s3 = new String(chars);
+```
 
 ---
 
@@ -73,13 +95,20 @@ source: "java_strings.pptx"
 
 ## String Immutability – Coding Example
 
-- Output:
-- Hello
-- HELLO
-- Hello
-- HELLO
+- Output, in order: `Hello`, `HELLO`, `Hello`, `HELLO`
 
-![](img/slide06-1.png)
+```java
+String str = "Hello";
+System.out.println(str);      // Prints "Hello"
+
+System.out.println(str.toUpperCase()); // Returns new String and prints it
+
+System.out.println(str);      // Still prints "Hello"
+
+str = str.toUpperCase();     // Must reassign!
+System.out.println(str);      // Now prints "HELLO"
+// Original String will be garbage collected because it has no references.
+```
 
 ---
 
@@ -103,11 +132,15 @@ source: "java_strings.pptx"
 - s1 == s2 returns true (same reference)
 - String s3 = new String("Java"); // Creates new object in heap
 
+---
+
+## String Pool & Memory (continued)
+
 ![](img/slide08-1.png)
 
 ---
 
-## Why is String Immutability bad?
+## Why is String Immutability bad?
 
 - String concatenation in loops creates many temporary objects
 - Each + operation creates a new String object
@@ -115,29 +148,79 @@ source: "java_strings.pptx"
 - Example: Building a String in a loop of 1000 iterations
 - Creates 1000 temporary String objects!
 
-![](img/slide09-1.png)
+---
+
+## Why is String Immutability bad? (continued)
+
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+</style>
+
+**The Problem: String Immutability**
+
+```java
+String result = "";
+for (int i = 0; i < 1000; i++) {
+    result += "a";  // Creates 1000 NEW String objects!
+}
+// Time: ~1000ms
+// Memory: 1000 temporary objects created and discarded
+```
+
+**The Solution: StringBuilder's Mutability**
+
+```java
+StringBuilder result = new StringBuilder();
+for (int i = 0; i < 1000; i++) {
+    result.append("a");  // Modifies SAME object 1000 times
+}
+// Time: ~1ms
+// Memory: 1 object reused
+```
 
 ---
 
+<!-- _class: centered-table -->
+
 ## String vs StringBuffer vs StringBuilder
 
-- String - Java 1.0 (1996) - Immutable
-- StringBuffer - Java 1.0 (1996) - Mutable, thread-safe
-- StringBuilder - Java 5 (2004) - Mutable, NOT thread-safe
-- Both String and StringBuffer were in the original Java release. They were designed together from the start:
-- String for immutable text
-- StringBuffer for mutable text operations (like concatenation in loops)
+| Class | Introduced | Mutability |
+|---|---|---|
+| `String` | Java 1.0 (1996) | Immutable |
+| `StringBuffer` | Java 1.0 (1996) | Mutable, thread-safe |
+| `StringBuilder` | Java 5 (2004) | Mutable, NOT thread-safe |
+
+---
+
+## String vs StringBuffer vs StringBuilder (continued)
+
+- Both String and StringBuffer were in the original Java release. They were designed together from the start:
+- String for immutable text
+- StringBuffer for mutable text operations (like concatenation in loops)
 - The reason StringBuffer was synchronized from the beginning was that early Java emphasized thread-safety as a core feature - this was the 90s when multi-threading was becoming important, and Java wanted to be "safe by default."
 
 ---
 
+<!-- _class: dense -->
+
 ## String vs StringBuffer vs StringBuilder
 
-- StringBuilder came 8 years later when the Java team realized that most StringBuffer usage was in single-threaded contexts, and the synchronization overhead was unnecessary performance cost.
-- So Java added StringBuilder as a drop-in replacement for StringBuffer with identical API but without the synchronization overhead.
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+</style>
+
+- StringBuilder came 8 years later when the Java team realized that most StringBuffer usage was in single-threaded contexts, and the synchronization overhead was unnecessary performance cost.
+- So Java added StringBuilder as a drop-in replacement for StringBuffer with identical API but without the synchronization overhead.
 - In practice: You'll almost always use StringBuilder. StringBuffer is now quite rare since most code doesn't need that level of thread-safety, and if it does, there are often better concurrent solutions available.
 
-![](img/slide11-1.png)
+```java
+// Use StringBuilder (most common case)
+StringBuilder sb = new StringBuilder();
+sb.append("Hello").append(" World");
+
+// Only use StringBuffer if multiple threads access it
+StringBuffer safeSb = new StringBuffer();  // Rarely needed
+```
 
 ---
 
@@ -148,6 +231,14 @@ source: "java_strings.pptx"
 - Much more efficient for string manipulation
 - Not thread-safe (use StringBuffer for thread safety)
 - Introduced in Java 5 as faster alternative to StringBuffer
+
+---
+
+## StringBuilder: Mutable Strings (continued)
+
+<style scoped>
+section img { max-height: 500px; }
+</style>
 
 ![](img/slide12-1.png)
 
@@ -171,9 +262,69 @@ source: "java_strings.pptx"
 - reverse(): Reverse the character sequence
 - toString(): Convert to String object
 
-![](img/slide14-1.png)
+---
+
+## Key StringBuilder Methods — in Action
+
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+section pre code { font-size: 17px; line-height: 1.3; }
+</style>
+
+```java
+StringBuilder methods = new StringBuilder("Hello World");
+
+// append()
+methods.append(" - Welcome");
+System.out.println("append: " + methods);
+
+// insert()
+methods.insert(5, " Java");
+System.out.println("insert: " + methods);
+
+// delete()
+methods.delete(5, 10);
+System.out.println("delete: " + methods);
+
+// deleteCharAt()
+methods.deleteCharAt(5);
+System.out.println("deleteCharAt: " + methods);
+
+// replace()
+methods.replace(0, 5, "Greetings");
+System.out.println("replace: " + methods);
+```
 
 ---
+
+## Key StringBuilder Methods — in Action (continued)
+
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+section pre code { font-size: 17px; line-height: 1.3; }
+</style>
+
+```java
+// reverse()
+StringBuilder toReverse = new StringBuilder("Java");
+toReverse.reverse();
+System.out.println("reverse: " + toReverse);
+
+// setCharAt()
+StringBuilder modify = new StringBuilder("Hello");
+modify.setCharAt(0, 'h');
+System.out.println("setCharAt: " + modify);
+
+// substring() - returns String, doesn't modify
+StringBuilder sub = new StringBuilder("Hello World");
+String extracted = sub.substring(0, 5);
+System.out.println("substring (returns String): " + extracted);
+System.out.println("Original StringBuilder unchanged: " + sub);
+```
+
+---
+
+<!-- _class: dense -->
 
 ## StringBuffer: Thread-Safe Alternative
 
@@ -184,15 +335,28 @@ source: "java_strings.pptx"
 - For single-threaded code, always use StringBuilder
 - API identical to StringBuilder (append, insert, delete, etc.)
 
-![](img/slide15-1.png)
+```java
+// StringBuffer - thread-safe (synchronized)
+StringBuffer buffer = new StringBuffer();
+// Safe for multiple threads to append simultaneously
+
+// StringBuilder - NOT thread-safe
+StringBuilder builder = new StringBuilder();
+// Only use in single-threaded code
+```
 
 ---
 
+<!-- _class: centered-table -->
+
 ## String vs StringBuilder
 
-- String: Immutable, thread-safe, stored in String pool
-- StringBuilder: Mutable, not thread-safe, faster for modifications
-- StringBuffer: Mutable, thread-safe (synchronized), slower
+| Class | Mutable? | Thread-safe? | Notes |
+|---|---|---|---|
+| `String` | No | Yes | Stored in the String pool |
+| `StringBuilder` | Yes | No | Faster for modifications |
+| `StringBuffer` | Yes | Yes (synchronized) | Slower |
+
 - Use String for read-only text
 - Use StringBuilder for frequent modifications
 
@@ -200,18 +364,22 @@ source: "java_strings.pptx"
 
 ## Which to Use?
 
+<style scoped>
+section img { max-height: 500px; }
+</style>
+
 ![](img/slide17-1.png)
 
 ---
 
+<!-- _class: centered-table -->
+
 ## Performance Comparison
 
-- Concatenating 10,000 strings in a loop:
-  - String concatenation: ~1000ms (very slow)
-  - StringBuilder: ~1ms (1000x faster!)
-- Memory usage:
-  - String: Creates thousands of temporary objects
-  - StringBuilder: Reuses same object with dynamic array
+| Metric | String | StringBuilder |
+|---|---|---|
+| Concatenating 10,000 strings in a loop | ~1000ms (very slow) | ~1ms (1000x faster!) |
+| Memory usage | Creates thousands of temporary objects | Reuses same object with dynamic array |
 
 ---
 
@@ -233,5 +401,11 @@ source: "java_strings.pptx"
 - Not converting StringBuilder to String when needed
 - Using StringBuffer when StringBuilder would suffice
 
-![](img/slide20-1.png)
+```java
+String s1 = new String("Hi");
+String s2 = new String("Hi");
+if (s1 == s2) { }        // false!
+
+if (s1.equals(s2)) { }   // true
+```
 

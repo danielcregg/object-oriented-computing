@@ -241,10 +241,6 @@ public void method2() {
 }
 ```
 
-<!-- Speaker notes:
-@Override - Indicates that a method declaration is intended to override a method declaration in a supertype.
--->
-
 ---
 
 ## Implementing an Interface

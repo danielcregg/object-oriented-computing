@@ -310,12 +310,6 @@ Background · running code · JVM, JDK · IDEs · common errors
 
 ![C compilation pipeline](img/slide22-1.png) ![Java compile: .java to .class](img/slide22-2.png) ![Computer](img/slide22-3.png) ![JVM](img/slide22-4.jpg)
 
-<!-- Speaker notes:
-Non java = compiled program
-Java is compiled then interpreted
-The whole source code is compiled in one go and is processed all at once by the computer.
--->
-
 ---
 
 <!-- _class: grid2 -->

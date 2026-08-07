@@ -119,11 +119,6 @@ class Car { // Class name
 
 ![Image result for object class](img/slide10-1.jpg)
 
-<!-- Speaker notes:
-Things an object knows are its instance variables (state).
-Things an object does are its methods (behaviour).
--->
-
 ---
 
 ## Creating/Instantiating/Constructing an object

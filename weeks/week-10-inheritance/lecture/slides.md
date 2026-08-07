@@ -172,10 +172,6 @@ class Superclass {
 
 ![Multiple Inheritance](img/slide16-1.jpg)
 
-<!-- Speaker notes:
-https://docs.oracle.com/javase/tutorial/java/IandI/multipleinheritance.html
--->
-
 ---
 
 ## A Vehicle Class Hierarchy
@@ -208,10 +204,6 @@ https://docs.oracle.com/javase/tutorial/java/IandI/multipleinheritance.html
 > 🎬 This slide has an embedded video in the original deck (see `original/`).
 
 ![Online Media 3](img/slide20-1.png)
-
-<!-- Speaker notes:
-https://www.youtube.com/watch?v=oZcLmje8-fg&t=57s
--->
 
 ---
 

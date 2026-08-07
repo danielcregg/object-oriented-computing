@@ -152,12 +152,6 @@ source: "Polymorphism.pptx"
 
 ![](img/slide15-2.png)
 
-<!-- Speaker notes:
-Output: 
-30
-60
--->
-
 ---
 
 ## Runtime Polymorphism

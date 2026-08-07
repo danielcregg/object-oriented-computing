@@ -79,10 +79,6 @@ source: "Encalsulation.pptx"
 
 ![](img/slide07-1.png)
 
-<!-- Speaker notes:
-https://www.javatpoint.com/access-modifiers
--->
-
 ---
 
 ## Hot to Implement Encapsulation

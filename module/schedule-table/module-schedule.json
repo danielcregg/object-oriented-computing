@@ -1,0 +1,182 @@
+{
+  "scheduleType": "sem1",
+  "startDate": "2026-09-15",
+  "weeks": [
+    {
+      "week": "1",
+      "topic": "Topic 1",
+      "lectureUrl": "https://example.com/lecture-1",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-1",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "2",
+      "topic": "Topic 2",
+      "lectureUrl": "https://example.com/lecture-2",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-2",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "3",
+      "topic": "Topic 3",
+      "lectureUrl": "https://example.com/lecture-3",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-3",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "4",
+      "topic": "Topic 4",
+      "lectureUrl": "https://example.com/lecture-4",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-4",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "5",
+      "topic": "Topic 5",
+      "lectureUrl": "https://example.com/lecture-5",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-5",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "6",
+      "topic": "Topic 6",
+      "lectureUrl": "https://example.com/lecture-6",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-6",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "X",
+      "topic": "",
+      "lectureUrl": "",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "",
+      "notes": "Reading week"
+    },
+    {
+      "week": "7",
+      "topic": "Topic 7",
+      "lectureUrl": "https://example.com/lecture-7",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-7",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "8",
+      "topic": "Topic 8",
+      "lectureUrl": "https://example.com/lecture-8",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-8",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "9",
+      "topic": "Topic 9",
+      "lectureUrl": "https://example.com/lecture-9",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-9",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "10",
+      "topic": "Topic 10",
+      "lectureUrl": "https://example.com/lecture-10",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-10",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "11",
+      "topic": "Topic 11",
+      "lectureUrl": "https://example.com/lecture-11",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-11",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "12",
+      "topic": "Topic 12",
+      "lectureUrl": "https://example.com/lecture-12",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-12",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "13",
+      "topic": "Topic 13",
+      "lectureUrl": "https://example.com/lecture-13",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://example.com/lab-13",
+      "assessment": "",
+      "notes": ""
+    }
+  ],
+  "theme": "slate",
+  "zebra": true,
+  "columnLabels": {},
+  "columnWidths": {},
+  "columnSettings": {
+    "lecture": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "video": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "ai": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "lab": {
+      "mode": "icon",
+      "iconChoice": 1,
+      "customSrc": ""
+    }
+  },
+  "columnOrder": [
+    "week",
+    "dates",
+    "topic",
+    "lecture",
+    "lab",
+    "assessment",
+    "notes"
+  ],
+  "customColumns": []
+}

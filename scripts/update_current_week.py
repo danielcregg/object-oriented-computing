@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """Update README's current-teaching-week banner.
 
-Reads the semester layout from module/schedule-table/module-schedule.json
-(startDate + ordered weeks array, where week "X" is reading week) and
-rewrites the README banner between the markers:
+The semester calendar is DERIVED, not configured — no schedule file needed:
+
+  - Reading week is always the week of the Irish October bank holiday
+    (the last Monday of October).
+  - There are exactly 6 teaching weeks before it (weeks 1-6) and 6 after
+    (weeks 7-12), so week 1 begins 6 weeks before bank-holiday Monday.
+  - Week topics come from the weeks/ folder names and each deck's
+    frontmatter title, so renaming/renumbering a week updates the banner
+    automatically.
+
+Rewrites the README between the markers:
 
     <!-- current-week:start --> ... <!-- current-week:end -->
 
-Week 1 is the calendar week containing startDate (weeks run Mon-Sun,
-Europe/Dublin). Rows advance one calendar week each, including the
-unnumbered reading-week row.
+Weeks run Mon-Sun, Europe/Dublin.
 
 Usage:
     python scripts/update_current_week.py [--date YYYY-MM-DD]
@@ -19,45 +25,79 @@ whether the README changed (git diff).
 """
 import argparse
 import datetime
-import json
 import re
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-SCHEDULE = Path("module/schedule-table/module-schedule.json")
 README = Path("README.md")
+WEEKS = Path("weeks")
 MARKER_RE = re.compile(
     r"<!-- current-week:start -->.*?<!-- current-week:end -->", re.DOTALL)
+TITLE_RE = re.compile(r'^title:\s*"?([^"\n]+?)"?\s*$', re.MULTILINE)
+
+TEACHING_WEEKS = 12
+BEFORE_BREAK = 6  # teaching weeks before reading week (and after it)
 
 
 def monday_of(day: datetime.date) -> datetime.date:
     return day - datetime.timedelta(days=day.weekday())
 
 
+def bank_holiday_monday(year: int) -> datetime.date:
+    """The Irish October bank holiday: the last Monday of October."""
+    return monday_of(datetime.date(year, 10, 31))
+
+
+def week1_monday(year: int) -> datetime.date:
+    return bank_holiday_monday(year) - datetime.timedelta(weeks=BEFORE_BREAK)
+
+
+def topics_from_tree() -> dict[int, str]:
+    """Map week number -> topic label, derived from weeks/ folders."""
+    topics: dict[int, str] = {}
+    if not WEEKS.is_dir():
+        return topics
+    for folder in sorted(p for p in WEEKS.iterdir() if p.is_dir()):
+        m = re.match(r"week-(\d+)-(.+)$", folder.name)
+        if not m:
+            continue  # week-06b-reading-week etc. — position is computed, not read
+        number, slug = int(m.group(1)), m.group(2)
+        mcq = re.fullmatch(r"mcq(\d)", slug)
+        if mcq:
+            topics[number] = f"MCQ {mcq.group(1)}"
+            continue
+        deck = folder / "lecture" / "slides.md"
+        if deck.is_file():
+            t = TITLE_RE.search(deck.read_text(encoding="utf-8"))
+            if t:
+                topics[number] = t.group(1)
+                continue
+        topics[number] = slug.replace("-", " ").title()
+    return topics
+
+
 def banner_text(today: datetime.date) -> str:
-    data = json.loads(SCHEDULE.read_text(encoding="utf-8"))
-    start = datetime.date.fromisoformat(data["startDate"])
-    week_rows = data["weeks"]
-    first_monday = monday_of(start)
-    index = (monday_of(today) - first_monday).days // 7
+    reading = bank_holiday_monday(today.year)
+    start = week1_monday(today.year)
+    this_monday = monday_of(today)
+    index = (this_monday - start).days // 7  # 0-12; reading week is index 6
 
     if index < 0:
-        opens = f"{start:%d %b %Y}"
         return (f"> 🗓️ **Semester has not started yet** — teaching begins the "
-                f"week of {opens}.")
-    if index >= len(week_rows):
-        return "> 🗓️ **Semester finished** — no teaching this week."
-
-    row = week_rows[index]
-    week_no = row.get("week", "")
-    topic = (row.get("topic") or "").strip()
-    wc = first_monday + datetime.timedelta(weeks=index)
-    if str(week_no).upper() == "X":
+                f"week of {start:%d %b %Y}.")
+    if index > TEACHING_WEEKS:  # rows 0..12 cover the semester
+        nxt = week1_monday(today.year + 1)
+        return (f"> 🗓️ **Semester finished** — teaching returns the week of "
+                f"{nxt:%d %b %Y}.")
+    if this_monday == reading:
         return (f"> 🗓️ **Reading week** (no lectures or labs) — week beginning "
-                f"{wc:%d %b %Y}.")
-    label = f" — {topic}" if topic and not topic.startswith("Topic ") else ""
+                f"{reading:%d %b %Y}.")
+
+    week_no = index + 1 if this_monday < reading else index
+    topic = topics_from_tree().get(week_no, "")
+    label = f" — {topic}" if topic else ""
     return (f"> 🗓️ **Current teaching week: {week_no}{label}** "
-            f"(week beginning {wc:%d %b %Y}).")
+            f"(week beginning {this_monday:%d %b %Y}).")
 
 
 def main() -> None:

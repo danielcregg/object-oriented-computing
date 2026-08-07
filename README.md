@@ -13,7 +13,7 @@ are preserved untouched in each week's `lecture/original/`.
 ## Module schedule
 
 <!-- current-week:start -->
-> 🗓️ **Semester has not started yet** — teaching begins the week of 15 Sep 2026.
+> 🗓️ **Semester has not started yet** — teaching begins the week of 14 Sep 2026.
 <!-- current-week:end -->
 
 | Week | Topic | Lecture | Lab |

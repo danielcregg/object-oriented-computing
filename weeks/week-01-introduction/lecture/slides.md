@@ -11,14 +11,12 @@ source: "Module Introduction.pptx"
 
 # Object Oriented Computing
 
-- Object Oriented Computing
 - Module Introduction
 
 ---
 
 ## Welcome
 
-- Welcome
 - This module assumes that you have some prior fundamental programming experience.
 - This module focuses on the Object-Oriented paradigm of programming.
 
@@ -26,14 +24,12 @@ source: "Module Introduction.pptx"
 
 ## About Me
 
-- About Me
 - These details can be found on the top of the module Moodle page.
 
 ---
 
 ## Module Learning Outcomes
 
-- Module Learning Outcomes
 - On completion of this module the learner will/should be able to;
 - Explain the fundamentals of programming such as variables, operators, conditional and iterative statements etc.
 - Understand the fundamentals of Object Oriented Programming such as defining Classes, instantiating Objects and invoking methods etc.
@@ -44,7 +40,6 @@ source: "Module Introduction.pptx"
 
 ## Module Delivery
 
-- Module Delivery
 - Delivered in an incremental and iterative fashion
   - Ideas and concepts expanded and expounded week by week.
 - Practice makes perfect – Programming is best learned through constant practice (constructive failure) over an extended period of time.
@@ -58,7 +53,6 @@ source: "Module Introduction.pptx"
 
 ## Timetable
 
-- Timetable
 - 13 teaching weeks over 14 calendar weeks. We have a 1 week break for reading week.
 - Labs Start Week 2
 - See top of Moodle page for Timetable and Syllabus breakdown
@@ -67,7 +61,6 @@ source: "Module Introduction.pptx"
 
 ## Assessment Matrix
 
-- Assessment Matrix
 | Week No. | Assessment Type | Grade Portion |
 |---|---|---|
 | 5 | MCQ 1 | 30% |
@@ -83,7 +76,6 @@ Get Exam Papers ASAP
 
 ## Lab Coding Environment
 
-- Lab Coding Environment
 - We will use GitHub Codespaces as our coding environment.
 - GitHub Codespaces is VS Code running on a virtual machine which you connect to via a browser. It is a cloud based IDE.
 - If you are familiar with VSCode then you will notice no difference.
@@ -93,7 +85,6 @@ Get Exam Papers ASAP
 
 ## Assessments
 
-- Assessments
 - All assessments are completed in-person in a lab.
 - MCQ questions are taken from Lab and Lecture materials.
 - Use AI to generate sample MCQ questions for you. Google's NotebookLM is a great tool to do this.
@@ -103,15 +94,12 @@ Get Exam Papers ASAP
 
 ## Grading System
 
-- Grading System
-
 ![](img/slide10-1.png)
 
 ---
 
 ## What do I do if I fail?
 
-- What do I do if I fail?
 - Pass by compensation
 - Repeat Project over Summer. Submit end of August
 
@@ -119,7 +107,6 @@ Get Exam Papers ASAP
 
 ## Enrol in Module on Moodle
 
-- Enrol in Module on Moodle
 - https://vlegalwaymayo.atu.ie/
 - Search for course: 8963
   - Please note I teach two Object Oriented Computing Modules so be careful to select to the correct one!
@@ -130,15 +117,13 @@ Get Exam Papers ASAP
 
 ## Tasks for this week
 
-- Tasks for this week
-- Sign up for GitHub Student Developer Pack
+- Sign up for [GitHub Student Developer Pack](https://education.github.com/pack)
 - Research Github Codespaces
 
 ---
 
 ## Programming Experience
 
-- Programming Experience
 - What programming experience do you have?
 - What languages have you used?
 - Have you used an OO language?
@@ -150,13 +135,10 @@ Get Exam Papers ASAP
 
 ## Java Refresh
 
-- Java Refresh
-
 ---
 
 ## Agenda
 
-- Agenda
 - Java Background
 - Running code in Java
 - JVM, JRE, JDK
@@ -167,7 +149,6 @@ Get Exam Papers ASAP
 
 ## Why Java?
 
-- Why Java?
 - Java is object-oriented by design, encouraging students to model real-world concepts using classes and objects.
 - Its strong static typing helps catch errors early and promotes disciplined coding habits.
 - Java has clear, readable syntax that makes OO concepts like encapsulation, inheritance, and polymorphism easy to teach.
@@ -180,7 +161,6 @@ Get Exam Papers ASAP
 
 ## Java Background
 
-- Java Background
 - Java was originally designed by James Gosling at Sun Microsystems in 1991.
 - It was initially named "Oak", inspired by an oak tree outside Gosling’s office.
 - The name was later changed to Java, after Java coffee.
@@ -193,14 +173,12 @@ Get Exam Papers ASAP
 
 ## Java Version History
 
-- Java Version History
-- Java version history - Wikipedia
+- [Java version history - Wikipedia](https://en.wikipedia.org/wiki/Java_version_history)
 
 ---
 
 ## Java Key Words
 
-- Java Key Words
 - A Computer Program is a sequence of human readable instructions that are converted by software into machine executable instructions.
 - List of 50 Java key words:
 
@@ -210,7 +188,6 @@ Get Exam Papers ASAP
 
 ## Compiler vs Interpreter
 
-- Compiler vs Interpreter
 - A compiler program that converts instructions into a machine-code or lower-level form so that they can be read and executed by a computer.
 - An interpreter is a computer program that directly executes, i.e. performs, instructions written in a programming or scripting language, without previously compiling them into a machine language program.
 - Java is both a compiled and an interpreted language. Java source code is first compiled into bytecode by the Java compiler. Then, the bytecode is executed by the Java Virtual Machine (JVM), which is a software-based interpreter.
@@ -219,15 +196,13 @@ Get Exam Papers ASAP
 
 ## non-Java program VS Java Program
 
-- non-Java program VS Java Program
+![C Compiling](img/slide22-1.png)
 
-![](img/slide22-1.png)
+![Image result for java compiler .java .class](img/slide22-2.png)
 
-![](img/slide22-2.png)
+![Computer with solid fill](img/slide22-3.png)
 
-![](img/slide22-3.png)
-
-![](img/slide22-4.jpg)
+![Jvm Letter Logo Design On White Stock Vector (Royalty Free) 2209443537 | Shutterstock](img/slide22-4.jpg)
 
 <!-- Speaker notes:
 Non java = compiled program
@@ -240,16 +215,15 @@ The whole source code is compiled in one go and is processed all at once by the 
 ## JIT
 
 - JIT
-- JIT
 - The JVM also has a Just-in-Time (JIT) compiler that can optimize the bytecode to native machine code at runtime
 
-![](img/slide23-1.png)
+![C Compiling](img/slide23-1.png)
 
-![](img/slide23-2.png)
+![Image result for java compiler .java .class](img/slide23-2.png)
 
-![](img/slide23-3.jpg)
+![Jvm Letter Logo Design On White Stock Vector (Royalty Free) 2209443537 | Shutterstock](img/slide23-3.jpg)
 
-![](img/slide23-4.png)
+![Computer with solid fill](img/slide23-4.png)
 
 <!-- Speaker notes:
 Non java = compiled program
@@ -261,7 +235,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Advantages of the JVM
 
-- Advantages of the JVM
 - Java is platform independent: Write Once Run Anywhere (WORA)
 - A computer platform is a system that consists of a hardware device and an operating system that an application, program or process runs upon. (e.g. PC with Intel Processor running Windows 10)
 - A Java program (myprogram.java) is written once and then compiled to bytecode (myprogram.class). The JVM program, which can be install on any platform, then runs this bytecode.
@@ -270,7 +243,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Java Development Kit (JDK)
 
-- Java Development Kit (JDK)
 - You need to install the Java JDK (Java Development Kit) to develop Java programs
   - Location after installed on Windows will be:
   - C:\Program Files\Java\jdk1.8.x
@@ -282,7 +254,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Your First Program
 
-- Your First Program
 - Traditional ‘Hello World’ program in Java
 - We will examine this program in the lab
   - Be careful of spelling
@@ -295,7 +266,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Text Editor Programming
 
-- Text Editor Programming
 - You can also use a simple text editor such as Notepad to write your source code.
 - Once saved as HelloPrinter.java, you can use a console window to:
   - Compile the program
@@ -310,7 +280,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Integrated Development Environment (IDE)
 
-- Integrated Development Environment (IDE)
 - An Integrated Development Environment used to  develop software.
   - A complete tool kit for development.
   - Contains a suite of productivity tools and options.
@@ -321,17 +290,15 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## VS Code IDE example
 
-- VS Code IDE example
 - Output
 - Editor
 
-![](img/slide29-1.png)
+![Why does my first Hello World Java program give an error on Visual Studio when using System.out to print to screen? - Stack Overflow](img/slide29-1.png)
 
 ---
 
 ## Syntax 1.1: The Java Program
 
-- Syntax 1.1: The Java Program
 - Every application has the same basic layout
   - Add your ‘code’ inside the main method
 
@@ -341,19 +308,21 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Common Error
 
-- Common Error
 - Omitting Semicolons
   - In Java, every statement must end in a semicolon. Forgetting to type a semicolon is a common error.  It confuses the compiler, because the compiler uses the semicolon to find where one statement ends and the next one starts.  For example, the compiler sees the below code:
-            - System.out.println("Hello")
-            - System.out.println("World!");
+```java
+System.out.println("Hello")
+System.out.println("World!");
+```
   - As this….
-- System.out.println("Hello") System.out.println("World!");
+```java
+System.out.println("Hello") System.out.println("World!");
+```
 
 ---
 
 ## Syntax Errors
 
-- Syntax Errors
 - What happens if you
   - Misspell a word:		 System.ou.println
   - Don’t Capitalise a word system.out.println
@@ -369,7 +338,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Summary: Java
 
-- Summary: Java
 - The Java compiler translates source code into class files that contain instructions for the Java virtual machine.
 - Java programs are distributed as instructions for a virtual machine, making them platform-independent.
 - An editor is a program for entering and modifying text, such as a Java program.
@@ -380,7 +348,5 @@ The whole source code is compiled in one go and is processed all at once by the 
 
 ## Side Note: Java and C# similarities
 
-- Side Note: Java and C# similarities
-
-![](img/slide34-1.jpg)
+![Hello World impl](img/slide34-1.jpg)
 

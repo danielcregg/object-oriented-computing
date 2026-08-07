@@ -18,7 +18,6 @@ source: "Java_Methods.pptx"
 
 ## Agenda
 
-- Agenda
 - What is a Method?
 - Method Syntax and Components
 - Parameters and Return Values
@@ -34,7 +33,6 @@ source: "Java_Methods.pptx"
 
 ## What is a Method?
 
-- What is a Method?
 - A method is a block of code that performs a specific task
 - Methods help us:
   - Organize code into reusable pieces
@@ -47,23 +45,29 @@ source: "Java_Methods.pptx"
 ## Slide 4
 
 - Method Syntax
-- accessModifier void methodName(parameters) {
-- // method body
-- // code to execute
-- }
-- public void run(double distanceMeters) {
-- // method body
-- distanceTraveled = distanceTraveled + distanceMeters
-- }
+```java
+accessModifier void methodName(parameters) {
+    // method body
+    // code to execute
+}
+```
+```java
+public void run(double distanceMeters) {
+    // method body
+    distanceTraveled = distanceTraveled + distanceMeters
+}
+```
 
 ---
 
 ## Slide 5
 
 - Example: Simple Method
-- public void greet() {
-- System.out.println("Hello, welcome to Java!");
-- }
+```java
+public void greet() {
+    System.out.println("Hello, welcome to Java!");
+}
+```
 - Breakdown:
 - • public - can be accessed from anywhere
 - • void - returns no value
@@ -75,12 +79,16 @@ source: "Java_Methods.pptx"
 ## Slide 6
 
 - Method with Parameters
-- public void greetUser(String name) {
-- System.out.println("Hello, " + name + "!");
-- }
+```java
+public void greetUser(String name) {
+    System.out.println("Hello, " + name + "!");
+}
+```
 - Calling the method:
-- greetUser("Alice");  // Output: Hello, Alice!
-- greetUser("Bob");    // Output: Hello, Bob!
+```java
+greetUser("Alice");  // Output: Hello, Alice!
+greetUser("Bob");    // Output: Hello, Bob!
+```
 - Parameters allow methods to accept input values
 
 ---
@@ -88,20 +96,23 @@ source: "Java_Methods.pptx"
 ## Slide 7
 
 - Method with Return Value
-- public int add(int a, int b) {
-- int sum = a + b;
-- return sum;
-- }
+```java
+public int add(int a, int b) {
+    int sum = a + b;
+    return sum;
+}
+```
 - Using the returned value:
-- int result = add(5, 3);
-- System.out.println(result);  // Output: 8
+```java
+int result = add(5, 3);
+System.out.println(result);  // Output: 8
+```
 - The return keyword sends a value back to the caller
 
 ---
 
 ## void vs Return Types
 
-- void vs Return Types
 - Choosing between void and a return type:
 - Use void when:
   - The method performs an action (printing, updating a variable)
@@ -117,20 +128,23 @@ source: "Java_Methods.pptx"
 ## Slide 9
 
 - Multiple Parameters
-- public double calculateArea(double length, double width) {
-- double area = length * width;
-- return area;
-- }
+```java
+public double calculateArea(double length, double width) {
+    double area = length * width;
+    return area;
+}
+```
 - Calling with multiple arguments:
-- double roomArea = calculateArea(5.5, 4.2);
-- System.out.println("Area: " + roomArea);
-- // Output: Area: 23.1
+```java
+double roomArea = calculateArea(5.5, 4.2);
+System.out.println("Area: " + roomArea);
+// Output: Area: 23.1
+```
 
 ---
 
 ## Method Scope and Visibility
 
-- Method Scope and Visibility
 - Access modifiers control who can call your methods:
 - public - accessible from anywhere
   - Most common for methods you want others to use
@@ -145,24 +159,25 @@ source: "Java_Methods.pptx"
 ## Slide 11
 
 - Method Visibility Example
-- public class BankAccount {
-- private double balance;
-- public void deposit(double amount) {
-- if (isValidAmount(amount)) {
-- balance = balance + amount;
-- }
-- }
-- private boolean isValidAmount(double amount) {
-- return amount > 0;  // Helper method
-- }
-- }
+```java
+public class BankAccount {
+    private double balance;
+    public void deposit(double amount) {
+        if (isValidAmount(amount)) {
+            balance = balance + amount;
+        }
+    }
+    private boolean isValidAmount(double amount) {
+        return amount > 0;  // Helper method
+    }
+}
+```
 - deposit() is public, isValidAmount() is private (internal helper)
 
 ---
 
 ## Static Methods
 
-- Static Methods
 - A static method belongs to the class itself, not to individual objects
 - Key characteristics:
   - Called using the class name, not an object
@@ -176,14 +191,18 @@ source: "Java_Methods.pptx"
 ## Slide 13
 
 - Static Method Example
-- public class MathHelper {
-- public static int square(int number) {
-- return number * number;
-- }
-- }
+```java
+public class MathHelper {
+    public static int square(int number) {
+        return number * number;
+    }
+}
+```
 - Calling a static method:
-- int result = MathHelper.square(5);
-- System.out.println(result);  // Output: 25
+```java
+int result = MathHelper.square(5);
+System.out.println(result);  // Output: 25
+```
 - We use ClassName.methodName() instead of creating an object
 
 ---
@@ -191,16 +210,18 @@ source: "Java_Methods.pptx"
 ## Slide 14
 
 - Static vs Non-Static
-- public class Counter {
-- static int staticCount = 0;      // Shared by all
-- int instanceCount = 0;           // Unique per object
-- public static void incrementStatic() {
-- staticCount++;
-- }
-- public void incrementInstance() {
-- instanceCount++;
-- }
-- }
+```java
+public class Counter {
+    static int staticCount = 0;      // Shared by all
+    int instanceCount = 0;           // Unique per object
+    public static void incrementStatic() {
+        staticCount++;
+    }
+    public void incrementInstance() {
+        instanceCount++;
+    }
+}
+```
 - • Static: belongs to class, shared across all instances
 - • Non-static: belongs to object, unique for each instance
 
@@ -208,7 +229,6 @@ source: "Java_Methods.pptx"
 
 ## Method Call Stack
 
-- Method Call Stack
 - When methods call other methods, Java tracks them in a call stack:
 - Stack behavior:
   - Methods are added to the top when called
@@ -224,24 +244,25 @@ source: "Java_Methods.pptx"
 ## Slide 16
 
 - Call Stack Example
-- public static void main(String[] args) {
-- methodA();  // Step 1: Call methodA
-- }
-- public static void methodA() {
-- System.out.println("In A");
-- methodB();  // Step 2: Call methodB
-- System.out.println("Back in A");
-- }
-- public static void methodB() {
-- System.out.println("In B");  // Step 3
-- }
+```java
+public static void main(String[] args) {
+    methodA();  // Step 1: Call methodA
+}
+public static void methodA() {
+    System.out.println("In A");
+    methodB();  // Step 2: Call methodB
+    System.out.println("Back in A");
+}
+public static void methodB() {
+    System.out.println("In B");  // Step 3
+}
+```
 - Execution order: main → methodA → methodB → methodA → main
 
 ---
 
 ## Common Mistakes with Methods
 
-- Common Mistakes with Methods
 - Missing return statement:
   - If method has return type, must return a value on all paths
 - Wrong parameter types:
@@ -258,44 +279,49 @@ source: "Java_Methods.pptx"
 
 - Common Mistakes - Examples
 - Missing return on all paths (WRONG):
-- public int getValue(int x) {
-- if (x > 0) {
-- return x;
-- }
-- // Missing return here!
-- }
+```java
+public int getValue(int x) {
+    if (x > 0) {
+        return x;
+    }
+    // Missing return here!
+}
+```
 - Correct version:
-- public int getValue(int x) {
-- if (x > 0) {
-- return x;
-- }
-- return 0;  // Return for all paths
-- }
+```java
+public int getValue(int x) {
+    if (x > 0) {
+        return x;
+    }
+    return 0;  // Return for all paths
+}
+```
 
 ---
 
 ## Slide 19
 
 - Complete Example
-- public class Calculator {
-- public static double divide(double num, double den) {
-- if (den == 0) {
-- System.out.println("Error: divide by zero!");
-- return 0;
-- }
-- return num / den;
-- }
-- public static void main(String[] args) {
-- double result = Calculator.divide(10, 2);
-- System.out.println("Result: " + result);
-- }
-- }
+```java
+public class Calculator {
+    public static double divide(double num, double den) {
+        if (den == 0) {
+            System.out.println("Error: divide by zero!");
+            return 0;
+        }
+        return num / den;
+    }
+    public static void main(String[] args) {
+        double result = Calculator.divide(10, 2);
+        System.out.println("Result: " + result);
+    }
+}
+```
 
 ---
 
 ## Best Practices
 
-- Best Practices
 - Use descriptive method names that explain what the method does
 - Keep methods short and focused on a single task
 - Use parameters to make methods flexible and reusable
@@ -308,7 +334,6 @@ source: "Java_Methods.pptx"
 
 ## Summary
 
-- Summary
 - Methods are reusable blocks of code that perform specific tasks
 - Methods can accept parameters and return values
 - Use void when performing actions, return types when producing values

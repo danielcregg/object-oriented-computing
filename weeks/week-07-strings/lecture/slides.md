@@ -11,15 +11,12 @@ source: "java_strings.pptx"
 
 # Java Strings
 
-- Java Strings
-
 ![](img/slide01-1.png)
 
 ---
 
 ## Agenda
 
-- Agenda
 - What is a String?
 - String Immutability
 - Why Strings are Immutable
@@ -32,7 +29,6 @@ source: "java_strings.pptx"
 
 ## What is a String?
 
-- What is a String?
 - A String is a sequence of characters representing text
 - Strings are objects, not primitive types
 - Part of java.lang package (imported automatically)
@@ -45,7 +41,6 @@ source: "java_strings.pptx"
 
 ## Creating Strings
 
-- Creating Strings
 - String literal:
   - String s1 = "Hello";
 - Using new keyword:
@@ -63,7 +58,6 @@ source: "java_strings.pptx"
 
 ## String Immutability
 
-- String Immutability
 - Once created, a String's value can not be changed
 - Any modification creates a NEW String object
 - Original String remains unchanged in memory
@@ -74,7 +68,6 @@ source: "java_strings.pptx"
 
 ## String Immutability – Coding Example
 
-- String Immutability – Coding Example
 - Output:
 - Hello
 - HELLO
@@ -87,20 +80,18 @@ source: "java_strings.pptx"
 
 ## Why is String Immutability Good?
 
-- Why is String Immutability Good?
 - Security: Prevents malicious code from modifying String values
 - Thread Safety: Multiple threads can share Strings safely
 - String Pool Optimization: Enables efficient memory usage
 - HashCode Caching: Hash value computed once and reused
 - Class Loading: Class names are Strings and must not change
 
-![](img/slide07-1.png)
+![String | bartleby](img/slide07-1.png)
 
 ---
 
 ## String Pool & Memory
 
-- String Pool & Memory
 - String Pool: Special memory area in heap for String literals
 - String s1 = "Java"; // Stored in pool
 - String s2 = "Java"; // Reuses same object from pool
@@ -113,7 +104,6 @@ source: "java_strings.pptx"
 
 ## Why is String Immutability bad?
 
-- Why is String Immutability bad?
 - String concatenation in loops creates many temporary objects
 - Each + operation creates a new String object
 - Memory intensive and slow for repeated modifications
@@ -126,7 +116,6 @@ source: "java_strings.pptx"
 
 ## String vs StringBuffer vs StringBuilder
 
-- String vs StringBuffer vs StringBuilder
 - String - Java 1.0 (1996) - Immutable
 - StringBuffer - Java 1.0 (1996) - Mutable, thread-safe
 - StringBuilder - Java 5 (2004) - Mutable, NOT thread-safe
@@ -139,7 +128,6 @@ source: "java_strings.pptx"
 
 ## String vs StringBuffer vs StringBuilder
 
-- String vs StringBuffer vs StringBuilder
 - StringBuilder came 8 years later when the Java team realized that most StringBuffer usage was in single-threaded contexts, and the synchronization overhead was unnecessary performance cost.
 - So Java added StringBuilder as a drop-in replacement for StringBuffer with identical API but without the synchronization overhead.
 - In practice: You'll almost always use StringBuilder. StringBuffer is now quite rare since most code doesn't need that level of thread-safety, and if it does, there are often better concurrent solutions available.
@@ -150,7 +138,6 @@ source: "java_strings.pptx"
 
 ## StringBuilder: Mutable Strings
 
-- StringBuilder: Mutable Strings
 - StringBuilder provides MUTABLE character sequences
 - Modifies the same object instead of creating new ones
 - Much more efficient for string manipulation
@@ -163,7 +150,6 @@ source: "java_strings.pptx"
 
 ## Why StringBuilder Was Created
 
-- Why StringBuilder Was Created
 - StringBuilder was specifically designed to solve the performance problem caused by String immutability when you need to:
 - Build strings in loops ✅
 - Make multiple modifications ✅
@@ -174,7 +160,6 @@ source: "java_strings.pptx"
 
 ## Key StringBuilder Methods
 
-- Key StringBuilder Methods
 - append(): Add text to end
 - insert(): Add text at specific position
 - delete(): Remove characters from range
@@ -187,7 +172,6 @@ source: "java_strings.pptx"
 
 ## StringBuffer: Thread-Safe Alternative
 
-- StringBuffer: Thread-Safe Alternative
 - StringBuffer is similar to StringBuilder but thread-safe
 - All methods are synchronized (thread-safe)
 - Slower than StringBuilder due to synchronization overhead
@@ -201,7 +185,6 @@ source: "java_strings.pptx"
 
 ## String vs StringBuilder
 
-- String vs StringBuilder
 - String: Immutable, thread-safe, stored in String pool
 - StringBuilder: Mutable, not thread-safe, faster for modifications
 - StringBuffer: Mutable, thread-safe (synchronized), slower
@@ -212,15 +195,12 @@ source: "java_strings.pptx"
 
 ## Which to Use?
 
-- Which to Use?
-
 ![](img/slide17-1.png)
 
 ---
 
 ## Performance Comparison
 
-- Performance Comparison
 - Concatenating 10,000 strings in a loop:
   - String concatenation: ~1000ms (very slow)
   - StringBuilder: ~1ms (1000x faster!)
@@ -232,7 +212,6 @@ source: "java_strings.pptx"
 
 ## Best Practices
 
-- Best Practices
 - Use String for simple, unchanging text
 - Use StringBuilder for loops and repeated modifications
 - Use StringBuffer only when thread safety is required
@@ -243,7 +222,6 @@ source: "java_strings.pptx"
 
 ## Common Mistakes to Avoid
 
-- Common Mistakes to Avoid
 - Forgetting that Strings are immutable
 - Using == to compare String values (use .equals() instead)
 - String concatenation in loops without StringBuilder

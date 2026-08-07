@@ -56,13 +56,12 @@ to read or change module content is markdown; binaries are read-only archives.
   `REDACTED`; the Moodle URL https://vlegalwaymayo.atu.ie is fine).
 - Bulk third-party materials (textbook dumps, book PDFs).
 
-Safety audit before any push (must all come up empty):
+Safety audit before any push (must print nothing):
 
-    git ls-files | grep -Ei '\.(xlsx|xls|mbz|zip|class|jar)$'
-    git ls-files '*.md' '*.yml' '*.py' '*.html' '*.xml' '*.json' -z | \
-      xargs -0 grep -HniE 'assignsubmission|G00[0-9]{6}|\b[0-9a-f]{32}\b' | \
-      grep -v 'classroom\.github\.com' | \
-      grep -v 'assignsubmission|G00' | grep -v '`assignsubmission`'
+    python scripts/safety_audit.py
 
-(The filters drop lines that quote the audit pattern itself — this file
-and the docs/ plan+spec legitimately contain the pattern text.)
+Checks tracked extensions, path placement (including pptx location),
+and tracked text content — plus every pptx's internal XML/rels parts —
+for leaked student data and Moodle tokens, stripping known-safe
+mentions (Classroom URLs, this pattern's own backtick-quoted name)
+from a line before re-testing it, never dropping the whole line.

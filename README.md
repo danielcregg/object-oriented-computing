@@ -1,6 +1,6 @@
-# Object-Oriented Computing (OOC1)
+# Object-Oriented Computing
 
-Private source-of-truth repo for the **Object-Oriented Computing 1** module
+Private source-of-truth repo for the **Object-Oriented Computing** module
 (Java, semester 1) at Atlantic Technological University — organised so both
 humans and AI tools can read, parse, and update every piece of module content.
 

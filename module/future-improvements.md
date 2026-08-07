@@ -11,3 +11,5 @@
 
 - Resolve the week-numbering conflicts: two `week 7` folders (Strings + Reading
   Week) and the syllabus/folders mismatch (see note in `module/syllabus.md`).
+- The 12-week move is now a confirmed plan for 2026-27 — see
+  `delivery-plan-2026-27.md` for the week-by-week structure.

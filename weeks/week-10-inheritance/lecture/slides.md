@@ -193,6 +193,8 @@ https://docs.oracle.com/javase/tutorial/java/IandI/multipleinheritance.html
 
 ## Animal Hierarchy
 
+![Class hierarchy](img/slide18-1.gif)
+
 ---
 
 ## Types of Inheritance
@@ -204,6 +206,8 @@ https://docs.oracle.com/javase/tutorial/java/IandI/multipleinheritance.html
 ## Identifying an Inheritance situation
 
 > 🎬 This slide has an embedded video in the original deck (see `original/`).
+
+![Online Media 3](img/slide20-1.png)
 
 <!-- Speaker notes:
 https://www.youtube.com/watch?v=oZcLmje8-fg&t=57s
@@ -231,6 +235,8 @@ https://www.youtube.com/watch?v=oZcLmje8-fg&t=57s
 ---
 
 ## Super keyword coding example
+
+![A screenshot of a computer AI-generated content may be incorrect.](img/slide23-1.png)
 
 ---
 

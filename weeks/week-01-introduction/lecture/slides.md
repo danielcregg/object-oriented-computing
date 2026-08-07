@@ -26,6 +26,8 @@ source: "Module Introduction.pptx"
 
 * These details can be found on the top of the module Moodle page.
 
+![A white background with black text AI-generated content may be incorrect.](img/slide03-1.png)
+
 ---
 
 ## Module Learning Outcomes
@@ -286,6 +288,12 @@ The whole source code is compiled in one go and is processed all at once by the 
 * Common Java IDEs are Eclipse, NetBeans and IntelliJ.
 * You can use notepad to write the hello world program to show the advantages of using an IDE and to provide you with a better understanding of what is happening behind the scenes of an IDE.
 
+![object 6](img/slide28-1.png)
+
+![object 7](img/slide28-2.png)
+
+![object 8](img/slide28-3.jpg)
+
 ---
 
 ## VS Code IDE example
@@ -349,4 +357,6 @@ System.out.println("Hello") System.out.println("World!");
 ## Side Note: Java and C# similarities
 
 ![Hello World impl](img/slide34-1.jpg)
+
+![Image result for c# hello world](img/slide34-2.png)
 

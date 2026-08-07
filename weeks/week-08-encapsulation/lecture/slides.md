@@ -31,6 +31,8 @@ source: "Encalsulation.pptx"
 
 ## Why are we learning about Encapsulation
 
+![A four pillars with different colored columns AI-generated content may be incorrect.](img/slide03-1.png)
+
 ---
 
 ## Encapsulation Definition
@@ -217,6 +219,8 @@ System.out.println(perObj1.getUsername());
 - Constructor: Initializes a new bank account object.
 - Getters: Allow for reading the account holder's name and the current balance.
 - Transaction Methods: The deposit() and withdraw() methods encapsulate the logic of transactions while enforcing basic rules (preventing negative deposits and overdrafts).
+
+![A screenshot of a computer code Description automatically generated](img/slide15-1.png)
 
 ---
 

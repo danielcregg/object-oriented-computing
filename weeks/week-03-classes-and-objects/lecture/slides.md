@@ -172,7 +172,9 @@ class Main {
 
 ## Class VS Object
 
-![A computer code with text and numbers Description automatically generated](img/slide14-1.png)
+![A screenshot of a computer program Description automatically generated](img/slide14-1.png)
+
+![A computer code with text and numbers Description automatically generated](img/slide14-2.png)
 
 ---
 

@@ -25,6 +25,8 @@ source: "Java Arrays.pptx"
 
 ## Slide 3
 
+![Online Media 3](img/slide03-1.jpeg)
+
 ---
 
 ## What is an Array?

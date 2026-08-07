@@ -277,6 +277,8 @@ Output:
 - ➡️ Upcasting is what enables polymorphism. Polymorphism happens when an upcast reference calls overridden methods.
 - Downcasting is not polymorphism — it's just a way to get back a more specific type.
 
+![A screenshot of a computer program AI-generated content may be incorrect.](img/slide28-1.png)
+
 ---
 
 ## Benefits of Polymorphism

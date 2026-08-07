@@ -256,6 +256,8 @@ public void method2() {
 
 ## Real world Interface Example
 
+![A screen shot of a computer program Description automatically generated](img/slide24-1.png)
+
 ---
 
 ## What can an Interface contain?

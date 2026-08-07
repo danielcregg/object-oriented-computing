@@ -191,15 +191,102 @@ def table_markdown(table):
     return out
 
 
+# Namespace-qualified names for locating fill-embedded pictures: an
+# <a:blip r:embed="rIdN"/> nested anywhere inside a NON-picture shape's XML
+# (a picture placeholder left at its layout type, an autoshape/logo filled
+# with an image, or a MEDIA shape's poster-frame blip) renders a real
+# picture that MSO_SHAPE_TYPE.PICTURE never catches -- python-pptx
+# classifies a shape as PLACEHOLDER or MEDIA before it ever considers
+# whether the shape's own fill happens to be a picture.
+BLIP_QN = qn("a:blip")
+EMBED_QN = qn("r:embed")
+CNVPR_QN = qn("p:cNvPr")
+
+
+def _sniff_ext(blob):
+    """Best-effort image format from magic bytes.
+
+    Only reached when an image part's own partname carries no extension
+    (not observed in this corpus, but the OPC spec doesn't forbid it).
+    Falls back to 'png' -- the same default WEB_SAFE_EXTS already treats
+    as safe, so an unrecognized format doesn't spuriously get flagged.
+    """
+    if blob.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "png"
+    if blob.startswith(b"\xff\xd8\xff"):
+        return "jpg"
+    if blob.startswith((b"GIF87a", b"GIF89a")):
+        return "gif"
+    if blob.startswith(b"BM"):
+        return "bmp"
+    if blob.startswith(b"RIFF") and blob[8:12] == b"WEBP":
+        return "webp"
+    return "png"
+
+
+def _shape_alt_text(shape):
+    """Alt text for a fill-embedded image: the shape's own descr (its
+    <p:cNvPr descr="...">, the same source picture alt text is read from),
+    falling back to the shape's name when the source deck set no
+    description.
+    """
+    descr = ""
+    cNvPr = shape._element.find(".//" + CNVPR_QN)
+    if cNvPr is not None:
+        descr = cNvPr.get("descr", "") or ""
+    descr = " ".join(descr.split())  # collapse embedded newlines
+    return descr or (shape.name or "")
+
+
+def _extract_fill_images(shape, slide, idx, img_dir, n_img, rid_to_name,
+                          images, image_alt, non_web_images,
+                          unresolved_fills):
+    """Extract picture(s) embedded as a FILL of `shape` (as opposed to a
+    MSO_SHAPE_TYPE.PICTURE shape, which the caller already handles).
+
+    Mutates images/image_alt/non_web_images/unresolved_fills in place and
+    returns the updated n_img counter, so filenames keep continuing the
+    same slideNN-M.<ext> sequence the PICTURE branch uses. A shape with no
+    fill blip is a no-op. Dedupes by rId within the slide: a second shape
+    whose blip carries an rId already written by an earlier shape on this
+    slide reuses that file (no re-write, no re-warn) but still gets its
+    own emitted image reference, since it's a distinct shape.
+    """
+    for blip in shape._element.findall(".//" + BLIP_QN):
+        rid = blip.get(EMBED_QN)
+        if not rid:
+            continue  # e.g. a linked (r:link) blip, not an embedded one
+        name = rid_to_name.get(rid)
+        if name is None:
+            try:
+                part = slide.part.related_part(rid)
+            except KeyError:
+                unresolved_fills.append((shape.name, rid))
+                continue
+            ext = part.partname.ext or _sniff_ext(part.blob)
+            n_img += 1
+            name = f"slide{idx:02d}-{n_img}.{ext}"
+            img_dir.mkdir(parents=True, exist_ok=True)
+            (img_dir / name).write_bytes(part.blob)
+            rid_to_name[rid] = name
+            if ext.lower() not in WEB_SAFE_EXTS:
+                non_web_images.append(name)
+        images.append(name)
+        image_alt[name] = _shape_alt_text(shape)
+    return n_img
+
+
 def extract_slide(slide, idx, img_dir):
     """Return (title, body_lines, image_names, notes, non_web_images,
-    image_alt, media_count).
+    image_alt, media_count, unresolved_fills).
 
     non_web_images is the subset of image_names saved in a format that
     browsers -- and therefore Marp's Chromium-based renderers -- cannot
     display natively (e.g. .wmf, .emf, .tiff). image_alt maps image name
     to its source alt/description text (may be ""). media_count is the
     number of embedded-video (MSO_SHAPE_TYPE.MEDIA) shapes on the slide.
+    unresolved_fills is a list of (shape_name, rId) pairs for fill-blips
+    whose relationship couldn't be resolved (skipped, not extracted).
     """
     title = None
     title_shape_id = None
@@ -217,6 +304,8 @@ def extract_slide(slide, idx, img_dir):
     body, images, non_web_images, n_img = [], [], [], 0
     image_alt = {}
     media_count = 0
+    rid_to_name = {}
+    unresolved_fills = []
     for shape in slide.shapes:
         if title_shape_id is not None and shape.shape_id == title_shape_id:
             continue
@@ -234,7 +323,9 @@ def extract_slide(slide, idx, img_dir):
             image_alt[name] = " ".join(descr.split())  # collapse embedded newlines
             if ext.lower() not in WEB_SAFE_EXTS:
                 non_web_images.append(name)
-        elif shape.shape_type == MSO_SHAPE_TYPE.MEDIA:
+            continue
+
+        if shape.shape_type == MSO_SHAPE_TYPE.MEDIA:
             media_count += 1
             body.append("> \U0001F3AC This slide has an embedded video in "
                          "the original deck (see `original/`).")
@@ -244,11 +335,20 @@ def extract_slide(slide, idx, img_dir):
         elif shape.has_text_frame:
             body.extend(text_frame_body_lines(shape.text_frame))
 
+        # Fill-embedded images (placeholder picture-fills, autoshape/logo
+        # fills, a MEDIA shape's poster frame) -- see _extract_fill_images.
+        # Runs for every shape reaching this point, after its own handling
+        # (if any) above; a shape with no fill blip is a no-op.
+        n_img = _extract_fill_images(shape, slide, idx, img_dir, n_img,
+                                      rid_to_name, images, image_alt,
+                                      non_web_images, unresolved_fills)
+
     notes = None
     if slide.has_notes_slide:
         text = slide.notes_slide.notes_text_frame.text.strip()
         notes = text or None
-    return title, body, images, notes, non_web_images, image_alt, media_count
+    return (title, body, images, notes, non_web_images, image_alt,
+            media_count, unresolved_fills)
 
 
 def main():
@@ -272,8 +372,8 @@ def main():
     warnings, total_images = [], 0
 
     for idx, slide in enumerate(prs.slides, start=1):
-        title, body, images, notes, non_web_images, image_alt, media_count = \
-            extract_slide(slide, idx, outdir / "img")
+        (title, body, images, notes, non_web_images, image_alt, media_count,
+         unresolved_fills) = extract_slide(slide, idx, outdir / "img")
         total_images += len(images)
         if idx > 1:
             lines += ["---", ""]
@@ -300,6 +400,10 @@ def main():
         for _ in range(media_count):
             warnings.append(f"slide {idx}: embedded video (MEDIA shape) "
                              "not extracted - see original/ for the source pptx")
+        for shape_name, rid in unresolved_fills:
+            warnings.append(f"slide {idx}: fill-embedded image on shape "
+                             f"{shape_name!r} (rId {rid}) could not be "
+                             "resolved - skipped")
 
     (outdir / "slides.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     for w in warnings:

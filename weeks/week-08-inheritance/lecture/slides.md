@@ -20,6 +20,20 @@ source: "Inheritance.pptx"
 
 ---
 
+## Agenda
+
+- The four principles of OOP — where inheritance fits
+- Definition & the is-a relationship
+- Terminology: superclass & subclass
+- Implementing inheritance with `extends`
+- The `Object` class
+- Types of inheritance in Java
+- Class hierarchies & identifying is-a situations
+- Constructors & the `super` keyword
+- Benefits & key facts
+
+---
+
 <!-- _class: grid2 -->
 
 ## Four major principles of OOP

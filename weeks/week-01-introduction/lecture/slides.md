@@ -18,6 +18,18 @@ Module Introduction
 
 ---
 
+## Agenda
+
+* **Part 1 — your module:** learning outcomes, delivery & timetable
+* Assessment: three MCQs (weeks 5, 9 and 12)
+* The lab coding environment & enrolling on Moodle
+* Your tasks for this week
+* **Part 2 — Java refresh:** background, JVM & JDK
+* Writing and running your first program
+* Editors, IDEs & common errors
+
+---
+
 ## Welcome
 
 * This module assumes that you have some prior fundamental programming experience.
@@ -131,16 +143,6 @@ On completion of this module the learner will/should be able to;
 # Java Refresh
 
 Background · running code · JVM, JDK · IDEs · common errors
-
----
-
-## Agenda
-
-* Java Background
-* Running code in Java
-* JVM, JDK
-* IDE
-* Common Errors
 
 ---
 

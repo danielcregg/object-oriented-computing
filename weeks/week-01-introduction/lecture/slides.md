@@ -78,6 +78,7 @@ section table td {
   border: none; border-bottom: 1px solid #DED8C9;
   padding: 10px 34px 10px 6px; background: transparent;
 }
+section.centered-table table { margin: 10px auto 18px auto; }
 section table thead tr, section table tbody tr,
 section table tbody tr:nth-child(odd), section table tbody tr:nth-child(even) { background: transparent !important; }
 section table td strong { color: #E76F00; }
@@ -124,11 +125,9 @@ section.dense { font-size: 22px; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 01 · object-oriented computing · atu</span>
-
 # Object Oriented Computing
 
-Module Introduction — Daniel Cregg
+Module Introduction
 
 ---
 
@@ -140,8 +139,6 @@ Module Introduction — Daniel Cregg
 ---
 
 ## About Me
-
-* These details can be found on the top of the module Moodle page.
 
 ![Lecturer contact banner](img/slide03-1.png)
 
@@ -170,25 +167,27 @@ On completion of this module the learner will/should be able to;
 
 ## Timetable
 
-* **13 teaching weeks** over 14 calendar weeks. We have a 1 week break for reading week.
+* **12 teaching weeks** over 13 calendar weeks. 
+  * We have a 1 week break for reading week.
 * Labs start **week 2**
-* See top of Moodle page for Timetable and Syllabus breakdown
+* See top of Moodle page for Timetable.
 
 ---
 
+<!-- _class: centered-table -->
+
 ## Assessment Matrix
+
+<br>
 
 | Week | Assessment | Grade portion |
 |---|---|---|
-| 5 | MCQ 1 | **30%** |
-| 9 | MCQ 2 | **35%** |
-| 13 | MCQ 3 | **35%** |
+| 5 | MCQ 1 | **33%** |
+| 9 | MCQ 2 | **33%** |
+| 12 | MCQ 3 | **33%** |
 
+<br>
 > All assessments are completed **in person, in a lab**.
-
-<!-- Speaker notes:
-Get Exam Papers ASAP
--->
 
 ---
 
@@ -204,22 +203,9 @@ Get Exam Papers ASAP
 ## Assessments
 
 * All assessments are completed **in-person in a lab**.
-* MCQ questions are taken from **Lab and Lecture materials**.
-* Use AI to generate sample MCQ questions for you — Google's **NotebookLM** is a great tool to do this.
-* MCQs will involve standard MCQ questions **plus some coding questions**.
-
----
-
-## Grading System
-
-![Grading bands](img/slide10-1.png)
-
----
-
-## What if I fail
-
-* Pass by **compensation**
-* **Repeat project** over summer — submit end of August
+* MCQ questions can be sourced from **Lecture and Lab** materials.
+* Use AI to generate sample MCQ questions for you. Google's **NotebookLM** is a great tool to do this.
+* MCQs will involve standard MCQ questions **plus some Coderunner coding questions**.
 
 ---
 
@@ -257,7 +243,7 @@ Get Exam Papers ASAP
 
 # Java Refresh
 
-Background · running code · JVM, JRE, JDK · IDEs · common errors
+Background · running code · JVM, JDK · IDEs · common errors
 
 ---
 
@@ -265,7 +251,7 @@ Background · running code · JVM, JRE, JDK · IDEs · common errors
 
 * Java Background
 * Running code in Java
-* JVM, JRE, JDK
+* JVM, JDK
 * IDE
 * Common Errors
 
@@ -275,7 +261,7 @@ Background · running code · JVM, JRE, JDK · IDEs · common errors
 
 ## Why Java
 
-* Java is **object-oriented by design**, encouraging students to model real-world concepts using classes and objects.
+* Java is **object-oriented** programming language. Real-world concepts are modeled using classes and objects.
 * Its **strong static typing** helps catch errors early and promotes disciplined coding habits.
 * Java has clear, readable syntax that makes OO concepts like encapsulation, inheritance, and polymorphism easy to teach.
 * It's **widely used in industry**, so students gain skills that are directly applicable to real-world development.
@@ -296,12 +282,6 @@ Background · running code · JVM, JRE, JDK · IDEs · common errors
 * Over **45 billion** active Java Virtual Machines (JVMs) are deployed worldwide across devices and servers.
 * Java remains one of the most popular programming languages, with over **10 million developers** globally (and growing).
 * It powers a wide range of technologies — from Android apps and enterprise systems to cloud platforms and IoT devices.
-
----
-
-## Java Version History
-
-* [Java version history — Wikipedia](https://en.wikipedia.org/wiki/Java_version_history)
 
 ---
 
@@ -339,20 +319,6 @@ The whole source code is compiled in one go and is processed all at once by the 
 ---
 
 <!-- _class: grid2 -->
-
-## JIT
-
-* The JVM also has a **Just-in-Time (JIT)** compiler that can optimize the bytecode to native machine code at runtime
-
-![C compilation](img/slide23-1.png) ![Java compile chain](img/slide23-2.png) ![JVM](img/slide23-3.jpg) ![Computer](img/slide23-4.png)
-
-<!-- Speaker notes:
-Non java = compiled program
-Java is compiled then interpreted
-The whole source code is compiled in one go and is processed all at once by the computer.
--->
-
----
 
 ## Advantages of the JVM
 
@@ -450,20 +416,3 @@ System.out.println("Hello") System.out.println("World!");
 
 ![Syntax error example](img/slide32-1.png) ![Compiler error output](img/slide32-2.png)
 
----
-
-## Summary: Java
-
-* The **Java compiler** translates source code into class files that contain instructions for the **Java virtual machine**.
-* Java programs are distributed as instructions for a virtual machine, making them **platform-independent**.
-* An **editor** is a program for entering and modifying text, such as a Java program.
-* **Classes** are the fundamental building blocks of Java programs.
-* Every Java application contains a class with a **main method** — when the application starts, the instructions in the main method are executed.
-
----
-
-<!-- _class: grid2 -->
-
-## Side Note: Java and C# similarities
-
-![Hello World in Java and C#](img/slide34-1.jpg) ![Language comparison](img/slide34-2.png)

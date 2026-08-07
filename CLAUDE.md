@@ -54,7 +54,8 @@ Safety audit before any push (must all come up empty):
     git ls-files | grep -Ei '\.(xlsx|xls|mbz|zip|class|jar)$'
     git ls-files '*.md' '*.yml' '*.py' '*.html' '*.xml' -z | \
       xargs -0 grep -HniE 'assignsubmission|G00[0-9]{6}|\b[0-9a-f]{32}\b' | \
-      grep -v 'classroom\.github\.com' | grep -vE 'assignsubmission|G00'
+      grep -v 'classroom\.github\.com' | \
+      grep -v 'assignsubmission|G00' | grep -v '`assignsubmission`'
 
-(The last filter drops lines that quote the audit pattern itself — this file
+(The filters drop lines that quote the audit pattern itself — this file
 and the docs/ plan+spec legitimately contain the pattern text.)

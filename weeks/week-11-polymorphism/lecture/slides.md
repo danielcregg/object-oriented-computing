@@ -16,7 +16,7 @@ source: "Polymorphism.pptx"
 
 # Polymorphism
 
-![Blog – Sachini Jayasinghe](img/slide01-1.png)
+- Same call, `speak()` — different sound, depending on the object.
 
 ---
 
@@ -92,7 +92,7 @@ source: "Polymorphism.pptx"
 
 ## What is Polymorphism
 
-- Polymorphism comes from the Greek word poly meaning “many” or “much” and morphē meaning “form” or  “shape”.
+- Polymorphism comes from the Greek word poly meaning “many” or “much” and morphē meaning “form” or  “shape”.
 - Polymorphism is the capability of a method to do different things based on the object that it is acting upon.
 
 ![A statue of a person with a beard Description automatically generated](img/slide08-1.png)
@@ -105,8 +105,9 @@ source: "Polymorphism.pptx"
 - Binding refers to linking a method call to the method body that will run.
 - Compile time Polymorphism known as static or early binding
 - Runtime Polymorphism known as dynamic or late binding
-
-![A diagram of a polymorphic process Description automatically generated](img/slide09-1.jpg)
+- Polymorphism
+  - Compile time → Overloading
+  - Runtime → Overriding
 
 ---
 
@@ -115,15 +116,17 @@ source: "Polymorphism.pptx"
 - Compile time Polymorphism is polymorphism that is resolved during compile time i.e., binding of the method call to its definition happens at compile time.
 - The compiler can decide which method to call just by looking at the method signature (number and type of parameters).
 - Method Overloading is an example of compile time polymorphism.
-
-![A close-up of a test AI-generated content may be incorrect.](img/slide10-1.png)
+- Same name, different signatures:
+  - `void fun(int a)`
+  - `void fun(int a, int b)`
+  - `void fun(char a)`
 
 ---
 
 ## Method Signature
 
-- A method signature is the method name and the number, type and order of its parameters.
-- Java can uniquely identify methods based on their method signatures:
+- A method signature is the method name and the number, type and order of its parameters.
+- Java can uniquely identify methods based on their method signatures:
       - Number of parameters passed
       - Data type of parameters
       - Sequence of data type of parameters
@@ -132,7 +135,21 @@ source: "Polymorphism.pptx"
 
 ## Method Structure
 
-![methods in java](img/slide12-1.png)
+```java
+public int max (int x, int y)
+{
+    if (x > y)
+        return x;
+    else
+        return y;
+}
+```
+
+- **modifier** — `public`
+- **return-type** — `int`
+- **method-name** — `max`
+- **parameter-list** — `(int x, int y)`
+- **body of the method** — the `{ }` block
 
 ---
 
@@ -153,25 +170,51 @@ source: "Polymorphism.pptx"
 
 - Method Overloading allows a class to have more than one method with the same name, as long as their signatures are different.
 
-![](img/slide15-1.png)
+```java
+public class Calculator {
+    // Simple add method. Note it has two input parameters, int and double
+    public double add(int a, double b) {
+        return a + b; // Implicit type casting. Returns double
+    }
+    // Differs in number of parameters passed
+    public double add(int a, double b, int c) {
+        return a + b + c;
+    }
+}
+```
 
-![](img/slide15-2.png)
+---
+
+## Method Overloading Example (continued)
+
+<!-- no-compile -->
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Creating Calculator Object
+        Calculator calcObj1 = new Calculator();
+        System.out.println(    calcObj1.add(10, 20.1)      );
+        System.out.println(    calcObj1.add(10, 20.5, 30)  );
+    }
+}
+```
 
 ---
 
 ## Runtime Polymorphism
 
 - Runtime Polymorphism is polymorphism which is resolved at runtime i.e., it is implemented dynamically when a program being executed
-- Java supports run-time polymorphism by dynamically dispatching methods at run time through Method Overriding i.e., method invocations are resolved at run time by the JVM and not at the compile time.
+- Java supports run-time polymorphism by dynamically dispatching methods at run time through Method Overriding i.e., method invocations are resolved at run time by the JVM and not at the compile time.
 - Method Overriding is an example of runtime polymorphism
-
-![A diagram of a diagram AI-generated content may be incorrect.](img/slide16-1.png)
+- Same signature, subclass supplies its own body:
+  - `Base.fun(int a)`
+  - `Derived.fun(int a)` — overrides it
 
 ---
 
 ## What is Method Overriding?
 
-- Method Overriding allows us to declare a method in a subclass which has already been declared in a superclass.
+- Method Overriding allows us to declare a method in a subclass which has already been declared in a superclass.
 - Method Overriding is done so that a subclass can provide its own implementation of a method which is already provided by the super class.
 - The method in the superclass is called the Overridden Method and the method in subclass is called the Overriding Method.
 
@@ -179,11 +222,33 @@ source: "Polymorphism.pptx"
 
 ## Method Overriding Example
 
-![](img/slide18-1.png)
+```java
+// Animal.java
+package ie.gmit.javaLabs.polymorphism.overriding.animal;
 
-![](img/slide18-2.png)
+public class Animal {
+    public void sound() {
+        System.out.println("Animal is making a sound");
+    }
+}
 
-![](img/slide18-3.png)
+// Dog.java (same package)
+public class Dog extends Animal {
+
+    @Override
+    public void sound() {
+        System.out.println("Woof");
+    }
+}
+
+// Cat.java (same package)
+public class Cat extends Animal {
+
+    public void sound() {
+        System.out.println("Meow");
+    }
+}
+```
 
 ---
 
@@ -199,9 +264,15 @@ source: "Polymorphism.pptx"
 
 ---
 
-## Slide 20
+## Overriding in Action
 
-![0.jpg](img/slide20-1.jpg)
+- Same call, `speak()` — each subclass overrides it to do something different:
+
+| Object | `speak()` prints |
+|---|---|
+| `Cat` | "Meow!" |
+| `Dog` | "Woof!" |
+| `Duck` | "Quack!" |
 
 ---
 
@@ -210,7 +281,16 @@ source: "Polymorphism.pptx"
 - The exact method to call depends on the actual object created at runtime — not just the variable type.
 - The compiler cannot know which object you will actually create.
 
-![A screenshot of a computer program AI-generated content may be incorrect.](img/slide21-1.png)
+<!-- no-compile -->
+```java
+Animal a = new Dog();
+a.sound();
+```
+
+- At compile time → `a` is just an `Animal`
+- At runtime → it becomes a `Dog`
+- Only **during execution** can the program determine which `sound()` method to call.
+- This is essential for: Inheritance, Interfaces, Real OOP behavior, and writing code that works for multiple object types.
 
 ---
 
@@ -221,9 +301,15 @@ source: "Polymorphism.pptx"
 
 ---
 
+<!-- _class: centered-table -->
+
 ## Difference between Overloading and Overriding
 
-![http://contribute.geeksforgeeks.org/wp-content/uploads/OverridingVsOverloading.png](img/slide23-1.png)
+| Feature | Overloading | Overriding |
+|---|---|---|
+| Where | Same class | Superclass and subclass (inheritance) |
+| Signature | Different — parameters differ | Identical — same name and parameters |
+| Example | `void fun(int a)`<br>`void fun(int a, int b)`<br>`void fun(char a)` | `Base.fun(int a)`<br>`Derived.fun(int a)` — overrides it |
 
 ---
 
@@ -236,20 +322,89 @@ source: "Polymorphism.pptx"
   - Superclass → Subclass
   - Explicit cast required, can fail at runtime.
 
-![A screenshot of a chat AI-generated content may be incorrect.](img/slide24-1.jpg)
+<!-- no-compile -->
+```java
+Cat c = new Cat();
+Animal a = c;  // upcasting, automatic
+```
+
+Why safe? Because every `Cat` IS an `Animal`.
+
+---
+
+## Objects: Upcasting & Downcasting (continued)
+
+<!-- no-compile -->
+```java
+Animal a = new Cat();
+Cat c = (Cat) a;  // downcasting, safe
+```
+
+Dangerous example — will throw `ClassCastException`:
+
+<!-- no-compile -->
+```java
+Animal a = new Animal();
+Cat c = (Cat) a; // will crash at runtime
+```
 
 ---
 
 ## Why Upcasting Is Useful (Arrays / Lists / Polymorphism)
 
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+section pre code { font-size: 17px; line-height: 1.3; }
+</style>
+
 - Upcasting allows you to store different subclasses inside a single array or list of the superclass type.
 - This is one of the most important uses of upcasting → polymorphism.
 - Here is an array of Animals holding different types of Cats
-- Output:
 
-![A screenshot of a computer code AI-generated content may be incorrect.](img/slide25-1.png)
+```java
+class Animal {
+    void speak() { System.out.println("Animal makes a sound"); }
+}
+class Cat extends Animal {
+    @Override
+    void speak() { System.out.println("Cat meows"); }
+}
+class Tiger extends Animal {
+    @Override
+    void speak() { System.out.println("Tiger roars"); }
+}
+```
 
-![A close up of words AI-generated content may be incorrect.](img/slide25-2.png)
+---
+
+## Why Upcasting Is Useful (continued)
+
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+section pre code { font-size: 16px; line-height: 1.3; }
+</style>
+
+<!-- no-compile -->
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Upcasting happens automatically:
+        Animal[] zoo = new Animal[3];
+        zoo[0] = new Cat();      // upcast Cat → Animal
+        zoo[1] = new Tiger();    // upcast Tiger → Animal
+        zoo[2] = new Cat();      // another Cat
+        // Polymorphism: each speak() calls the correct method
+        for (Animal a : zoo) {
+            a.speak();
+        }
+    }
+}
+
+// Output:
+// Cat meows
+// Tiger roars
+// Cat meows
+```
 
 ---
 
@@ -265,7 +420,38 @@ source: "Polymorphism.pptx"
 
 - Sometimes you need to downcast when retrieving an object.
 
-![A screenshot of a computer program AI-generated content may be incorrect.](img/slide27-1.png)
+<!-- no-compile -->
+```java
+Animal[] zoo = {
+    new Cat(),
+    new Tiger(),
+    new Cat()
+};
+
+// Downcasting safely:
+Cat firstCat = (Cat) zoo[0];   // OK, it's really a Cat
+firstCat.speak();
+
+// Unsafe downcasting:
+Cat secondCat = (Cat) zoo[1]; // Tiger is NOT a Cat → will crash
+```
+
+---
+
+## Downcasting Example With Arrays (continued)
+
+- Use `instanceof` to avoid crashing:
+
+<!-- no-compile -->
+```java
+for (Animal a : zoo) {
+    if (a instanceof Cat) {
+        Cat catObj = (Cat) a;
+        System.out.println("Found a Cat!");
+        catObj.speak();
+    }
+}
+```
 
 ---
 
@@ -276,7 +462,51 @@ source: "Polymorphism.pptx"
 - ➡️ Upcasting is what enables polymorphism. Polymorphism happens when an upcast reference calls overridden methods.
 - Downcasting is not polymorphism — it's just a way to get back a more specific type.
 
-![A screenshot of a computer program AI-generated content may be incorrect.](img/slide28-1.png)
+```java
+class Animal {
+    void speak() { System.out.println("Animal sound"); }
+}
+class Cat extends Animal {
+    void speak() { System.out.println("Meow"); }
+    void scratch() { System.out.println("Cat scratches!"); }
+}
+class Tiger extends Animal {
+    void speak() { System.out.println("ROAR!"); }
+}
+```
+
+---
+
+## Full Program Demonstrating Everything (continued)
+
+<style scoped>
+section pre { padding: 8px 14px; margin: 4px 0; }
+section pre code { font-size: 13.5px; line-height: 1.2; }
+</style>
+
+<!-- no-compile -->
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Upcasting
+        Animal a1 = new Cat();   // Cat → Animal
+        Animal a2 = new Tiger(); // Tiger → Animal
+        // Array of Animals
+        Animal[] animals = { a1, a2, new Cat() };
+        // Polymorphism in action
+        for (Animal a : animals) {
+            a.speak();
+        }
+        // Downcasting safely
+        if (animals[0] instanceof Cat) {
+            Cat cat1 = (Cat) animals[0];
+            cat1.scratch();  // works!
+        }
+        // Unsafe example (will throw error)
+        // Cat badCast = (Cat) animals[1]; // animals[1] is a Tiger → crash
+    }
+}
+```
 
 ---
 
@@ -306,4 +536,3 @@ source: "Polymorphism.pptx"
 - http://www.geeksforgeeks.org/overloading-in-java/
 - [http://www.c-sharpcorner.com/UploadFile/433c33/polymorphism-in-java/](https://beginnersbook.com/2013/03/polymorphism-in-java/)
 - https://www.simplilearn.com/tutorials/java-tutorial/java-polymorphism
-

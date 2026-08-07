@@ -709,4 +709,3 @@ In this lab, we've covered:
 
 Arrays are a foundational aspect of Java programming, enabling efficient data storage and manipulation. Mastery of arrays will significantly aid in understanding more complex data structures and algorithms. By exploring these additional topics, you've equipped yourself with a robust understanding of arrays in Java.
 
-```

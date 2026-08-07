@@ -15,13 +15,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate question bank splits + safety audit
+        run: |
+          set -euo pipefail
+          python3 scripts/split_question_bank.py
+          git diff --exit-code -- 'weeks/*/questions.xml'
+          python3 scripts/safety_audit.py
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Install Marp CLI
-        run: npm install -g @marp-team/marp-cli
+        run: npm install -g @marp-team/marp-cli@4.5.0
 
       - name: Render decks
         run: |

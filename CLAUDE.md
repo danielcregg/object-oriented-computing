@@ -1,7 +1,8 @@
 # CLAUDE.md — how to work in this repo
 
-Source-of-truth repo for the OOC1 module (Java, ATU). Everything an AI needs
-to read or change module content is markdown; binaries are read-only archives.
+Source-of-truth repo for the OOC1 module (Java, ATU). Editable sources are
+Markdown, Moodle XML, JSON, and HTML; binaries (`original/*.pptx`, images)
+are read-only archives.
 
 ## Map
 
@@ -46,7 +47,9 @@ to read or change module content is markdown; binaries are read-only archives.
   then add a row to README's schedule table.
 - Known quirk: two week-7 folders (strings + reading-week) and a
   syllabus/folder numbering mismatch — see `module/future-improvements.md`
-  before renumbering anything.
+  before renumbering anything. Renumbering also touches
+  `scripts/split_question_bank.py` TARGETS, `module/question-bank/README.md`,
+  and `module/schedule-table/`.
 
 ## Never commit
 

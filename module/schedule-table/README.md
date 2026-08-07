@@ -15,3 +15,9 @@ Google-Sheets iframe currently embedded via
 
 Reading-week anchor: the X row always lands on the Irish October
 bank-holiday week — 6 teaching weeks before it, 6 after.
+
+**2026-27 note:** `module-schedule.json` is shaped for the 2025-26 13-week
+layout described above (weeks 1–6, X, 7–13). `module/delivery-plan-2026-27.md`
+confirms a 12-week restructure for 2026-27 — before reuse, rebuild this JSON
+in the builder app against that new week count and topic list; don't hand-edit
+it into a 12-week shape.

@@ -23,8 +23,12 @@ are read-only archives.
   and `schedule-table/` (builder template for the Moodle schedule table).
 - `docs/superpowers/` — the design spec and the (amended) build and fix-wave plans this
   repo was created from; execution history, not module content.
-- Rendered decks: checkout the `gh-pages` branch or download the
-  `rendered-decks` workflow artifact (GitHub Pages serving is not enabled).
+- Rendered decks are PUBLIC on GitHub Pages:
+  https://danielcregg.is-a.dev/object-oriented-computing/ (one folder per
+  week: index.html + slides.pdf + slides.pptx). The repo stays private;
+  only rendered lecture decks are published — never labs' answer keys,
+  question banks, or module internals. Anything pushed to a deck goes
+  public within minutes.
 - `scripts/pptx_to_marp.py` — one-shot converter used for the initial import.
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML/PDF/PPTX on push (gh-pages branch + build artifact).

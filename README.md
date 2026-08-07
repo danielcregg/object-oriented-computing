@@ -4,6 +4,8 @@ Private source-of-truth repo for the **Object-Oriented Computing** module
 (Java, semester 1) at Atlantic Technological University — organised so both
 humans and AI tools can read, parse, and update every piece of module content.
 
+**Live slides:** https://danielcregg.is-a.dev/object-oriented-computing/
+
 Lectures are **Marp markdown** (`weeks/*/lecture/slides.md`) — edit the
 markdown, push, and CI re-renders HTML/PDF/PPTX. The original PowerPoint decks
 are preserved untouched in each week's `lecture/original/`.

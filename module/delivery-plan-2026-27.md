@@ -7,34 +7,51 @@ All MCQs are held during the lab slot of their week.
 | Teaching week | Content | Notes |
 |---|---|---|
 | 1 | Module introduction lecture | No lab in week 1 |
-| 2 | Topic slot 1 | |
-| 3 | Topic slot 2 | |
-| 4 | Topic slot 3 | |
+| 2 | Classes and Objects | |
+| 3 | Methods | |
+| 4 | Arrays | |
 | 5 | **MCQ 1** | During lab slot |
-| 6 | Topic slot 4 | |
+| 6 | Strings | |
 | — | Reading week | October bank-holiday week; no lectures or labs |
-| 7 | Topic slot 5 | |
-| 8 | Topic slot 6 | |
+| 7 | Encapsulation | |
+| 8 | Inheritance | |
 | 9 | **MCQ 2** | During lab slot |
-| 10 | Topic slot 7 | |
-| 11 | Topic slot 8 | |
+| 10 | Polymorphism | |
+| 11 | Abstraction | |
 | 12 | **MCQ 3** | During lab slot |
 
 ## Mapping from current content
 
-The repo currently holds 10 lecture topics (Introduction, Structure,
+The repo originally held 10 lecture topics (Introduction, Structure,
 Classes and Objects, Methods, Arrays, Strings, Encapsulation, Inheritance,
-Polymorphism, Abstraction) against 8 topic slots + intro — one topic must be
-dropped or merged into another during the restructure (the future-improvements notes flag
-repetitive lectures as consolidation candidates). Topic-to-slot assignment
-is the lecturer's open decision.
+Polymorphism, Abstraction). **Structure is dropped as a standalone week** — its fundamentals
+(program anatomy, compilation, variables, data types) move into the week-1 intro
+(as a Java fast-start) and/or the opening of Classes and Objects. Final placement
+is the lecturer's call when overhauling the intro deck.
 
-The MCQ banks already align with this cadence
-(`module/question-bank/` + per-week `questions.xml`):
+### MCQ bank re-mapping
 
-- **MCQ 1** covers Introduction, Structure, Classes and Objects, Methods
-- **MCQ 2** covers Arrays, Strings, Encapsulation
-- **MCQ 3** covers Inheritance, Polymorphism, Abstraction
+The existing question banks (`module/question-bank/` + per-week `questions.xml`)
+require three moves to align with this structure:
+
+- Arrays: move from MCQ2 to MCQ1
+- Inheritance: move from MCQ3 to MCQ2
+- Retire or review Structure + Introduction questions currently in MCQ1 that test dropped material
+
+After re-exporting the full Moodle bank and updating `module/question-bank/full-export-2026-27.xml`,
+re-split the questions with `python scripts/split_question_bank.py`:
+
+- **MCQ 1** (week 5): Introduction, Classes and Objects, Methods, Arrays
+- **MCQ 2** (week 9): Strings, Encapsulation, Inheritance
+- **MCQ 3** (week 12): Polymorphism, Abstraction
+
+### Lab assignment naming
+
+Classroom assignment names carry stale `wN` prefixes after the week shift
+(e.g. `w3-lab-classes-and-objects` runs in week 2; `w10-lab-inheritance` runs in week 8).
+Rename these when creating 2026-27 assignments in Classroom. The week-2
+Structure lab (`w2-lab-structure`) becomes supplementary, used alongside
+`wX-lab-control-flow` for the week-1 intro.
 
 The schedule-table template (`module/schedule-table/`) should be rebuilt to
 this layout when filling in real dates and links.

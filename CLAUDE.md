@@ -66,4 +66,7 @@ any embedded office object inside a pptx, flagged for manual review)
 for leaked student data and Moodle tokens. A known-safe mention (a
 Classroom URL, or this pattern's own backtick-quoted name) only clears
 a match it fully covers — real content extending past one, even glued
-on with no separating space, still surfaces.
+on with no separating space, still surfaces. Classroom `/classrooms/`
+URLs clear only by exact whitelist, not by shape — add a newly
+referenced one to `CLASSROOMS_WHITELIST` in the script, or it will
+surface for review instead of being silently trusted.

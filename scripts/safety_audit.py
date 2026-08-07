@@ -12,12 +12,14 @@ Checks:
   2. text scan -- every tracked *.md *.yml *.yaml *.py *.html *.xml *.json
      file, line by line, for leaked Moodle submission-path text, ATU
      student ID numbers, or 32-char hex tokens. Three known-safe shapes
-     are exact, length-bounded regexes: a Classroom invite/invitation/
-     classroom URL, the literal pattern-quoting text this file's own
-     regex is built from, and the backtick-quoted mention of that text
-     used in prose elsewhere in the repo. A sensitive match is suppressed
-     ONLY when its entire span lies within one safe-shape span on the
-     SAME (unmodified) line -- the line is never mutated and never
+     are exact or length-bounded regexes: a Classroom invite/invitation
+     URL (an exact whitelist for the open-ended /classrooms/ slug shape,
+     length bounds for the other two fixed-shape ones -- see
+     CLASSROOMS_WHITELIST below), the literal pattern-quoting text this
+     file's own regex is built from, and the backtick-quoted mention of
+     that text used in prose elsewhere in the repo. A sensitive match is
+     suppressed ONLY when its entire span lies within one safe-shape span
+     on the SAME (unmodified) line -- the line is never mutated and never
      dropped whole, so a real token glued directly onto, or merely
      sharing a line with, a safe shape still surfaces. This file's own
      source contains all three shapes verbatim and clears itself through
@@ -60,25 +62,52 @@ BAD_EXTENSION_RE = re.compile(r"\.(xlsx|xls|mbz|zip|class|jar)$", re.IGNORECASE)
 TEXT_SCAN_GLOBS = ("*.md", "*.yml", "*.yaml", "*.py", "*.html", "*.xml", "*.json")
 SENSITIVE_RE = re.compile(r"assignsubmission|G00[0-9]{6}|\b[0-9a-f]{32}\b", re.IGNORECASE)
 
-# Classroom URL shapes and their real, bounded lengths:
-#   /a/<code>                     -- short invite code, 8 chars in practice.
+# Classroom URL shapes:
+#   /a/<code>                     -- short invite code, 8 chars in practice,
+#                                     length-bounded (never "or more").
 #   /assignment-invitations/<hex> -- documented as a 32-hex id (also
 #                                     matches the 32-hex sensitive pattern,
 #                                     which is exactly why this exemption
 #                                     exists: it's a shareable link, not a
-#                                     secret).
-#   /classrooms/<slug>            -- classroom-level slug; generous but
-#                                     still finite bound.
-# Each alternative's upper bound is chosen so it can never fully cover an
-# adjacent, glued-on sensitive match (shortest is G00 + 6 digits = 9
-# chars): the /a/ and /classrooms/ bounds are comfortably under that, and
-# the /assignment-invitations/ bound is exact (not "32 or more"), so any
-# extra glued content starts outside the safe span.
+#                                     secret), exact 32 (not "32 or more").
+#   /classrooms/<slug>            -- classroom slugs are open-ended free
+#                                     text, not a fixed shape, so (unlike
+#                                     the other two) this is an EXACT
+#                                     LITERAL whitelist, not a length
+#                                     bound: a length bound loose enough to
+#                                     cover a realistic slug (e.g. 64
+#                                     chars) is also loose enough to fully
+#                                     swallow a glued-on id or hex token,
+#                                     which is exactly what happened here
+#                                     in the first round of this fix: a
+#                                     student-id-shaped suffix glued onto
+#                                     the slug with `[A-Za-z0-9-]{1,64}`
+#                                     was silently swallowed and suppressed
+#                                     whole. Add a slug here ONLY when it's
+#                                     genuinely referenced in this repo
+#                                     (currently just the one in README's
+#                                     related-repos table); an unlisted
+#                                     classrooms/ URL gets no exemption at
+#                                     all and surfaces for review -- a
+#                                     deliberate friction, not a bug.
+# Each /a/ and /assignment-invitations/ bound is chosen so it can never
+# fully cover an adjacent, glued-on sensitive match (shortest is G00 + 6
+# digits = 9 chars): both are comfortably under or exactly that, so any
+# extra glued content starts outside the safe span. Each classrooms/
+# whitelist entry is followed by a negative lookahead requiring the next
+# character (if any) NOT be alphanumeric/hyphen, so 'classrooms/<slug>'
+# glued directly to more alnum content (an id, a different slug, hex)
+# doesn't match the safe shape AT ALL -- the whole line is then scanned
+# with no exemption there, rather than relying on a truncated-but-still-
+# partial-match being merely "not fully contained".
+CLASSROOMS_WHITELIST = (
+    "REDACTED",  # README.md related-repos table: OOC GitHub Classroom
+)
 CLASSROOM_URL_SAFE_RE = re.compile(
     r"https://classroom\.github\.com/(?:"
     r"a/[A-Za-z0-9_-]{1,8}"
     r"|assignment-invitations/[0-9a-f]{32}"
-    r"|classrooms/[A-Za-z0-9-]{1,64}"
+    r"|classrooms/(?:" + "|".join(re.escape(slug) for slug in CLASSROOMS_WHITELIST) + r")(?![A-Za-z0-9-])"
     r")"
 )
 PATTERN_QUOTE = "assignsubmission|G00"

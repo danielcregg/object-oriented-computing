@@ -24,8 +24,8 @@ All MCQs are held during the lab slot of their week.
 
 The repo currently holds 10 lecture topics (Introduction, Structure,
 Classes and Objects, Methods, Arrays, Strings, Encapsulation, Inheritance,
-Polymorphism, Abstraction) against 8 topic slots + intro — two topics must
-merge or drop during the restructure (the future-improvements notes flag
+Polymorphism, Abstraction) against 8 topic slots + intro — one topic must be
+dropped or merged into another during the restructure (the future-improvements notes flag
 repetitive lectures as consolidation candidates). Topic-to-slot assignment
 is the lecturer's open decision.
 

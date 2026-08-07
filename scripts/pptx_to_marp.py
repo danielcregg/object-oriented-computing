@@ -20,7 +20,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 # display natively. Anything else (e.g. legacy Windows Metafile) is still
 # extracted to disk, but flagged so the deck doesn't silently render a
 # broken image.
-WEB_SAFE_EXTS = {"png", "jpg", "jpeg", "gif", "webp", "svg"}
+WEB_SAFE_EXTS = {"png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"}
 
 
 def para_bullets(text_frame):
@@ -59,7 +59,7 @@ def extract_slide(slide, idx, img_dir):
 
     non_web_images is the subset of image_names saved in a format that
     browsers -- and therefore Marp's Chromium-based renderers -- cannot
-    display natively (e.g. .wmf, .emf, .tiff, .bmp).
+    display natively (e.g. .wmf, .emf, .tiff).
     """
     title = None
     try:

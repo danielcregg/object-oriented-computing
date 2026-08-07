@@ -17,7 +17,13 @@ to read or change module content is markdown; binaries are read-only archives.
 - `module/question-bank/` — the full 2025–26 Moodle question-bank export
   (canonical; includes shared/sample banks). Regenerate the per-week splits
   with `python scripts/split_question_bank.py`.
-- `module/` — syllabus, future-improvements, Moodle course-page HTML assets.
+- `module/` — syllabus, future-improvements, Moodle course-page HTML assets,
+  `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint),
+  and `schedule-table/` (builder template for the Moodle schedule table).
+- `docs/superpowers/` — the design spec and the (amended) build plan this
+  repo was created from; execution history, not module content.
+- Rendered decks: checkout the `gh-pages` branch or download the
+  `rendered-decks` workflow artifact (GitHub Pages serving is not enabled).
 - `scripts/pptx_to_marp.py` — one-shot converter used for the initial import.
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML/PDF/PPTX on push (gh-pages branch + build artifact).
@@ -27,7 +33,8 @@ to read or change module content is markdown; binaries are read-only archives.
 - Folder/file names: kebab-case, no spaces.
 - Every `slides.md` and `lab.md` starts with YAML frontmatter:
   `title`, `week` (int), `topic` (kebab slug), `type` (`lecture`|`lab`),
-  `source` (original filename or `authored`). Lecture decks additionally have
+  `source` (original filename, `authored`, or for lab snapshots
+  `"<starter-repo> README.md (synced YYYY-MM-DD)"`). Lecture decks also have
   `marp: true`, `theme`, `paginate`.
 - Slides are separated by `---` on its own line; slide 1 uses `#`, the rest `##`.
 - Speaker notes live in `<!-- Speaker notes: ... -->` comments.
@@ -52,7 +59,7 @@ to read or change module content is markdown; binaries are read-only archives.
 Safety audit before any push (must all come up empty):
 
     git ls-files | grep -Ei '\.(xlsx|xls|mbz|zip|class|jar)$'
-    git ls-files '*.md' '*.yml' '*.py' '*.html' '*.xml' -z | \
+    git ls-files '*.md' '*.yml' '*.py' '*.html' '*.xml' '*.json' -z | \
       xargs -0 grep -HniE 'assignsubmission|G00[0-9]{6}|\b[0-9a-f]{32}\b' | \
       grep -v 'classroom\.github\.com' | \
       grep -v 'assignsubmission|G00' | grep -v '`assignsubmission`'

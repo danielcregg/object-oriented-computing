@@ -21,7 +21,7 @@ are read-only archives.
 - `module/` — syllabus, future-improvements, Moodle course-page HTML assets,
   `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint),
   and `schedule-table/` (builder template for the Moodle schedule table).
-- `docs/superpowers/` — the design spec and the (amended) build plan this
+- `docs/superpowers/` — the design spec and the (amended) build and fix-wave plans this
   repo was created from; execution history, not module content.
 - Rendered decks: checkout the `gh-pages` branch or download the
   `rendered-decks` workflow artifact (GitHub Pages serving is not enabled).
@@ -67,7 +67,7 @@ Checks tracked extensions, path placement (including pptx location),
 tracked text content, and every pptx's internal XML/rels parts (plus
 any embedded office object inside a pptx, flagged for manual review)
 for leaked student data and Moodle tokens. A known-safe mention (a
-Classroom URL, or this pattern's own backtick-quoted name) only clears
+whitelisted Classroom URL, or this pattern's own name — plain or backtick-quoted) only clears
 a match it fully covers — real content extending past one, even glued
 on with no separating space, still surfaces. Classroom `/classrooms/`
 URLs clear only by exact whitelist, not by shape — add a newly

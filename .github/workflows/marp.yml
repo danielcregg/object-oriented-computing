@@ -47,9 +47,9 @@ jobs:
             out="build/$week_dir"
             mkdir -p "$out"
             if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
-            marp "$f" --allow-local-files -o "$out/index.html"
-            marp "$f" --allow-local-files -o "$out/slides.pdf"
-            marp "$f" --allow-local-files -o "$out/slides.pptx"
+            marp "$f" --html --allow-local-files -o "$out/index.html"
+            marp "$f" --html --allow-local-files -o "$out/slides.pdf"
+            marp "$f" --html --allow-local-files -o "$out/slides.pptx"
             printf '%s\n' "<li><a href='$week_dir/index.html'>$week_dir</a> (<a href='$week_dir/slides.pdf'>pdf</a>, <a href='$week_dir/slides.pptx'>pptx</a>)</li>" >> build/index.html
           done
           echo '</ul>' >> build/index.html

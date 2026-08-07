@@ -55,6 +55,17 @@ are read-only archives.
   `scripts/split_question_bank.py` TARGETS, `module/question-bank/README.md`,
   and `module/schedule-table/`.
 
+## Local preview (before committing)
+
+    npm install          # once per machine — pinned marp-cli, same version as CI
+    npm run preview      # live server over weeks/ -> http://localhost:8080
+
+Browse to any deck (e.g. `/week-01-introduction/lecture/slides.md`); edit the
+markdown, refresh the browser to see it. `npm run preview:intro` opens a
+self-refreshing preview window instead, and the Marp for VS Code extension
+gives instant side-panel previews while editing. Preview locally first —
+CI re-renders the published decks only on push.
+
 ## Never commit
 
 - Student personal data of any kind (names, IDs, grades, submissions).

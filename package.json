@@ -1,0 +1,13 @@
+{
+  "name": "object-oriented-computing",
+  "private": true,
+  "description": "Local Marp preview/build tooling for the OOC module repo (same pinned marp-cli as CI)",
+  "devDependencies": {
+    "@marp-team/marp-cli": "4.5.0"
+  },
+  "scripts": {
+    "preview": "marp -s --html .",
+    "preview:intro": "marp --preview --html --allow-local-files weeks/week-01-introduction/lecture/slides.md",
+    "export:intro": "marp --html --allow-local-files weeks/week-01-introduction/lecture/slides.md -o build/week-01-introduction/slides.pptx"
+  }
+}

@@ -27,6 +27,8 @@ images) are read-only archives.
   question banks, or module internals. Anything pushed to a deck goes
   public within minutes.
 - `scripts/pptx_to_marp.py` — one-shot converter used for the initial import.
+- `scripts/build_index.py` — generates the Pages landing page from the
+  `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML/PDF/PPTX on push (gh-pages branch + build artifact).
 

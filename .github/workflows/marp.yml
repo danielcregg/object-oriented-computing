@@ -39,9 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          printf '%s\n' \
-            "<!doctype html><meta charset='utf-8'><title>OOC Lecture Decks</title>" \
-            "<h1>OOC Lecture Decks</h1><ul>" > build/index.html
+          python3 scripts/build_index.py build
           # mapfile, NOT find|while: a piped while-loop hands the pipe to the
           # loop body's stdin, and marp-cli treats piped stdin as an extra
           # markdown input ("Converting 2 markdowns" + output-path error).
@@ -55,9 +53,7 @@ jobs:
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pdf"
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pptx"
-            printf '%s\n' "<li><a href='$week_dir/index.html'>$week_dir</a> (<a href='$week_dir/slides.pdf'>pdf</a>, <a href='$week_dir/slides.pptx'>pptx</a>)</li>" >> build/index.html
           done
-          echo '</ul>' >> build/index.html
 
       - name: Upload rendered decks as artifact
         uses: actions/upload-artifact@v4

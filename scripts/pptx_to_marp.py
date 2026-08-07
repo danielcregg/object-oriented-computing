@@ -9,10 +9,12 @@ Writes <outdir>/slides.md; embedded pictures go to <outdir>/img/.
 Extraction is text-faithful, not layout-faithful (see design spec).
 """
 import argparse
+import io
 import re
 import sys
 from pathlib import Path
 
+from PIL import Image as PIL_Image
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.oxml.ns import qn
@@ -203,25 +205,33 @@ EMBED_QN = qn("r:embed")
 CNVPR_QN = qn("p:cNvPr")
 
 
-def _sniff_ext(blob):
-    """Best-effort image format from magic bytes.
+# Same format-name -> extension map python-pptx's own Image.ext uses (see
+# pptx.parts.image.Image.ext), so a fill-embedded image sniffed here and a
+# PICTURE-branch image sniffed by python-pptx itself never disagree on what
+# to call the same format.
+_PIL_EXT_MAP = {"BMP": "bmp", "GIF": "gif", "JPEG": "jpg", "PNG": "png",
+                 "TIFF": "tiff", "WMF": "wmf"}
 
-    Only reached when an image part's own partname carries no extension
-    (not observed in this corpus, but the OPC spec doesn't forbid it).
-    Falls back to 'png' -- the same default WEB_SAFE_EXTS already treats
-    as safe, so an unrecognized format doesn't spuriously get flagged.
+
+def _sniff_ext(blob):
+    """The image format actually encoded in `blob`, found the same way the
+    PICTURE branch's own `shape.image.ext` finds it (open with Pillow, read
+    the detected format) -- or None if Pillow can't identify it, or
+    identifies a format outside _PIL_EXT_MAP.
+
+    This is the PRIMARY signal for a fill-embedded image's extension (see
+    _extract_fill_images), deliberately content- not label-based: trusting
+    an OPC part's own declared partname instead -- as the PICTURE branch
+    never does -- would let a part whose partname claims a web-safe
+    extension but whose actual bytes are e.g. a legacy Windows Metafile
+    silently dodge the WEB_SAFE_EXTS warning.
     """
-    if blob.startswith(b"\x89PNG\r\n\x1a\n"):
-        return "png"
-    if blob.startswith(b"\xff\xd8\xff"):
-        return "jpg"
-    if blob.startswith((b"GIF87a", b"GIF89a")):
-        return "gif"
-    if blob.startswith(b"BM"):
-        return "bmp"
-    if blob.startswith(b"RIFF") and blob[8:12] == b"WEBP":
-        return "webp"
-    return "png"
+    try:
+        with PIL_Image.open(io.BytesIO(blob)) as im:
+            fmt = im.format
+    except Exception:
+        return None
+    return _PIL_EXT_MAP.get(fmt)
 
 
 def _shape_alt_text(shape):
@@ -263,7 +273,12 @@ def _extract_fill_images(shape, slide, idx, img_dir, n_img, rid_to_name,
             except KeyError:
                 unresolved_fills.append((shape.name, rid))
                 continue
-            ext = part.partname.ext or _sniff_ext(part.blob)
+            # Sniff first (ground truth from the bytes themselves, matching
+            # how the PICTURE branch's shape.image.ext already works);
+            # partname.ext (never leading-dot -- PackURI.ext already strips
+            # it) is only a fallback for when Pillow can't identify the
+            # format, with 'png' as the last resort.
+            ext = _sniff_ext(part.blob) or part.partname.ext or "png"
             n_img += 1
             name = f"slide{idx:02d}-{n_img}.{ext}"
             img_dir.mkdir(parents=True, exist_ok=True)

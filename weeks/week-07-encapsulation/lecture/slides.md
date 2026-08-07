@@ -236,11 +236,20 @@ public class Person {
 
 ---
 
+<style scoped>section pre code { font-size: 18px; } section pre { padding: 14px 18px; }</style>
+
 ## Why use Getters and Setter Methods?
 
 - Let us say Person class objects can only accept usernames that have a maximum of ten characters.
 - We can add validation in the setUsername setter method to make sure the username conforms to this requirement.
 - If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated (e.g. the output below is `theRedRhin`)
+
+---
+
+<style scoped>section pre code { font-size: 19px; } section pre { padding: 14px 18px; }</style>
+
+## Why use Getters and Setter Methods? (continued)
+
 ```java
 public class Person {
     // Private instance variable

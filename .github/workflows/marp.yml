@@ -21,6 +21,12 @@ jobs:
           python3 scripts/safety_audit.py
           python3 scripts/verify_snippets.py
 
+      - name: Set up Java (for snippet verification)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:

@@ -1,8 +1,8 @@
 # CLAUDE.md — how to work in this repo
 
-Source-of-truth repo for the OOC1 module (Java, ATU). Editable sources are
-Markdown, Moodle XML, JSON, and HTML; binaries (`original/*.pptx`, images)
-are read-only archives.
+Source-of-truth repo for the Object-Oriented Computing module (Java, ATU).
+Editable sources are Markdown, JSON, and HTML; binaries (`original/*.pptx`,
+images) are read-only archives.
 
 ## Map
 
@@ -13,7 +13,7 @@ are read-only archives.
   starter repo, and a synced snapshot of the starter repo's README (the
   canonical lab instructions). Edits made here must be pushed to the starter
   repo too. Weeks without labs say so explicitly.
-- `weeks/week-05-mcq1|week-09-mcq2|week-13-mcq3/` — assessment weeks.
+- `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` — assessment weeks.
   MCQ question content lives in Moodle only — never commit it here.
 - `module/` — syllabus, future-improvements, Moodle course-page HTML assets,
   `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint),
@@ -56,11 +56,11 @@ are read-only archives.
 - To change a lecture: edit its `slides.md` and push — CI re-renders decks.
 - To add week N: create `weeks/week-NN-<topic>/lecture/slides.md` (+ `lab/lab.md`),
   then add a row to README's schedule table.
-- Known quirk: two week-7 folders (strings + reading-week) and a
-  syllabus/folder numbering mismatch — see `module/future-improvements.md`
-  before renumbering anything. Renumbering also touches
-  `scripts/split_question_bank.py` TARGETS, `module/question-bank/README.md`,
-  and `module/schedule-table/`.
+- Week folders follow the 2026-27 plan: 12 numbered weeks plus the
+  deliberately unnumbered `weeks/week-06b-reading-week/` (October
+  bank-holiday week, no teaching — it sits between teaching weeks 6 and 7).
+  Renumbering weeks also touches README's schedule table,
+  `module/schedule-table/module-schedule.json`, and this file.
 
 ## Local preview (before committing)
 

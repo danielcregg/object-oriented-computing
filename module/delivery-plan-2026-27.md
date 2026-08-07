@@ -34,8 +34,8 @@ is the lecturer's call when overhauling the intro deck.
 
 ### MCQ bank re-mapping
 
-The existing question banks (`module/question-bank/` + per-week `questions.xml`)
-require three moves to align with this structure:
+The existing question bank (kept in the private question-bank folder outside
+this repo) requires three moves to align with this structure:
 
 - Arrays: move from MCQ2 to MCQ1
 - Inheritance: move from MCQ3 to MCQ2

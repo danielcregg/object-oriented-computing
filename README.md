@@ -42,6 +42,7 @@ no projects. Extra unscheduled Classroom labs exist for
 
 ## Module info
 
+- [Module overview — weekly topics and what each week covers](module/module-overview.md)
 - [Syllabus (2025–26 plan)](module/syllabus.md)
 - [Delivery plan 2026-27 (12 weeks)](module/delivery-plan-2026-27.md)
 - [Future improvements](module/future-improvements.md)

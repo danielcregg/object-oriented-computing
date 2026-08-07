@@ -14,7 +14,7 @@ source: "Java_Methods.pptx"
 
 <span class="kicker">// week 03 · methods · object-oriented computing</span>
 
-# Slide 1
+# Java Methods
 
 - Java Methods
 - Building Blocks of Java Programs
@@ -47,25 +47,27 @@ source: "Java_Methods.pptx"
 
 ---
 
-## Slide 4
+## Method Syntax
 
 - Method Syntax
+<!-- no-compile -->
 ```java
 accessModifier void methodName(parameters) {
     // method body
     // code to execute
 }
 ```
+<!-- no-compile -->
 ```java
 public void run(double distanceMeters) {
     // method body
-    distanceTraveled = distanceTraveled + distanceMeters
+    distanceTraveled = distanceTraveled + distanceMeters;
 }
 ```
 
 ---
 
-## Slide 5
+## Anatomy of a Method
 
 - Example: Simple Method
 ```java
@@ -81,7 +83,7 @@ public void greet() {
 
 ---
 
-## Slide 6
+## Methods with Parameters
 
 - Method with Parameters
 ```java
@@ -90,6 +92,7 @@ public void greetUser(String name) {
 }
 ```
 - Calling the method:
+<!-- no-compile -->
 ```java
 greetUser("Alice");  // Output: Hello, Alice!
 greetUser("Bob");    // Output: Hello, Bob!
@@ -98,7 +101,7 @@ greetUser("Bob");    // Output: Hello, Bob!
 
 ---
 
-## Slide 7
+## Methods with Return Values
 
 - Method with Return Value
 ```java
@@ -108,6 +111,7 @@ public int add(int a, int b) {
 }
 ```
 - Using the returned value:
+<!-- no-compile -->
 ```java
 int result = add(5, 3);
 System.out.println(result);  // Output: 8
@@ -130,7 +134,7 @@ System.out.println(result);  // Output: 8
 
 ---
 
-## Slide 9
+## Working with Multiple Parameters
 
 - Multiple Parameters
 ```java
@@ -140,6 +144,7 @@ public double calculateArea(double length, double width) {
 }
 ```
 - Calling with multiple arguments:
+<!-- no-compile -->
 ```java
 double roomArea = calculateArea(5.5, 4.2);
 System.out.println("Area: " + roomArea);
@@ -161,7 +166,7 @@ System.out.println("Area: " + roomArea);
 
 ---
 
-## Slide 11
+## Private Helper Methods
 
 - Method Visibility Example
 ```java
@@ -193,7 +198,7 @@ public class BankAccount {
 
 ---
 
-## Slide 13
+## Calling a Static Method
 
 - Static Method Example
 ```java
@@ -204,6 +209,7 @@ public class MathHelper {
 }
 ```
 - Calling a static method:
+<!-- no-compile -->
 ```java
 int result = MathHelper.square(5);
 System.out.println(result);  // Output: 25
@@ -212,7 +218,7 @@ System.out.println(result);  // Output: 25
 
 ---
 
-## Slide 14
+## Static vs Non-Static Members
 
 - Static vs Non-Static
 ```java
@@ -246,7 +252,7 @@ public class Counter {
 
 ---
 
-## Slide 16
+## Tracing the Call Stack
 
 - Call Stack Example
 ```java
@@ -280,10 +286,16 @@ public static void methodB() {
 
 ---
 
-## Slide 18
+## Fixing a Missing Return Statement
+
+<style scoped>
+section pre { padding: 12px 16px; margin: 8px 0; }
+section pre code { font-size: 17px; line-height: 1.3; }
+</style>
 
 - Common Mistakes - Examples
 - Missing return on all paths (WRONG):
+<!-- no-compile -->
 ```java
 public int getValue(int x) {
     if (x > 0) {
@@ -304,7 +316,7 @@ public int getValue(int x) {
 
 ---
 
-## Slide 19
+## Putting It All Together
 
 - Complete Example
 ```java

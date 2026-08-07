@@ -177,7 +177,15 @@ Background · running code · JVM, JDK · IDEs · common errors
 * A **computer program** is a sequence of human-readable instructions that are converted by software into machine-executable instructions.
 * List of 50 Java key words:
 
-![The 50 Java keywords](img/slide20-1.png)
+| Range | Keywords |
+|---|---|
+| A–C | abstract, assert, boolean, break, byte, case, catch, char, class, *const* |
+| C–F | continue, default, do, double, else, enum, extends, final, finally, float |
+| F–N | for, *goto*, if, implements, import, instanceof, int, interface, long, native |
+| N–S | new, package, private, protected, public, return, short, static, strictfp, super |
+| S–W | switch, synchronized, this, throw, throws, transient, try, void, volatile, while |
+
+*`const` and `goto` are reserved but not currently used in Java.*
 
 ---
 
@@ -226,7 +234,15 @@ Background · running code · JVM, JDK · IDEs · common errors
   * Be careful of spelling — `JaVa iS CaSe SeNsItiVe`
   * Java uses special characters, e.g. `{}`
 
-![Hello World in Java](img/slide26-1.png)
+```java
+public class HelloPrinter
+{
+    public static void main(String[] args)
+    {
+        System.out.println("Hello, World!");
+    }
+}
+```
 
 ---
 
@@ -235,7 +251,14 @@ Background · running code · JVM, JDK · IDEs · common errors
 * You can also use a simple text editor such as **Notepad** to write your source code.
 * Once saved as `HelloPrinter.java`, you can use a console window to **compile** and **run** the program.
 
-![Compile and execute in a console](img/slide27-1.png)
+```text
+D:\temp\hello>javac HelloPrinter.java
+
+D:\temp\hello>java HelloPrinter
+Hello, World!
+
+D:\temp\hello>
+```
 
 ---
 
@@ -265,7 +288,15 @@ Background · running code · JVM, JDK · IDEs · common errors
 * Every application has the same basic layout
   * Add your 'code' inside the **main method**
 
-![Anatomy of a Java program](img/slide30-1.png)
+```java
+public class HelloPrinter
+{
+    public static void main(String[] args)
+    {
+        System.out.println("Hello, World!");
+    }
+}
+```
 
 ---
 
@@ -273,6 +304,7 @@ Background · running code · JVM, JDK · IDEs · common errors
 
 * **Omitting semicolons** — in Java, every statement must end in a semicolon. Forgetting one confuses the compiler, which uses `;` to find where one statement ends and the next starts. The compiler sees this code:
 
+<!-- no-compile -->
 ```java
 System.out.println("Hello")
 System.out.println("World!");
@@ -280,6 +312,7 @@ System.out.println("World!");
 
 * As this…
 
+<!-- no-compile -->
 ```java
 System.out.println("Hello") System.out.println("World!");
 ```
@@ -295,5 +328,15 @@ System.out.println("Hello") System.out.println("World!");
   * **Leave out** a word: `void` · **forget a semicolon** after `("Hello, World!")`
   * **Don't match a curly brace?** Remove line 6
 
-![Syntax error example](img/slide32-1.png) ![Compiler error output](img/slide32-2.png)
+![w:110 Frustrated programmer](img/slide32-1.png)
+
+```java
+public class HelloPrinter
+{
+    public static void main(String[] args)
+    {
+        System.out.println("Hello, World!");
+    }
+}
+```
 

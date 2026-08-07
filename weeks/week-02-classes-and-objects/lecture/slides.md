@@ -61,9 +61,11 @@ source: "Classes and Objects.pptx"
 
 - In the real world, we can find many objects around us like cars, buildings, and humans. All these objects have some state and behaviour.
 - If we consider a car, then its states can be top speed, total seats, fuel capacity and manufacturer.
-- Its  behaviours can be refuel, park, and drive.
+- Its behaviours can be refuel, park, and drive.
 
-![](img/slide05-1.png)
+<style scoped>
+section img { max-height: 300px; }
+</style>
 
 ![](img/slide05-2.png)
 
@@ -74,17 +76,23 @@ source: "Classes and Objects.pptx"
 - The Car class is implemented on the right.
 - Fields – also called member variables/instance variables of a class. This is because they contain the information relevant to the object of the class. A car object would have a top speed, a certain number of seats, and so many other pieces of data that we could store in variables.
 - Methods - This category of attributes enables the class object to perform operations using the fields. In the case of the car class, the refuel() function would fill up the fuelCapacity property of the object.
+
+---
+
+## Attributes (also called members) of a class (continued)
+
+<!-- no-compile -->
 ```java
-class Car { // Class name
-  // Class Data members
-  int topSpeed;
-  int totalSeats;
-  int fuelCapacity;
-  String manufacturer;
-  // Class Methods
-  void refuel();
-  void park();
-  void drive();
+class Car { // Class name
+  // Class Data members
+  int topSpeed;
+  int totalSeats;
+  int fuelCapacity;
+  String manufacturer;
+  // Class Methods
+  void refuel();
+  void park();
+  void drive();
 }
 ```
 
@@ -96,7 +104,14 @@ class Car { // Class name
 - In Java, we define classes in the following way:
 - The class command tells the compiler that we are creating our custom class. All the members of the class will be defined within the class scope.
 
-![](img/slide07-1.png)
+```java
+class ClassName { // Class name
+
+  /* All member variables
+and methods*/
+
+}
+```
 
 ---
 
@@ -131,13 +146,15 @@ class Car { // Class name
 - Here we will instantiate an object of the Elephant class.
 - The reference variable to this object is elephantObject1
 - We can create a new object by calling the keyword new :
+
+<!-- no-compile -->
 ```java
-class Main {
-    // Main method
-    public static void main(String args[]) {
-	// Create an elephant object called elephantObject1
-	Elephant elephantObject1 = new Elephant();
-  }
+class Main {
+    // Main method
+    public static void main(String args[]) {
+        // Create an elephant object called elephantObject1
+        Elephant elephantObject1 = new Elephant();
+    }
 }
 ```
 
@@ -151,7 +168,11 @@ class Main {
 - You could have multiple reference variables pointing to the same object.
 - Both s1 and s2 point to the same object identity.
 
-![](img/slide12-1.png)
+<!-- no-compile -->
+```java
+Student s1 = new Student("Alice");
+Student s2 = s1;    // s2 now refers to the same object as s1
+```
 
 ---
 
@@ -164,17 +185,94 @@ class Main {
   - A variable name (e.g. s1, s2) is just a reference (handle) to an object in memory.
   - Multiple variables can point to the same object.
 
-![](img/slide13-1.png)
+<!-- no-compile -->
+```java
+Student s1 = new Student("Alice");
+Student s2 = new Student("Alice");
+Student s3 = s1;
+```
+- s1 and s2 → different objects (different memory locations)
+- s1 and s3 → same object (same memory location)
 
-![](img/slide13-2.png)
+---
+
+## Object Identity vs Reference Variables (continued)
+
+> **Analogy** — Object = a house. Reference variable = a slip of paper with directions to the house. Name of the variable = what you wrote on the slip for yourself (e.g. "Alice's house").
 
 ---
 
 ## Class VS Object
 
-![A screenshot of a computer program Description automatically generated](img/slide14-1.png)
+<style scoped>
+section pre { padding: 8px 14px; margin: 4px 0; }
+section pre code { font-size: 14px; line-height: 1.25; }
+</style>
 
-![A computer code with text and numbers Description automatically generated](img/slide14-2.png)
+```java
+public class Student {
+    // Instance variables
+    private String name;
+    private int age;
+    private double gpa;
+    // Constructor
+    public Student(String name, int age, double gpa) {
+        this.name = name;
+        this.age = age;
+        this.gpa = gpa;
+    }
+    // Getter methods
+    public String getName() {
+        return name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public double getGpa() {
+        return gpa;
+    }
+    // Additional methods:
+    // You can add other methods as needed, for example:
+    //
+    // - calculateAverageGrade(double[] grades)
+    // - printStudentInfo()
+    // - isEligibleForScholarship()
+}
+```
+
+---
+
+## Class VS Object (continued)
+
+<style scoped>
+section pre { padding: 12px 18px; margin: 8px 0; }
+section pre code { font-size: 17px; line-height: 1.3; }
+</style>
+
+<!-- no-compile -->
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Create student objects
+        Student student1 = new Student("John Doe", 20, 3.85);
+        Student student2 = new Student("Jane Smith", 22, 3.50);
+
+        // Use getter methods to access student information
+        System.out.println("Student 1:");
+        System.out.println("Name: " + student1.getName());
+        System.out.println("Age: " + student1.getAge());
+        System.out.println("GPA: " + student1.getGpa());
+
+        // You can add more functionality here, such as:
+        //
+        // - Create an array of students
+        // - Loop through the array and print information for each student
+
+    }
+}
+```
 
 ---
 
@@ -269,8 +367,7 @@ public Cat(int age) {
 ## Single Responsibility Principle (SRP)
 
 - The development of a class should be guided by the Single Responsibility Principle (SRP).
-
-![](img/slide21-1.png)
+- A class should have one, and only one, responsibility. Every field and method it defines should serve that single responsibility.
 
 ---
 

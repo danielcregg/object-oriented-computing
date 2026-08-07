@@ -33,49 +33,8 @@ source: "Abstraction.pptx"
 
 ## Four major principles of OOP
 
-- Abstraction is one of the 4 major principles of OOP
-      - Abstraction
-      - P
-      - I
-      - E
-
-![Image result for a pie](img/slide03-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Abstraction is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - I
-      - E
-
-![Image result for a pie](img/slide04-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Abstraction is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - Inheritance
-      - E
-
-![Image result for a pie](img/slide05-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Abstraction is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - Inheritance
-      - Encapsulation
-
-![Image result for a pie](img/slide06-1.jpg)
+- Recall: OOP rests on 4 pillars — Abstraction, Polymorphism, Inheritance, Encapsulation.
+- Covered in full back in week 7 — this week we go deep on **Abstraction**.
 
 ---
 
@@ -84,9 +43,10 @@ source: "Abstraction.pptx"
 - Abstraction is the process of hiding the implementation details (i.e., the body) of methods and showing only method signatures.
 ```java
 public int add(int a, int b) {
-  return a + b;
+  return a + b;
 }
 ```
+<!-- no-compile -->
 ```java
 public int add(int a, int b);
 ```
@@ -232,8 +192,18 @@ void method2();
 
 ## Implementing an Interface
 
-- Before you can use an interface, it must be implemented by some class. Here ExampleClass that implements the ExampleInterface:
+<style scoped>
+section pre { padding: 8px 14px; margin: 4px 0; }
+section pre code { font-size: 16px; line-height: 1.25; }
+</style>
+
+- Before you can use an interface, it must be implemented by some class. Here `ExampleClass` implements `ExampleInterface`:
 ```java
+interface ExampleInterface {
+void method1();
+void method2();
+}
+
 public class ExampleClass implements ExampleInterface {
 @Override
 public void method1() {
@@ -257,7 +227,22 @@ public void method2() {
 
 ## Real world Interface Example
 
-![A screen shot of a computer program Description automatically generated](img/slide24-1.png)
+- A simple interface and a class that implements it:
+
+```java
+public interface Drawable {
+    void draw();
+}
+
+public class Circle implements Drawable {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a circle");
+    }
+}
+```
+
+- Any class that implements `Drawable` must provide its own `draw()` method.
 
 ---
 
@@ -273,9 +258,11 @@ public void method2() {
 
 ## Differences between a class and an interface
 
+<!-- _class: dense -->
+
 - The keyword used to create a class is “class”. The keyword used to create an interface is “interface”
 - A class can be instantiated i.e, objects of a class can be created. An Interface cannot be instantiated i.e, objects cannot be created.
-- Classes do not support multiple inheritance. The interface supports multiple inheritance.
+- Multiple inheritance: classes don't support it, interfaces do (see comparison table).
 - Classes can inherit from another class. An interface cannot inherit a class.
 - A class implements an interface and an interface can inherit other interfaces NOT implement them!
 - Classes can be inherited by another class using the keyword ‘extends’. An interface can be inherited by a class by using the keyword ‘implements’ and it can be inherited by an interface using the keyword ‘extends’.
@@ -288,7 +275,7 @@ public void method2() {
 
 ## Why use Interfaces?
 
-- Interfaces increase flexibility because a class can implement multiple interfaces. Since Java does not have multiple inheritance, using abstract classes prevents your users from using any other class hierarchy.
+- Interfaces increase flexibility: a class can implement several of them (see comparison table).
 - An interface is a contract (or a protocol, or a common understanding) of what the classes can do. When a class implements a certain interface, it promises to provide implementation to all the abstract methods declared in the interface.
 - Interfaces facilitate polymorphism.
 
@@ -297,13 +284,17 @@ public void method2() {
 ## Interface Vs Abstract Class
 
 - The choice between using an interface or an abstract class in Java depends on the design requirements of your application. Here are some factors to consider:
-- Multiple inheritance: Java does not support multiple inheritance of classes, which means a class can only extend one other class. However, a class can implement multiple interfaces. If you need your class to inherit behavior from multiple sources, you should use interfaces.
+- Multiple inheritance: extend one class only, but implement many interfaces — use interfaces if you need behavior from multiple sources (see comparison table).
 - Default behavior: If you want to provide default behavior for some methods, you should use an abstract class. Abstract classes can have fully implemented methods, while interfaces can only have method signatures until Java 7. However, from Java 8 onwards, interfaces can have default methods and static methods.
 - Type definition: If you want to define a type that will be used by many classes, including unrelated ones, use an interface. An interface is a good way to define a contract that can be implemented by any class anywhere in the class hierarchy.
 
 ---
 
-## Slide 29
+<!-- _class: dense -->
+
+<style scoped>table { font-size: 15px; } td, th { padding: 5px 10px 5px 4px; }</style>
+
+## Concrete vs Abstract vs Interface
 
 | Feature | Concrete Class | Abstract Class | Interface |
 |---|---|---|---|

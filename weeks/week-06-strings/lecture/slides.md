@@ -163,7 +163,6 @@ String result = "";
 for (int i = 0; i < 1000; i++) {
     result += "a";  // Creates 1000 NEW String objects!
 }
-// Time: ~1000ms
 // Memory: 1000 temporary objects created and discarded
 ```
 
@@ -174,52 +173,23 @@ StringBuilder result = new StringBuilder();
 for (int i = 0; i < 1000; i++) {
     result.append("a");  // Modifies SAME object 1000 times
 }
-// Time: ~1ms
 // Memory: 1 object reused
 ```
 
 ---
 
-<!-- _class: centered-table -->
+## Why StringBuilder Was Created
 
-## String vs StringBuffer vs StringBuilder
-
-| Class | Introduced | Mutability |
-|---|---|---|
-| `String` | Java 1.0 (1996) | Immutable |
-| `StringBuffer` | Java 1.0 (1996) | Mutable, thread-safe |
-| `StringBuilder` | Java 5 (2004) | Mutable, NOT thread-safe |
-
----
-
-## String vs StringBuffer vs StringBuilder (continued)
-
-- Both String and StringBuffer were in the original Java release. They were designed together from the start:
-- String for immutable text
-- StringBuffer for mutable text operations (like concatenation in loops)
-- The reason StringBuffer was synchronized from the beginning was that early Java emphasized thread-safety as a core feature - this was the 90s when multi-threading was becoming important, and Java wanted to be "safe by default."
-
----
-
-<!-- _class: dense -->
-
-## String vs StringBuffer vs StringBuilder
-
-<style scoped>
-section pre { padding: 12px 16px; margin: 8px 0; }
-</style>
-
-- StringBuilder came 8 years later when the Java team realized that most StringBuffer usage was in single-threaded contexts, and the synchronization overhead was unnecessary performance cost.
-- So Java added StringBuilder as a drop-in replacement for StringBuffer with identical API but without the synchronization overhead.
-- In practice: You'll almost always use StringBuilder. StringBuffer is now quite rare since most code doesn't need that level of thread-safety, and if it does, there are often better concurrent solutions available.
+- String and StringBuffer shipped together in Java 1.0 (1996): String immutable, StringBuffer mutable and synchronized — 90s Java valued "safe by default"
+- Java 5 (2004) added StringBuilder: same API as StringBuffer, no synchronization overhead — most code is single-threaded and never needed it
+- Solves String's slow-concatenation problem: loops, repeated modifications, building large strings
+- In practice: use StringBuilder unless multiple threads share the object
 
 ```java
-// Use StringBuilder (most common case)
 StringBuilder sb = new StringBuilder();
-sb.append("Hello").append(" World");
+sb.append("Hello").append(" World");      // common case
 
-// Only use StringBuffer if multiple threads access it
-StringBuffer safeSb = new StringBuffer();  // Rarely needed
+StringBuffer safeSb = new StringBuffer(); // only if threads share it
 ```
 
 ---
@@ -229,7 +199,6 @@ StringBuffer safeSb = new StringBuffer();  // Rarely needed
 - StringBuilder provides MUTABLE character sequences
 - Modifies the same object instead of creating new ones
 - Much more efficient for string manipulation
-- Not thread-safe (use StringBuffer for thread safety)
 - Introduced in Java 5 as faster alternative to StringBuffer
 
 ---
@@ -241,16 +210,6 @@ section img { max-height: 500px; }
 </style>
 
 ![](img/slide12-1.png)
-
----
-
-## Why StringBuilder Was Created
-
-- StringBuilder was specifically designed to solve the performance problem caused by String immutability when you need to:
-- Build strings in loops ✅
-- Make multiple modifications ✅
-- Concatenate many pieces ✅
-- Construct large strings ✅
 
 ---
 
@@ -324,41 +283,19 @@ System.out.println("Original StringBuilder unchanged: " + sub);
 
 ---
 
-<!-- _class: dense -->
-
-## StringBuffer: Thread-Safe Alternative
-
-- StringBuffer is similar to StringBuilder but thread-safe
-- All methods are synchronized (thread-safe)
-- Slower than StringBuilder due to synchronization overhead
-- Use ONLY when multiple threads access same object
-- For single-threaded code, always use StringBuilder
-- API identical to StringBuilder (append, insert, delete, etc.)
-
-```java
-// StringBuffer - thread-safe (synchronized)
-StringBuffer buffer = new StringBuffer();
-// Safe for multiple threads to append simultaneously
-
-// StringBuilder - NOT thread-safe
-StringBuilder builder = new StringBuilder();
-// Only use in single-threaded code
-```
-
----
-
 <!-- _class: centered-table -->
 
-## String vs StringBuilder
+## String vs StringBuffer vs StringBuilder
 
-| Class | Mutable? | Thread-safe? | Notes |
-|---|---|---|---|
-| `String` | No | Yes | Stored in the String pool |
-| `StringBuilder` | Yes | No | Faster for modifications |
-| `StringBuffer` | Yes | Yes (synchronized) | Slower |
+| Class | Introduced | Mutable? | Thread-safe? | Notes |
+|---|---|---|---|---|
+| `String` | Java 1.0 (1996) | No | Yes | Stored in the String pool |
+| `StringBuilder` | Java 5 (2004) | Yes | No | Faster for modifications |
+| `StringBuffer` | Java 1.0 (1996) | Yes | Yes (synchronized) | Slower |
 
 - Use String for read-only text
 - Use StringBuilder for frequent modifications
+- Use StringBuffer when multiple threads share it
 
 ---
 

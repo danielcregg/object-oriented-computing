@@ -30,65 +30,34 @@ source: "Polymorphism.pptx"
 
 ---
 
-## Four major principles of OOP
+<!-- _class: split -->
 
-- Polymorphism is one of the 4 major principles of OOP
-      - A
-      - Polymorphism
-      - I
-      - E
-
-![Image result for a pie](img/slide03-1.jpg)
-
----
+<style scoped>
+section.split { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; align-content: start; }
+section.split h2 { grid-column: 1 / -1; }
+section.split ul { grid-column: 1; }
+section.split p:has(img) { grid-column: 2; grid-row: 2; align-self: center; margin: 0; }
+section.split img { max-height: 360px; object-fit: contain; }
+</style>
 
 ## Four major principles of OOP
 
-- Polymorphism is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - I
-      - E
-
-![Image result for a pie](img/slide04-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Polymorphism is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - I
-      - E
-
-![Image result for a pie](img/slide05-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Polymorphism is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - Inheritance
-      - E
-
-![Image result for a pie](img/slide06-1.jpg)
-
----
-
-## Four major principles of OOP
-
-- Polymorphism is one of the 4 major principles of OOP
-      - Abstraction
-      - Polymorphism
-      - Inheritance
-      - Encapsulation
+- Recall: OOP rests on 4 pillars — Abstraction, Polymorphism, Inheritance, Encapsulation.
+- Covered in full back in week 7 — this week we go deep on **Polymorphism**.
 
 ![Image result for a pie](img/slide07-1.jpg)
 
 ---
+
+<!-- _class: split -->
+
+<style scoped>
+section.split { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; align-content: start; }
+section.split h2 { grid-column: 1 / -1; }
+section.split ul { grid-column: 1; }
+section.split p:has(img) { grid-column: 2; grid-row: 2; align-self: center; margin: 0; }
+section.split img { max-height: 360px; object-fit: contain; }
+</style>
 
 ## What is Polymorphism
 
@@ -130,6 +99,8 @@ source: "Polymorphism.pptx"
       - Number of parameters passed
       - Data type of parameters
       - Sequence of data type of parameters
+- Example: `max(int, int)`
+- A class cannot have two methods with the same signature.
 
 ---
 
@@ -150,19 +121,6 @@ public int max (int x, int y)
 - **method-name** — `max`
 - **parameter-list** — `(int x, int y)`
 - **body of the method** — the `{ }` block
-
----
-
-## Method Signature
-
-- max(int, int)
-
----
-
-## Method Signature
-
-- A method signature is a combination of the method name and the parameter list.
-- A class cannot have two methods with the same signature
 
 ---
 
@@ -252,8 +210,9 @@ public class Cat extends Animal {
 
 ---
 
-## Overriding Example
+## Try It Yourself
 
+- Exercise — write this code yourself:
 - Create Human Class
 - Create IrishPerson Class that inherits from Human
 - Create FrenchPerson Class that inherits from Human
@@ -291,13 +250,6 @@ a.sound();
 - At runtime → it becomes a `Dog`
 - Only **during execution** can the program determine which `sound()` method to call.
 - This is essential for: Inheritance, Interfaces, Real OOP behavior, and writing code that works for multiple object types.
-
----
-
-## Difference between Overloading and Overriding
-
-- Overloading is about the same method having different signatures.
-- Overriding is about the same method with the same signature but with different classes, connected through inheritance.
 
 ---
 

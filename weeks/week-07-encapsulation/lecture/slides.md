@@ -16,8 +16,6 @@ source: "Encalsulation.pptx"
 
 # Encapsulation
 
-![Image result for encapsulation](img/slide01-1.png)
-
 ---
 
 ## Agenda
@@ -28,7 +26,7 @@ source: "Encalsulation.pptx"
 - Implementing encapsulation (private fields, getters & setters)
 - Getters & setters: purpose + examples
 - Validation via setters (e.g., username length)
-- Coding example: BankAccount
+- Coding example: BankAccount
 - Benefits: protection, flexibility, maintainability
 - Wrap-up & resources
 
@@ -43,103 +41,98 @@ source: "Encalsulation.pptx"
 ## Encapsulation Definition
 
 - English meaning of encapsulation
-  - To encase in
-  - As if in a capsule
+  - To encase in, as if in a capsule
 - Encapsulation meaning in OOP:
   - Encapsulation in Java refers to the bundling of data (aka fields or instance variables) and methods that operate on that data (AKA Getters and Setters) within a single unit (a class), while restricting direct access to some of the object's components.
+  - In Encapsulation, the instance variables of a class are hidden (i.e., made private) from other classes and can only be accessed through the methods of their own class.
+  - Data hiding is the practice of making fields private to prevent direct external access — a key aspect of encapsulation.
 
-![A diagram of a pill Description automatically generated](img/slide04-1.png)
+---
+
+## Encapsulation Definition
+
+A class is a capsule: private data on one side, the methods that operate on it on the other — bundled together as a single unit.
+
+![A diagram of a pill Description automatically generated w:520](img/slide04-1.png)
 
 ---
 
-## What is Encapsulation?
-
-- Encapsulation is one of the four fundamental OOP concepts.
-- Encapsulation in Java is a mechanism of wrapping the instance variables and methods acting on the instance variables together as a single unit.
-- In Encapsulation, the instance variables of a class will be hidden (i.e., made private) from other classes. They can only be accessed only through the methods of their current class.
-- Data hiding is the practice of making fields private to prevent direct external access, which is a key aspect of encapsulation.
-
----
+<!-- _class: centered-table -->
 
 ## Access Modifiers
 
 - Encapsulation is the principle of hiding internal implementation details and exposing only what is necessary through a controlled interface.
-- Access modifiers are the tools Java gives you to enforce that principle.
-- We can impose access restrictions on instance variable and methods.
-- The restrictions are specified through access modifiers.
-- Access modifiers are keywords we can associate with each member to define which parts of the program can access it directly.
-- In Java, there are 3 types of access modifier and 4 levels of access.
+- Access modifiers are the keywords Java gives you to enforce that principle — associated with each member to define which parts of the program can access it directly.
+- In Java, there are 3 types of access modifier and 4 levels of access:
+
+| Modifier | Class | Package | Subclass (other package) | World |
+|---|---|---|---|---|
+| `private` | Y | N | N | N |
+| *(default)* | Y | Y | N | N |
+| `protected` | Y | Y | Y | N |
+| `public` | Y | Y | Y | Y |
+
+- *(default)* means no modifier keyword is written at all. Source: https://www.javatpoint.com/access-modifiers
 
 ![](img/slide06-1.png)
 
 ---
 
-## Access Modifiers Table
-
-    - Visible to the class only (private).
-    - Visible to the package (default). No modifiers are needed!
-    - Visible to the package and all subclasses (protected).
-    - Visible to the world (public).
-    - https://www.javatpoint.com/access-modifiers
-
-![](img/slide07-1.png)
-
----
-
-## Hot to Implement Encapsulation
+## How to Implement Encapsulation
 
 - Declare instance variables private.
 - Provide a public getter and setter method for each private instance variable.
 ```java
 public class Student {
-// Private instance variable
-private String email;
-// Getter method
-public String getEmail() {
-	return email;
-}
-// Setter method
-public void setEmail(String email) {
-	this.email = email;
-}
+    // Private instance variable
+    private String email;
+
+    // Getter method
+    public String getEmail() {
+        return email;
+    }
+
+    // Setter method
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
 ```
 
 ---
 
-## Getter and Setter Methods
+## Getters and Setters
 
-- Getter methods are used to “get” (i.e., retrieve) the current value of a private instance variable.
-- Setters methods are used to “set” (i.e., update) the value of a private instance variable.
-- Getter methods are sometimes referred to as accessors methods.
-- Setters methods are sometimes referred to as mutator methods.
+- Getter methods are used to "get" (i.e., retrieve) the current value of a private instance variable — sometimes called accessor methods.
+- Setter methods are used to "set" (i.e., update) the value of a private instance variable — sometimes called mutator methods.
+- It is a common convention to name these methods after the corresponding field, prefixed with `get` or `set`.
 
 ---
 
 ## Getters and Setters
 
-- These two types of methods are very popular in OOP. A get method retrieves the value of a particular instance variable, whereas a set method sets its value.
-- It is a common convention to write the name of the corresponding member fields with the get or set command.
 ```java
-// Car class
-class Car {
-   private int speed; // member field speed
-   // Setter method to set the speed of the car
-   public void setSpeed(int x) {
-     speed = x;
-   }
-   // Getter method to get the speed of the car
-   public int getSpeed() {
-       return speed;
-   }
+class Car {
+    private int speed; // member field speed
+
+    // Setter method to set the speed of the car
+    public void setSpeed(int x) {
+        speed = x;
+    }
+
+    // Getter method to get the speed of the car
+    public int getSpeed() {
+        return speed;
+    }
 }
-class Main {
-   public static void main(String args[]) {
-       Car car = new Car();
-       car.setSpeed(100); // calling the setter method
-       // calling the getter method
-       System.out.println(car.getSpeed());
-   }
+
+class Main {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.setSpeed(100); // calling the setter method
+        // calling the getter method
+        System.out.println(car.getSpeed());
+    }
 }
 ```
 
@@ -160,18 +153,86 @@ class Main {
 - The implementation inside the class has changed but the outside world is not affected. The way the methods are called remains the same.
 ```java
 public class Person {
-// Private instance variables
-private String middleNames;
-public String getMiddleNames() {
-	return middleNames;
-}
-public void setMiddleNames(String middleNames) {
-	this.middleNames = middleNames;
-}
+    // Private instance variable
+    private String middleNames;
+
+    public String getMiddleNames() {
+        return middleNames;
+    }
+
+    public void setMiddleNames(String middleNames) {
+        this.middleNames = middleNames;
+    }
 }
 ```
 
-![A screenshot of a computer code AI-generated content may be incorrect.](img/slide12-1.png)
+---
+
+## Why use Getters and Setter Methods?
+
+<style scoped>
+section pre { padding: 12px 18px; margin: 8px 0; }
+section pre code { font-size: 18px; line-height: 1.3; }
+</style>
+
+- Internally, `middleNames` becomes a `String[]` — the getter/setter signatures don't change:
+```java
+public class Person {
+    // Private instance variable - array to store multiple middle names
+    // Encapsulation: data is hidden from direct external access
+    private String[] middleNames;
+
+    /**
+     * Getter method to retrieve all middle names as a single String
+     * Demonstrates encapsulation: controlled access to private data
+     * @return String containing all middle names separated by spaces
+     */
+    public String getMiddleNames() {
+        // Check if array is null or empty to avoid NullPointerException
+        if (middleNames == null || middleNames.length == 0) {
+            return "";
+        }
+        // Use String.join() to combine array elements with spaces
+        // More efficient and cleaner than StringBuffer for this purpose
+        return String.join(" ", middleNames);
+    }
+}
+```
+
+---
+
+## Why use Getters and Setter Methods?
+
+<style scoped>
+section pre { padding: 12px 18px; margin: 8px 0; }
+section pre code { font-size: 18px; line-height: 1.3; }
+</style>
+
+- The matching setter validates the input and rebuilds the array:
+```java
+public class Person {
+    private String[] middleNames;
+
+    /**
+     * Setter method to set middle names from a String input
+     * Demonstrates encapsulation: controlled modification of private data
+     * The setter transforms the input (String) into internal format (array)
+     * @param middleNames String containing middle names separated by spaces
+     */
+    public void setMiddleNames(String middleNames) {
+        // Validate input: check for null or empty string
+        if (middleNames == null || middleNames.trim().isEmpty()) {
+            // If invalid, set to empty array rather than leaving null
+            this.middleNames = new String[0];
+        } else {
+            // Split the string into an array using whitespace as delimiter
+            // trim() removes leading/trailing spaces
+            // \\s+ splits on one or more whitespace characters (handles multiple spaces)
+            this.middleNames = middleNames.trim().split("\\s+");
+        }
+    }
+}
+```
 
 ---
 
@@ -179,36 +240,47 @@ public void setMiddleNames(String middleNames) {
 
 - Let us say Person class objects can only accept usernames that have a maximum of ten characters.
 - We can add validation in the setUsername setter method to make sure the username conforms to this requirement.
-- If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated (e.g. the code output on right = theRedRhin)
+- If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated (e.g. the output below is `theRedRhin`)
 ```java
 public class Person {
-// Private instance variables
-private String username;
-public String getUsername() {
-	return username;
-}
-public void setUsername(String username) {
-if (username.length() > 10) {
-	this.username = username.substring(0, 10);
-} else {
-	this.username = username;
-}
-}
-}
-```
-```java
-public class Main {
-public static void main(String[] args) {
-Person perObj1 = new Person();
-perObj1.setUsername("theRedRhino"); // 11 Characters in username
-System.out.println(perObj1.getUsername());
-}
+    // Private instance variable
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        if (username.length() > 10) {
+            this.username = username.substring(0, 10);
+        } else {
+            this.username = username;
+        }
+    }
 }
 ```
 
 ---
 
-## Slide 14
+## Why use Getters and Setter Methods?
+
+- Calling code sees only the public `getUsername()`/`setUsername(String)` interface — truncation happens invisibly inside the setter:
+
+<!-- no-compile -->
+```java
+// Person class defined on the previous slide — this fence is a continuation, not standalone
+public class Main {
+    public static void main(String[] args) {
+        Person perObj1 = new Person();
+        perObj1.setUsername("theRedRhino"); // 11 characters in username
+        System.out.println(perObj1.getUsername());
+    }
+}
+```
+
+---
+
+## Encapsulation Visualised
 
 ![Image result for java encapsulation](img/slide14-1.png)
 
@@ -216,12 +288,49 @@ System.out.println(perObj1.getUsername());
 
 ## Coding Example
 
-- Private Data: The accountHolder and balance are private, ensuring controlled access.
-- Constructor: Initializes a new bank account object.
-- Getters: Allow for reading the account holder's name and the current balance.
-- Transaction Methods: The deposit() and withdraw() methods encapsulate the logic of transactions while enforcing basic rules (preventing negative deposits and overdrafts).
+- Private Data: The accountHolder and balance are private, ensuring controlled access.
+- Constructor: Initializes a new bank account object.
+- Getters: Allow for reading the account holder's name and the current balance.
+- Transaction Methods: The deposit() and withdraw() methods encapsulate the logic of transactions while enforcing basic rules (preventing negative deposits and overdrafts).
 
-![A screenshot of a computer code Description automatically generated](img/slide15-1.png)
+---
+
+## Coding Example
+
+```java
+public class BankAccount {
+    private String accountHolder;
+    private double balance;
+
+    // Constructor
+    public BankAccount(String accountHolder, double initialBalance) {
+        this.accountHolder = accountHolder;
+        this.balance = initialBalance;
+    }
+
+    // Getters
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    // Methods for transactions (with basic safeguards)
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+        }
+    }
+}
+```
 
 ---
 
@@ -241,8 +350,8 @@ System.out.println(perObj1.getUsername());
 
 ## End note
 
-- Core Concept: Encapsulation is a fundamental principle in object-oriented programming (OOP). It involves bundling data (instance variables) and the code that operates on that data (methods) together into a single unit, such as a class.
-- Controlling Access: Access control mechanisms (like private, public, and protected) are central to encapsulation. By making instance variables private, you prevent direct access to them from outside the class. This forces interaction through the provided methods (getters and setters).
+- Core Concept: Encapsulation is a fundamental principle in object-oriented programming (OOP). It involves bundling data (instance variables) and the code that operates on that data (methods) together into a single unit, such as a class.
+- Controlling Access: Access control mechanisms (like private, public, and protected) are central to encapsulation. By making instance variables private, you prevent direct access to them from outside the class. This forces interaction through the provided methods (getters and setters).
 
 ---
 

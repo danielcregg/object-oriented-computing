@@ -12,35 +12,33 @@ are preserved untouched in each week's `lecture/original/`.
 
 ## Module schedule
 
+<!-- current-week:start -->
+> 🗓️ **Semester has not started yet** — teaching begins the week of 15 Sep 2026.
+<!-- current-week:end -->
+
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|
 | 1 | Introduction | [slides](weeks/week-01-introduction/lecture/slides.md) | [no lab](weeks/week-01-introduction/lab/lab.md) |
-| 2 | Structure | [slides](weeks/week-02-structure/lecture/slides.md) | [lab](weeks/week-02-structure/lab/lab.md) |
-| 3 | Classes and Objects | [slides](weeks/week-03-classes-and-objects/lecture/slides.md) | [lab](weeks/week-03-classes-and-objects/lab/lab.md) |
-| 4 | Methods | [slides](weeks/week-04-methods/lecture/slides.md) | [lab](weeks/week-04-methods/lab/lab.md) |
-| 5 | **MCQ 1** | [details](weeks/week-05-mcq1/README.md) | — |
-| 6 | Arrays | [slides](weeks/week-06-arrays/lecture/slides.md) | [lab](weeks/week-06-arrays/lab/lab.md) |
-| 7 | Strings | [slides](weeks/week-07-strings/lecture/slides.md) | [lab](weeks/week-07-strings/lab/lab.md) |
-| 7* | Reading Week | [details](weeks/week-07-reading-week/README.md) | — |
-| 8 | Encapsulation | [slides](weeks/week-08-encapsulation/lecture/slides.md) | [lab](weeks/week-08-encapsulation/lab/lab.md) |
-| 9 | **MCQ 2** | [details](weeks/week-09-mcq2/README.md) | — |
-| 10 | Inheritance | [slides](weeks/week-10-inheritance/lecture/slides.md) | [lab](weeks/week-10-inheritance/lab/lab.md) |
-| 11 | Polymorphism | [slides](weeks/week-11-polymorphism/lecture/slides.md) | [lab](weeks/week-11-polymorphism/lab/lab.md) |
-| 12 | Abstraction | [slides](weeks/week-12-abstraction/lecture/slides.md) | [lab](weeks/week-12-abstraction/lab/lab.md) |
-| 13 | **MCQ 3** | [details](weeks/week-13-mcq3/README.md) | — |
-
-\* Two week-7 entries mirror the source folders; the planned 12-week
-restructure resolves this ([future improvements](module/future-improvements.md)).
-The [2025–26 syllabus plan](module/syllabus.md) uses different week numbers —
-the folders here reflect what is actually organised.
+| 2 | Classes and Objects | [slides](weeks/week-02-classes-and-objects/lecture/slides.md) | [lab](weeks/week-02-classes-and-objects/lab/lab.md) |
+| 3 | Methods | [slides](weeks/week-03-methods/lecture/slides.md) | [lab](weeks/week-03-methods/lab/lab.md) |
+| 4 | Arrays | [slides](weeks/week-04-arrays/lecture/slides.md) | [lab](weeks/week-04-arrays/lab/lab.md) |
+| 5 | **MCQ 1** (33%) | [details](weeks/week-05-mcq1/README.md) | — |
+| 6 | Strings | [slides](weeks/week-06-strings/lecture/slides.md) | [lab](weeks/week-06-strings/lab/lab.md) |
+| — | Reading week | [details](weeks/week-06b-reading-week/README.md) | — |
+| 7 | Encapsulation | [slides](weeks/week-07-encapsulation/lecture/slides.md) | [lab](weeks/week-07-encapsulation/lab/lab.md) |
+| 8 | Inheritance | [slides](weeks/week-08-inheritance/lecture/slides.md) | [lab](weeks/week-08-inheritance/lab/lab.md) |
+| 9 | **MCQ 2** (33%) | [details](weeks/week-09-mcq2/README.md) | — |
+| 10 | Polymorphism | [slides](weeks/week-10-polymorphism/lecture/slides.md) | [lab](weeks/week-10-polymorphism/lab/lab.md) |
+| 11 | Abstraction | [slides](weeks/week-11-abstraction/lecture/slides.md) | [lab](weeks/week-11-abstraction/lab/lab.md) |
+| 12 | **MCQ 3** (33%) | [details](weeks/week-12-mcq3/README.md) | — |
 
 **Scheduling rule:** reading week always falls on the week of the Irish
 October bank holiday, with 6 teaching weeks before it and 6 after.
 
-**Assessment:** the module is assessed by the three MCQs (weeks 5, 9, 13)
-only — projects are discontinued. An extra unscheduled Classroom lab exists,
-[`wX-lab-control-flow`](REDACTED) — control
-flow has no lecture week of its own; schedule it per delivery.
+**Assessment:** three MCQs (weeks 5, 9, 12), held during lab slots —
+no projects. Extra unscheduled Classroom labs exist for
+[control flow](REDACTED) and structure
+(topics without dedicated lecture weeks).
 
 ## Module info
 

@@ -1,6 +1,6 @@
 # Future Improvements (from "TO DO for NEXT year" notes)
 
-- Move to 12 weeks; last MCQ in week 12.
+- ~~Move to 12 weeks; last MCQ in week 12.~~ **Done 2026-08-07** (repo restructured).
 - Some lectures repeated themselves — needs overhaul. Consider full AI lectures (NotebookLM).
 - Polymorphism lab is a bit too long — consider removing a section.
 - Add expected outputs to labs after DIY sections.

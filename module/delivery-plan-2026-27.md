@@ -1,5 +1,8 @@
 # Delivery Plan — 2026-27 (12 teaching weeks)
 
+> **Status: executed in this repo on 2026-08-07** — the `weeks/` tree now
+> follows this structure (Structure removed; weeks renumbered).
+
 Stated by the lecturer on 2026-08-07. Anchor rule: reading week always falls
 on the Irish October bank-holiday week — 6 teaching weeks before it, 6 after.
 All MCQs are held during the lab slot of their week.

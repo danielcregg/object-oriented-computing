@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Inheritance"
 week: 10
@@ -8,6 +8,11 @@ topic: inheritance
 type: lecture
 source: "Inheritance.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 10 · inheritance · object-oriented computing</span>
 
 # Java Inheritance
 

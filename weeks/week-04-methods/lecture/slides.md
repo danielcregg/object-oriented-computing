@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Java Methods"
 week: 4
@@ -8,6 +8,11 @@ topic: methods
 type: lecture
 source: "Java_Methods.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 04 · methods · object-oriented computing</span>
 
 # Slide 1
 

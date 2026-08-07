@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Java Arrays"
 week: 6
@@ -8,6 +8,11 @@ topic: arrays
 type: lecture
 source: "Java Arrays.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 06 · arrays · object-oriented computing</span>
 
 # Java Arrays
 

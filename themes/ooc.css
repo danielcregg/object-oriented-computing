@@ -1,0 +1,119 @@
+/* @theme ooc */
+/* OOC module theme — "the lecture as source code".
+   Java-brand palette (blue #33698C, orange #E76F00) on warm paper #FBFAF7;
+   editor-gutter rail with line-number pagination; headings end in an
+   orange semicolon. Classes: lead, cols, grid2, logos, dense,
+   centered-table. See CLAUDE.md for usage. */
+
+@import 'default';
+
+/* ── OOC theme: "the lecture as source code" ─────────────────────────
+   Palette from Java's own identity: java-blue #33698C, java-orange #E76F00,
+   ink #1E2833, paper #FBFAF7. Signature: an editor gutter down the left,
+   slide numbers set like line numbers, and every heading ends in ;
+   (element rules are section-prefixed to outrank the default theme) */
+section {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1.5;
+  color: #1E2833;
+  /* the editor-gutter rail is painted into the background — template-proof */
+  background: linear-gradient(to right,
+    #FBFAF7 0, #FBFAF7 86px,
+    #DED8C9 86px, #DED8C9 88px,
+    #FBFAF7 88px, #FBFAF7 100%);
+  padding: 56px 72px 56px 122px;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+  align-items: stretch !important;
+}
+section::after {
+  position: absolute !important; left: 0 !important; right: auto !important;
+  top: auto !important; bottom: 26px !important; width: 86px !important;
+  text-align: center !important; padding: 0 !important; background: transparent !important;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 16px !important; font-weight: 400 !important; color: #AFA893 !important;
+  content: attr(data-marpit-pagination) !important;
+}
+section h1, section h2 {
+  font-family: 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-weight: 600; letter-spacing: -0.01em;
+}
+section h2 { font-size: 40px; margin: 0 0 26px 0 !important; padding: 0; color: #1E2833; border: none; }
+section h2::after { content: ';'; color: #E76F00; }
+section ul { margin: 0; padding-left: 1.15em; }
+section li { margin: 7px 0; }
+section ul li::marker { content: '▸ '; color: #E76F00; }
+section ul ul li::marker { content: '· '; color: #8B94A3; }
+section ul ul { font-size: 0.9em; color: #46536B; }
+section a { color: #33698C; text-decoration-color: #E76F00; }
+section strong { color: #0F1720; }
+section em { color: #46536B; }
+section code {
+  font-family: 'Cascadia Code', Consolas, monospace;
+  background: #EFECE3; color: #B94E00;
+  padding: 0.1em 0.35em; border-radius: 5px; font-size: 0.9em;
+}
+section pre {
+  background: #16222E; border: none; border-radius: 10px;
+  padding: 20px 24px; margin: 14px 0;
+  line-height: 1.45;
+}
+section pre code { background: transparent; color: #E8ECF1; font-size: 21px; padding: 0; }
+section pre code .hljs-string { color: #F0B26B; }
+section pre code .hljs-keyword { color: #7FB4D8; }
+section pre code .hljs-title, section pre code .hljs-built_in { color: #A8D3EE; }
+section pre code .hljs-comment { color: #7C8B99; }
+section table { margin: 10px 0 18px 0; border-collapse: collapse; font-size: 24px; }
+section table th {
+  font-family: 'Cascadia Code', Consolas, monospace; font-weight: 600;
+  text-align: left; color: #46536B; font-size: 20px;
+  border: none; border-bottom: 2px solid #1E2833;
+  padding: 8px 34px 8px 6px; background: transparent;
+}
+section table td {
+  border: none; border-bottom: 1px solid #DED8C9;
+  padding: 10px 34px 10px 6px; background: transparent;
+}
+section.centered-table table { margin: 10px auto 18px auto; }
+section table thead tr, section table tbody tr,
+section table tbody tr:nth-child(odd), section table tbody tr:nth-child(even) { background: transparent !important; }
+section table td strong { color: #E76F00; }
+section blockquote {
+  border: none; border-left: 4px solid #E76F00; background: #F4F0E6;
+  margin: 14px 0; padding: 12px 20px; color: #46536B; font-size: 0.92em;
+}
+section img {
+  max-width: 100%;
+  background: #FFFFFF; border: 1px solid #E5E1D6;
+  border-radius: 8px; padding: 6px;
+}
+/* lead: title + section dividers — inverted ink, no gutter */
+section.lead {
+  background: linear-gradient(150deg, #14202C 0%, #23405A 100%);
+  color: #F4F1E8; padding: 96px 110px; justify-content: center;
+}
+section.lead::after { color: #4E6478; }
+section.lead h1 { font-size: 62px; color: #FFFFFF; margin: 6px 0 18px 0; }
+section.lead h1::after { content: ';'; color: #E76F00; }
+section.lead p { color: #A9B6C4; font-size: 26px; }
+section.lead .kicker {
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 21px; color: #E76F00; letter-spacing: 0.06em;
+}
+/* cols: two-column bullet flow for dense slides */
+section.cols ul { columns: 2; column-gap: 52px; font-size: 21px; }
+section.cols li { break-inside: avoid; margin: 0 0 12px 0; }
+/* grid2: side-by-side image walls (JVM diagrams, error screenshots) */
+section.grid2 p:has(img) {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  justify-content: center; align-items: center; margin: 10px 0;
+}
+section.grid2 img { max-width: 46%; max-height: 215px; object-fit: contain; }
+/* logos: borderless inline logo row */
+section.logos p:has(img) {
+  display: flex; gap: 28px; justify-content: center; align-items: center;
+}
+section.logos img { border: none; background: transparent; padding: 0; max-height: 100px; max-width: 30%; object-fit: contain; }
+/* dense: slightly smaller body for prose-heavy slides */
+section.dense { font-size: 22px; }

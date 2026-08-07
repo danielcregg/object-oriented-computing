@@ -1,0 +1,6 @@
+{
+  "markdown.marp.themes": [
+    "./themes/ooc.css"
+  ],
+  "markdown.marp.enableHtml": true
+}

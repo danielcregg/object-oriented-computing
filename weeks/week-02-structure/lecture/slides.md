@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Structure"
 week: 2
@@ -8,6 +8,11 @@ topic: structure
 type: lecture
 source: "Structure.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 02 · structure · object-oriented computing</span>
 
 # Java Project Structure
 

@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Abstraction"
 week: 12
@@ -8,6 +8,11 @@ topic: abstraction
 type: lecture
 source: "Abstraction.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 12 · abstraction · object-oriented computing</span>
 
 # Abstraction
 

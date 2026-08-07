@@ -6,8 +6,8 @@
     "@marp-team/marp-cli": "4.5.0"
   },
   "scripts": {
-    "preview": "marp -s --html .",
-    "preview:intro": "marp --preview --html --allow-local-files weeks/week-01-introduction/lecture/slides.md",
-    "export:intro": "marp --html --allow-local-files weeks/week-01-introduction/lecture/slides.md -o build/week-01-introduction/slides.pptx"
+    "preview": "marp -s --html --theme-set themes/ooc.css .",
+    "preview:intro": "marp --preview --html --allow-local-files --theme-set themes/ooc.css weeks/week-01-introduction/lecture/slides.md",
+    "export:intro": "marp --html --allow-local-files --theme-set themes/ooc.css weeks/week-01-introduction/lecture/slides.md -o build/week-01-introduction/slides.pptx"
   }
 }

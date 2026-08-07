@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Java Strings"
 week: 7
@@ -8,6 +8,11 @@ topic: strings
 type: lecture
 source: "java_strings.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 07 · strings · object-oriented computing</span>
 
 # Java Strings
 

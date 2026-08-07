@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Classes and Objects"
 week: 3
@@ -8,6 +8,11 @@ topic: classes-and-objects
 type: lecture
 source: "Classes and Objects.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 03 · classes and objects · object-oriented computing</span>
 
 # Classes and Objects
 

@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Encapsulation"
 week: 8
@@ -8,6 +8,11 @@ topic: encapsulation
 type: lecture
 source: "Encalsulation.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 08 · encapsulation · object-oriented computing</span>
 
 # Encapsulation
 

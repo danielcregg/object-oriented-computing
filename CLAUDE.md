@@ -38,6 +38,12 @@ are read-only archives.
   `"<starter-repo> README.md (synced YYYY-MM-DD)"`). Lecture decks also have
   `marp: true`, `theme`, `paginate`.
 - Slides are separated by `---` on its own line; slide 1 uses `#`, the rest `##`.
+- All decks use the repo theme `themes/ooc.css` (`theme: ooc` in frontmatter) —
+  edit the theme file to restyle every deck at once. Per-slide classes via
+  `<!-- _class: ... -->`: `lead` (title/divider), `cols` (2-column bullets),
+  `grid2` (side-by-side images), `logos` (borderless logo row), `dense`
+  (smaller body), `centered-table`. Kicker lines use
+  `<span class="kicker">// ...</span>` (requires the workflow's `--html`).
 - Bullet markers carry meaning: `* ` = fragmented (revealed one per keypress in
   the HTML presentation), `- ` = shown immediately. Week 1 uses fragments;
   a converter re-run emits `- ` everywhere, so re-apply fragments after any

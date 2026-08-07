@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: ooc
 paginate: true
 title: "Polymorphism"
 week: 11
@@ -8,6 +8,11 @@ topic: polymorphism
 type: lecture
 source: "Polymorphism.pptx"
 ---
+
+<!-- _class: lead -->
+<!-- _paginate: false -->
+
+<span class="kicker">// week 11 · polymorphism · object-oriented computing</span>
 
 # Polymorphism
 

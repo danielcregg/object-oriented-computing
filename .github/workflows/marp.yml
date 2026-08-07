@@ -1,0 +1,57 @@
+name: marp
+concurrency: marp
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      - name: Render decks
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          printf '%s\n' \
+            "<!doctype html><meta charset='utf-8'><title>OOC Lecture Decks</title>" \
+            "<h1>OOC Lecture Decks</h1><ul>" > build/index.html
+          find weeks -type f -path '*/lecture/slides.md' | sort | while IFS= read -r f; do
+            lecture_dir=$(dirname "$f")
+            week_dir=$(basename "$(dirname "$lecture_dir")")
+            out="build/$week_dir"
+            mkdir -p "$out"
+            if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
+            marp "$f" --allow-local-files -o "$out/index.html"
+            marp "$f" --allow-local-files -o "$out/slides.pdf"
+            marp "$f" --allow-local-files -o "$out/slides.pptx"
+            printf '%s\n' "<li><a href='$week_dir/index.html'>$week_dir</a> (<a href='$week_dir/slides.pdf'>pdf</a>, <a href='$week_dir/slides.pptx'>pptx</a>)</li>" >> build/index.html
+          done
+          echo '</ul>' >> build/index.html
+
+      - name: Upload rendered decks as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-decks
+          path: build/
+
+      - name: Deploy to gh-pages
+        continue-on-error: true   # Pages serving may be unavailable on a private repo
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./build/

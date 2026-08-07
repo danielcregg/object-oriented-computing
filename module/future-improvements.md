@@ -1,8 +1,8 @@
 # Future Improvements (from "TO DO for NEXT year" notes)
 
 - ~~Move to 12 weeks; last MCQ in week 12.~~ **Done 2026-08-07** (repo restructured).
-- Some lectures repeated themselves — needs overhaul. Consider full AI lectures (NotebookLM).
-- Polymorphism lab is a bit too long — consider removing a section.
+- ~~Some lectures repeated themselves — needs overhaul.~~ **Done 2026-08-08** (cross-deck dedup: APIE recaps, merged duplicate pairs). AI lectures (NotebookLM) still open.
+- ~~Polymorphism lab is a bit too long — consider removing a section.~~ **Done 2026-08-08** (Benefits capstone section removed, synced upstream).
 - Add expected outputs to labs after DIY sections.
 - Work on lab devcontainer: make it fast, prebuild the container.
 - Possibly move this module to Python (teach OO Python, then Java OO in semester 2).

@@ -15,10 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Safety audit
+      - name: Safety audit + snippet verification
         run: |
           set -euo pipefail
           python3 scripts/safety_audit.py
+          python3 scripts/verify_snippets.py
 
       - name: Set up Node
         uses: actions/setup-node@v4

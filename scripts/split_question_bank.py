@@ -5,14 +5,19 @@ Moodle XML sets the active category with <question type="category"> markers;
 every following question belongs to that category until the next marker.
 Each output file keeps its subtree's markers, so it re-imports cleanly.
 
-Before writing, every bucket is validated against the full export itself
-(no hardcoded expected counts): each of the three MCQ buckets must have at
-least one category marker and at least one question, and the three bucket
-question-counts plus the shared-bank remainder (Sample/Mike's CodeRunner
-categories -- anything outside MCQ1/MCQ2/MCQ3) must add up to the full
-export's non-category question count. If validation fails, the script
-aborts and writes nothing. Each output file that does get written goes
-through a temp file + os.replace so a file is never left half-written.
+Before writing, every MCQ bucket is validated against the full export
+itself, with two independent checks (not one arithmetic identity that
+would hold by construction regardless of misrouting):
+  - the export contains a category marker with EXACTLY the bucket's root
+    text ($course$/top/KEY) -- a renamed or deleted root aborts here, by
+    name, even in the case where every remaining question would still
+    happen to land in the right bucket;
+  - the bucket itself has at least one category marker and at least one
+    question.
+If validation fails, the script aborts and writes nothing. Each output
+file that does get written goes through a temp file + os.replace so a
+file is never left half-written, and per-bucket question/category counts
+are always printed on success so drift is visible in CI logs/diffs.
 
 Usage (from repo root): python scripts/split_question_bank.py
 Testing against a scratch copy (never touches the real repo files):
@@ -58,42 +63,49 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def split(root: ET.Element) -> tuple[dict[str, list[ET.Element]], list[ET.Element]]:
-    """Bucket every <question> under its MCQ target, or into 'other' (shared banks)."""
+def split(root: ET.Element) -> dict[str, list[ET.Element]]:
+    """Bucket every <question> under its MCQ target.
+
+    Anything outside MCQ1/MCQ2/MCQ3 (the shared Sample/Mike's CodeRunner
+    banks) belongs to none of the three output files and is dropped here.
+    """
     buckets: dict[str, list[ET.Element]] = {key: [] for key in TARGETS}
-    other: list[ET.Element] = []
     current: str | None = None
     for q in root.findall("question"):
         if q.get("type") == "category":
             current = bucket_for(q.find("category/text").text or "")
-        (buckets[current] if current else other).append(q)
-    return buckets, other
+        if current:
+            buckets[current].append(q)
+    return buckets
 
 
-def validate(
-    buckets: dict[str, list[ET.Element]], other: list[ET.Element], total_questions: int
-) -> list[str]:
+def category_texts(root: ET.Element) -> set[str]:
+    """Every distinct <question type="category"> marker text in the export."""
+    return {
+        q.find("category/text").text or ""
+        for q in root.findall("question")
+        if q.get("type") == "category"
+    }
+
+
+def validate(buckets: dict[str, list[ET.Element]], present_categories: set[str]) -> list[str]:
     """Return human-readable errors; an empty list means it's safe to write."""
     errors = []
-    bucket_question_total = 0
     for key in TARGETS:
+        root_marker = f"$course$/top/{key}"
+        if root_marker not in present_categories:
+            errors.append(
+                f"{key}: root category marker '{root_marker}' not found in "
+                "export (renamed or deleted)"
+            )
+
         entries = buckets[key]
         n_cat = sum(1 for e in entries if e.get("type") == "category")
         n_q = len(entries) - n_cat
-        bucket_question_total += n_q
         if n_cat < 1:
             errors.append(f"{key}: no category markers found (need >= 1)")
         if n_q < 1:
             errors.append(f"{key}: no questions found (need >= 1)")
-
-    other_n_cat = sum(1 for e in other if e.get("type") == "category")
-    shared_remainder = len(other) - other_n_cat
-    if bucket_question_total + shared_remainder != total_questions:
-        errors.append(
-            "question-count mismatch: MCQ buckets "
-            f"({bucket_question_total}) + shared-bank remainder "
-            f"({shared_remainder}) != full-export total ({total_questions})"
-        )
     return errors
 
 
@@ -125,12 +137,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: could not read/parse {args.src}: {exc}", file=sys.stderr)
         return 1
 
-    total_questions = sum(
-        1 for q in root.findall("question") if q.get("type") != "category"
-    )
-    buckets, other = split(root)
+    buckets = split(root)
+    present_categories = category_texts(root)
 
-    errors = validate(buckets, other, total_questions)
+    errors = validate(buckets, present_categories)
     if errors:
         for err in errors:
             print(f"ERROR: {err}", file=sys.stderr)

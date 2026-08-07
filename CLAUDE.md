@@ -61,7 +61,9 @@ Safety audit before any push (must print nothing):
     python scripts/safety_audit.py
 
 Checks tracked extensions, path placement (including pptx location),
-and tracked text content — plus every pptx's internal XML/rels parts —
-for leaked student data and Moodle tokens, stripping known-safe
-mentions (Classroom URLs, this pattern's own backtick-quoted name)
-from a line before re-testing it, never dropping the whole line.
+tracked text content, and every pptx's internal XML/rels parts (plus
+any embedded office object inside a pptx, flagged for manual review)
+for leaked student data and Moodle tokens. A known-safe mention (a
+Classroom URL, or this pattern's own backtick-quoted name) only clears
+a match it fully covers — real content extending past one, even glued
+on with no separating space, still surfaces.

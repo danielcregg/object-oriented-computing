@@ -10,7 +10,7 @@ Lectures are **Marp markdown** (`weeks/*/lecture/slides.md`) — edit the
 markdown, push, and CI re-renders HTML/PDF/PPTX. The original PowerPoint decks
 are preserved untouched in each week's `lecture/original/`.
 
-## Week schedule
+## Module schedule
 
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|

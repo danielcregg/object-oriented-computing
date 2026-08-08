@@ -28,7 +28,7 @@ source: "Inheritance.pptx"
 - Implementing inheritance with `extends`
 - The `Object` class
 - Types of inheritance in Java
-- Class hierarchies & identifying is-a situations
+- Class hierarchies
 - Constructors & the `super` keyword
 - Benefits, key facts, summary & resources
 
@@ -199,14 +199,6 @@ public class Main {
 
 <!-- diagram source: img/diagram-animal-hierarchy.mmd -->
 ![h:430 Animal class hierarchy](img/diagram-animal-hierarchy.svg)
-
----
-
-## Identifying an Inheritance situation
-
-> 🎬 This slide has an embedded video in the original deck (see `original/`).
-
-![Online Media 3](img/slide20-1.png)
 
 ---
 

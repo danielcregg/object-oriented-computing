@@ -1,0 +1,12 @@
+{
+  "topics": [
+    { "slug": "classesandobjects", "title": "Classes and Objects" },
+    { "slug": "methods", "title": "Methods" },
+    { "slug": "arrays", "title": "Arrays" },
+    { "slug": "strings", "title": "Strings" },
+    { "slug": "encapsulation", "title": "Encapsulation" },
+    { "slug": "inheritance", "title": "Inheritance" },
+    { "slug": "polymorphism", "title": "Polymorphism" },
+    { "slug": "abstraction", "title": "Abstraction" }
+  ]
+}

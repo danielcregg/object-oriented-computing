@@ -1,0 +1,471 @@
+{
+  "topic": "polymorphism",
+  "title": "Polymorphism",
+  "questions": [
+    {
+      "id": "polymorphism-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "The word polymorphism comes from the Greek roots poly and morphe. What is the literal meaning, and what does it describe in Java?",
+      "code": null,
+      "options": [
+        "Multiple parents - one class inheriting from several superclasses at once",
+        "Many names - one behaviour reachable through several different method names",
+        "Many forms - the same method call doing different things depending on the object it acts upon",
+        "Changing shape - an object switching to a different class while the program runs"
+      ],
+      "answer": 2,
+      "explanation": "Poly means many and morphe means form: one call, many forms. A Java object never changes its class at run time, and a class has only one direct superclass - the many forms are the different behaviours a single call can produce depending on the object."
+    },
+    {
+      "id": "polymorphism-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In discussions of polymorphism, what does binding refer to?",
+      "code": null,
+      "options": [
+        "Linking a method call to the method body that will run",
+        "Connecting a subclass to its superclass with the extends keyword",
+        "Storing an object's fields together in one block of memory",
+        "Attaching an access modifier to a method declaration"
+      ],
+      "answer": 0,
+      "explanation": "Binding links a call site to the body that executes for it. Java draws that link at compile time for overloaded methods (early or static binding) and at run time for overridden methods (late or dynamic binding)."
+    },
+    {
+      "id": "polymorphism-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which mechanism is an example of compile-time (static) polymorphism in Java?",
+      "code": null,
+      "options": [
+        "Method overriding",
+        "Method overloading",
+        "Downcasting with an explicit cast",
+        "Dynamic method dispatch"
+      ],
+      "answer": 1,
+      "explanation": "With overloading, the compiler picks the right method just by looking at the method name and the argument types at the call site, so the call is bound before the program ever runs. Overriding and dynamic dispatch are resolved at run time by the JVM."
+    },
+    {
+      "id": "polymorphism-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Runtime (dynamic) polymorphism in Java is achieved through which mechanism?",
+      "code": null,
+      "options": [
+        "Method overloading within a single class",
+        "Declaring methods as static",
+        "Method overriding in a subclass",
+        "Giving two methods different return types"
+      ],
+      "answer": 2,
+      "explanation": "When a subclass overrides an inherited method, the JVM decides at run time which body to execute based on the actual object, not the reference type. This is late (dynamic) binding, also called dynamic method dispatch."
+    },
+    {
+      "id": "polymorphism-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What exactly makes up a method's signature in Java?",
+      "code": null,
+      "options": [
+        "The method name and its return type",
+        "The method name plus the number, types, and order of its parameters",
+        "The access modifier, the return type, and the method name",
+        "The method name and the names given to its parameters"
+      ],
+      "answer": 1,
+      "explanation": "The signature is the name plus the parameter list - how many parameters, of what types, in what order. Return type, modifiers, and parameter names are not part of it, and a class cannot declare two methods with the same signature."
+    },
+    {
+      "id": "polymorphism-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement about upcasting is correct?",
+      "code": null,
+      "options": [
+        "It needs an explicit cast operator and may fail at run time",
+        "It converts a superclass reference into a subclass reference",
+        "It rebuilds the object as an instance of the superclass",
+        "It is performed automatically by Java and is always safe"
+      ],
+      "answer": 3,
+      "explanation": "Upcasting goes from subclass to superclass, and because every subclass object IS-A superclass instance it can never fail, so no cast syntax is needed. The object itself is unchanged - only the reference type becomes more general."
+    },
+    {
+      "id": "polymorphism-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What question does the instanceof operator answer?",
+      "code": null,
+      "options": [
+        "Whether a reference variable was declared with a particular type",
+        "Whether two reference variables point to the same object",
+        "Whether a class contains a method with a particular name",
+        "Whether the object a reference currently points to really is of a given type"
+      ],
+      "answer": 3,
+      "explanation": "instanceof examines the actual object at run time and returns true when it is an instance of the named type or one of its subclasses. That makes it the standard guard to run before attempting a downcast."
+    },
+    {
+      "id": "polymorphism-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which two ingredients are required for method overriding?",
+      "code": null,
+      "options": [
+        "One class containing two methods with the same name but different parameter lists",
+        "An inheritance relationship, and a subclass method with the same signature as a superclass method",
+        "One class containing two methods with the same name but different return types",
+        "An inheritance relationship, and a subclass method with a different signature from the superclass method"
+      ],
+      "answer": 1,
+      "explanation": "Overriding spans a superclass and a subclass: the subclass re-declares an inherited method with an identical signature and provides its own body. Same name with different parameter lists in one class is overloading, not overriding."
+    },
+    {
+      "id": "polymorphism-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Polymorphism is one of the four major principles of object-oriented programming. Which option names the other three?",
+      "code": null,
+      "options": [
+        "Encapsulation, inheritance, and abstraction",
+        "Overloading, overriding, and casting",
+        "Compilation, interpretation, and execution",
+        "Classes, objects, and packages"
+      ],
+      "answer": 0,
+      "explanation": "The four pillars of OOP are encapsulation, inheritance, polymorphism, and abstraction. Overloading and overriding are mechanisms that implement polymorphism, not pillars in their own right."
+    },
+    {
+      "id": "polymorphism-010",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which of the following is NOT part of a method's signature?",
+      "code": null,
+      "options": [
+        "The order of its parameter types",
+        "The number of parameters it takes",
+        "The return type",
+        "The method name"
+      ],
+      "answer": 2,
+      "explanation": "A signature is only the name plus the parameter count, types, and order. Because the return type is excluded, two methods that differ only in return type have the same signature and can never be told apart at a call site."
+    },
+    {
+      "id": "polymorphism-011",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this class compile?",
+      "code": "class MathUtil {\n    int max(int a, int b) { return (a > b) ? a : b; }\n    long max(int x, int y) { return (x > y) ? x : y; }\n}",
+      "options": [
+        "Yes - the return types differ, so the methods are distinct",
+        "Yes - the parameter names differ, so the signatures differ",
+        "No - both methods have the signature max(int, int), and a class cannot declare the same signature twice",
+        "No - a class may only ever contain one method per method name"
+      ],
+      "answer": 2,
+      "explanation": "Return types and parameter names are not part of the signature, so both declarations are max(int, int) and the compiler rejects the class. A class CAN reuse a method name, but only with different parameter lists - that is overloading."
+    },
+    {
+      "id": "polymorphism-012",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "static void fun(int a)    { System.out.println(\"int\"); }\nstatic void fun(double a) { System.out.println(\"double\"); }\n\npublic static void main(String[] args) {\n    fun(5);\n    fun(5.0);\n    fun('A');\n}",
+      "options": [
+        "It does not compile - there is no fun(char) overload for fun('A')",
+        "int, double, double - the char promotes to the larger double type",
+        "int, int, int - all three literals are treated as int",
+        "int, double, int - the char widens to int, the nearest fit"
+      ],
+      "answer": 3,
+      "explanation": "fun(5) exactly matches fun(int) and the double literal 5.0 matches fun(double). There is no fun(char), so 'A' widens to the nearest fitting type, and int beats double, so the third call prints int. All three choices are fixed at compile time."
+    },
+    {
+      "id": "polymorphism-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program runs?",
+      "code": "class Animal {\n    void speak() { System.out.println(\"Some animal sound\"); }\n}\nclass Cat extends Animal {\n    @Override\n    void speak() { System.out.println(\"Meow\"); }\n}\n\n// in main:\nAnimal a = new Cat();\na.speak();",
+      "options": [
+        "It prints Meow - the JVM dispatches on the actual object, a Cat",
+        "It prints Some animal sound - the reference type Animal decides",
+        "It does not compile - an Animal variable cannot hold a Cat object",
+        "It throws ClassCastException when the assignment runs"
+      ],
+      "answer": 0,
+      "explanation": "Assigning a Cat to an Animal variable is an automatic, safe upcast. The compiler only verifies that Animal has a speak() method; at run time the JVM sees the object is really a Cat and runs Cat's overriding body."
+    },
+    {
+      "id": "polymorphism-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens with this code?",
+      "code": "class Animal {\n    void speak() { System.out.println(\"Some animal sound\"); }\n}\nclass Cat extends Animal {\n    @Override\n    void speak() { System.out.println(\"Meow\"); }\n    void purr() { System.out.println(\"prrrr\"); }\n}\n\n// in main:\nAnimal a = new Cat();\na.purr();",
+      "options": [
+        "It prints prrrr - the object really is a Cat",
+        "Compile error - the reference type Animal has no purr() method",
+        "It compiles but throws ClassCastException at run time",
+        "It prints Some animal sound - purr() falls back to speak()"
+      ],
+      "answer": 1,
+      "explanation": "The compiler checks every call against the reference type, and Animal declares no purr(), so the call is rejected at compile time even though the object is genuinely a Cat. The reference type decides which methods MAY be called; the object type only decides which body runs."
+    },
+    {
+      "id": "polymorphism-015",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A variable is declared as Shape s = new Circle(); where Circle extends Shape and overrides its methods. Which statement correctly describes the roles of the two types?",
+      "code": null,
+      "options": [
+        "Shape, the reference type, fixes which methods may be called; Circle, the object type, determines which overriding body actually runs",
+        "Circle fixes which methods may be called; Shape determines which body runs",
+        "Both decisions come from Shape, because that is the declared type of the variable",
+        "Both decisions come from Circle, because that is the object that was created"
+      ],
+      "answer": 0,
+      "explanation": "The compiler validates calls against the declared reference type, so only Shape's methods are callable through s. At run time the JVM dispatches each call to the actual object's class, so Circle's overrides are what execute."
+    },
+    {
+      "id": "polymorphism-016",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens with this code?",
+      "code": "class Animal { }\nclass Cat extends Animal { }\n\n// in main:\nAnimal plain = new Animal();\nCat c = (Cat) plain;",
+      "options": [
+        "Compile error - an Animal reference can never be cast to Cat",
+        "It runs fine - the cast converts the Animal object into a Cat",
+        "It compiles, then throws ClassCastException at run time",
+        "It runs fine, but c is set to null because the cast fails"
+      ],
+      "answer": 2,
+      "explanation": "The explicit cast satisfies the compiler, because a variable typed Animal could legitimately point to a Cat. At run time the JVM checks the actual object, finds a plain Animal that is not a Cat, and throws ClassCastException. A cast never converts or changes the object."
+    },
+    {
+      "id": "polymorphism-017",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why does Java perform upcasts automatically but insist on an explicit cast for downcasts?",
+      "code": null,
+      "options": [
+        "Downcasting is slower, and the cast tells the JVM to optimise the conversion",
+        "An upcast can never fail because every subclass object is-a superclass instance, but the compiler cannot prove a downcast will succeed, so the programmer must explicitly accept the risk",
+        "The explicit cast instructs the compiler to convert the object into the subclass type",
+        "Upcasts are only permitted inside the subclass's own methods, where they are known to be safe"
+      ],
+      "answer": 1,
+      "explanation": "Subclass-to-superclass conversion is guaranteed by the inheritance contract, so Java does it silently. A superclass reference might point to anything in the hierarchy, so a downcast is a promise the compiler cannot verify - it compiles the cast and the JVM checks the actual object at run time."
+    },
+    {
+      "id": "polymorphism-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Animal { void speak() { System.out.println(\"Some animal sound\"); } }\nclass Cat extends Animal {\n    @Override void speak() { System.out.println(\"Meow\"); }\n}\nclass Tiger extends Animal {\n    @Override void speak() { System.out.println(\"Roar\"); }\n}\n\npublic class Zoo {\n    public static void main(String[] args) {\n        Animal[] zoo = { new Cat(), new Tiger(), new Cat() };\n        for (Animal x : zoo) {\n            x.speak();\n        }\n    }\n}",
+      "options": [
+        "Meow, Roar, Meow - each element dispatches to its own class's override",
+        "Some animal sound three times - the array's type is Animal[]",
+        "Compile error - an Animal[] cannot hold Cat and Tiger objects at the same time",
+        "Meow, Meow, Roar - the elements are grouped by type before the loop runs"
+      ],
+      "answer": 0,
+      "explanation": "Placing Cats and Tigers into an Animal[] is automatic upcasting, and each object keeps its actual type. On every iteration the JVM dispatches speak() on the element's actual class, so the output follows the array order: Meow, Roar, Meow."
+    },
+    {
+      "id": "polymorphism-019",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A programmer intends to override speak() in a subclass but types the name as speek() and does not use @Override. What is the result?",
+      "code": null,
+      "options": [
+        "A compile error, because speek does not exist in the superclass",
+        "A run-time exception the first time speak() is called on the subclass",
+        "The compiler links speek to speak automatically because the names are so similar",
+        "It compiles: speek becomes an unrelated new method, and the subclass silently keeps the inherited speak() behaviour"
+      ],
+      "answer": 3,
+      "explanation": "Without @Override the compiler has no way to know an override was intended, so the misspelt method is accepted as a brand-new method and calls to speak() still run the superclass body - a silent bug. Writing @Override turns exactly this mistake into a compile-time error."
+    },
+    {
+      "id": "polymorphism-020",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this compile?",
+      "code": "class Animal {\n    void speak() { System.out.println(\"Some animal sound\"); }\n}\nclass Dog extends Animal {\n    @Override\n    void speek() { System.out.println(\"Woof\"); }\n}",
+      "options": [
+        "Yes - @Override is documentation only and never affects compilation",
+        "Yes - speek simply overloads speak, which is legal",
+        "No - @Override fails because speek does not override any method from a supertype",
+        "No - a subclass may not declare methods that its superclass lacks"
+      ],
+      "answer": 2,
+      "explanation": "@Override asks the compiler to verify that the method genuinely overrides an inherited one. Animal has no speek(), so compilation fails - exactly the safety net the annotation provides. (speek would not overload speak either: overloads must share one name.)"
+    },
+    {
+      "id": "polymorphism-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which option correctly contrasts method overloading with method overriding?",
+      "code": null,
+      "options": [
+        "Overloading needs an identical signature in a subclass; overriding needs different signatures in one class",
+        "Overloading is same name with different signatures in one class, resolved by the compiler; overriding is an identical signature across superclass and subclass, resolved by the JVM at run time",
+        "Overloading is resolved at run time by the JVM; overriding is resolved at compile time",
+        "Overloading requires an inheritance relationship; overriding requires different parameter lists"
+      ],
+      "answer": 1,
+      "explanation": "Overloading lives inside one class: one name, several parameter lists, and the compiler picks by the arguments (early binding). Overriding spans an inheritance pair: the same signature gets a new body in the subclass, and the JVM picks by the object's actual type (late binding)."
+    },
+    {
+      "id": "polymorphism-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why can the decision about which overriding method body a call like a.speak() should run generally NOT be made at compile time?",
+      "code": null,
+      "options": [
+        "Overriding methods are stored in separate files that the compiler never reads",
+        "The compiler is forbidden from inspecting subclass method bodies",
+        "Overridden methods are re-translated to bytecode each time they are called",
+        "The actual class of the object that a will refer to may only be known while the program is running"
+      ],
+      "answer": 3,
+      "explanation": "A reference such as Animal a may end up holding a Dog or a Cat depending on run-time events like user input or random choices. The compiler knows only the reference type, so the body can only be chosen when the actual object is known - at run time."
+    },
+    {
+      "id": "polymorphism-023",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Which overloaded method does the marked call execute?",
+      "code": "public class Calculator {\n    public int add(int x, int y) { return x + y; }\n    public double add(double x, double y) { return x + y; }\n    public double add(int x, double y) { return x + y; }\n}\n\n// in main:\nCalculator calc = new Calculator();\nSystem.out.println(calc.add(5, 3.5));   // which add runs?",
+      "options": [
+        "add(int, int) - the compiler always prefers the first declared overload",
+        "add(double, double) - both arguments are converted to double first",
+        "add(int, double) - the argument types match this signature exactly",
+        "None - the call is ambiguous, so the class does not compile"
+      ],
+      "answer": 2,
+      "explanation": "The compiler resolves an overloaded call by matching the argument types against the available signatures: 5 is an int and 3.5 is a double, so add(int, double) is an exact match and no conversion is needed. The choice is made entirely at compile time."
+    },
+    {
+      "id": "polymorphism-024",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Vehicle {\n    void startEngine() { System.out.println(\"Vehicle engine starts\"); }\n}\nclass Car extends Vehicle {\n    @Override\n    void startEngine() { System.out.println(\"Car engine starts\"); }\n    void drive() { System.out.println(\"Car drives\"); }\n}\n\n// in main:\nVehicle v = new Car();\nv.startEngine();\nif (v instanceof Car) {\n    Car c = (Car) v;\n    c.drive();\n}",
+      "options": [
+        "Vehicle engine starts, then Car drives",
+        "Car engine starts, then Car drives",
+        "Car engine starts, then ClassCastException at the (Car) cast",
+        "Vehicle engine starts only - the instanceof test is false"
+      ],
+      "answer": 1,
+      "explanation": "v points to a Car, so dynamic dispatch runs Car's startEngine() even through a Vehicle reference. The instanceof check passes because the object really is a Car, so the guarded downcast succeeds and drive() becomes callable through the Car reference."
+    },
+    {
+      "id": "polymorphism-025",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A method processes an Animal[] by calling speak() on every element. A new subclass Wolf, with its own speak() override, is added later and Wolf objects are put into the array. What must change in the processing method?",
+      "code": null,
+      "options": [
+        "Nothing - it is written against Animal, and dynamic dispatch will find Wolf's override automatically",
+        "A new instanceof branch with a cast to Wolf must be added inside the loop",
+        "The parameter must be redeclared as a new array type that mentions Wolf",
+        "The method must be rewritten, because existing code always needs modification when subclasses are added"
+      ],
+      "answer": 0,
+      "explanation": "This is extensibility, a key benefit of polymorphism: code written against a superclass works unchanged for every subclass, including ones written later. Each call still dispatches to the element's actual type at run time."
+    },
+    {
+      "id": "polymorphism-026",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Base {\n    static void whoAmI() { System.out.println(\"Base\"); }\n}\nclass Sub extends Base {\n    static void whoAmI() { System.out.println(\"Sub\"); }\n}\n\npublic class Trap {\n    public static void main(String[] args) {\n        Base b = new Sub();\n        b.whoAmI();\n    }\n}",
+      "options": [
+        "Sub - the object is a Sub, so dynamic dispatch selects Sub's method",
+        "Nothing - it fails to compile because static methods cannot be redefined in a subclass",
+        "Sub, then Base - both versions execute in order",
+        "Base - static methods are bound using the reference type at compile time"
+      ],
+      "answer": 3,
+      "explanation": "Static methods belong to the class, not to any object, so no dynamic dispatch happens: the reference type Base decides at compile time. Sub's identically-named static method hides Base's rather than overriding it."
+    },
+    {
+      "id": "polymorphism-027",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Why do static methods not participate in runtime polymorphism?",
+      "code": null,
+      "options": [
+        "Static methods always execute faster, so the JVM skips the dispatch step to save time",
+        "Static methods are implicitly final and can never be redeclared in a subclass",
+        "Dynamic dispatch chooses a body using the actual object's type, and a static method belongs to a class rather than to any object",
+        "Static methods can only be called from other static methods, where no objects exist"
+      ],
+      "answer": 2,
+      "explanation": "Dynamic dispatch answers the question: what object is this call landing on? A static call has no receiver object, so the reference (class) type decides at compile time. A subclass redeclaring the same static method produces hiding, not overriding, and marking it @Override is a compile error."
+    },
+    {
+      "id": "polymorphism-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Animal { }\nclass Cat extends Animal { }\n\n// in main:\nAnimal a = new Cat();\nSystem.out.println(a instanceof Cat);\nSystem.out.println(a instanceof Animal);",
+      "options": [
+        "true, then true",
+        "true, then false",
+        "false, then true",
+        "false, then false"
+      ],
+      "answer": 0,
+      "explanation": "instanceof tests the actual object, and the object is a Cat, so a instanceof Cat is true regardless of the Animal reference type. Because every Cat is-an Animal, a instanceof Animal is true as well."
+    },
+    {
+      "id": "polymorphism-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens at lines A and B?",
+      "code": "class Animal { void speak() { System.out.println(\"Some sound\"); } }\nclass Cat extends Animal {\n    @Override void speak() { System.out.println(\"Meow\"); }\n}\nclass Tiger extends Animal {\n    @Override void speak() { System.out.println(\"Roar\"); }\n}\n\n// in main:\nAnimal[] zoo = { new Cat(), new Tiger() };\nCat first = (Cat) zoo[0];    // line A\nCat second = (Cat) zoo[1];   // line B",
+      "options": [
+        "Neither line compiles - elements of an Animal[] are Animals, not Cats",
+        "Line A fails at run time; line B succeeds",
+        "Both lines succeed - the casts convert each element into a Cat",
+        "Line A succeeds; line B compiles but throws ClassCastException because the object is a Tiger"
+      ],
+      "answer": 3,
+      "explanation": "Both downcasts compile, because an Animal element could plausibly be a Cat. At run time the JVM checks each actual object: zoo[0] really is a Cat, so line A succeeds; zoo[1] is a Tiger, and a Tiger is not a Cat (they are siblings, not parent and child), so line B throws ClassCastException."
+    },
+    {
+      "id": "polymorphism-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Vehicle {\n    void startEngine() { System.out.println(\"Vehicle engine\"); }\n}\nclass Car extends Vehicle {\n    @Override\n    void startEngine() { System.out.println(\"Car engine\"); }\n}\n\n// in main:\nCar car = new Car();\nVehicle v = car;   // upcast\ncar.startEngine();\nv.startEngine();",
+      "options": [
+        "Car engine, then Vehicle engine - each call follows the variable's declared type",
+        "Car engine, then Car engine - both references point to the same Car object",
+        "Vehicle engine, then Vehicle engine - the upcast permanently converts the object",
+        "Vehicle engine, then Car engine - upcasting reverses the method lookup order"
+      ],
+      "answer": 1,
+      "explanation": "Upcasting changes only the reference type - the object on the heap is still a Car. Dynamic dispatch looks at the object, not at the variable used to reach it, so both calls run Car's override and print Car engine twice."
+    },
+    {
+      "id": "polymorphism-031",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In an inheritance pair where a subclass redefines a superclass method with the same signature, what are the two methods called?",
+      "code": null,
+      "options": [
+        "The superclass method is the overridden method; the subclass method is the overriding method",
+        "The superclass method is the overriding method; the subclass method is the overridden method",
+        "The superclass method is the overloaded method; the subclass method is the overloading method",
+        "Both are simply called virtual methods, and the two terms are interchangeable"
+      ],
+      "answer": 0,
+      "explanation": "The superclass supplies the method that gets overridden; the subclass supplies the overriding version that runs when dispatch selects it. Overloading terminology does not apply here, because only one signature is involved."
+    }
+  ]
+}

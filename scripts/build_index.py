@@ -139,7 +139,9 @@ MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
   <p class="standfirst">One lecture deck per teaching week. Open the slides in
-  your browser, or take the PDF or PowerPoint version with you.</p>
+  your browser, or take the PDF or PowerPoint version with you.
+  Also here: <a href="labs/">the labs</a> &middot;
+  <a href="practice/">MCQ practice</a>.</p>
 </header>
 <main>
 <ol class="timeline">
@@ -176,8 +178,16 @@ PREVIEW_FOOT = """</ol>
 """
 
 
+def lab_slug(folder: str) -> str | None:
+    slug = re.sub(r"^week-\d+-", "", folder).replace("-", "")
+    return slug if (Path("labs/src/ie/atu") / slug).is_dir() else None
+
+
 def lecture_row(folder: str, week_no: str, title: str) -> str:
     t = html.escape(title)
+    slug = lab_slug(folder)
+    lab = (f'      <a class="dl" href="labs/{slug}/"'
+           f' aria-label="Week {week_no}: {t} — lab">lab</a>\n') if slug else ""
     return (f'  <li class="row lecture">\n'
             f'    <span class="num" data-week aria-hidden="true">{week_no}</span>\n'
             f'    <span class="topic"><a href="{folder}/index.html">{t}</a></span>\n'
@@ -188,6 +198,7 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
             f' aria-label="Week {week_no}: {t} — PDF">pdf</a>\n'
             f'      <a class="dl" href="{folder}/slides.pptx"'
             f' aria-label="Week {week_no}: {t} — PowerPoint">pptx</a>\n'
+            f'{lab}'
             f'    </span>\n'
             f'  </li>\n')
 

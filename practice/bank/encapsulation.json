@@ -1,0 +1,486 @@
+{
+  "topic": "encapsulation",
+  "title": "Encapsulation",
+  "questions": [
+    {
+      "id": "encapsulation-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement best describes encapsulation in object-oriented programming?",
+      "code": null,
+      "options": [
+        "Bundling data (fields) and the methods that operate on that data into a single class, while restricting direct access to the object's internals",
+        "Defining several methods in one class that share a name but take different parameter lists",
+        "Creating a new class that automatically receives all the fields and methods of an existing class",
+        "Splitting a large program into many small source files so each class is easier to find"
+      ],
+      "answer": 0,
+      "explanation": "Encapsulation is two moves made together: bundle state and behaviour into one unit (the class), and hide the state so all access goes through methods you choose to expose. Same-name methods and receiving members from another class describe overloading and inheritance, which are different ideas."
+    },
+    {
+      "id": "encapsulation-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which list names the four major principles (pillars) of object-oriented programming?",
+      "code": null,
+      "options": [
+        "Compilation, inheritance, iteration, abstraction",
+        "Encapsulation, inheritance, polymorphism, abstraction",
+        "Encapsulation, instantiation, iteration, recursion",
+        "Classes, objects, methods, variables"
+      ],
+      "answer": 1,
+      "explanation": "OOP rests on four pillars: encapsulation, inheritance, polymorphism and abstraction. Encapsulation comes first because the other three build on classes that protect their own data. Classes, objects and methods are building blocks of the language, not principles."
+    },
+    {
+      "id": "encapsulation-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "One pillar of OOP is summed up as: objects guard their own data behind a small public face. Which pillar is it?",
+      "code": null,
+      "options": [
+        "Inheritance",
+        "Polymorphism",
+        "Abstraction",
+        "Encapsulation"
+      ],
+      "answer": 3,
+      "explanation": "Guarding an object's own state behind a controlled public interface is encapsulation. Inheritance builds new classes on existing ones, polymorphism lets one method call produce many behaviours, and abstraction exposes what something does while hiding how it works."
+    },
+    {
+      "id": "encapsulation-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What does the term data hiding mean in the context of encapsulation?",
+      "code": null,
+      "options": [
+        "Encrypting field values before they are stored in memory",
+        "Making fields private so code outside the class cannot access them directly",
+        "Declaring fields inside methods so that other methods cannot see them",
+        "Giving fields deliberately obscure names so other programmers leave them alone"
+      ],
+      "answer": 1,
+      "explanation": "Data hiding is the hiding half of encapsulation: fields are made private, so the only way in is through the methods the class chooses to expose. It is access control enforced by the compiler, not encryption or naming tricks."
+    },
+    {
+      "id": "encapsulation-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is the standard two-step recipe for encapsulating the state of a Java class?",
+      "code": null,
+      "options": [
+        "Declare the fields public and add comments warning other programmers not to misuse them",
+        "Declare the fields static and access them through the class name instead of an object",
+        "Declare the fields protected and read them only from subclasses",
+        "Declare the fields private and provide a public getter and setter method for each one"
+      ],
+      "answer": 3,
+      "explanation": "The recipe is mechanical: make every instance variable private, then expose controlled access through public getters and setters. Comments carry no enforcement, and static changes sharing rather than visibility; only private makes the compiler block outside access."
+    },
+    {
+      "id": "encapsulation-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which access modifier makes a class member accessible only from code inside that same class?",
+      "code": null,
+      "options": [
+        "protected",
+        "public",
+        "private",
+        "default (writing no modifier keyword)"
+      ],
+      "answer": 2,
+      "explanation": "private is the strictest level: only the class's own code can touch the member. Default opens it to the whole package, protected adds subclasses in other packages, and public opens it to everywhere."
+    },
+    {
+      "id": "encapsulation-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Getter and setter methods also have formal names. What are they?",
+      "code": null,
+      "options": [
+        "Getters are accessor methods; setters are mutator methods",
+        "Getters are mutator methods; setters are accessor methods",
+        "Getters and setters are both known as constructor methods",
+        "Getters are called iterators; setters are called initialisers"
+      ],
+      "answer": 0,
+      "explanation": "A getter accesses (reads) the current value of a private field, so it is an accessor; a setter mutates (updates) the value, so it is a mutator. Constructors are a separate mechanism that initialises a brand-new object."
+    },
+    {
+      "id": "encapsulation-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "A class declares the field: private String email; Following standard Java naming conventions, what is its getter called?",
+      "code": null,
+      "options": [
+        "email()",
+        "readEmail()",
+        "Email()",
+        "getEmail()"
+      ],
+      "answer": 3,
+      "explanation": "The convention is the prefix get or set followed by the field name with its first letter capitalised: getEmail() and setEmail(...). IDEs generate exactly these names, and other Java programmers and libraries rely on the pattern."
+    },
+    {
+      "id": "encapsulation-009",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Car {\n    private int speed;\n\n    public void setSpeed(int x) {\n        speed = x;\n    }\n\n    public int getSpeed() {\n        return speed;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Car car = new Car();\n        car.setSpeed(100);\n        System.out.println(car.getSpeed());\n    }\n}",
+      "options": [
+        "0",
+        "Nothing - it fails to compile because speed is private",
+        "100",
+        "The program compiles but crashes with an exception at run time"
+      ],
+      "answer": 2,
+      "explanation": "Main never touches the private field directly; it goes through the public setter and getter, which is exactly the access encapsulation intends. setSpeed(100) stores 100 in the field and getSpeed() reads it back."
+    },
+    {
+      "id": "encapsulation-010",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What happens when you try to compile and run this code?",
+      "code": "class Account {\n    private double balance;\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Account a = new Account();\n        a.balance = 50.0;\n    }\n}",
+      "options": [
+        "It fails to compile: balance has private access in Account",
+        "It compiles and runs, and balance becomes 50.0",
+        "It compiles, but throws an exception at run time when balance is assigned",
+        "It compiles with a warning, and balance keeps its default value 0.0"
+      ],
+      "answer": 0,
+      "explanation": "private means only code inside Account may touch balance, so the assignment in Main is rejected by the compiler. That is the point: an illegal write is caught at compile time, before the program can ever run with bad data."
+    },
+    {
+      "id": "encapsulation-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A field is declared as: int count; with no access modifier keyword. From where can it be accessed directly?",
+      "code": null,
+      "options": [
+        "Only from code in the same class",
+        "From the same class and from any class in the same package",
+        "From the same class, its package, and subclasses in other packages",
+        "From anywhere in the program"
+      ],
+      "answer": 1,
+      "explanation": "Writing no keyword gives default (package) access: the class itself plus every class in the same package. Even subclasses are excluded once they live in another package; that extra reach requires protected. Forgetting private therefore silently opens a field to its whole package."
+    },
+    {
+      "id": "encapsulation-012",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which access level allows a member to be used from its own class, its package, and subclasses in other packages, but not from unrelated classes elsewhere?",
+      "code": null,
+      "options": [
+        "private",
+        "default (no modifier)",
+        "protected",
+        "public"
+      ],
+      "answer": 2,
+      "explanation": "protected is package access plus subclasses: even a subclass in a different package may use the member. Only public opens a member to all code everywhere, and default stops at the package boundary."
+    },
+    {
+      "id": "encapsulation-013",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Java is often described as having three access modifier keywords but four levels of access. What explains the difference?",
+      "code": null,
+      "options": [
+        "The fourth level, default (package) access, has no keyword: it applies when you write no modifier at all",
+        "The static keyword acts as a fourth access modifier when it is placed before a field",
+        "protected counts twice because it behaves differently for fields and for methods",
+        "private and public can be combined on one member to produce an intermediate level"
+      ],
+      "answer": 0,
+      "explanation": "The keywords are private, protected and public; the fourth level, default (package) access, is what you get by writing nothing. static is not an access modifier, protected has a single meaning, and access modifiers can never be combined."
+    },
+    {
+      "id": "encapsulation-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Counter and Till are two classes in the same package. What happens when this code is compiled and run?",
+      "code": "// File shop/Counter.java\npackage shop;\n\npublic class Counter {\n    int count;   // no access modifier written\n}\n\n// File shop/Till.java\npackage shop;\n\npublic class Till {\n    public static void main(String[] args) {\n        Counter c = new Counter();\n        c.count = 5;\n        System.out.println(c.count);\n    }\n}",
+      "options": [
+        "Compile error: count has private access in Counter",
+        "Compile error: every field must be given an access modifier",
+        "It compiles and prints 5",
+        "It compiles, but an exception is thrown when count is assigned"
+      ],
+      "answer": 2,
+      "explanation": "A field with no modifier has default (package) access, so every class in the same package may use it directly. Till and Counter share the package shop, so the access is legal and 5 is printed. Default is looser than private; only private would have blocked this."
+    },
+    {
+      "id": "encapsulation-015",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A setter that simply assigns its parameter to the field looks no better than a public field. What real advantage does routing all access through getter and setter methods still provide?",
+      "code": null,
+      "options": [
+        "Method calls are optimised by the compiler, so access through getters is faster than field access",
+        "Validation or a new internal data representation can be added later without changing any calling code",
+        "Getters and setters allow several objects to share a single copy of the field's value",
+        "The compiler refuses to accept a private field unless a getter and a setter are provided"
+      ],
+      "answer": 1,
+      "explanation": "Even an empty setter is a checkpoint you can staff later: the day rules are needed, you add them in one place and not one caller changes. A public field can never be upgraded that way. There is no speed benefit, and the compiler never demands getters or setters."
+    },
+    {
+      "id": "encapsulation-016",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Person {\n    private String username;\n\n    public String getUsername() { return username; }\n\n    public void setUsername(String username) {\n        if (username.length() > 10) {\n            this.username = username.substring(0, 10);\n        } else {\n            this.username = username;\n        }\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Person p = new Person();\n        p.setUsername(\"theRedRhino\");   // 11 characters\n        System.out.println(p.getUsername());\n    }\n}",
+      "options": [
+        "theRedRhino",
+        "An empty string",
+        "It throws a StringIndexOutOfBoundsException at run time",
+        "theRedRhin"
+      ],
+      "answer": 3,
+      "explanation": "The argument has 11 characters, so the setter's guard runs substring(0, 10) and stores only the first ten: theRedRhin. The validation happens invisibly inside the setter, so the caller never has to check and no code anywhere can store an 11-character username."
+    },
+    {
+      "id": "encapsulation-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Student {\n    private String email;\n\n    public String getEmail() { return email; }\n\n    public void setEmail(String email) {\n        email = email;   // note: no \"this.\"\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.setEmail(\"ada@example.com\");\n        System.out.println(s.getEmail());\n    }\n}",
+      "options": [
+        "ada@example.com",
+        "null",
+        "It fails to compile: the variable email is already defined in setEmail",
+        "An empty string"
+      ],
+      "answer": 1,
+      "explanation": "Inside the setter the parameter name shadows the field, so email = email assigns the parameter to itself and the field is never written; the String field keeps its default value null. Writing this.email = email is what stores the parameter in the field, because this. breaks the tie when the names clash."
+    },
+    {
+      "id": "encapsulation-018",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "How do you make a private field readable from outside the class but impossible for outside code to overwrite?",
+      "code": null,
+      "options": [
+        "Provide a public getter for it, but no public setter",
+        "Provide a public setter for it, but no public getter",
+        "Change its access modifier from private to protected",
+        "Keep it private and add a comment stating that it is read-only"
+      ],
+      "answer": 0,
+      "explanation": "A getter with no setter splits reading from writing: the world may look, but changes can only happen through whatever controlled methods the class itself offers. A field exposed directly is all-or-nothing; whoever can read it can also write it."
+    },
+    {
+      "id": "encapsulation-019",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Odometer {\n    private int km;\n\n    public int getKm() { return km; }\n\n    public void drive(int distance) {\n        if (distance > 0) { km += distance; }\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Odometer o = new Odometer();\n        o.drive(30);\n        o.drive(-10);\n        o.drive(20);\n        System.out.println(o.getKm());\n    }\n}",
+      "options": [
+        "40",
+        "60",
+        "50",
+        "30"
+      ],
+      "answer": 2,
+      "explanation": "drive(30) and drive(20) pass the distance > 0 guard; drive(-10) fails it and is silently ignored, so km ends at 50. Because the class offers no setter, km is read-only from outside and can only legally increase through drive()."
+    },
+    {
+      "id": "encapsulation-020",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A Person class stores middle names internally as one String. It is rewritten so the private field becomes a String array, while getMiddleNames() still returns a String and setMiddleNames(String) still accepts one; both public signatures are unchanged. What happens to existing code that uses Person?",
+      "code": null,
+      "options": [
+        "Every caller must be rewritten, because the field's type changed from String to an array",
+        "Callers still compile, but the getter now returns null because the internal type changed",
+        "Callers fail at run time when the internal array cannot be converted back to a String",
+        "Callers keep compiling and running unchanged, because they depend only on the method signatures"
+      ],
+      "answer": 3,
+      "explanation": "Callers bind to the public methods, not the private internals. The getter joins the array back into one String on the way out and the setter splits the incoming String on the way in, so from outside nothing observable changed. This freedom to rebuild the insides is a core benefit of encapsulation."
+    },
+    {
+      "id": "encapsulation-021",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class BankAccount {\n    private double balance;\n\n    public BankAccount(double openingBalance) {\n        this.balance = openingBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        if (amount > 0) { balance += amount; }\n    }\n\n    public void withdraw(double amount) {\n        if (amount > 0 && amount <= balance) { balance -= amount; }\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        BankAccount acct = new BankAccount(100.00);\n        acct.deposit(-50);\n        acct.withdraw(500);\n        acct.deposit(25);\n        System.out.println(acct.getBalance());\n    }\n}",
+      "options": [
+        "125.0",
+        "-425.0",
+        "75.0",
+        "100.0"
+      ],
+      "answer": 0,
+      "explanation": "deposit(-50) fails the amount > 0 guard and withdraw(500) fails amount <= balance, so both are silently ignored; only deposit(25) passes, leaving 100.0 + 25 = 125.0. The guards inside the methods keep the object valid without the caller doing anything."
+    },
+    {
+      "id": "encapsulation-022",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Which line, if any, fails to compile?",
+      "code": "class BankAccount {\n    private double balance;\n\n    public BankAccount(double openingBalance) {\n        this.balance = openingBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        if (amount > 0) { balance += amount; }\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        BankAccount acct = new BankAccount(100.0);\n        acct.deposit(40.0);              // line 1\n        double b = acct.getBalance();    // line 2\n        acct.balance = 1000000.0;        // line 3\n    }\n}",
+      "options": [
+        "Line 1, because deposit() changes a private field",
+        "Line 2, because a private field cannot be read from outside the class in any way",
+        "Line 3, because balance has private access in BankAccount",
+        "None of them; all three lines compile"
+      ],
+      "answer": 2,
+      "explanation": "Code inside BankAccount may use its own private field freely, and lines 1 and 2 go through public methods, which is exactly the intended interface. Only line 3 names the private field directly from another class, so only it is rejected by the compiler."
+    },
+    {
+      "id": "encapsulation-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "In a very large program, a public field such as balance is written with a wildly wrong value by one forgotten line. Why is this bug so hard to track down?",
+      "code": null,
+      "options": [
+        "Assigning to a field runs no code, so nothing can validate, log, or break on the change, and every line able to reach the field is a suspect",
+        "Public fields are kept in a protected memory area that debuggers are not permitted to inspect",
+        "The JVM batches field assignments together, so the write happens at an unpredictable moment",
+        "The compiler removes field assignments from stack traces, so the responsible line cannot appear in them"
+      ],
+      "answer": 0,
+      "explanation": "Assignment is not an event: no method runs when a public field is written, so there is no single place to validate, log, or set a breakpoint, and any code that can see the field could be the culprit. Forcing every change through one setter gives one door, one guard, and one place to look."
+    },
+    {
+      "id": "encapsulation-024",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "In an IDE you create a Student object in another class and type student. to open the autocomplete list. The field gpa used to appear in that list, but it no longer does, even though the field still exists under the same name. What most likely changed?",
+      "code": null,
+      "options": [
+        "The field was moved below the methods in the Student source file",
+        "The field's access modifier was changed from public to private",
+        "The class was recompiled with a newer version of Java",
+        "The getter method for gpa was deleted, which hides the field itself from the list"
+      ],
+      "answer": 1,
+      "explanation": "The autocomplete list shows only members that are accessible from the calling code, so making a field private removes it from the list outside its own class. If you cannot see it in the list, you cannot access it directly; the IDE is surfacing Java's access rules."
+    },
+    {
+      "id": "encapsulation-025",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A class must enforce that age stays between 16 and 100, both when an object is constructed and whenever setAge() is called later. What is the recommended way to implement this without duplicating the rule?",
+      "code": null,
+      "options": [
+        "Validate only in the constructor, since an object cannot become invalid after it has been created",
+        "Make the field public so that each caller becomes responsible for validating values itself",
+        "Write the rule once in a private helper method and call it from both the constructor and the setter",
+        "Copy the validation code into both places, because a constructor is not allowed to call other methods"
+      ],
+      "answer": 2,
+      "explanation": "A constructor is a kind of setter too: it sets the fields' first values, so it needs the same rule as setAge(). A private helper such as validateAge() holds the logic once, following the DRY principle, and both entry points call it. Skipping either entry point would let invalid data in."
+    },
+    {
+      "id": "encapsulation-026",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A class's constructor and setter both call a shared validateAge() helper method. Why should that helper be declared private rather than public?",
+      "code": null,
+      "options": [
+        "private methods are compiled to faster bytecode than public methods",
+        "Java requires every method that a constructor calls to be declared private",
+        "Declaring it private prevents the helper from being called more than once per object",
+        "The helper is internal machinery for the class's own use, not an operation the class means to offer callers"
+      ],
+      "answer": 3,
+      "explanation": "A class's public members should be exactly the operations it intends the outside world to use. The validation rule is an internal detail supporting the constructor and setter, so it stays hidden and can change freely without affecting any caller. Access modifiers say nothing about speed or how often a method may run."
+    },
+    {
+      "id": "encapsulation-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Student {\n    private int age;\n\n    public Student(int age) {\n        this.age = validateAge(age);\n    }\n\n    public void setAge(int age) {\n        this.age = validateAge(age);\n    }\n\n    private int validateAge(int age) {\n        if (age < 16 || age > 100) {\n            return 16;\n        }\n        return age;\n    }\n\n    public int getAge() { return age; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Student s = new Student(150);\n        System.out.println(s.getAge());\n        s.setAge(21);\n        System.out.println(s.getAge());\n    }\n}",
+      "options": [
+        "150 then 21",
+        "16 then 21",
+        "16 then 16",
+        "150 then 16"
+      ],
+      "answer": 1,
+      "explanation": "The constructor routes 150 through the shared private helper, which rejects anything outside 16 to 100 and returns 16, so the object starts in a valid state and the first line prints 16. setAge(21) passes the same check, so the second line prints 21."
+    },
+    {
+      "id": "encapsulation-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "The scores field is private. What does this program print?",
+      "code": "class Gradebook {\n    private int[] scores = {70, 80, 90};\n\n    public int[] getScores() { return scores; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Gradebook g = new Gradebook();\n        int[] view = g.getScores();\n        view[0] = 0;\n        System.out.println(g.getScores()[0]);\n    }\n}",
+      "options": [
+        "70, because a private field cannot be changed from outside its class",
+        "It fails to compile: view[0] = 0 writes to a private array",
+        "It throws an exception at run time when view[0] is assigned",
+        "0"
+      ],
+      "answer": 3,
+      "explanation": "The getter returns a reference to the internal array, not a copy, so view and the private scores variable point at the same object and view[0] = 0 rewrites the private data. private seals the field itself, not the object it refers to; a capsule leaks if its getters hand out references to internal mutable state."
+    },
+    {
+      "id": "encapsulation-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "import java.util.Arrays;\n\nclass Gradebook {\n    private int[] scores = {70, 80, 90};\n\n    public int[] getScores() {\n        return Arrays.copyOf(scores, scores.length);\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Gradebook g = new Gradebook();\n        int[] view = g.getScores();\n        view[0] = 0;\n        System.out.println(g.getScores()[0]);\n    }\n}",
+      "options": [
+        "70",
+        "0",
+        "90",
+        "It fails to compile: Arrays.copyOf cannot be applied to a private field"
+      ],
+      "answer": 0,
+      "explanation": "Arrays.copyOf hands the caller a brand-new array, a defensive copy, so view[0] = 0 scribbles on the copy while the private original stays 70, 80, 90. The second getScores() call copies the untouched original, so element 0 is still 70."
+    },
+    {
+      "id": "encapsulation-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String name = \"ada\";\nString loud = name.toUpperCase();\n\nSystem.out.println(name);\nSystem.out.println(loud);",
+      "options": [
+        "ADA then ADA",
+        "ada then ADA",
+        "ada then ada",
+        "ADA then ada"
+      ],
+      "answer": 1,
+      "explanation": "String is immutable, a capsule with no write gates: toUpperCase() cannot change the original, so it returns a new String instead. name still refers to ada while loud refers to the new ADA; that unchangeability is what makes Strings safe to share anywhere."
+    },
+    {
+      "id": "encapsulation-031",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Why can a public field never provide the flexibility to swap a class's internal data representation, while a getter and setter pair can?",
+      "code": null,
+      "options": [
+        "Public fields are allocated on the stack, and stack storage cannot change its layout",
+        "The compiler permanently locks the declared type of any field marked public",
+        "Callers bind directly to the field's type, so changing it breaks them; a method commits only to its signature, leaving the body free to change",
+        "Public fields cannot store arrays or other object types, so there is nothing to swap"
+      ],
+      "answer": 2,
+      "explanation": "With a public field, the field's type is the public contract: change it and every access point breaks. A method promises only its signature, so its body can translate between the published parameter and return types and any internal representation, and callers never notice."
+    },
+    {
+      "id": "encapsulation-032",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "A team replaces a public balance field with a private field plus guarded deposit and withdraw methods. A forgotten line elsewhere still contains: account.balance = -1000000; In debugging terms, what has making the field private achieved?",
+      "code": null,
+      "options": [
+        "The bad write still happens, but the JVM now logs a warning each time that line runs",
+        "The bad write becomes a run-time exception instead of silently corrupting the balance",
+        "Nothing changes until a public setter is also written for the balance field",
+        "The bad write becomes a compile-time error, caught before the program can even be run"
+      ],
+      "answer": 3,
+      "explanation": "With the field private, the stray assignment no longer compiles (balance has private access), so the bug moves from run time, where a victim finds it weeks later, to compile time, where the programmer finds it instantly. Encapsulation makes the invalid write impossible rather than merely detectable."
+    }
+  ]
+}

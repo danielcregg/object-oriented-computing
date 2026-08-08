@@ -1,0 +1,486 @@
+{
+  "topic": "strings",
+  "title": "Strings",
+  "questions": [
+    {
+      "id": "strings-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement best describes what a Java String is?",
+      "code": null,
+      "options": [
+        "An object that holds a sequence of characters",
+        "A primitive type, like `int` or `char`",
+        "A fixed-size array of `char` that you index with square brackets",
+        "A keyword that reserves memory for text but has no methods"
+      ],
+      "answer": 0,
+      "explanation": "`String` is a class, so every string is an object with methods; primitives like `int` store bare values. The characters live inside the object - the variable itself only holds a reference to it."
+    },
+    {
+      "id": "strings-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "`String` can be used in any Java file without an `import` statement. Why?",
+      "code": null,
+      "options": [
+        "The compiler replaces strings with `char` arrays, so no class is involved",
+        "`String` belongs to `java.lang`, which is imported automatically",
+        "`String` is a primitive type, and primitives never need imports",
+        "Any class whose name starts with a capital letter is imported automatically"
+      ],
+      "answer": 1,
+      "explanation": "`String` lives in the `java.lang` package, the one package every Java file imports for free. It is a normal class - capital S, full method set - not a primitive."
+    },
+    {
+      "id": "strings-003",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String s = \"hello\";\ns.toUpperCase();\nSystem.out.println(s);",
+      "options": [
+        "HELLO",
+        "Hello",
+        "hello",
+        "Nothing - it fails to compile because the return value of `toUpperCase()` is not used"
+      ],
+      "answer": 2,
+      "explanation": "Strings are immutable: `toUpperCase()` builds and returns a new \"HELLO\" object, but nothing captures it, so `s` still points at \"hello\". Ignoring a return value is perfectly legal, so the code compiles and runs."
+    },
+    {
+      "id": "strings-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "You want to test whether two String variables hold exactly the same characters. Which expression is correct?",
+      "code": null,
+      "options": [
+        "`s1 == s2`",
+        "`s1 = s2`",
+        "`s1.length() == s2.length()`",
+        "`s1.equals(s2)`"
+      ],
+      "answer": 3,
+      "explanation": "`equals()` compares the actual text, character by character. `==` only asks whether both variables point at the same object - it can be false for identical text - and equal lengths prove nothing about the contents."
+    },
+    {
+      "id": "strings-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Two variables are assigned the same literal: `String s1 = \"Java\";` and `String s2 = \"Java\";`. How many String objects hold that text?",
+      "code": null,
+      "options": [
+        "One - both variables share the same object from the String pool",
+        "Two - every assignment creates its own object",
+        "Two at first, then the garbage collector merges them into one",
+        "Zero - literals are compiled into the code and never become objects"
+      ],
+      "answer": 0,
+      "explanation": "The JVM keeps literals in the String pool and recycles them: the second \"Java\" literal reuses the object the first one created, so both variables point at one shared object. That sharing is safe precisely because no code can ever modify a String."
+    },
+    {
+      "id": "strings-006",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String m = \"Java\";\nSystem.out.println(m.length());\nSystem.out.println(m.charAt(0));",
+      "options": [
+        "4 then J",
+        "5 then J",
+        "4 then a",
+        "3 then v"
+      ],
+      "answer": 0,
+      "explanation": "`length()` counts the characters - four in \"Java\". Indexing starts at zero, so `charAt(0)` returns the first character, 'J'."
+    },
+    {
+      "id": "strings-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is the key difference between `String` and `StringBuilder`?",
+      "code": null,
+      "options": [
+        "`String` stores only letters and digits; `StringBuilder` accepts any characters",
+        "A `String` can never be changed after creation, while a `StringBuilder` edits its contents in place",
+        "`StringBuilder` is thread-safe; `String` is not",
+        "`String` objects live in the heap; `StringBuilder` objects live in the String pool"
+      ],
+      "answer": 1,
+      "explanation": "Strings are immutable - every apparent change manufactures a new object - while StringBuilder is a mutable character sequence whose methods modify the same object. The thread-safety distractor is backwards: String is safe because it cannot change, and StringBuilder is the unsynchronized one."
+    },
+    {
+      "id": "strings-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "When you call a \"modifying\" String method such as `trim()` or `replace()`, what actually happens?",
+      "code": null,
+      "options": [
+        "The characters inside the original object are overwritten",
+        "The original object is destroyed and rebuilt with the new text",
+        "A brand-new String holding the result is created and returned; the original is untouched",
+        "Nothing at all, unless the String was created with `new`"
+      ],
+      "answer": 2,
+      "explanation": "String methods are factories: they return a new String containing the result and leave the original exactly as it was. If you do not capture the returned reference, the result is lost."
+    },
+    {
+      "id": "strings-009",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "StringBuilder sb = new StringBuilder(\"hello\");\nsb.append(\" world\");\nSystem.out.println(sb);\nSystem.out.println(sb.length());",
+      "options": [
+        "hello then 5",
+        "hello world then 11",
+        "hello then 11",
+        "hello world then 5"
+      ],
+      "answer": 1,
+      "explanation": "`append()` edits the builder itself - no reassignment needed - so `sb` genuinely grows to \"hello world\", which is 11 characters counting the space. In-place mutation is exactly what StringBuilder exists for."
+    },
+    {
+      "id": "strings-010",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print, in order?",
+      "code": "String a = \"hello\";\nString b = \"hello\";\nString c = new String(\"hello\");\nSystem.out.println(a == b);\nSystem.out.println(a == c);\nSystem.out.println(a.equals(c));",
+      "options": [
+        "true, true, true",
+        "false, false, true",
+        "true, false, true",
+        "true, false, false"
+      ],
+      "answer": 2,
+      "explanation": "The two literals share one pooled object, so `a == b` is true. `new String(...)` always builds a fresh object even when an identical String sits in the pool, so `a == c` compares different objects and is false, while `equals()` reads the matching characters and says true."
+    },
+    {
+      "id": "strings-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Code that compares Strings with `==` often passes its tests but fails with real input. What explains this?",
+      "code": null,
+      "options": [
+        "`==` is slower than `equals()`, so comparisons time out on production data",
+        "Literals in tests share pooled objects, so `==` happens to be true; text read at run time is not pooled, so `==` is false even for matching text",
+        "`==` compares only the first character of each String",
+        "The String pool is disabled outside of test runs, so literals stop matching"
+      ],
+      "answer": 1,
+      "explanation": "`==` compares references, and identical literals happen to point at one pooled object, so tests written with literals pass by luck. Strings that arrive at run time - typed by a user, read from a file, split from a line - are separate objects, so the same comparison quietly returns false. Always compare text with `equals()`."
+    },
+    {
+      "id": "strings-012",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String a = \"ha\";\nString b = a;\na = a + \"!\";\nSystem.out.println(a);\nSystem.out.println(b);",
+      "options": [
+        "ha! then ha!",
+        "ha then ha",
+        "ha! then ha",
+        "It does not compile - `b` cannot be assigned from another String variable"
+      ],
+      "answer": 2,
+      "explanation": "`b = a` copies the reference, so both variables point at \"ha\". The concatenation builds a new String \"ha!\" and moves only `a` to it; the shared original cannot have changed, so `b` still prints ha."
+    },
+    {
+      "id": "strings-013",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which of the following is NOT a benefit of String immutability?",
+      "code": null,
+      "options": [
+        "Strings can be shared safely between threads without synchronization",
+        "A String's hash code can be computed once and cached",
+        "The String pool can let many variables share one object safely",
+        "Text can be appended repeatedly in a loop without creating extra objects"
+      ],
+      "answer": 3,
+      "explanation": "Safe sharing, pooling, and hash-code caching all follow from the guarantee that a String can never change. Repeated appending is the cost side: because the object cannot grow, every concatenation must build a new String - the very problem StringBuilder solves."
+    },
+    {
+      "id": "strings-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "StringBuilder sb = new StringBuilder(\"hello\");\nsb.append(\" world\");\nsb.reverse();\nSystem.out.println(sb);",
+      "options": [
+        "hello world",
+        "olleh",
+        "world hello",
+        "dlrow olleh"
+      ],
+      "answer": 3,
+      "explanation": "Both calls edit the same object in place: `append` makes \"hello world\", then `reverse` flips the entire sequence to \"dlrow olleh\". Nothing needs to be caught or reassigned because StringBuilder is mutable."
+    },
+    {
+      "id": "strings-015",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A loop runs 1000 times and each iteration executes `result += \"x\";` on a String variable. Roughly how many String objects does the loop create?",
+      "code": null,
+      "options": [
+        "About 1000 - each `+=` builds a new String and abandons the previous one",
+        "One - the same String is extended each time",
+        "Two - one before the loop and one after it",
+        "Zero - the compiler folds the whole loop into a single constant"
+      ],
+      "answer": 0,
+      "explanation": "A String cannot be extended, so every `+=` copies everything built so far into a brand-new object, leaving the old one as garbage - roughly one new String per iteration. A StringBuilder would edit one object for the entire loop."
+    },
+    {
+      "id": "strings-016",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which class gives you a mutable character sequence that several threads can safely modify at the same time?",
+      "code": null,
+      "options": [
+        "`String`",
+        "`StringBuilder`",
+        "`char[]`",
+        "`StringBuffer`"
+      ],
+      "answer": 3,
+      "explanation": "`StringBuffer`'s methods are synchronized, so threads cannot corrupt it mid-edit - that locking is also why it is slower. `StringBuilder` has the same API without locks, and `String` is thread-safe only because it cannot be modified at all."
+    },
+    {
+      "id": "strings-017",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "`StringBuffer` had existed since Java 1.0. Why did Java 5 add `StringBuilder`?",
+      "code": null,
+      "options": [
+        "To provide the same API without synchronization, which is faster for the common single-threaded case",
+        "To add methods like `append()` and `insert()` that `StringBuffer` lacked",
+        "To make string building thread-safe for the first time",
+        "To replace the `String` class, which was being deprecated"
+      ],
+      "answer": 0,
+      "explanation": "Every `StringBuffer` method takes a lock, and most code is single-threaded - paying for protection it never uses. `StringBuilder` is the same API with the locking removed, so it is noticeably faster; reach for `StringBuffer` only when threads genuinely share the object."
+    },
+    {
+      "id": "strings-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "The string below has two spaces on each side of the word. What does this code print?",
+      "code": "String s = \"  Java  \";\ns.trim();\nSystem.out.println(s.length());",
+      "options": [
+        "4",
+        "8",
+        "6",
+        "Nothing - it fails to compile because `trim()`'s result is discarded"
+      ],
+      "answer": 1,
+      "explanation": "`trim()` returns a new trimmed String, but the result is never assigned, so `s` still holds all eight characters - two spaces, Java, two spaces. Reassigning with `s = s.trim();` would make the length 4."
+    },
+    {
+      "id": "strings-019",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String version = \"1.2.3\";\nSystem.out.println(version.replaceAll(\".\", \"-\"));",
+      "options": [
+        "1-2-3",
+        "123",
+        "-----",
+        "1.2.3"
+      ],
+      "answer": 2,
+      "explanation": "`replaceAll` treats its first argument as a regular expression, and the regex `.` matches any single character - so all five characters become dashes. For a literal replacement use `replace(\".\", \"-\")`, which prints 1-2-3."
+    },
+    {
+      "id": "strings-020",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "`String constructed = new String(\"Lab\");` creates an object outside the String pool. What does `constructed.intern()` return?",
+      "code": null,
+      "options": [
+        "The exact object `constructed` already points at",
+        "A second fresh copy of \"Lab\", also outside the pool",
+        "`null`, because Strings made with `new` can never be pooled",
+        "The pooled \"Lab\" object - so comparing the result to the literal \"Lab\" with `==` gives true"
+      ],
+      "answer": 3,
+      "explanation": "`intern()` looks the content up in the String pool and returns the pooled object holding those characters. It only returns that reference - `constructed` keeps pointing at the heap object unless you reassign it, as in `constructed = constructed.intern();`."
+    },
+    {
+      "id": "strings-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "You have finished assembling text in a `StringBuilder` and must pass the result to a method that expects a `String`. What is the correct move?",
+      "code": null,
+      "options": [
+        "Pass the builder directly - `StringBuilder` is a subclass of `String`",
+        "Call `toString()` on the builder to get a String holding its contents",
+        "Cast it: `(String) builder`",
+        "Call `append(\"\")`, which converts the builder into a String"
+      ],
+      "answer": 1,
+      "explanation": "A StringBuilder is not a String and cannot be cast to one - they are unrelated classes. `toString()` produces an immutable String snapshot of the builder's current contents: build in the builder, finish with `toString()`."
+    },
+    {
+      "id": "strings-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "In which situation should you switch from the `+` operator to a `StringBuilder`?",
+      "code": null,
+      "options": [
+        "Joining two names once: `String full = first + \" \" + last;`",
+        "Printing a label: `System.out.println(\"Total: \" + total);`",
+        "Appending one more piece to a result variable inside a loop with thousands of iterations",
+        "Concatenating three literals in a single expression on one line"
+      ],
+      "answer": 2,
+      "explanation": "A lone `+` expression is fine - the compiler turns it into efficient building for you. The trouble is `+` repeated across loop iterations: each pass creates a new String from everything so far, which is exactly the workload StringBuilder eliminates."
+    },
+    {
+      "id": "strings-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why does the chained call `sb.append(\"a\").append(\"b\").append(\"c\")` work on a `StringBuilder`?",
+      "code": null,
+      "options": [
+        "`append()` returns the same builder it just modified, so each call feeds the next",
+        "`append()` returns a new StringBuilder each time, and the chain collects them",
+        "The compiler rewrites the chain into a single String concatenation",
+        "`StringBuilder` overloads the dot operator to allow chaining"
+      ],
+      "answer": 0,
+      "explanation": "`append()` mutates the builder and then returns that same object, giving the next `.append()` something to act on. The whole chain is one builder edited three times - no new objects along the way."
+    },
+    {
+      "id": "strings-024",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "The variable `text` may be `null`. Which condition safely evaluates whether it contains \"ok\" without ever throwing a `NullPointerException`?",
+      "code": null,
+      "options": [
+        "`text != null && text.contains(\"ok\")`",
+        "`text.contains(\"ok\") && text != null`",
+        "`text.contains(\"ok\")` on its own - `contains()` simply returns false when `text` is null",
+        "`text == \"ok\"`"
+      ],
+      "answer": 0,
+      "explanation": "`&&` evaluates left to right and stops as soon as the answer is known, so the null check must come first; when `text` is null the `contains()` call never runs. Reversing the order calls a method on null before the check and throws immediately, and `==` never throws but compares references rather than content."
+    },
+    {
+      "id": "strings-025",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "StringBuilder sb = new StringBuilder(\"Java Strings\");\nsb.append(\"!\");\nsb.insert(0, \"ABC: \");\nsb.delete(0, 5);\nSystem.out.println(sb);",
+      "options": [
+        "ABC: Java Strings!",
+        "Java Strings!",
+        "Strings!",
+        "ABC: Java!"
+      ],
+      "answer": 1,
+      "explanation": "`append` gives \"Java Strings!\" and `insert(0, \"ABC: \")` gives \"ABC: Java Strings!\". `delete(0, 5)` uses a half-open range - it removes indexes 0 through 4, exactly the five characters of \"ABC: \" - landing back on \"Java Strings!\", with every call editing the same object."
+    },
+    {
+      "id": "strings-026",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens when you try to compile and run this code?",
+      "code": "String s = \"Java\";\nint n = s.length;\nSystem.out.println(n);",
+      "options": [
+        "It prints 4",
+        "It prints 3",
+        "It fails to compile - `length` on a String is a method and needs parentheses",
+        "It compiles, but throws an exception at run time"
+      ],
+      "answer": 2,
+      "explanation": "Arrays expose `length` as a field with no brackets, but String provides `length()` as a method - `s.length` without parentheses is not a member of String, so the compiler rejects the line. With `s.length()` it would print 4."
+    },
+    {
+      "id": "strings-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens when this code runs?",
+      "code": "String s = \"Java\";\nSystem.out.println(s.substring(0, 4));\nSystem.out.println(s.charAt(4));",
+      "options": [
+        "It prints Java, then throws a `StringIndexOutOfBoundsException`",
+        "It prints Java, then prints a",
+        "The `substring` call throws, because index 4 is past the last character",
+        "It does not compile"
+      ],
+      "answer": 0,
+      "explanation": "`substring`'s end index is exclusive, so it may equal the length - `substring(0, 4)` happily returns \"Java\". `charAt` has no such allowance: valid indexes run 0 to `length() - 1` (0 to 3 here), so `charAt(4)` throws at run time."
+    },
+    {
+      "id": "strings-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "StringBuilder sb = new StringBuilder(\"Hello\");\nsb.setCharAt(0, 'h');\nsb.deleteCharAt(4);\nSystem.out.println(sb);",
+      "options": [
+        "Hello",
+        "hello",
+        "Hell",
+        "hell"
+      ],
+      "answer": 3,
+      "explanation": "`setCharAt(0, 'h')` overwrites the first character in place, giving \"hello\"; `deleteCharAt(4)` then removes the 'o' at index 4, leaving \"hell\". Both calls mutate the one builder directly - no return values needed."
+    },
+    {
+      "id": "strings-029",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Building an N-character string with `+=` in a loop does work proportional to N squared, not N. What causes the square law?",
+      "code": null,
+      "options": [
+        "The garbage collector pauses the loop after every concatenation",
+        "Each `+=` must copy every character built so far into a new String before appending the new piece",
+        "The String pool is searched for every intermediate result",
+        "The hash code of the whole string is recomputed on every iteration"
+      ],
+      "answer": 1,
+      "explanation": "Immutability means `+=` can never extend the existing String - it copies the entire text so far into a fresh object each time. Copying 1 + 2 + ... + N characters totals about N*N/2 work, which is how 10,000 appends end up copying on the order of 100 million characters."
+    },
+    {
+      "id": "strings-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "StringBuilder sb = new StringBuilder(\"Hello World\");\nString s = sb.substring(0, 5);\nSystem.out.println(s);\nSystem.out.println(sb);",
+      "options": [
+        "Hello then Hello",
+        "Hello World then Hello World",
+        "It does not compile - `substring` on a StringBuilder cannot be assigned to a String",
+        "Hello then Hello World"
+      ],
+      "answer": 3,
+      "explanation": "Unusually for a StringBuilder method, `substring()` does not mutate: it returns a new String copy of the half-open range 0 to 5 and leaves the builder untouched. So `s` is \"Hello\" while `sb` still holds \"Hello World\"."
+    },
+    {
+      "id": "strings-031",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "After this code runs, what is true of `r`?",
+      "code": "String a = \"Java\";\nString b = \"Kotlin\";\nint r = a.compareTo(b);",
+      "options": [
+        "`r` is positive, because \"Kotlin\" is the longer string",
+        "It does not compile - `compareTo` returns a `boolean`, not an `int`",
+        "`r` is negative, because \"Java\" orders alphabetically before \"Kotlin\"",
+        "`r` is 0, because `compareTo` tests reference equality and these are different objects"
+      ],
+      "answer": 2,
+      "explanation": "`compareTo` compares lexicographically and returns an `int`: negative when the receiver sorts first, zero for equal content, positive when it sorts after. 'J' comes before 'K', so `\"Java\".compareTo(\"Kotlin\")` is negative."
+    },
+    {
+      "id": "strings-032",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which single call joins the array `{\"Java\", \"Strings\", \"are\", \"powerful\"}` into \"Java Strings are powerful\"?",
+      "code": null,
+      "options": [
+        "`String.join(words, \" \")` - array first, then the separator",
+        "`String.format(\" \", words)`",
+        "`words.join(\" \")`",
+        "`String.join(\" \", words)` - separator first, then the array"
+      ],
+      "answer": 3,
+      "explanation": "`String.join` takes the separator as its first argument followed by the pieces, and returns them joined with the separator between each pair - no loop required. Arrays have no `join` method of their own, and `String.format` fills placeholders in a template instead."
+    }
+  ]
+}

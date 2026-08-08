@@ -1,0 +1,486 @@
+{
+  "topic": "inheritance",
+  "title": "Inheritance",
+  "questions": [
+    {
+      "id": "inheritance-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Along with inheritance, which three principles complete the four major pillars of object-oriented programming?",
+      "code": null,
+      "options": [
+        "Compilation, iteration and recursion",
+        "Overloading, overriding and casting",
+        "Encapsulation, polymorphism and abstraction",
+        "Encapsulation, composition and delegation"
+      ],
+      "answer": 2,
+      "explanation": "OOP rests on four pillars: encapsulation, inheritance, polymorphism and abstraction. The other options mix in general programming ideas that are not among the four pillars."
+    },
+    {
+      "id": "inheritance-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement best defines inheritance in Java?",
+      "code": null,
+      "options": [
+        "It is the mechanism by which one class acquires the instance variables and methods of another class",
+        "It is the mechanism of hiding a class's fields behind public getter and setter methods",
+        "It is the mechanism by which one class stores a reference to another class as a field",
+        "It is the mechanism that copies one object's field values into another object at runtime"
+      ],
+      "answer": 0,
+      "explanation": "Inheritance lets a subclass acquire the fields and methods of its superclass, expressing an is-a relationship. Hiding fields behind getters and setters is encapsulation, and holding a reference to another class is a has-a relationship, not inheritance."
+    },
+    {
+      "id": "inheritance-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Inheritance is a mechanism for expressing which kind of relationship between two classes?",
+      "code": null,
+      "options": [
+        "A has-a relationship, where one class contains another as a field",
+        "An is-a relationship, also known as a parent-child relationship",
+        "A uses-a relationship, where one class temporarily calls another's methods",
+        "A one-to-many relationship between objects created at runtime"
+      ],
+      "answer": 1,
+      "explanation": "Inheritance expresses an is-a (parent-child) relationship: an Employee is a Person, so Employee can extend Person. A has-a relationship is modelled with a field inside the class, not with extends."
+    },
+    {
+      "id": "inheritance-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In an inheritance relationship, what is the class whose instance variables and methods are inherited by another class called?",
+      "code": null,
+      "options": [
+        "The subclass",
+        "The derived class",
+        "The extended class",
+        "The superclass"
+      ],
+      "answer": 3,
+      "explanation": "The class that has its members inherited is the superclass, also known as the base class or parent class. Subclass, derived class and extended class are all names for the class that receives those members."
+    },
+    {
+      "id": "inheritance-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which of the following is NOT another name for a subclass?",
+      "code": null,
+      "options": [
+        "Child class",
+        "Base class",
+        "Derived class",
+        "Extended class"
+      ],
+      "answer": 1,
+      "explanation": "Base class is a synonym for the superclass, the class being inherited from. Child class, derived class and extended class all describe the class that inherits."
+    },
+    {
+      "id": "inheritance-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which keyword is used to implement inheritance between two classes in Java?",
+      "code": null,
+      "options": [
+        "inherits",
+        "super",
+        "extends",
+        "implements"
+      ],
+      "answer": 2,
+      "explanation": "A class inherits from another using extends, as in class Subclass extends Superclass. The implements keyword is for interfaces, super accesses the superclass from inside a subclass, and inherits is not a Java keyword."
+    },
+    {
+      "id": "inheritance-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "A class is declared as class Gadget { } with no extends clause. Which statement about its superclass is true?",
+      "code": null,
+      "options": [
+        "Gadget has no superclass at all",
+        "Gadget's direct superclass is the Object class from java.lang",
+        "Gadget's superclass is decided at runtime when the first object is created",
+        "The code does not compile because every class must name its superclass explicitly"
+      ],
+      "answer": 1,
+      "explanation": "If you do not supply a superclass, your class automatically becomes a subclass of Object, which is defined in java.lang. Object is the root of every class hierarchy, so only Object itself has no superclass."
+    },
+    {
+      "id": "inheritance-008",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Person {\n    private int age;\n    public int getAge() { return age; }\n    public void setAge(int a) { this.age = a; }\n}\nclass Employee extends Person {\n    private String role;\n    public String getRole() { return role; }\n    public void setRole(String r) { this.role = r; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Employee emp = new Employee();\n        emp.setAge(25);\n        emp.setRole(\"Developer\");\n        System.out.println(emp.getAge() + \" : \" + emp.getRole());\n    }\n}",
+      "options": [
+        "25 : Developer",
+        "It fails to compile because Employee has no setAge method",
+        "0 : null",
+        "It fails to compile because age has private access in Person"
+      ],
+      "answer": 0,
+      "explanation": "Employee inherits the public getAge and setAge methods from Person, so both calls work and the program prints 25 : Developer. The private field age is only ever touched by Person's own methods, so no access error occurs."
+    },
+    {
+      "id": "inheritance-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Two related classes each contain identical hand-pasted fields and methods. Which benefit of inheritance most directly fixes this problem?",
+      "code": null,
+      "options": [
+        "Faster program execution",
+        "Automatic memory management",
+        "Stronger hiding of private data",
+        "Code reusability, by moving the common code up into a shared superclass"
+      ],
+      "answer": 3,
+      "explanation": "Inheritance minimises duplicate code: the common members move up into one superclass and every subclass acquires them automatically, so a later change is made in exactly one place. Inheritance does not speed up execution or manage memory."
+    },
+    {
+      "id": "inheritance-010",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this code compile?",
+      "code": "class Student { }\nclass Employee { }\nclass TeachingAssistant extends Student, Employee { }",
+      "options": [
+        "Yes, TeachingAssistant inherits the members of both classes",
+        "Yes, but only the members of the first class listed are inherited",
+        "No, a Java class can extend exactly one class",
+        "No, extends may not be used more than once in the same file"
+      ],
+      "answer": 2,
+      "explanation": "Java does not allow multiple inheritance of classes, so extends must name exactly one class and this declaration is a compile error. A class that needs several types would implement multiple interfaces instead."
+    },
+    {
+      "id": "inheritance-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which list contains only types of inheritance that Java allows for classes?",
+      "code": null,
+      "options": [
+        "Single, multilevel and hierarchical",
+        "Single, multiple and multilevel",
+        "Multiple, hierarchical and hybrid",
+        "Single, multiple and hierarchical"
+      ],
+      "answer": 0,
+      "explanation": "Java supports single, multilevel and hierarchical inheritance for classes. Every other list includes multiple inheritance, which Java forbids for classes and supports only through interfaces."
+    },
+    {
+      "id": "inheritance-012",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Class C extends class B, and class B extends class A. What type of inheritance is this?",
+      "code": null,
+      "options": [
+        "Hierarchical inheritance",
+        "Multiple inheritance",
+        "Multilevel inheritance",
+        "Hybrid inheritance"
+      ],
+      "answer": 2,
+      "explanation": "A chain in which a class extends a class that itself extends another is multilevel inheritance. Hierarchical inheritance would have several classes extending the same superclass, and multiple inheritance would give one class two superclasses."
+    },
+    {
+      "id": "inheritance-013",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Classes B, C and D each extend the same class A. What type of inheritance is this?",
+      "code": null,
+      "options": [
+        "Hierarchical inheritance",
+        "Multilevel inheritance",
+        "Multiple inheritance",
+        "Single inheritance"
+      ],
+      "answer": 0,
+      "explanation": "When more than one class extends the same superclass, the shape is hierarchical inheritance. Multiple inheritance is the reverse, one subclass with several superclasses, and Java does not allow it for classes."
+    },
+    {
+      "id": "inheritance-014",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why does Java NOT allow a class to extend more than one class?",
+      "code": null,
+      "options": [
+        "Because compiling two superclasses would make compilation too slow",
+        "Because both superclasses could define the same method, making it ambiguous which version the subclass inherits",
+        "Because a subclass may not contain more members than its superclass",
+        "Because an object can only store the fields of one class at a time"
+      ],
+      "answer": 1,
+      "explanation": "If two parents both defined the same method, Java could not decide which version the child inherits, so it refuses to guess. Each class therefore has exactly one superclass, and interfaces provide multiple inheritance of type instead."
+    },
+    {
+      "id": "inheritance-015",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Java forbids multiple inheritance of classes. What is the legal way for a single Java class to acquire more than one type?",
+      "code": null,
+      "options": [
+        "Extend the extra classes from inside a nested class",
+        "List several classes after extends, separated by commas",
+        "Mark the additional superclasses as protected",
+        "Implement more than one interface"
+      ],
+      "answer": 3,
+      "explanation": "Java supports multiple inheritance of type through interfaces: one class may implement any number of them. A class may still extend only one class."
+    },
+    {
+      "id": "inheritance-016",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why are constructors NOT inherited by subclasses in Java?",
+      "code": null,
+      "options": [
+        "Because constructors are private by default",
+        "Because constructors are not members of a class",
+        "Because constructors are static",
+        "Because a subclass never needs to initialise superclass fields"
+      ],
+      "answer": 1,
+      "explanation": "Inheritance passes down the members of a class, meaning its instance variables and methods. Constructors are not members, so they are never inherited, although a subclass constructor can still invoke one with super(...)."
+    },
+    {
+      "id": "inheritance-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Person {\n    Person() { System.out.println(\"Person ready\"); }\n}\nclass Student extends Person {\n    Student() { System.out.println(\"Student ready\"); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Student();\n    }\n}",
+      "options": [
+        "Student ready only",
+        "Student ready, then Person ready",
+        "Nothing, because Person() is never called",
+        "Person ready, then Student ready"
+      ],
+      "answer": 3,
+      "explanation": "The compiler inserts an implicit super() as the first statement of Student(), so the superclass constructor runs before the subclass constructor body. The parent is always constructed first."
+    },
+    {
+      "id": "inheritance-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this code is compiled?",
+      "code": "class Person {\n    private int age;\n    public int getAge() { return age; }\n}\nclass Employee extends Person {\n    public boolean canRetire() {\n        return age > 65;\n    }\n}",
+      "options": [
+        "It compiles; Employee inherits age and may use it directly",
+        "It compiles, but age is always 0 inside canRetire",
+        "It fails to compile only if canRetire() is actually called somewhere",
+        "It fails to compile because age has private access in Person"
+      ],
+      "answer": 3,
+      "explanation": "Private members are not inherited in an accessible way: the age storage exists inside every Employee object, but only Person's own code can touch it, so the line age > 65 is a compile error. The fix is to use the public getter: return getAge() > 65."
+    },
+    {
+      "id": "inheritance-019",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "A superclass field should be hidden from unrelated classes but directly accessible inside every subclass. Which access modifier achieves exactly this?",
+      "code": null,
+      "options": [
+        "private",
+        "public",
+        "protected",
+        "static"
+      ],
+      "answer": 2,
+      "explanation": "A subclass can see the public and protected members of its superclass; protected opens a member to subclasses while keeping it closed to unrelated classes. A private member is hidden even from subclasses, and static is not an access modifier."
+    },
+    {
+      "id": "inheritance-020",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What is the result of running this program?",
+      "code": "class Animal {\n    public void eat() { System.out.println(\"Animal eats\"); }\n}\nclass Mammal extends Animal {\n    public void breathe() { System.out.println(\"Mammal breathes\"); }\n}\nclass Dog extends Mammal {\n    public void bark() { System.out.println(\"Dog barks\"); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Dog();\n        d.eat();\n        d.breathe();\n        d.bark();\n    }\n}",
+      "options": [
+        "It prints Animal eats, Mammal breathes and Dog barks, each on its own line",
+        "It prints only Dog barks, because Dog declares just one method",
+        "It fails to compile because Dog does not declare an eat() method",
+        "It fails to compile because a class cannot inherit through two levels"
+      ],
+      "answer": 0,
+      "explanation": "This is multilevel inheritance: Dog inherits breathe() from Mammal and eat() from Animal through the chain, so all three calls compile and run. A subclass acquires the accessible members of every class above it in its hierarchy."
+    },
+    {
+      "id": "inheritance-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which pair of tasks is the super keyword used for inside a subclass?",
+      "code": null,
+      "options": [
+        "Creating superclass objects and destroying subclass objects",
+        "Accessing superclass members that share a name with subclass members, and invoking a superclass constructor",
+        "Importing the superclass package and renaming inherited methods",
+        "Preventing a class from being extended and marking its methods final"
+      ],
+      "answer": 1,
+      "explanation": "super differentiates superclass members from same-named subclass members, and super(...) invokes the superclass constructor from a subclass constructor. It is the superclass-directed counterpart of this."
+    },
+    {
+      "id": "inheritance-022",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "In the Cat constructor, what does the statement super(age); do?",
+      "code": "class Mammal {\n    int age;\n    Mammal(int age) {\n        this.age = age;\n    }\n}\nclass Cat extends Mammal {\n    Cat(int age) {\n        super(age);\n    }\n}",
+      "options": [
+        "It creates a second, separate Mammal object next to the Cat",
+        "It copies Mammal's constructor into Cat so that Cat inherits it",
+        "It calls Cat's own constructor again recursively with the same age",
+        "It invokes the Mammal(int) constructor so the superclass part is initialised first"
+      ],
+      "answer": 3,
+      "explanation": "super(age) explicitly calls the parameterized superclass constructor, passing age up so the Mammal part of the object is initialised before Cat's constructor continues. No extra object is created, and the constructor is still not inherited."
+    },
+    {
+      "id": "inheritance-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Methods such as toString(), equals() and hashCode() can be called on every Java object, even objects of classes that declare no methods at all. Why?",
+      "code": null,
+      "options": [
+        "The compiler generates a fresh copy of these methods inside every class",
+        "They are static utility methods that belong to the java.util package",
+        "The JVM attaches them at runtime, but only to classes that use extends",
+        "Every class inherits them from Object, the root superclass defined in java.lang"
+      ],
+      "answer": 3,
+      "explanation": "Every class descends from java.lang.Object, so Object's common behaviours such as toString, equals and hashCode are inherited by all objects. That is why printing an object with no toString of its own shows Object's default ClassName@hex output."
+    },
+    {
+      "id": "inheritance-024",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "You are modelling the classes Car and Engine. Which design is correct, and why?",
+      "code": null,
+      "options": [
+        "class Car extends Engine, because a car is powered by an engine",
+        "class Engine extends Car, because an engine belongs to a car",
+        "Car should declare an Engine field, because a car has an engine rather than is an engine",
+        "Either extends direction is fine, because the compiler treats both the same way"
+      ],
+      "answer": 2,
+      "explanation": "The is-a sentence test fails in both directions: a Car is not an Engine, and an Engine is not a Car. This is a has-a relationship, modelled by containment: class Car { private Engine engine; }."
+    },
+    {
+      "id": "inheritance-025",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "This program compiles and prints something like Gadget@1b6d3586. Where does the toString() method come from?",
+      "code": "class Gadget { }\npublic class Main {\n    public static void main(String[] args) {\n        Gadget g = new Gadget();\n        System.out.println(g.toString());\n    }\n}",
+      "options": [
+        "It is inherited from Object, which Gadget implicitly extends",
+        "Nowhere; the code cannot compile because Gadget never defines toString()",
+        "System.out.println invents a default toString() for any argument it receives",
+        "It is inherited from the String class, since toString() returns a String"
+      ],
+      "answer": 0,
+      "explanation": "A class with no extends clause implicitly extends Object, and Object supplies toString(), equals() and hashCode() to every class. The ClassName@hex text is Object's default toString() result."
+    },
+    {
+      "id": "inheritance-026",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "This code fails to compile. Why?",
+      "code": "class Person {\n    private String name;\n    Person(String name) {\n        this.name = name;\n    }\n}\nclass Student extends Person {\n    Student() { }\n}",
+      "options": [
+        "A constructor body is not allowed to be empty",
+        "The implicit super() in Student() needs a no-arg Person constructor, and declaring Person(String) removed the default one",
+        "name is private in Person, so Person cannot be extended",
+        "Person must be declared abstract before another class may extend it"
+      ],
+      "answer": 1,
+      "explanation": "Every subclass constructor starts with an implicit super() unless you write a super call yourself, and declaring Person(String) cost Person its free no-arg default constructor. The hidden super() finds no matching constructor, so compilation fails; the fix is for Student() to call super(...) explicitly with a String."
+    },
+    {
+      "id": "inheritance-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens when this code is compiled?",
+      "code": "class Vehicle {\n    private String type;\n    Vehicle(String type) {\n        this.type = type;\n    }\n}\nclass Car extends Vehicle {\n    private int doors;\n    Car(String type, int doors) {\n        this.doors = doors;\n        super(type);\n    }\n}",
+      "options": [
+        "It compiles; statement order inside a constructor does not matter",
+        "It compiles, but doors is initialised twice at runtime",
+        "It fails to compile because a subclass constructor may not assign its own fields",
+        "It fails to compile because super(type) must be the first statement in the Car constructor"
+      ],
+      "answer": 3,
+      "explanation": "A super(...) call must be the very first statement of a subclass constructor, because the superclass must be initialised before the subclass part runs. Placing this.doors = doors before it is a compile-time error."
+    },
+    {
+      "id": "inheritance-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "How many constructors execute when new Student() runs?",
+      "code": "class Person {\n    Person() { }\n}\nclass Student extends Person {\n    Student() { }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Student();\n    }\n}",
+      "options": [
+        "One: Student() only",
+        "Two: Student() and Person()",
+        "Three: Student(), Person() and Object()",
+        "Four: Student(), Person(), Object() and Main()"
+      ],
+      "answer": 2,
+      "explanation": "Each constructor first calls its superclass constructor, and every inheritance chain ends at Object, so the call climbs from Student() to Person() to Object() and three constructors run, oldest finishing first. No Main object is ever created, so no Main constructor runs."
+    },
+    {
+      "id": "inheritance-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens when this code is compiled?",
+      "code": "class Animal {\n    public String describe() { return \"an animal\"; }\n}\nclass Mammal extends Animal {\n    public String describe() { return \"a mammal\"; }\n}\nclass Dog extends Mammal {\n    public String label() {\n        return super.super.describe();\n    }\n}",
+      "options": [
+        "It fails to compile; super.super is not valid Java, so a class can only reach its direct superclass",
+        "It compiles, and label() returns an animal",
+        "It compiles, and label() returns a mammal",
+        "It fails to compile because a subclass may not redefine a superclass method"
+      ],
+      "answer": 0,
+      "explanation": "Using multiple super keywords to reach an ancestor beyond the direct superclass is not permitted, so super.super.describe() is a compile error. A subclass may speak to its parent with super, but never skip past it to a grandparent."
+    },
+    {
+      "id": "inheritance-030",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "You genuinely cannot decide whether class X should extend class Y or simply hold a Y field; both designs seem defensible. Which guideline applies?",
+      "code": null,
+      "options": [
+        "Prefer extends, since inheritance always maximises code reuse",
+        "Prefer the field, since a has-a field is easy to change later while extends is a public promise that X is a Y",
+        "Use both extends and a field together so that neither option is lost",
+        "Choose at random, because the two designs behave identically in Java"
+      ],
+      "answer": 1,
+      "explanation": "When genuinely torn, prefer has-a: a private field is an internal detail that is easy to change later, whereas extends publicly and permanently commits X to being a Y. Inheritance should be kept for relationships that clearly pass the is-a sentence test."
+    },
+    {
+      "id": "inheritance-031",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "class Vehicle {\n    Vehicle() { System.out.println(\"Vehicle built\"); }\n}\nclass Car extends Vehicle {\n    Car() { System.out.println(\"Car built\"); }\n}\nclass ElectricCar extends Car {\n    ElectricCar() { System.out.println(\"ElectricCar built\"); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new ElectricCar();\n    }\n}",
+      "options": [
+        "ElectricCar built, then Car built, then Vehicle built",
+        "ElectricCar built only",
+        "Vehicle built, then Car built, then ElectricCar built",
+        "It fails to compile because ElectricCar() does not call super() explicitly"
+      ],
+      "answer": 2,
+      "explanation": "Subclass objects are constructed top-down: each constructor's implicit super() climbs to the top of the chain, then the bodies run from the oldest class downwards. Explicit super() calls are optional here because every class in the chain has a no-arg constructor."
+    },
+    {
+      "id": "inheritance-032",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which statement about the shape of a Java class hierarchy is true?",
+      "code": null,
+      "options": [
+        "A superclass may have any number of subclasses, but a subclass extends exactly one class",
+        "A class may have several direct superclasses, but a superclass may have only one subclass",
+        "Only abstract classes may be extended by more than one subclass",
+        "A class may extend two classes as long as those classes declare different methods"
+      ],
+      "answer": 0,
+      "explanation": "Nothing limits how many subclasses extend one superclass, but every class except Object has exactly one direct superclass. One class with two superclasses would be multiple inheritance, which Java forbids for classes even when the parents' methods would not clash."
+    }
+  ]
+}

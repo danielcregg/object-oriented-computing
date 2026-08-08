@@ -44,7 +44,18 @@ All labs live in this repository — **[labs/](labs/README.md)** — one
 folder per lab with the instructions (README) and a runnable `Main.java`
 starter. Students: **fork this repo, open a Codespace on your fork**
 (the devcontainer gives you a ready Java IDE), pick a lab folder, and
-follow its README. GitHub Classroom is retired.
+follow its README. Read-only lab pages are also published on the
+[live site](https://danielcregg.is-a.dev/object-oriented-computing/labs/).
+GitHub Classroom is retired.
+
+## MCQ practice
+
+Self-test quizzes generated from the module's own content:
+**[MCQ practice](https://danielcregg.is-a.dev/object-oriented-computing/practice/)** —
+pick your topics, then exam mode (30 questions, 60-minute timer) or
+instant-feedback practice mode. Per-topic progress is stored in your
+browser only. The practice bank (`practice/bank/`) is authored for this
+purpose and is separate from any assessment material.
 
 ## Module info
 

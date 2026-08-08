@@ -1,0 +1,486 @@
+{
+  "topic": "abstraction",
+  "title": "Abstraction",
+  "questions": [
+    {
+      "id": "abstraction-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In object-oriented programming, what does abstraction mean?",
+      "code": null,
+      "options": [
+        "Hiding an object's data behind access modifiers and exposing it only through getters and setters",
+        "Hiding the implementation details (the bodies) of methods and showing only their method signatures",
+        "Reusing the fields and methods of a parent class inside a child class",
+        "Splitting a program into packages so that classes cannot see each other's source code"
+      ],
+      "answer": 1,
+      "explanation": "Abstraction hides how a method works (its body) and exposes only what it offers (its signature). Hiding data behind access modifiers and getters/setters is encapsulation, a different OOP pillar."
+    },
+    {
+      "id": "abstraction-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement correctly distinguishes abstraction from encapsulation?",
+      "code": null,
+      "options": [
+        "Abstraction hides method implementation using abstract classes and interfaces; encapsulation hides data using access modifiers with getters and setters",
+        "Abstraction hides data using access modifiers; encapsulation hides method implementation using interfaces",
+        "They are two interchangeable names for exactly the same technique",
+        "Abstraction applies only to variables, while encapsulation applies only to methods"
+      ],
+      "answer": 0,
+      "explanation": "Both pillars hide something, but the targets differ: abstraction hides implementation (method bodies) via abstract classes and interfaces, while encapsulation hides state (data) via access modifiers, getters and setters."
+    },
+    {
+      "id": "abstraction-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "To drive a car you use only the pedals, gear shift and steering wheel, and you never see how the engine works. In abstraction terms, what do the pedals and wheel represent?",
+      "code": null,
+      "options": [
+        "The implementation, because they are the parts that physically make the car move",
+        "Encapsulated private data belonging to the car",
+        "The exposed interface (the contract) through which the hidden implementation is used",
+        "An abstract method, because the driver must supply their own body for it"
+      ],
+      "answer": 2,
+      "explanation": "The controls are the simple interface the driver depends on, while the engine and transmission are the hidden implementation. Abstraction means using something through its contract without ever seeing the machinery underneath."
+    },
+    {
+      "id": "abstraction-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which two Java constructs are the main tools for achieving abstraction?",
+      "code": null,
+      "options": [
+        "Getters and setters",
+        "Constructors and method overloading",
+        "Packages and access modifiers",
+        "Abstract classes and interfaces"
+      ],
+      "answer": 3,
+      "explanation": "Java implements abstraction through the abstract keyword (abstract classes and abstract methods) and through interfaces, which are fully abstract contracts. Getters, setters and access modifiers are the tools of encapsulation instead."
+    },
+    {
+      "id": "abstraction-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What happens if code tries to create an object of an abstract class directly with new?",
+      "code": null,
+      "options": [
+        "It compiles, but an exception is thrown at run time",
+        "An object is created whose abstract methods simply do nothing",
+        "The code fails to compile",
+        "It compiles with a warning and the nearest concrete subclass is instantiated instead"
+      ],
+      "answer": 2,
+      "explanation": "Declaring a class abstract imposes a compile-time rule: it can never be instantiated, only inherited. The compiler rejects any new expression on an abstract class."
+    },
+    {
+      "id": "abstraction-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "How is an abstract method written inside an abstract class?",
+      "code": null,
+      "options": [
+        "A method signature followed by empty braces { }",
+        "A method signature ending in a semicolon, with no body at all",
+        "A full method whose body simply returns a default value",
+        "A method marked final so that subclasses are forced to replace its body"
+      ],
+      "answer": 1,
+      "explanation": "An abstract method supplies only the signature: instead of a { } body it ends with a semicolon, with the abstract keyword placed after the access modifier and before the return type. Empty braces would be a concrete method with an empty body, which is different."
+    },
+    {
+      "id": "abstraction-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which keyword does a class use to declare that it will fulfil an interface's contract?",
+      "code": null,
+      "options": [
+        "extends",
+        "interface",
+        "abstract",
+        "implements"
+      ],
+      "answer": 3,
+      "explanation": "A class implements an interface; classes use extends only for inheriting another class. Interfaces themselves use extends when they inherit other interfaces."
+    },
+    {
+      "id": "abstraction-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "How many classes can a Java class extend, and how many interfaces can it implement?",
+      "code": null,
+      "options": [
+        "It can extend at most one class but implement many interfaces",
+        "It can extend many classes but implement only one interface",
+        "It can extend at most one class and implement at most one interface",
+        "It can extend many classes and implement many interfaces"
+      ],
+      "answer": 0,
+      "explanation": "Java allows single inheritance of classes (extends exactly one) but multiple inheritance of type through interfaces (implements as many as needed). Needing behaviour from multiple sources is a key reason to choose interfaces."
+    },
+    {
+      "id": "abstraction-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which pairing of relationships is correct?",
+      "code": null,
+      "options": [
+        "Interface: is-a relationship; abstract class: can-do relationship",
+        "Both abstract classes and interfaces express only is-a relationships",
+        "Abstract class: is-a relationship; interface: can-do relationship (a capability)",
+        "Both abstract classes and interfaces express only can-do relationships"
+      ],
+      "answer": 2,
+      "explanation": "Extending an abstract class says what the object is (a Dog is an Animal), while implementing an interface says what it can do (a Bird can fly, so it implements Flyable). This distinction guides which construct to choose in a design."
+    },
+    {
+      "id": "abstraction-010",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What is the result of compiling and running this code?",
+      "code": "interface Playable {\n    void play();\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Playable p = new Playable();\n        p.play();\n    }\n}",
+      "options": [
+        "It prints nothing and exits normally",
+        "It throws an exception at run time when play() is called",
+        "It compiles only if play() is given a default body",
+        "It fails to compile: an interface cannot be instantiated"
+      ],
+      "answer": 3,
+      "explanation": "Interfaces are pure contracts and can never be instantiated with new; they can only be implemented by classes or extended by other interfaces. Only a concrete implementing class could be instantiated and assigned to a Playable variable."
+    },
+    {
+      "id": "abstraction-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A class contains one abstract method and nine ordinary methods with bodies. What does the compiler require?",
+      "code": null,
+      "options": [
+        "The class itself must be declared abstract",
+        "Nothing extra: only classes where every method is abstract need the abstract keyword",
+        "The class must be converted into an interface",
+        "The other nine methods must also be declared abstract"
+      ],
+      "answer": 0,
+      "explanation": "Even a single abstract method makes the class incomplete, so the class must be declared abstract. Abstract classes may freely mix abstract methods with concrete ones."
+    },
+    {
+      "id": "abstraction-012",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this code compile?",
+      "code": "abstract class Shape {\n    public abstract double area();\n}\n\nclass Triangle extends Shape {\n    // no methods yet\n}",
+      "options": [
+        "Yes: Triangle inherits area() and may leave it unimplemented",
+        "No: Triangle must implement area() or be declared abstract itself",
+        "No: an abstract class may not contain an abstract method",
+        "Yes, but calling area() on a Triangle throws an exception at run time"
+      ],
+      "answer": 1,
+      "explanation": "A subclass that inherits an abstract method has exactly two options: provide a body for it, or be declared abstract and pass the obligation on. Triangle does neither, so compilation fails."
+    },
+    {
+      "id": "abstraction-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this hierarchy compile?",
+      "code": "abstract class A {\n    abstract void m();\n}\n\nabstract class B extends A {\n}\n\nclass C extends B {\n    void m() { }\n}",
+      "options": [
+        "No: B must implement m() because it extends A",
+        "No: an abstract class cannot extend another abstract class",
+        "Yes: B stays abstract so it may leave m() unimplemented, and C finally provides the body",
+        "Yes, but only C is usable; A and B are removed by the compiler"
+      ],
+      "answer": 2,
+      "explanation": "An abstract subclass may leave inherited abstract methods unimplemented and pass them down. The chain is legal because some descendant (here C) eventually implements everything; otherwise the family could never produce a single object."
+    },
+    {
+      "id": "abstraction-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What is the result of this code?",
+      "code": "abstract class Vehicle {\n    public void stop() {\n        System.out.println(\"Braking...\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Vehicle v = new Vehicle();\n        v.stop();\n    }\n}",
+      "options": [
+        "It prints Braking...",
+        "It compiles because Vehicle has no abstract methods, but crashes at run time",
+        "It prints nothing",
+        "It fails to compile: Vehicle is abstract, even though it contains no abstract methods"
+      ],
+      "answer": 3,
+      "explanation": "An abstract class may contain zero abstract methods; the abstract keyword on the class declaration alone forbids instantiation. Whether new is allowed depends on how the class is declared, not on what it contains."
+    },
+    {
+      "id": "abstraction-015",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "abstract class Animal {\n    protected String name;\n    public Animal(String name) { this.name = name; }\n    public abstract void makeSound();\n    public void introduce() {\n        System.out.println(\"I am \" + name);\n    }\n}\n\nclass Dog extends Animal {\n    public Dog(String name) { super(name); }\n    public void makeSound() { System.out.println(\"Woof!\"); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Animal a = new Dog(\"Spot\");\n        a.introduce();\n        a.makeSound();\n    }\n}",
+      "options": [
+        "It prints \"I am Spot\" then \"Woof!\"",
+        "It fails to compile: an abstract class cannot have a constructor",
+        "It fails to compile: makeSound() cannot be called through an Animal reference",
+        "It prints \"I am Spot\" then fails at run time because Animal has no makeSound() body"
+      ],
+      "answer": 0,
+      "explanation": "Abstract classes can have constructors (run through super()) and an Animal reference may hold a Dog object. Calling makeSound() through the Animal type is legal and dynamically runs Dog's implementation, so both lines print."
+    },
+    {
+      "id": "abstraction-016",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Can an abstract class declare a constructor?",
+      "code": null,
+      "options": [
+        "No: since it cannot be instantiated, a constructor would be meaningless",
+        "Yes: subclasses call it with super() to initialise the inherited part of the object",
+        "Only if the class contains no abstract methods",
+        "Yes, but the constructor must be declared abstract as well"
+      ],
+      "answer": 1,
+      "explanation": "Abstract classes can hold state, so they have constructors to initialise it; subclass constructors invoke them via super(), never via new. Interfaces, by contrast, have no constructors at all."
+    },
+    {
+      "id": "abstraction-017",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Inside an interface, a method is declared as: void method1(); Which modifiers does it implicitly have?",
+      "code": null,
+      "options": [
+        "package-private and abstract",
+        "protected and abstract",
+        "public and abstract",
+        "public and final"
+      ],
+      "answer": 2,
+      "explanation": "All ordinary method declarations in an interface are implicitly public abstract, so writing void method1(); and public abstract void method1(); mean exactly the same thing. Interface methods are never package-private or protected."
+    },
+    {
+      "id": "abstraction-018",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Inside an interface, a variable is declared as: double PI = 3.1415; Which modifiers does it implicitly have?",
+      "code": null,
+      "options": [
+        "private static final",
+        "public abstract",
+        "protected static",
+        "public static final"
+      ],
+      "answer": 3,
+      "explanation": "Every variable declared in an interface is implicitly public static final, making it a constant shared by all implementers. That is why it must be initialised where declared and can never be reassigned."
+    },
+    {
+      "id": "abstraction-019",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Why does this code fail to compile?",
+      "code": "interface Speaker {\n    void speak();\n}\n\nclass Dog implements Speaker {\n    void speak() {\n        System.out.println(\"Woof\");\n    }\n}",
+      "options": [
+        "Dog is missing the @Override annotation, which is mandatory when implementing an interface",
+        "Interface methods are implicitly public, and Dog's speak() has weaker (package-private) access; an implementation may not reduce access",
+        "Dog must also extend a class before it may implement an interface",
+        "speak() in the interface needs a body before Dog can implement it"
+      ],
+      "answer": 1,
+      "explanation": "The interface's speak() is implicitly public, but Dog's version has default (package-private) access, and Java never lets an implementing method weaken access. The fix is to declare it public void speak(); @Override is helpful but optional."
+    },
+    {
+      "id": "abstraction-020",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Vehicle is an abstract class; Car is a concrete class extending Vehicle; Circle is a concrete class implementing the Drawable interface and its draw() prints a message. Which lines compile?",
+      "code": "Vehicle v = new Vehicle();   // line 1\nVehicle c = new Car();       // line 2\nDrawable d = new Circle();   // line 3\nd.draw();                    // line 4",
+      "options": [
+        "Lines 2, 3 and 4 only",
+        "All four lines",
+        "Lines 3 and 4 only",
+        "Line 2 only"
+      ],
+      "answer": 0,
+      "explanation": "Line 1 fails because an abstract class can never be instantiated. A parent-type or interface-type reference may hold any concrete implementer, so lines 2 and 3 are fine, and calling draw() through the interface reference on line 4 is exactly how interfaces are meant to be used."
+    },
+    {
+      "id": "abstraction-021",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "interface Drawable {\n    void draw();\n}\n\nclass Circle implements Drawable {\n    public void draw() {\n        System.out.println(\"Drawing a circle\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Drawable d = new Circle();\n        d.draw();\n    }\n}",
+      "options": [
+        "Nothing: an interface reference cannot invoke methods",
+        "It fails to compile because a variable's type may not be an interface",
+        "Drawing a circle",
+        "It fails to compile because Circle should use extends, not implements"
+      ],
+      "answer": 2,
+      "explanation": "An interface is a valid reference type: the variable is typed by the contract while the object supplies the implementation. The call d.draw() runs Circle's method and prints Drawing a circle."
+    },
+    {
+      "id": "abstraction-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which list contains only things an interface may contain (Java 8 and later)?",
+      "code": null,
+      "options": [
+        "Method signatures, constructors and instance variables",
+        "Only method signatures: nothing else is permitted",
+        "Constants, method signatures and constructors",
+        "Constants, method signatures, default methods, static methods and nested types"
+      ],
+      "answer": 3,
+      "explanation": "An interface may hold constants, abstract method signatures, default and static methods (since Java 8) and nested types. It can never contain constructors or instance variables; its variables are implicitly public static final constants."
+    },
+    {
+      "id": "abstraction-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Since Java 8, which interface methods are allowed to have a body?",
+      "code": null,
+      "options": [
+        "None: every interface method must be a bare signature",
+        "default methods and static methods",
+        "Any method, as long as it is declared protected",
+        "Only methods explicitly marked abstract"
+      ],
+      "answer": 1,
+      "explanation": "Java 8 added default and static methods, which carry implementations inside the interface itself. Ordinary interface methods remain implicitly abstract signatures, and an abstract method by definition has no body."
+    },
+    {
+      "id": "abstraction-024",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this code compile?",
+      "code": "interface Wearable {\n    void wear();\n}\n\ninterface Chargeable {\n    void charge();\n}\n\nclass Smartwatch implements Wearable, Chargeable {\n    public void wear() { System.out.println(\"On the wrist\"); }\n    public void charge() { System.out.println(\"Charging...\"); }\n}",
+      "options": [
+        "Yes: a class may implement any number of interfaces, provided it implements all their methods",
+        "No: a class may implement only one interface at a time",
+        "No: Smartwatch must use extends for the first interface and implements for the second",
+        "Only if Wearable and Chargeable extend a common parent interface"
+      ],
+      "answer": 0,
+      "explanation": "Multiple interfaces are listed after implements, separated by commas; this is Java's multiple inheritance of type. Smartwatch honours both contracts by giving every declared method a public implementation."
+    },
+    {
+      "id": "abstraction-025",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Closely related classes Dog, Cat and Horse all need the same name and age fields, a shared sleep() method with a body, and each needs its own makeSound(). A generic \"animal\" should never be created directly. What is the best design?",
+      "code": null,
+      "options": [
+        "An Animal interface that Dog, Cat and Horse implement",
+        "A concrete Animal superclass that is instantiated whenever a generic animal is needed",
+        "An abstract Animal class holding the fields and sleep(), with makeSound() declared abstract",
+        "Three unrelated classes, each duplicating the fields and the sleep() method"
+      ],
+      "answer": 2,
+      "explanation": "Shared state (instance fields) and shared method bodies among close relatives point to an abstract class, because interfaces cannot hold instance variables. Declaring Animal abstract also guarantees no generic animal is ever instantiated."
+    },
+    {
+      "id": "abstraction-026",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Bird, Airplane and Superman are unrelated classes in different hierarchies, but each must offer a fly() behaviour. What is the best design?",
+      "code": null,
+      "options": [
+        "Make them all extend an abstract Flyer class that declares fly()",
+        "Give each class its own unrelated fly() method and cast between the types as needed",
+        "Pick one of the three classes as the parent and have the other two extend it",
+        "Define a Flyable interface with fly() and have each class implement it"
+      ],
+      "answer": 3,
+      "explanation": "A capability shared by unrelated classes is exactly what interfaces are for: any class, anywhere in any hierarchy, can implement Flyable. A common superclass cannot work here because each class may already have its own parent and Java allows only single inheritance."
+    },
+    {
+      "id": "abstraction-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What is the result of this code?",
+      "code": "interface Config {\n    int MAX = 10;\n}\n\nclass App implements Config {\n    public static void main(String[] args) {\n        MAX = 20;\n        System.out.println(MAX);\n    }\n}",
+      "options": [
+        "It fails to compile: MAX is implicitly final and cannot be reassigned",
+        "It prints 20",
+        "It prints 10 because the assignment is silently ignored",
+        "It fails to compile: interface variables can only ever be accessed as Config.MAX"
+      ],
+      "answer": 0,
+      "explanation": "Interface variables are implicitly public static final, so MAX is a constant and assigning to it is a compile-time error. Reading it unqualified from an implementing class would be perfectly legal; it is the assignment that breaks the code."
+    },
+    {
+      "id": "abstraction-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What is the result of this code?",
+      "code": "interface MediaPlayer {\n    void play();\n    default void pause() {\n        System.out.println(\"Paused\");\n    }\n}\n\nclass Radio implements MediaPlayer {\n    public void play() {\n        System.out.println(\"Playing radio\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        MediaPlayer m = new Radio();\n        m.play();\n        m.pause();\n    }\n}",
+      "options": [
+        "It fails to compile: Radio must implement pause() as well",
+        "It prints \"Playing radio\" then \"Paused\"",
+        "It fails to compile: interface methods can never have bodies",
+        "It prints \"Playing radio\" then throws an exception because Radio has no pause()"
+      ],
+      "answer": 1,
+      "explanation": "A default method (Java 8+) ships a ready-made body with the interface, so implementers only have to supply the abstract methods, here just play(). Radio inherits pause() from the interface and the call prints Paused."
+    },
+    {
+      "id": "abstraction-029",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "A NotificationManager class depends only on a MessageService interface. Adding a brand-new EmailService implementation requires no change to NotificationManager. Which principle does this illustrate, and why?",
+      "code": null,
+      "options": [
+        "Encapsulation, because the manager's fields are private so new services cannot corrupt them",
+        "Single inheritance, because each service extends exactly one manager",
+        "Method overloading, because the manager gains a new sendNotification variant for each service",
+        "The Open/Closed Principle: the system is open to extension through new implementations but closed to modification of existing client code"
+      ],
+      "answer": 3,
+      "explanation": "Open/Closed says software should be open for extension but closed for modification. Because the client codes against the stable interface contract, new implementers can be added at any time while the existing client code stays untouched."
+    },
+    {
+      "id": "abstraction-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "Does this code compile?",
+      "code": "interface Calculator {\n    int add(int a, int b);\n}\n\nclass Basic implements Calculator {\n    public int add(int a) {\n        return a;\n    }\n}",
+      "options": [
+        "Yes: one add method is enough to satisfy the contract",
+        "Yes: add(int) overloads add(int, int), and overloads count as implementations",
+        "No: Basic never implements add(int, int); an implementing method must match the interface's signature exactly",
+        "No: methods in an implementing class may not be overloaded"
+      ],
+      "answer": 2,
+      "explanation": "A class must implement every abstract method with the exact signature (name and parameters) declared in the interface. add(int) is a different method, an overload, so the add(int, int) contract remains unfulfilled and Basic fails to compile as a concrete class."
+    },
+    {
+      "id": "abstraction-031",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Given interface A, interface B and class C, which of these declarations is legal?",
+      "code": null,
+      "options": [
+        "interface B implements A",
+        "interface B extends A",
+        "interface B extends C",
+        "class C extends A"
+      ],
+      "answer": 1,
+      "explanation": "An interface may extend other interfaces, but it never implements anything and never inherits from a class. A class, in turn, must use implements (not extends) to adopt an interface."
+    },
+    {
+      "id": "abstraction-032",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "A method is declared as sendNotification(MessageService service, String msg), where MessageService is an interface. What is the main benefit of typing the parameter by the interface?",
+      "code": null,
+      "options": [
+        "Any present or future implementation (SMS, WhatsApp, Email, ...) can be passed in without changing the method",
+        "The method runs faster because interface calls skip dynamic dispatch",
+        "The method can create its own MessageService instances with new whenever it needs one",
+        "Implementations passed to it are excused from implementing the interface's other methods"
+      ],
+      "answer": 0,
+      "explanation": "Programming to an interface means the method depends only on the contract, so every implementer, including ones written later, is accepted automatically. This keeps code flexible and reusable and is the mechanism behind the Open/Closed Principle."
+    }
+  ]
+}

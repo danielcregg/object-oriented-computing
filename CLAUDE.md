@@ -35,9 +35,17 @@ read-only assets.
   only rendered lecture decks are published — never labs' answer keys,
   question banks, or module internals. Anything pushed to a deck goes
   public within minutes.
+- `practice/` — the MCQ practice web app (`index.html`, self-contained
+  vanilla JS) + its question bank (`bank/<topic>.json`, one per topic).
+  Bank questions are PRACTICE questions authored from the decks and labs
+  — never the real Moodle assessment bank, and always self-contained (no
+  schedule references). `scripts/check_practice_bank.py` validates the
+  bank in CI; CI copies `practice/` to the site at `/practice/`.
 - `scripts/pptx_to_marp.py` — one-shot converter used for the initial import.
 - `scripts/build_index.py` — generates the Pages landing page from the
   `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
+- `scripts/build_lab_pages.py` — renders each lab README as a read-only
+  styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`).
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML/PDF/PPTX on push (gh-pages branch + build artifact).
 

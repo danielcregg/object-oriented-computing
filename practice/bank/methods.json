@@ -1,0 +1,486 @@
+{
+  "topic": "methods",
+  "title": "Methods",
+  "questions": [
+    {
+      "id": "methods-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is a method in Java?",
+      "code": null,
+      "options": [
+        "A special kind of loop that repeats code a fixed number of times",
+        "A named block of code that performs a specific task and can be called whenever needed",
+        "A variable that can store several values of the same type",
+        "A file that stores the program's output"
+      ],
+      "answer": 1,
+      "explanation": "A method packages a task under a name so the same code can be called from many places instead of being copied. Variables store data and loops repeat code, but neither gives you a reusable, named block."
+    },
+    {
+      "id": "methods-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In the declaration public void greet(), what does void indicate?",
+      "code": null,
+      "options": [
+        "The method takes no parameters",
+        "The method body is empty and does nothing",
+        "The method returns no value to its caller",
+        "The method can only be called once"
+      ],
+      "answer": 2,
+      "explanation": "void is the return type that means nothing comes back: the method does its work but hands no value to the caller. Whether it has parameters is shown by the parentheses, not by void."
+    },
+    {
+      "id": "methods-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "A method is declared as public void greetUser(String name) and called with greetUser(\"Alice\"). Which statement is correct?",
+      "code": null,
+      "options": [
+        "name is the parameter and \"Alice\" is the argument",
+        "name is the argument and \"Alice\" is the parameter",
+        "Both name and \"Alice\" are called parameters",
+        "\"Alice\" is the value the method returns"
+      ],
+      "answer": 0,
+      "explanation": "The parameter is the named slot declared in the method's signature; the argument is the actual value you supply at the call. At the moment of the call, the argument's value is copied into the parameter."
+    },
+    {
+      "id": "methods-004",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static int add(int a, int b) {\n    return a + b;\n}\n\npublic static void main(String[] args) {\n    System.out.println(add(2, 2) + 1);\n}",
+      "options": [
+        "5",
+        "41",
+        "221",
+        "It does not compile"
+      ],
+      "answer": 0,
+      "explanation": "The call add(2, 2) collapses into the value 4, so the expression becomes 4 + 1 and the program prints 5. A call to a value-returning method can sit anywhere a value can."
+    },
+    {
+      "id": "methods-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is special about a static method?",
+      "code": null,
+      "options": [
+        "It cannot accept any parameters",
+        "It can directly read the instance variables of every object",
+        "It runs automatically as soon as the program starts",
+        "It belongs to the class itself and can be called without creating an object"
+      ],
+      "answer": 3,
+      "explanation": "A static method lives on the class and is called as ClassName.methodName(), with no object needed. That is also why it cannot directly use instance variables: there is no particular object attached to the call."
+    },
+    {
+      "id": "methods-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What does the return statement do in a method whose return type is int?",
+      "code": null,
+      "options": [
+        "Prints the value to the screen and carries on with the next line of the method",
+        "Hands the value back to the caller and immediately ends the method",
+        "Saves the value so the method can reuse it the next time it is called",
+        "Hands the value back to the caller and then finishes running the rest of the method body"
+      ],
+      "answer": 1,
+      "explanation": "return does two jobs at once: it sends the value to the caller and it exits the method on the spot, so no later lines of the body run."
+    },
+    {
+      "id": "methods-007",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "In what order do the words print?",
+      "code": "public static void main(String[] args) {\n    System.out.println(\"before\");\n    greet();\n    System.out.println(\"after\");\n}\n\npublic static void greet() {\n    System.out.println(\"hello\");\n}",
+      "options": [
+        "before, after, hello",
+        "hello, before, after",
+        "before, after (greet() never runs because it is written below main)",
+        "before, hello, after"
+      ],
+      "answer": 3,
+      "explanation": "A call is a round trip: main pauses at greet(), the body runs and prints hello, then main resumes at the exact line after the call. Where a method is written in the file has no effect on when it runs."
+    },
+    {
+      "id": "methods-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "You pasted the same six lines of calculation code into three places. Later the calculation rule changes. What is the main advantage a method would have given you?",
+      "code": null,
+      "options": [
+        "The program would run faster because methods execute more quickly than pasted code",
+        "The compiler would automatically find and update any copies you missed",
+        "The rule would live in one place, so a single edit would fix every use at once",
+        "The program would use less memory while running"
+      ],
+      "answer": 2,
+      "explanation": "With one method called from three places, the rule exists exactly once, so one edit updates every caller. Copy-paste multiplies the places a bug can live, and nothing warns you about the copy you forget to fix."
+    },
+    {
+      "id": "methods-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which name follows the standard Java convention for method names?",
+      "code": null,
+      "options": [
+        "Calculate_Total",
+        "CalculateTotal",
+        "calculateTotal",
+        "CALCULATE_TOTAL"
+      ],
+      "answer": 2,
+      "explanation": "Java method names use camelCase: the first word lowercase and each later word capitalised. A verb name like calculateTotal also tells the reader exactly what the method does."
+    },
+    {
+      "id": "methods-010",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Math.sqrt(2.0) and Math.max(3, 7) are called directly on the Math class. What kind of methods are they?",
+      "code": null,
+      "options": [
+        "Private helper methods",
+        "void methods",
+        "Instance methods, which first require a Math object",
+        "Static methods"
+      ],
+      "answer": 3,
+      "explanation": "They are static methods: they belong to the Math class itself and are called as ClassName.methodName() without creating any object. Utility calculations that depend only on their inputs are the classic use for static."
+    },
+    {
+      "id": "methods-011",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static void triple(int n) {\n    n = n * 3;\n}\n\npublic static void main(String[] args) {\n    int x = 10;\n    triple(x);\n    System.out.println(x);\n}",
+      "options": [
+        "10",
+        "30",
+        "0",
+        "It does not compile"
+      ],
+      "answer": 0,
+      "explanation": "Java is pass-by-value: triple receives a copy of the 10, and tripling that copy never touches x back in main. The parameter n and the variable x are separate boxes."
+    },
+    {
+      "id": "methods-012",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static void curve(int[] s) {\n    s[0] = s[0] + 5;\n}\n\npublic static void main(String[] args) {\n    int[] scores = {60, 70, 85};\n    curve(scores);\n    System.out.println(scores[0]);\n}",
+      "options": [
+        "60",
+        "65",
+        "0",
+        "It does not compile"
+      ],
+      "answer": 1,
+      "explanation": "An array variable holds a reference (an arrow) to the array, and the call copies that arrow, not the boxes. s and scores point at the same array, so s[0] = s[0] + 5 changes the one real element to 65."
+    },
+    {
+      "id": "methods-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static void wipe(int n, int[] data) {\n    n = 0;\n    data[0] = 0;\n}\n\npublic static void main(String[] args) {\n    int x = 7;\n    int[] nums = {7, 7, 7};\n    wipe(x, nums);\n    System.out.println(x + \" \" + nums[0]);\n}",
+      "options": [
+        "7 7",
+        "0 0",
+        "7 0",
+        "0 7"
+      ],
+      "answer": 2,
+      "explanation": "One rule covers both results: Java always passes a copy of what is in the variable. For the int that is a copy of the value 7, so x is untouched; for the array it is a copy of the arrow, so data[0] = 0 writes into the same boxes nums points at."
+    },
+    {
+      "id": "methods-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static int mystery(int x) {\n    if (x > 3) {\n        return x * 2;\n    }\n    return x;\n}\n\npublic static void main(String[] args) {\n    System.out.println(mystery(5) + mystery(2));\n}",
+      "options": [
+        "7",
+        "10",
+        "14",
+        "12"
+      ],
+      "answer": 3,
+      "explanation": "mystery(5) takes the if branch because 5 > 3 and returns 10; mystery(2) skips the if and returns 2. 10 + 2 prints 12."
+    },
+    {
+      "id": "methods-015",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this method is compiled?",
+      "code": "public static int grade(int score) {\n    if (score >= 40) {\n        return 1;\n    }\n}",
+      "options": [
+        "Compile error: missing return statement, because a call with score below 40 would reach the end with nothing to return",
+        "It compiles, and calls with score below 40 return 0 by default",
+        "It compiles but throws an exception at runtime when score is below 40",
+        "Compile error: return statements are not allowed inside if blocks"
+      ],
+      "answer": 0,
+      "explanation": "A method with return type int must return a value on every possible path. If score is below 40, execution would fall off the closing brace with nothing to hand back, so the compiler reports a missing return statement."
+    },
+    {
+      "id": "methods-016",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "In what order do the lines print?",
+      "code": "public static void main(String[] args) {\n    methodA();\n    System.out.println(\"back in main\");\n}\n\npublic static void methodA() {\n    System.out.println(\"A starts\");\n    methodB();\n    System.out.println(\"A ends\");\n}\n\npublic static void methodB() {\n    System.out.println(\"B runs\");\n}",
+      "options": [
+        "A starts, A ends, B runs, back in main",
+        "A starts, B runs, A ends, back in main",
+        "back in main, A starts, B runs, A ends",
+        "A starts, B runs, back in main, A ends"
+      ],
+      "answer": 1,
+      "explanation": "Each call pushes a frame and the caller waits: methodA pauses at methodB(), and only after B finishes does A print its last line, then main resumes. Every caller picks up exactly where it left off."
+    },
+    {
+      "id": "methods-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program is compiled?",
+      "code": "public static double vatOf(double amount) {\n    double rate = 0.135;\n    return amount * rate;\n}\n\npublic static void main(String[] args) {\n    double v = vatOf(200.0);\n    System.out.println(rate);\n}",
+      "options": [
+        "It prints 0.135",
+        "It prints 27.0",
+        "Compile error: cannot find symbol, because rate exists only inside vatOf",
+        "It prints 0.0, because rate loses its value once vatOf returns"
+      ],
+      "answer": 2,
+      "explanation": "rate is a local variable: it is born when vatOf runs and destroyed when the method returns, and no other method can see it. Parameters in and the return value out are the only connections between methods, so main fails to compile with cannot find symbol."
+    },
+    {
+      "id": "methods-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program is compiled?",
+      "code": "public class App {\n    public void hello() {\n        System.out.println(\"hi\");\n    }\n\n    public static void main(String[] args) {\n        hello();\n    }\n}",
+      "options": [
+        "It prints hi",
+        "It compiles but throws an exception when hello() is reached",
+        "It prints nothing, because hello() returns void",
+        "Compile error: an instance method cannot be called from static main without an object"
+      ],
+      "answer": 3,
+      "explanation": "main is static, so it runs with no App object in existence, and an instance method needs an object to be called on. The fix is to make hello static, or to create an object first and call new App().hello()."
+    },
+    {
+      "id": "methods-019",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Method calls are tracked on the call stack. Which statement describes how the stack behaves?",
+      "code": null,
+      "options": [
+        "Last In, First Out: the most recently called method must finish before the one that called it can continue",
+        "First In, First Out: methods finish in the same order they were called",
+        "All methods on the stack run at the same time, in parallel",
+        "The stack stores only the values methods return, not the calls themselves"
+      ],
+      "answer": 0,
+      "explanation": "Calling a method pushes it onto the top of the stack and returning pops it off, so the newest call always finishes first: Last In, First Out. Every method below the top is paused, waiting for the calls above it to finish."
+    },
+    {
+      "id": "methods-020",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Why can a static method not directly access an instance variable of its class?",
+      "code": null,
+      "options": [
+        "Instance variables are always private, so no method can reach them",
+        "A static method runs without any particular object, so Java cannot tell which object's variable it would mean",
+        "Static methods are forbidden from using variables of any kind",
+        "Instance variables exist only while main is running"
+      ],
+      "answer": 1,
+      "explanation": "Instance variables live inside individual objects, and a static method is called on the class with no object attached, so there is no way to know whose variable to read. That is why static methods suit utility work that depends only on its parameters."
+    },
+    {
+      "id": "methods-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which of these methods is the best candidate for a void return type?",
+      "code": null,
+      "options": [
+        "A method that computes the VAT owed on an amount",
+        "A method that checks whether a password is valid",
+        "A method that prints a menu of options on the screen",
+        "A method that converts a temperature from Celsius to Fahrenheit"
+      ],
+      "answer": 2,
+      "explanation": "Printing is an action with nothing useful to hand back, so void fits. The other three each produce an answer (a number or a true/false) that the caller will want to store, compare or reuse, so they should return it."
+    },
+    {
+      "id": "methods-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "finalPrice(double price, double discountPct) computes a discounted price. A caller writes finalPrice(25.0, 40.0) when they meant a price of 40.0 with a 25.0 percent discount. What happens?",
+      "code": null,
+      "options": [
+        "Compile error: the argument names do not match the parameter names",
+        "Java matches each argument to the correct parameter by looking at its name",
+        "A runtime exception is thrown because the values are in the wrong order",
+        "It compiles and runs, but quietly computes the wrong result: arguments fill parameters left to right, by position"
+      ],
+      "answer": 3,
+      "explanation": "Arguments are matched to parameters purely by position, left to right; names never travel with the values. Because both arguments are doubles, the swapped call compiles cleanly and simply produces a wrong answer."
+    },
+    {
+      "id": "methods-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "In a BankAccount class, deposit(double amount) is public but its helper isValidAmount(double amount) is private. What does making the helper private achieve?",
+      "code": null,
+      "options": [
+        "Only code inside BankAccount can call it, so the class is free to change or rewrite the helper without breaking any other class",
+        "It makes the helper run faster than a public method would",
+        "It lets the helper be called without creating a BankAccount object",
+        "It prevents the helper from returning a value to deposit"
+      ],
+      "answer": 0,
+      "explanation": "private restricts callers to the same class, which keeps the helper as hidden internal scaffolding: it can be renamed, rewritten or removed without any other class noticing, and no outside code can call it on its own. Hiding implementation detail like this is encapsulation."
+    },
+    {
+      "id": "methods-024",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "calculateTotal(10, 5) returns an int. A caller writes the single statement calculateTotal(10, 5); and never uses the result. What happens?",
+      "code": null,
+      "options": [
+        "Compile error: a returned value must always be assigned to a variable",
+        "It compiles and runs, but the returned value is simply thrown away",
+        "The result is stored automatically in a variable named calculateTotal",
+        "A runtime error occurs because the value has nowhere to go"
+      ],
+      "answer": 1,
+      "explanation": "Calling a method and ignoring its result is legal Java: the value is computed and then discarded. That is usually a bug, so store it (int total = calculateTotal(10, 5);) or use the call inside an expression."
+    },
+    {
+      "id": "methods-025",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A class declares the fields static int created = 0; and int id;. Three objects of the class have been created. How many created boxes and how many id boxes exist in memory?",
+      "code": null,
+      "options": [
+        "Three created boxes and three id boxes",
+        "One created box and one id box, shared by everything",
+        "One shared created box and three id boxes, one per object",
+        "Three created boxes and one shared id box"
+      ],
+      "answer": 2,
+      "explanation": "A static field belongs to the class, so there is exactly one created box no matter how many objects exist, and every object sees that same box. An instance field lives inside each object, so three objects mean three separate id boxes."
+    },
+    {
+      "id": "methods-026",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Inside a void method, what does the bare statement return; do?",
+      "code": null,
+      "options": [
+        "It causes a compile error, because void methods cannot contain return",
+        "It returns the value 0 to the caller",
+        "It pauses the method so it can resume later from the same spot",
+        "It ends the method immediately without sending back any value"
+      ],
+      "answer": 3,
+      "explanation": "In a void method, a bare return; simply exits early: no value travels back. Only returning an actual value, such as return x;, is illegal when the return type is void."
+    },
+    {
+      "id": "methods-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static int sum(int n) {\n    if (n <= 1) {\n        return 1;\n    }\n    return n + sum(n - 1);\n}\n\npublic static void main(String[] args) {\n    System.out.println(sum(4));\n}",
+      "options": [
+        "10",
+        "24",
+        "4",
+        "It crashes with a StackOverflowError"
+      ],
+      "answer": 0,
+      "explanation": "Each recursive call pushes a fresh frame: sum(4) waits for sum(3), which waits for sum(2), which waits for sum(1). The base case returns 1, then the frames pop and the results combine as 4 + 3 + 2 + 1 = 10."
+    },
+    {
+      "id": "methods-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static void reset(int[] data) {\n    data = new int[3];\n    data[0] = 99;\n}\n\npublic static void main(String[] args) {\n    int[] nums = {1, 2, 3};\n    reset(nums);\n    System.out.println(nums[0]);\n}",
+      "options": [
+        "99",
+        "1",
+        "0",
+        "It does not compile"
+      ],
+      "answer": 1,
+      "explanation": "reset receives a copy of the arrow that points at the array. Re-aiming that copy at a brand-new array never moves the caller's arrow, so the 99 lands in the new array, which is discarded when reset returns; nums still shows 1."
+    },
+    {
+      "id": "methods-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public static double toFahrenheit(double celsius) {\n    return celsius * (9 / 5) + 32;\n}\n\npublic static void main(String[] args) {\n    System.out.println(toFahrenheit(10.0));\n}",
+      "options": [
+        "50.0",
+        "42",
+        "42.0",
+        "It does not compile because 9 / 5 is not a double"
+      ],
+      "answer": 2,
+      "explanation": "9 / 5 divides two ints, so the result is truncated to 1 and the method computes 10.0 * 1 + 32 = 42.0 instead of the correct 50.0. Writing 9.0 / 5.0 keeps the arithmetic in doubles and fixes the formula."
+    },
+    {
+      "id": "methods-030",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "main is declared as public static void main(String[] args). Why must it be static?",
+      "code": null,
+      "options": [
+        "static makes main run faster than an instance method would",
+        "Every method that returns void must also be static",
+        "static means main can only be called once per program run",
+        "When the program starts no objects exist yet, so the JVM must be able to call main on the class itself"
+      ],
+      "answer": 3,
+      "explanation": "The JVM invokes main to start the program, before any of your objects have been created, so main must be callable on the class alone, which is exactly what static provides. public makes it reachable from outside the class, and void says it hands nothing back."
+    },
+    {
+      "id": "methods-031",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "When a method is called, a new frame is pushed onto the call stack. What lives inside that frame?",
+      "code": null,
+      "options": [
+        "That call's parameters and local variables, plus the spot in the caller where execution will resume",
+        "The method's compiled source code",
+        "Every variable in the whole program, so the method can see them all",
+        "A fresh copy of the class's static fields"
+      ],
+      "answer": 0,
+      "explanation": "A frame holds everything private to one call: the values copied into the parameters, the locals born in the body, and the bookmark telling Java where to resume in the caller after the return. Frames are per call, so two calls to the same method get separate frames."
+    },
+    {
+      "id": "methods-032",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "A recursive method crashes with a StackOverflowError. What is the most likely cause?",
+      "code": null,
+      "options": [
+        "The deepest call returned a value of the wrong type",
+        "It has no working base case, so every call pushes another frame until the stack runs out of room",
+        "It was declared void, and void methods are not allowed to call themselves",
+        "It uses more than one parameter, which limits how deep the stack can grow"
+      ],
+      "answer": 1,
+      "explanation": "Every recursive call pushes another frame onto the stack, and only a base case, a branch that returns without calling again, stops the chain. Without one, or with one that is never reached, frames pile up until the stack has no room left."
+    }
+  ]
+}

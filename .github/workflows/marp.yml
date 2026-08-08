@@ -15,12 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Safety audit + snippet verification + diagram freshness + labs compile
+      - name: Safety audit + snippet verification + diagram freshness + labs compile + bank check
         run: |
           set -euo pipefail
           python3 scripts/safety_audit.py
           python3 scripts/verify_snippets.py
           python3 scripts/check_diagrams.py
+          python3 scripts/check_practice_bank.py
           find labs/src -name '*.java' -print0 | xargs -0 javac -d "$RUNNER_TEMP/labs-classes"
 
       - name: Set up Java (for snippet verification)
@@ -41,7 +42,11 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
+          python3 -m pip install --quiet markdown
           python3 scripts/build_index.py build
+          python3 scripts/build_lab_pages.py build
+          mkdir -p build/practice
+          cp -R practice/. build/practice/
           # mapfile, NOT find|while: a piped while-loop hands the pipe to the
           # loop body's stdin, and marp-cli treats piped stdin as an extra
           # markdown input ("Converting 2 markdowns" + output-path error).

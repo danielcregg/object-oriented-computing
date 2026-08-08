@@ -1,0 +1,486 @@
+{
+  "topic": "classesandobjects",
+  "title": "Classes and Objects",
+  "questions": [
+    {
+      "id": "classesandobjects-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In Java, what is a class?",
+      "code": null,
+      "options": [
+        "A region of memory allocated by the JVM to hold field values",
+        "A blueprint that defines the fields and methods of the objects created from it",
+        "A variable that stores a reference to an object",
+        "The keyword used to allocate a new object"
+      ],
+      "answer": 1,
+      "explanation": "A class is the blueprint: it defines the fields (state) and methods (behaviour) that every object created from it will have. The memory that holds actual field values is an object — an instance of the class — not the class itself."
+    },
+    {
+      "id": "classesandobjects-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement best describes an object in Java?",
+      "code": null,
+      "options": [
+        "The blueprint that lists which fields and methods its instances will have",
+        "A run-time copy of the class's source code, including its method text",
+        "An instance of a class, with its own values for the fields the class defines",
+        "A reference variable such as s1 that appears in the code"
+      ],
+      "answer": 2,
+      "explanation": "An object is one concrete instance built from a class at run time, holding its own copy of each field. The blueprint is the class, and a reference variable is only a handle that points at an object — not the object itself."
+    },
+    {
+      "id": "classesandobjects-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "In object-oriented programming, where do an object's state and behaviour live?",
+      "code": null,
+      "options": [
+        "State lives in the methods; behaviour lives in the fields",
+        "Both state and behaviour live in the constructor",
+        "State lives in local variables of main; behaviour lives in standalone functions",
+        "State lives in its fields; behaviour lives in the methods defined by its class"
+      ],
+      "answer": 3,
+      "explanation": "Fields (instance variables) store what an object knows — its state; methods define what it does — its behaviour. Constructors merely initialise the fields at creation time; they are not where state is stored."
+    },
+    {
+      "id": "classesandobjects-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which Java keyword is used to create a new object from a class?",
+      "code": null,
+      "options": [
+        "this",
+        "class",
+        "object",
+        "new"
+      ],
+      "answer": 3,
+      "explanation": "new allocates memory for the object and then calls the class's constructor. class declares a blueprint, this refers to the current object, and object is not a Java keyword at all."
+    },
+    {
+      "id": "classesandobjects-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "The fields and methods defined by a class are collectively known as its:",
+      "code": null,
+      "options": [
+        "constructors",
+        "members",
+        "instances",
+        "references"
+      ],
+      "answer": 1,
+      "explanation": "Fields and methods together are the members of a class. Instances are the objects created from the class, and references are the variables that point at those objects — different concepts entirely."
+    },
+    {
+      "id": "classesandobjects-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which of the following is another accepted name for a field of a class?",
+      "code": null,
+      "options": [
+        "instance variable",
+        "local variable",
+        "return value",
+        "method parameter"
+      ],
+      "answer": 0,
+      "explanation": "Fields are also called instance variables (or attributes) because every instance carries its own copy. Local variables and parameters exist only during a single method call and belong to no object."
+    },
+    {
+      "id": "classesandobjects-007",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which statement about Java constructors is correct?",
+      "code": null,
+      "options": [
+        "A constructor must declare a return type of void",
+        "A constructor can be given any name, as long as it is public",
+        "A constructor has the same name as its class and no return type, not even void",
+        "A constructor must be called explicitly using the dot operator"
+      ],
+      "answer": 2,
+      "explanation": "A constructor is identified by exactly two features: it bears the class's own name and declares no return type at all. It runs automatically when new creates an instance; writing void in front of it would turn it into an ordinary method that new never calls."
+    },
+    {
+      "id": "classesandobjects-008",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Car {\n    int topSpeed;\n}\n\n// in main:\nCar c = new Car();\nSystem.out.println(c.topSpeed);",
+      "options": [
+        "0",
+        "null",
+        "A random garbage value",
+        "It does not compile because topSpeed was never initialised"
+      ],
+      "answer": 0,
+      "explanation": "Fields that are never assigned receive their type's default value: 0 for numeric types, false for boolean, and null for object types. topSpeed is an int, so it prints 0 — never garbage, and a primitive can never be null."
+    },
+    {
+      "id": "classesandobjects-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "A variable of type Student currently holds the value null. What does this mean?",
+      "code": null,
+      "options": [
+        "It refers to a Student object whose fields all still hold their default values",
+        "It refers to no object at all",
+        "It has not been declared yet",
+        "It refers to a Student whose name field is the empty string"
+      ],
+      "answer": 1,
+      "explanation": "null means the reference points at nothing — no object exists behind it. That is different from pointing at a real object whose fields still hold defaults, and following a null reference (e.g. accessing a field through it) throws a NullPointerException."
+    },
+    {
+      "id": "classesandobjects-010",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "The variable person1 refers to a Person object that has an introduce() method. Which statement correctly calls that method?",
+      "code": null,
+      "options": [
+        "Person.introduce();",
+        "introduce(person1);",
+        "new person1.introduce();",
+        "person1.introduce();"
+      ],
+      "answer": 3,
+      "explanation": "The dot operator reaches through a reference into one particular object: person1.introduce(). Person.introduce() names the class rather than an instance, but introduce() needs an actual object whose fields it can use."
+    },
+    {
+      "id": "classesandobjects-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which statement about when classes and objects exist is correct?",
+      "code": null,
+      "options": [
+        "Both the class and its objects are created at run time by the new keyword",
+        "Objects exist at compile time, while the class is built at run time",
+        "The class is a compile-time blueprint; its objects are created at run time, one for every new",
+        "Each object stores its own complete copy of the class definition, including method code"
+      ],
+      "answer": 2,
+      "explanation": "The class is source-code structure that exists once, at compile time, while objects are built from it as the program runs — every new call produces one more. Objects hold field values, not a copy of the class definition."
+    },
+    {
+      "id": "classesandobjects-012",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A class declares three fields and two methods, and 100 objects are created from it. What does each object get?",
+      "code": null,
+      "options": [
+        "Its own copy of the three fields; the method code is stored once in the class and shared by all objects",
+        "Its own copy of both the fields and the method code",
+        "A single shared copy of the fields and of the methods",
+        "Its own copy of the methods, while all 100 objects share one set of fields"
+      ],
+      "answer": 0,
+      "explanation": "Each object owns a separate copy of every field, which is why different objects can hold different values. Method code is defined once by the class and shared by all instances — it is not duplicated per object."
+    },
+    {
+      "id": "classesandobjects-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Car {\n    int topSpeed;\n}\n\n// in main:\nCar a = new Car();\nCar b = new Car();\na.topSpeed = 200;\nSystem.out.println(b.topSpeed);",
+      "options": [
+        "200",
+        "0",
+        "It does not compile",
+        "It throws a NullPointerException at run time"
+      ],
+      "answer": 1,
+      "explanation": "a and b come from two separate new calls, so they are independent objects, each with its own topSpeed field. Assigning 200 through a changes only a's object; b's field still holds the int default, 0."
+    },
+    {
+      "id": "classesandobjects-014",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "When does the Java compiler provide a default (no-argument) constructor for a class?",
+      "code": null,
+      "options": [
+        "Always — every class automatically has one in addition to any constructors you write",
+        "Only when the class has no fields to initialise",
+        "Never — you must always write at least one constructor yourself",
+        "Only when the class declares no constructors at all"
+      ],
+      "answer": 3,
+      "explanation": "The compiler's default constructor exists only while the class declares no constructors of its own. Declaring any constructor withdraws it — which is why new MyClass() can suddenly stop compiling after you add a parameterised constructor."
+    },
+    {
+      "id": "classesandobjects-015",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Does this code compile?",
+      "code": "class Puppy {\n    String name;\n\n    Puppy(String puppyName) {\n        name = puppyName;\n    }\n}\n\n// in main:\nPuppy p = new Puppy();",
+      "options": [
+        "No — declaring Puppy(String) removed the compiler's default constructor, so new Puppy() matches nothing",
+        "Yes — the compiler always supplies a no-argument constructor alongside the ones you write",
+        "Yes — it compiles, but throws an exception when new Puppy() runs",
+        "No — a class with a String field must initialise that field in every constructor"
+      ],
+      "answer": 0,
+      "explanation": "Because the class declares a constructor, the compiler no longer provides the default no-arg one, and new Puppy() matches no constructor — a compile-time error. The fix is to pass a String argument or to write a no-arg constructor yourself."
+    },
+    {
+      "id": "classesandobjects-016",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Counter {\n    int count;\n\n    Counter(int count) {\n        count = count;\n    }\n}\n\n// in main:\nCounter c = new Counter(5);\nSystem.out.println(c.count);",
+      "options": [
+        "5",
+        "It does not compile — a parameter may not have the same name as a field",
+        "0",
+        "It compiles, but an exception is thrown while the constructor runs"
+      ],
+      "answer": 2,
+      "explanation": "Inside the constructor the nearest declaration wins, so both occurrences of count refer to the parameter: count = count assigns the parameter to itself. The field is never written and keeps its default 0 — and this shadowing bug compiles in silence. The fix is this.count = count."
+    },
+    {
+      "id": "classesandobjects-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Cat {\n    int age;\n\n    Cat(int age) {\n        this.age = age;\n    }\n}\n\n// in main:\nCat c = new Cat(3);\nSystem.out.println(c.age);",
+      "options": [
+        "0",
+        "3",
+        "It does not compile — this cannot be used inside a constructor",
+        "It does not compile — the parameter age clashes with the field age"
+      ],
+      "answer": 1,
+      "explanation": "A parameter may shadow the bare name age, but this.age always means the current object's field, so the field is assigned 3. Using this inside constructors and instance methods is exactly how Java resolves the name clash — it is legal and idiomatic."
+    },
+    {
+      "id": "classesandobjects-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Student {\n    String name;\n}\n\n// in main:\nStudent s1 = new Student();\nStudent s2 = s1;\ns2.name = \"Grace\";\nSystem.out.println(s1.name);",
+      "options": [
+        "Grace",
+        "null",
+        "It does not compile — the object's field cannot be changed through s2",
+        "An empty string"
+      ],
+      "answer": 0,
+      "explanation": "Student s2 = s1 copies the reference, not the object: new ran only once, so a single Student exists with two variables pointing at it. A write through either reference changes that one shared object, so s1.name is Grace."
+    },
+    {
+      "id": "classesandobjects-019",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Box {\n    int size;\n}\n\n// in main:\nBox a = new Box();\nBox b = a;\nBox c = new Box();\nSystem.out.println(a == b);\nSystem.out.println(a == c);",
+      "options": [
+        "true then true",
+        "false then false",
+        "true then false",
+        "false then true"
+      ],
+      "answer": 2,
+      "explanation": "== on object references compares identity: do both point at the same object? a and b share one object (true), while c came from its own new, so it is a distinct object even though its field values are identical (false)."
+    },
+    {
+      "id": "classesandobjects-020",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "How many Student objects does this code create?",
+      "code": "class Student {\n}\n\n// in main:\nStudent a = new Student();\nStudent b = new Student();\nStudent c = a;",
+      "options": [
+        "Three — one for each variable",
+        "One — all three variables share a single object",
+        "None — objects are only created once a method is called on them",
+        "Two — objects are created by new, which runs twice"
+      ],
+      "answer": 3,
+      "explanation": "Only new creates objects, and it runs twice here. Student c = a merely copies an existing reference, so the code ends with three variables pointing at just two objects."
+    },
+    {
+      "id": "classesandobjects-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "What is actually stored inside a variable of a class type, such as Car myCar?",
+      "code": null,
+      "options": [
+        "The entire object, including all of its field values",
+        "A reference — the location of the object in memory, not the object itself",
+        "A fresh copy of the object's field values",
+        "The name of the class the object was created from"
+      ],
+      "answer": 1,
+      "explanation": "An object variable stores a reference — an arrow to where the object lives in memory — never the object itself. That is why assignment between object variables copies the arrow rather than duplicating the object, unlike a primitive such as int, whose variable holds the value directly."
+    },
+    {
+      "id": "classesandobjects-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "When == is applied to two object references, what does it compare?",
+      "code": null,
+      "options": [
+        "Whether the two references point at the very same object",
+        "Whether the two objects contain equal values in their fields",
+        "Whether the two objects were created from the same class",
+        "Whether both references are non-null"
+      ],
+      "answer": 0,
+      "explanation": "== asks only whether the two references point at the same object — identity, not contents. Two objects with equal field values still compare false; comparing values meaningfully is the job of an overridden equals() method."
+    },
+    {
+      "id": "classesandobjects-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Inside a constructor or instance method, what does the keyword this refer to?",
+      "code": null,
+      "options": [
+        "The class itself, rather than any particular object",
+        "The object most recently created anywhere in the program",
+        "The object whose constructor or method is currently executing",
+        "A brand-new copy of the current object"
+      ],
+      "answer": 2,
+      "explanation": "this is a ready-made reference to the current object — the one whose constructor or method is running. It lets you name that object's own members explicitly, as in this.age = age, and it never creates anything new."
+    },
+    {
+      "id": "classesandobjects-024",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Student {\n    String studentID;\n    int age;\n\n    Student() {\n        this(\"N/A\", 0);\n    }\n\n    Student(String studentID, int age) {\n        this.studentID = studentID;\n        this.age = age;\n    }\n}\n\n// in main:\nStudent s = new Student();\nSystem.out.println(s.studentID + \" \" + s.age);",
+      "options": [
+        "null 0",
+        "N/A 0",
+        "It does not compile — a constructor cannot call another constructor",
+        "It runs forever because the constructors keep calling each other"
+      ],
+      "answer": 1,
+      "explanation": "this(\"N/A\", 0) is constructor chaining: the no-argument constructor calls the two-parameter constructor of the same class, which fills in both fields. Chaining is legal and runs once — only the no-arg constructor calls the other, so there is no endless loop."
+    },
+    {
+      "id": "classesandobjects-025",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Puppy {\n    String name;\n\n    Puppy() {\n        name = \"unnamed\";\n    }\n\n    Puppy(String puppyName) {\n        name = puppyName;\n    }\n}\n\n// in main:\nPuppy p1 = new Puppy();\nPuppy p2 = new Puppy(\"Rex\");\nSystem.out.println(p1.name + \" \" + p2.name);",
+      "options": [
+        "unnamed Rex",
+        "It does not compile — a class cannot declare two constructors with the same name",
+        "Rex Rex",
+        "null Rex"
+      ],
+      "answer": 0,
+      "explanation": "A class may declare several constructors provided their parameter lists differ — that is overloading. new Puppy() selects the no-argument version and new Puppy(\"Rex\") the String version, so each object is initialised with its own name."
+    },
+    {
+      "id": "classesandobjects-026",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Which statement expresses the Single Responsibility Principle (SRP)?",
+      "code": null,
+      "options": [
+        "A class should declare at most one constructor",
+        "A class should print, parse, and store its own data so that everything related to it lives in one place",
+        "A program should consist of one class so that responsibility is easy to find",
+        "A class should have one, and only one, responsibility, and every field and method should serve it"
+      ],
+      "answer": 3,
+      "explanation": "SRP says a class should have exactly one responsibility — one reason to change. Bundling printing, parsing, and storage into a domain class is the classic violation of SRP, not an application of it: those jobs belong in separate classes."
+    },
+    {
+      "id": "classesandobjects-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Student {\n    String name;\n\n    Student(String name) {\n        this.name = name;\n    }\n}\n\n// in main:\nStudent s1 = new Student(\"Ada\");\nStudent s2 = s1;\ns1 = null;\nSystem.out.println(s2.name);",
+      "options": [
+        "null",
+        "It throws a NullPointerException",
+        "Ada",
+        "It does not compile — s1 cannot be reassigned after being copied into s2"
+      ],
+      "answer": 2,
+      "explanation": "s1 = null re-points the s1 variable at nothing; it does not destroy the object, which s2 still references. Printing s2.name follows a valid reference and shows Ada — only reading through the null reference s1 would throw a NullPointerException."
+    },
+    {
+      "id": "classesandobjects-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Box {\n    int size;\n}\n\n// in main:\nBox a = new Box();\nBox b = a;\nb = new Box();\nb.size = 42;\nSystem.out.println(a.size);",
+      "options": [
+        "0",
+        "42",
+        "It throws a NullPointerException",
+        "It does not compile"
+      ],
+      "answer": 0,
+      "explanation": "b briefly shared a's object, but b = new Box() re-points b at a brand-new second object before the write, so b.size = 42 changes that new object only. a still references the first Box, whose size was never assigned and remains 0."
+    },
+    {
+      "id": "classesandobjects-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Student {\n    String studentID;\n\n    Student(String studentID) {\n        this.studentID = studentID;\n    }\n}\n\n// in main:\nStudent s1 = new Student(\"S001\");\nStudent s2 = new Student(\"S001\");\nSystem.out.println(s1.equals(s2));",
+      "options": [
+        "true — equals() compares the objects' field values",
+        "false — the inherited default equals() compares identity, just like ==",
+        "It does not compile — Student never defines an equals() method",
+        "true — both constructors received the same String literal"
+      ],
+      "answer": 1,
+      "explanation": "Every class inherits equals(), so the call compiles — but the default version behaves like ==, comparing identity rather than values. The two new calls produced two distinct objects, so the result is false; equals() only compares meaningful values once the class overrides it."
+    },
+    {
+      "id": "classesandobjects-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens when this code runs?",
+      "code": "class Puppy {\n    String name;\n\n    void Puppy(String name) {\n        this.name = name;\n    }\n}\n\n// in main:\nPuppy p = new Puppy();\nSystem.out.println(p.name);",
+      "options": [
+        "It does not compile — a method may not have the same name as its class",
+        "It does not compile — new Puppy() matches no constructor",
+        "It prints an empty string",
+        "It prints null"
+      ],
+      "answer": 3,
+      "explanation": "void Puppy(...) declares a return type, which makes it an ordinary (legal, badly named) method — not a constructor, so new never calls it. Since the class declares no constructors, the compiler's default constructor still exists: new Puppy() runs it and name keeps its default value, null."
+    },
+    {
+      "id": "classesandobjects-031",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Two Student objects are created with identical values in every field. Which statement is true?",
+      "code": null,
+      "options": [
+        "Java merges them into a single object to save memory",
+        "== returns true for them because their contents match",
+        "They share one set of field storage until one of them is modified",
+        "They remain two distinct objects, each with its own identity in memory"
+      ],
+      "answer": 3,
+      "explanation": "Identity comes from creation: every new builds an object at its own location in memory, and identical contents never merge two objects into one. == on the pair still returns false, because it compares identity rather than values."
+    },
+    {
+      "id": "classesandobjects-032",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "class Student {\n    String studentID;\n\n    Student(String studentID) {\n        this.studentID = studentID;\n    }\n\n    @Override\n    public String toString() {\n        return \"Student{id=\" + studentID + \"}\";\n    }\n}\n\n// in main:\nStudent s = new Student(\"S001\");\nSystem.out.println(s);",
+      "options": [
+        "It does not compile — println cannot accept a Student argument",
+        "s",
+        "Student{id=S001}",
+        "A class name and hash code, such as Student@1a2b3c"
+      ],
+      "answer": 2,
+      "explanation": "System.out.println(someObject) automatically calls that object's toString(), so the overridden version supplies the output. The Student@1a2b3c style appears only when a class does not override toString()."
+    }
+  ]
+}

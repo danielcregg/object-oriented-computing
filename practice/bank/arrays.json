@@ -1,0 +1,471 @@
+{
+  "topic": "arrays",
+  "title": "Arrays",
+  "questions": [
+    {
+      "id": "arrays-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is an array in Java?",
+      "code": null,
+      "options": [
+        "A structure that automatically grows as values are added",
+        "A container that can mix values of different types",
+        "A container object that holds a fixed number of values of a single type",
+        "A mapping from names (keys) to values"
+      ],
+      "answer": 2,
+      "explanation": "An array holds a fixed number of values of a single type. Its length is set when it is created and every element shares one element type - it never grows, shrinks, or mixes types."
+    },
+    {
+      "id": "arrays-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "An array is created with new int[5]. Which indices are valid for it?",
+      "code": null,
+      "options": [
+        "1 through 5",
+        "0 through 5",
+        "1 through 4",
+        "0 through 4"
+      ],
+      "answer": 3,
+      "explanation": "Indexing is zero-based: the first element is at index 0 and the last is at length - 1, so a length-5 array runs 0 to 4. Index 5 does not exist - using it throws an exception at run time."
+    },
+    {
+      "id": "arrays-003",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "String[] cars = {\"Volvo\", \"BMW\", \"Ford\", \"Mazda\"};\nSystem.out.println(cars.length);",
+      "options": [
+        "4",
+        "3",
+        "5",
+        "It fails to compile - length on an array needs parentheses"
+      ],
+      "answer": 0,
+      "explanation": "The array has four elements, so its built-in length field is 4. Remember length counts elements, while the largest valid index is length - 1, which is 3 here."
+    },
+    {
+      "id": "arrays-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which line declares an array variable and allocates space for 10 ints?",
+      "code": null,
+      "options": [
+        "int num = new int[10];",
+        "int[10] num = new int;",
+        "int[] num = int[10];",
+        "int[] num = new int[10];"
+      ],
+      "answer": 3,
+      "explanation": "The left side declares the variable (the [] belongs with the type), and new int[10] constructs an array of 10 ints. The size goes inside the brackets after new, not after the type name in the declaration."
+    },
+    {
+      "id": "arrays-005",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Before any values are assigned, what does each element of an array created with new boolean[4] hold?",
+      "code": null,
+      "options": [
+        "false",
+        "true",
+        "0",
+        "null"
+      ],
+      "answer": 0,
+      "explanation": "Java never leaves array elements as garbage: each element starts at the default for its type. For boolean that default is false; numeric types get 0 or 0.0 and reference types get null."
+    },
+    {
+      "id": "arrays-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Before any values are assigned, what does each element of an array created with new String[4] hold?",
+      "code": null,
+      "options": [
+        "The empty string \"\"",
+        "Unpredictable garbage left in memory",
+        "Reading one throws an exception",
+        "null"
+      ],
+      "answer": 3,
+      "explanation": "String is a reference (object) type, and reference-type elements default to null - there is no object yet, just an empty reference. Numeric elements default to 0 and boolean elements to false."
+    },
+    {
+      "id": "arrays-007",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] n = {10, 20, 30};\nSystem.out.println(n[1]);",
+      "options": [
+        "10",
+        "30",
+        "20",
+        "It throws ArrayIndexOutOfBoundsException"
+      ],
+      "answer": 2,
+      "explanation": "Index 1 is the second element because indexing starts at 0: n[0] is 10, n[1] is 20, n[2] is 30. Reading index 1 as the first element is the classic off-by-one trap."
+    },
+    {
+      "id": "arrays-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Given an array variable data, which expression gives the number of elements it holds?",
+      "code": null,
+      "options": [
+        "data.length()",
+        "data.size()",
+        "data.length",
+        "length(data)"
+      ],
+      "answer": 2,
+      "explanation": "Arrays carry their size in a built-in field accessed without parentheses: data.length. length() with parentheses is the String method, and size() belongs to collections like ArrayList - neither exists on an array."
+    },
+    {
+      "id": "arrays-009",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which expression always accesses the LAST element of an int array named data?",
+      "code": null,
+      "options": [
+        "data[data.length - 1]",
+        "data[data.length]",
+        "data.last()",
+        "data[-1]"
+      ],
+      "answer": 0,
+      "explanation": "Indices run 0 to length - 1, so the last element is data[data.length - 1]. data[data.length] is one past the end and throws ArrayIndexOutOfBoundsException, and negative indices are never valid in Java."
+    },
+    {
+      "id": "arrays-010",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens with this line?",
+      "code": "int[] values = {1, 2.5, 3, 3.5, 4};",
+      "options": [
+        "It compiles; the values are truncated to {1, 2, 3, 3, 4}",
+        "It fails to compile - 2.5 and 3.5 are double literals and Java will not narrow them to int",
+        "It compiles but throws an exception at run time",
+        "It compiles; the array silently becomes a double[]"
+      ],
+      "answer": 1,
+      "explanation": "Arrays are homogeneous and the compiler enforces the element type before the program runs: 2.5 is a double literal and Java never narrows double to int automatically. Declaring the array as double[] instead would work, because int literals widen to double for free."
+    },
+    {
+      "id": "arrays-011",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this code is compiled and run?",
+      "code": "int[] values = new int[5];\nvalues[5] = 12;",
+      "options": [
+        "It fails to compile - the compiler sees that index 5 is too big",
+        "It runs fine and stores 12 in the last element",
+        "It compiles, then throws ArrayIndexOutOfBoundsException at run time",
+        "It compiles, then throws NullPointerException at run time"
+      ],
+      "answer": 2,
+      "explanation": "The compiler checks types, not index values, so the code compiles; valid indices for a length-5 array are 0 to 4. At run time the bounds check fails and ArrayIndexOutOfBoundsException is thrown for index 5."
+    },
+    {
+      "id": "arrays-012",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this code runs?",
+      "code": "int[] a = {1, 2, 3};\nfor (int i = 0; i <= a.length; i++) {\n    System.out.println(a[i]);\n}",
+      "options": [
+        "1, 2 and 3 print, then ArrayIndexOutOfBoundsException is thrown",
+        "1, 2 and 3 print and the program ends normally",
+        "It fails to compile because of the <=",
+        "1, 2, 3 and 0 print"
+      ],
+      "answer": 0,
+      "explanation": "The condition i <= a.length lets i reach 3, but the largest valid index of a length-3 array is 2. The first three elements print, then a[3] throws ArrayIndexOutOfBoundsException - always write i < a.length."
+    },
+    {
+      "id": "arrays-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] a = {5, 10, 15};\nfor (int x : a) {\n    x = 0;\n}\nSystem.out.println(a[0]);",
+      "options": [
+        "It fails to compile - x cannot be assigned",
+        "0",
+        "15",
+        "5"
+      ],
+      "answer": 3,
+      "explanation": "The for-each variable x holds a copy of each element, so x = 0 overwrites the copy, never the array. To write into elements you need the counting loop and an index, such as a[i] = 0."
+    },
+    {
+      "id": "arrays-014",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] mine = {1, 2, 3};\nint[] yours = mine;\nyours[0] = 99;\nSystem.out.println(mine[0]);",
+      "options": [
+        "1",
+        "99",
+        "0",
+        "It fails to compile - an array can only be modified through the variable that created it"
+      ],
+      "answer": 1,
+      "explanation": "int[] yours = mine copies the reference (the arrow), not the array - both names point at one array object. Writing through either name changes the single shared array, so mine[0] is now 99."
+    },
+    {
+      "id": "arrays-015",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] a = {1, 2, 3};\nint[] b = {1, 2, 3};\nSystem.out.println(a == b);\nSystem.out.println(java.util.Arrays.equals(a, b));",
+      "options": [
+        "true then true",
+        "true then false",
+        "false then false",
+        "false then true"
+      ],
+      "answer": 3,
+      "explanation": "== on arrays compares references, and a and b are two separate array objects, so it prints false. Arrays.equals compares the contents element by element, and both hold 1, 2, 3, so it prints true."
+    },
+    {
+      "id": "arrays-016",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Given int[] a = {5, 10, 15};, which line gives b its own separate array holding the same values, so that changing b never affects a?",
+      "code": null,
+      "options": [
+        "int[] b = a;",
+        "int[] b = new int[3];",
+        "int[] b = a.copy();",
+        "int[] b = a.clone();"
+      ],
+      "answer": 3,
+      "explanation": "clone() builds a new array and copies every element, so b is independent of a (Arrays.copyOf and System.arraycopy do the same job). int[] b = a; merely copies the reference - one array, two names - new int[3] holds only zeros, and copy() does not exist on arrays."
+    },
+    {
+      "id": "arrays-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this code runs?",
+      "code": "String[] crew = new String[3];\ncrew[0] = \"Ada\";\nSystem.out.println(crew[1].length());",
+      "options": [
+        "It prints 0",
+        "It prints null",
+        "It throws NullPointerException",
+        "It throws ArrayIndexOutOfBoundsException"
+      ],
+      "answer": 2,
+      "explanation": "new String[3] fills every element with the default for reference types, null, and only crew[0] was assigned. crew[1] is still null, and calling a method through a null reference throws NullPointerException at run time."
+    },
+    {
+      "id": "arrays-018",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[][] m = {\n    {1, 2, 3},\n    {4, 5, 6},\n    {7, 8, 9}\n};\nSystem.out.println(m[1][2]);",
+      "options": [
+        "6",
+        "8",
+        "2",
+        "5"
+      ],
+      "answer": 0,
+      "explanation": "The first index selects the row and the second the column: m[1] is the row {4, 5, 6}, and index 2 within it is 6. Answering 8 comes from swapping row and column (m[2][1]); answering 2 comes from counting from 1 instead of 0."
+    },
+    {
+      "id": "arrays-019",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "For int[][] grid = new int[3][4];, what is the value of grid.length?",
+      "code": null,
+      "options": [
+        "4",
+        "3",
+        "12",
+        "7"
+      ],
+      "answer": 1,
+      "explanation": "A 2D array is an array of arrays, so grid.length counts the rows: 3. The columns of a row come from grid[0].length (4 here), and the total element count would be 3 * 4 = 12."
+    },
+    {
+      "id": "arrays-020",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "What does calling java.util.Arrays.sort(nums) on an int array do?",
+      "code": null,
+      "options": [
+        "It returns a new sorted array and leaves nums unchanged",
+        "It sorts nums into descending order",
+        "It rearranges nums itself into ascending order",
+        "It only works on arrays of Strings"
+      ],
+      "answer": 2,
+      "explanation": "Arrays.sort rearranges the existing array in place into ascending order; it returns nothing, so expecting an untouched original plus a new sorted array is a common mistake. If you need the original intact, copy it first and sort the copy."
+    },
+    {
+      "id": "arrays-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Printing an int array directly with System.out.println(nums) shows text like [I@1b6d3586. Why?",
+      "code": null,
+      "options": [
+        "The variable holds a reference to the array, and that reference is what gets printed - use Arrays.toString(nums) to see the contents",
+        "The elements are shown in hexadecimal and must be converted back by hand",
+        "The array was never initialized, so leftover garbage prints",
+        "println only accepts arrays of Strings"
+      ],
+      "answer": 0,
+      "explanation": "Arrays are objects, so the variable holds a reference, and println prints that reference (a type tag plus hash), not the elements. Use Arrays.toString(nums) - or a loop - to display the contents."
+    },
+    {
+      "id": "arrays-022",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "You want a loop that overwrites every element of an int array with 0. Which loop must you use, and why?",
+      "code": null,
+      "options": [
+        "For-each, because it is shorter",
+        "The counting (indexed) for loop, because writing into elements needs the index - the for-each variable is only a copy",
+        "Either loop - assigning to the for-each variable also changes the array",
+        "Neither - array elements cannot be changed after creation"
+      ],
+      "answer": 1,
+      "explanation": "The for-each variable is only a copy of each element, so assigning to it changes nothing in the array. Writing requires naming the box itself - a[i] = 0 - which is exactly what the counting loop's index makes possible."
+    },
+    {
+      "id": "arrays-023",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A loop finds the largest value in an int array by tracking a best-so-far variable. Why should best be initialized to the FIRST ELEMENT rather than to 0?",
+      "code": null,
+      "options": [
+        "Initializing best to 0 does not compile",
+        "If every element is negative, best would stay 0 and the method would return a value that is not in the array",
+        "Index 0 must always be read before a loop can start",
+        "Starting at 0 makes the loop run one extra time"
+      ],
+      "answer": 1,
+      "explanation": "The champion must start as a value actually in the array. If best started at 0 and every element were negative, nothing would beat 0, and the method would return 0 - a value the array does not contain."
+    },
+    {
+      "id": "arrays-024",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A search method that walks an array returns the index where the target was found, or -1 if it was not. Why is -1 the conventional not-found answer?",
+      "code": null,
+      "options": [
+        "-1 signals that an exception was thrown",
+        "-1 refers to the last element, as it does in some other languages",
+        "Java requires search methods to return a negative number on failure",
+        "-1 can never be a valid index, so it cannot be confused with a real position"
+      ],
+      "answer": 3,
+      "explanation": "Valid indices are 0 up to length - 1, so -1 can never point at a real element - it is an unmistakable not-found signal. In Java a negative index does not wrap around to the end; using one would throw an exception."
+    },
+    {
+      "id": "arrays-025",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A method declared as void change(int[] arr) executes arr[0] = 42;. After calling change(nums), what does the caller observe in nums?",
+      "code": null,
+      "options": [
+        "nums[0] is now 42 - the parameter is another reference to the same array object",
+        "nums is unchanged - Java hands the method a full copy of the array",
+        "nums is unchanged - arrays are read-only inside methods",
+        "It does not compile - array elements cannot be assigned inside a method"
+      ],
+      "answer": 0,
+      "explanation": "Passing an array passes a copy of the reference, so arr and nums are two names for the same array object; a write through arr is visible through nums. The array itself is never duplicated when passed to a method."
+    },
+    {
+      "id": "arrays-026",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] n = {5, 10, 15, 20};\nfor (int i = n.length - 1; i >= 0; i--) {\n    System.out.print(n[i] + \" \");\n}",
+      "options": [
+        "20 15 10 5",
+        "5 10 15 20",
+        "20 15 10",
+        "It throws ArrayIndexOutOfBoundsException"
+      ],
+      "answer": 0,
+      "explanation": "The loop starts at the last valid index (n.length - 1, which is 3) and the condition i >= 0 keeps going down to and including index 0, printing 20 15 10 5. Writing i > 0 would stop before index 0 and lose the 5, and starting at n.length would throw immediately."
+    },
+    {
+      "id": "arrays-027",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] original = {1, 2, 3};\nint[] copy = new int[original.length];\nSystem.arraycopy(original, 0, copy, 0, original.length);\ncopy[0] = 10;\nSystem.out.println(original[0] + \" \" + copy[0]);",
+      "options": [
+        "10 10",
+        "1 1",
+        "1 10",
+        "10 1"
+      ],
+      "answer": 2,
+      "explanation": "System.arraycopy copies the element values into copy's own separate boxes, so the two arrays are independent afterwards. Changing copy[0] to 10 leaves original[0] at 1 - unlike int[] copy = original;, which would have shared one array."
+    },
+    {
+      "id": "arrays-028",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[][] grid = {\n    {1, 2, 3},\n    {4, 5},\n    {6}\n};\nSystem.out.println(grid.length + \" \" + grid[1].length);",
+      "options": [
+        "3 3",
+        "2 3",
+        "3 2",
+        "It fails to compile - every row must have the same length"
+      ],
+      "answer": 2,
+      "explanation": "grid.length counts the rows: 3. Each row is its own array with its own length, and grid[1] is {4, 5}, so grid[1].length is 2 - rows of different lengths (a ragged array) are perfectly legal."
+    },
+    {
+      "id": "arrays-029",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What happens with this code?",
+      "code": "int[] a;\na = {1, 2, 3};",
+      "options": [
+        "It compiles, and a holds {1, 2, 3}",
+        "It fails to compile - the {...} form is only allowed in the declaration line; a = new int[]{1, 2, 3}; would work",
+        "It compiles but throws an exception at run time",
+        "It compiles, and a has length 0"
+      ],
+      "answer": 1,
+      "explanation": "The {1, 2, 3} initializer shorthand is only allowed in the declaration line itself, as in int[] a = {1, 2, 3};. On a later line you must state the type with new: a = new int[]{1, 2, 3};."
+    },
+    {
+      "id": "arrays-030",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "What does this code print?",
+      "code": "int[] t = {-8, -3, -11};\nint best = 0;\nfor (int i = 0; i < t.length; i++) {\n    if (t[i] > best) {\n        best = t[i];\n    }\n}\nSystem.out.println(best);",
+      "options": [
+        "-3",
+        "-11",
+        "-8",
+        "0"
+      ],
+      "answer": 3,
+      "explanation": "best starts at 0, but every element is negative, so t[i] > best is never true and best is still 0 at the end - a value that is not even in the array. Initializing best to t[0] fixes the bug, which is why the maximum search should start from the first element."
+    },
+    {
+      "id": "arrays-031",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Which of these array mistakes is caught at COMPILE time rather than at run time?",
+      "code": null,
+      "options": [
+        "Reading a[a.length]",
+        "Putting the double literal 2.5 into an int[] initializer",
+        "Calling a method on an element that is still null",
+        "Modifying a shared array through a second variable that refers to it"
+      ],
+      "answer": 1,
+      "explanation": "A wrong element type breaks the homogeneity rule the compiler enforces, so the double literal is rejected before the program ever runs. Bad indices (ArrayIndexOutOfBoundsException) and calls through null (NullPointerException) only surface at run time, and modifying through a second reference is legal behaviour, not an error."
+    }
+  ]
+}

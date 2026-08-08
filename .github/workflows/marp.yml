@@ -15,11 +15,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Safety audit + snippet verification
+      - name: Safety audit + snippet verification + diagram freshness
         run: |
           set -euo pipefail
           python3 scripts/safety_audit.py
           python3 scripts/verify_snippets.py
+          python3 scripts/check_diagrams.py
 
       - name: Set up Java (for snippet verification)
         uses: actions/setup-java@v4

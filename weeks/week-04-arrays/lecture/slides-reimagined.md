@@ -165,6 +165,7 @@ int[] scores = new int[5];
 ## Step 3 — read and write
 
 ```java
+int[] scores = new int[5];
 scores[2] = 78;                    // write into box 2
 int mine = scores[2];              // read box 2
 System.out.println(mine);          // 78
@@ -293,6 +294,8 @@ System.out.println(scores.length);   // 5
 ## The counting loop — learn this shape
 
 ```java
+int[] scores = {83, 91, 78, 65, 95};
+
 for (int i = 0; i < scores.length; i++) {
     System.out.println(scores[i]);
 }
@@ -308,6 +311,8 @@ for (int i = 0; i < scores.length; i++) {
 ## For-each — when you don't need the index
 
 ```java
+int[] scores = {83, 91, 78, 65, 95};
+
 for (int score : scores) {
     System.out.println(score);
 }

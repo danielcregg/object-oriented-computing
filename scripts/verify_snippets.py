@@ -62,7 +62,7 @@ def compiles(code, workdir):
 
 def main():
     targets = [Path(a) for a in sys.argv[1:]] or sorted(
-        Path("weeks").glob("*/lecture/slides.md"))
+        Path("weeks").glob("*/lecture/slides*.md"))
     failures = 0
     with tempfile.TemporaryDirectory() as workdir:
         for path in targets:

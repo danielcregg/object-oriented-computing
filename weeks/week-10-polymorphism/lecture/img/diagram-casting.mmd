@@ -1,6 +1,0 @@
-flowchart TB
-  A["Animal\n(superclass)"]
-  C["Cat\n(subclass)"]
-  C -- "upcasting — automatic, always safe\nAnimal a = new Cat();" --> A
-  A -- "downcasting — explicit cast, can crash\nCat c = (Cat) a;" --> C
-  style A fill:#FDEBD7,stroke:#E76F00

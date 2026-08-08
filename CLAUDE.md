@@ -71,23 +71,23 @@ read-only assets.
   code captions) stay immediate. A converter re-run emits `- ` everywhere,
   so re-apply fragments after any deck regeneration. Decks also set
   `transition: fade` (HTML-only slide transition; ignored in PDF/PPTX).
-- Every topic deck has one fragmented predict-style quiz slide ("Predict
-  the Output" / "Predict: Does This Compile?"); answers are `* ` bullets
-  so they reveal after the class commits to a guess.
+- Topic decks carry 3-4 fragmented predict-style beats ("Predict the
+  Output", "Predict: Does This Compile?") spaced through the hour;
+  answers are `* ` bullets so they reveal after the class commits.
 - Speaker notes live in `<!-- Speaker notes: ... -->` comments.
-- Diagrams: concept diagrams are Mermaid, pre-rendered to SVG (Marp does not
-  render mermaid fences). Each lives as `lecture/img/diagram-<name>.svg` with
-  its editable source beside it (`diagram-<name>.mmd`), referenced by a
-  `<!-- diagram source: img/diagram-<name>.mmd -->` comment above the image.
-  Edit the `.mmd`, then re-render every diagram with
-  `npm run render:diagrams` (stamps each SVG with a hash of its source +
-  theme config). CI fails on stale or unstamped SVGs via
-  `scripts/check_diagrams.py` — never edit a rendered `.svg` by hand.
-- Topic decks (weeks 2+) share one flow: title → agenda → context/recap
-  (the four-pillars slide on OOP-pillar weeks) → concepts with examples →
-  benefits/common mistakes → summary. Every deck ends on its Summary
-  slide — no resources slides. Week 1 (module intro) is exempt from the
-  flow but also ends on a Summary.
+- Diagrams in decks are drawn in deck-local CSS (a `<style>` block at the
+  top of each `slides.md`: memory boxes, pillar strips, hierarchy trees,
+  call-stack frames…) — no image files and no build pipeline. The only
+  tracked deck image is week-01's About-Me banner. Lab READMEs use
+  ```mermaid fences, rendered natively by GitHub and client-side on the
+  lab pages.
+- Topic decks (weeks 2+) share one flow: title (lead + kicker) →
+  problem-first hook (1-2 slides) → "the idea" → agenda → context (the
+  four-pillars strip on OOP-pillar weeks) → concepts with worked examples
+  and predict beats → benefits/common mistakes → summary. Every deck ends
+  on its Summary slide — no resources slides. Week 1 (module intro) is a
+  two-act exception (module logistics + Java fast-start) but follows the
+  same hook-first, Summary-last frame.
 - Decks are SELF-CONTAINED, reusable in other courses: never reference
   other weeks/decks or the module schedule ("recall from week 7", "next
   week", pillar week-tags). Concept back-references without schedule

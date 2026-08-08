@@ -20,7 +20,6 @@ jobs:
           set -euo pipefail
           python3 scripts/safety_audit.py
           python3 scripts/verify_snippets.py
-          python3 scripts/check_diagrams.py
           python3 scripts/check_practice_bank.py
           find labs/src -name '*.java' -print0 | xargs -0 javac -d "$RUNNER_TEMP/labs-classes"
 
@@ -60,19 +59,6 @@ jobs:
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pdf"
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pptx"
-          done
-          # TEMPORARY preview: publish the slides-reimagined.md drafts (HTML
-          # only) under /reimagined/ for review. The listing page comes from
-          # build_index.py (auto-built while drafts exist). Remove this loop
-          # once the adoption decision is made.
-          mapfile -t drafts < <(find weeks -type f -path '*/lecture/slides-reimagined.md' | sort)
-          for f in "${drafts[@]}"; do
-            lecture_dir=$(dirname "$f")
-            week_dir=$(basename "$(dirname "$lecture_dir")")
-            out="build/reimagined/$week_dir"
-            mkdir -p "$out"
-            if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
-            marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
           done
 
       - name: Upload rendered decks as artifact

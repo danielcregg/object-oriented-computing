@@ -7,8 +7,6 @@
   },
   "scripts": {
     "preview": "marp -s --html . --theme-set themes/ooc.css",
-    "render:diagrams": "python3 scripts/render_diagrams.py",
-    "check:diagrams": "python3 scripts/check_diagrams.py",
     "preview:intro": "marp --preview --html --allow-local-files weeks/week-01-introduction/lecture/slides.md --theme-set themes/ooc.css",
     "export:intro": "marp --html --allow-local-files weeks/week-01-introduction/lecture/slides.md -o build/week-01-introduction/slides.pptx --theme-set themes/ooc.css"
   }

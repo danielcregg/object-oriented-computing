@@ -157,27 +157,6 @@ MAIN_FOOT = """</ol>
 </html>
 """
 
-PREVIEW_HEADER = """<header>
-  <p class="kicker">draft preview &middot; not the published decks</p>
-  <h1>Reimagined Decks</h1>
-  <p class="standfirst">From-scratch rebuilds of every lecture, up for review.
-  Tap a week to open its draft &mdash; tap or swipe inside to advance.</p>
-</header>
-<main>
-<ol class="timeline">
-"""
-
-PREVIEW_FOOT = """</ol>
-</main>
-<footer>
-  <p class="comment"><a href="../">back to the published decks</a></p>
-  <p class="comment">drafts rebuild on every push &mdash; this page retires at adoption</p>
-</footer>
-</body>
-</html>
-"""
-
-
 def lab_slug(folder: str) -> str | None:
     slug = re.sub(r"^week-\d+-", "", folder).replace("-", "")
     return slug if (Path("labs/src/ie/atu") / slug).is_dir() else None
@@ -203,18 +182,6 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
             f'  </li>\n')
 
 
-def preview_row(folder: str, week_no: str, title: str) -> str:
-    t = html.escape(title)
-    return (f'  <li class="row lecture">\n'
-            f'    <span class="num" data-week aria-hidden="true">{week_no}</span>\n'
-            f'    <span class="topic"><a href="{folder}/">{t}</a></span>\n'
-            f'    <span class="actions">\n'
-            f'      <a class="open" href="{folder}/"'
-            f' aria-label="Week {week_no}: {t} — open draft">open</a>\n'
-            f'    </span>\n'
-            f'  </li>\n')
-
-
 def marker_row(week_no: str, label: str) -> str:
     num_attr = ' data-week' if week_no else ''
     return (f'  <li class="row marker">\n'
@@ -226,9 +193,7 @@ def marker_row(week_no: str, label: str) -> str:
 
 def deck_title(deck: Path, slug: str) -> str:
     m = TITLE_RE.search(deck.read_text(encoding="utf-8"))
-    if m:
-        return re.sub(r"\s*\(reimagined\)$", "", m.group(1))
-    return slug.replace("-", " ").title()
+    return m.group(1) if m else slug.replace("-", " ").title()
 
 
 def build_main_rows() -> tuple[str, int, int]:
@@ -251,18 +216,6 @@ def build_main_rows() -> tuple[str, int, int]:
     return "".join(rows), lectures, markers
 
 
-def build_preview_rows() -> tuple[str, int]:
-    rows, count = [], 0
-    for deck in sorted(WEEKS.glob("*/lecture/slides-reimagined.md")):
-        name = deck.parent.parent.name
-        week_match = WEEK_NO_RE.match(name)
-        week_no = week_match.group(1).lstrip("0") if week_match else ""
-        slug = name.split("-", 2)[-1]
-        rows.append(preview_row(name, week_no, deck_title(deck, slug)))
-        count += 1
-    return "".join(rows), count
-
-
 def main() -> None:
     out_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "build")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -272,15 +225,6 @@ def main() -> None:
             + MAIN_HEADER + rows + MAIN_FOOT)
     (out_dir / "index.html").write_text(page, encoding="utf-8", newline="\n")
     print(f"wrote {out_dir / 'index.html'} ({lectures} lectures, {markers} marker rows)")
-
-    drafts, count = build_preview_rows()
-    if count:
-        preview_dir = out_dir / "reimagined"
-        preview_dir.mkdir(parents=True, exist_ok=True)
-        page = (page_head("Reimagined Decks &mdash; draft preview")
-                + PREVIEW_HEADER + drafts + PREVIEW_FOOT)
-        (preview_dir / "index.html").write_text(page, encoding="utf-8", newline="\n")
-        print(f"wrote {preview_dir / 'index.html'} ({count} draft decks)")
 
 
 if __name__ == "__main__":

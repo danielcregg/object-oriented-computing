@@ -64,7 +64,7 @@ What an array is and its characteristics: fixed length, homogeneous
 element type, zero-based indices. Declaring, constructing, and assigning
 arrays (both syntaxes), reading and writing elements by index, the `length`
 variable. Looping over arrays with `for` and for-each, then
-multidimensional arrays. Includes an in-class quiz and a Kahoot.
+multidimensional arrays. Includes an in-class quiz.
 
 ## Week 5 — MCQ 1 *(33%)*
 

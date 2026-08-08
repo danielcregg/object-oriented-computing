@@ -28,7 +28,7 @@ source: "Java Arrays.pptx"
 - The `length` property
 - Looping through arrays (`for` and for-each)
 - Multidimensional arrays
-- Kahoot & summary
+- Summary
 
 ---
 
@@ -227,12 +227,6 @@ board[1][2] = 'd';
 System.out.println(board[1][2]);
 ```
 - Lab exercise: use a `char[8][8]` to model a chess board
-
----
-
-## Kahoot - Arrays
-
-![](img/slide20-1.png)
 
 ---
 

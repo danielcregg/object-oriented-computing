@@ -35,8 +35,8 @@ Same call, `speak()` — different sound, depending on the object.
 
 ## Four major principles of OOP
 
-* Recall from week 7: OOP rests on 4 pillars — Encapsulation, Inheritance, Polymorphism, Abstraction.
-* We've covered Encapsulation (week 7) and Inheritance (week 8) — this week we go deep on **Polymorphism**.
+* Recall: OOP rests on 4 pillars — Encapsulation, Inheritance, Polymorphism, Abstraction.
+* With Encapsulation and Inheritance in hand, this lecture goes deep on **Polymorphism**.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
@@ -74,7 +74,7 @@ section.split img { max-height: 360px; object-fit: contain; }
 
 ---
 
-## Method Structure (recap from week 3)
+## Method Structure (recap)
 
 ```java
 public int max (int x, int y)

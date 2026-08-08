@@ -72,6 +72,11 @@ images) are read-only archives.
   benefits/common mistakes → summary. Every deck ends on its Summary
   slide — no resources slides. Week 1 (module intro) is exempt from the
   flow but also ends on a Summary.
+- Decks are SELF-CONTAINED, reusable in other courses: never reference
+  other weeks/decks or the module schedule ("recall from week 7", "next
+  week", pillar week-tags). Concept back-references without schedule
+  coupling ("Recall: …", "as you've seen") are fine. Exempt: title-slide
+  kickers, frontmatter `week:`, and week-01's module-logistics act.
 
 ## Editing rules
 

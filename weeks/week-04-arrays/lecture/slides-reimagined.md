@@ -72,7 +72,7 @@ One name. Many values.
 
 ## A true story
 
-- It's week 4. You're building the class gradebook.
+- You're building the class gradebook.
 - One `int` variable holds one score. You have **300 students**.
 
 <!-- no-compile -->
@@ -211,7 +211,7 @@ String[] names = {"Ada", "Linus", "Grace"};
 
 - The first box is zero steps from the front door: `a[0]`.
 - Which is why the **last** box of a length-`n` array is `a[n - 1]` — not `a[n]`.
-- Burn this in now and every off-by-one error for the rest of the semester gets easier.
+- Burn this in now and every off-by-one error you ever meet gets easier.
 
 ---
 
@@ -347,11 +347,11 @@ System.out.println(a[0]);
 
 ---
 
-<!-- Speaker notes: ~0:30. References movement — the deepest idea of the hour, and the payoff of week 2's object-identity lesson. -->
+<!-- Speaker notes: ~0:30. References movement — the deepest idea of the hour, and the payoff of the object-identity lesson. -->
 
 ## Arrays are objects
 
-- Week 2 taught: a variable of object type holds a **reference** — an arrow, not the thing.
+- Remember: a variable of object type holds a **reference** — an arrow, not the thing.
 - **Arrays are objects.** Same rule, same consequences:
 
 ```java
@@ -484,7 +484,7 @@ System.out.println(crew[2].length());   // NullPointerException!
 ```
 
 - An unfilled box is `null` — call a method through it and the program dies.
-- Next week (Strings) lives here: a `String[]` is arrows to String objects.
+- Strings live right here too: a `String[]` is arrows to String objects.
 
 ---
 
@@ -502,7 +502,7 @@ board[7][4] = 'K';     // row 7, column 4
 
 - Read `board[row][col]` — **row first, always**.
 - Spreadsheets, pixel grids, game boards, seating plans — every grid in computing is this.
-- **Your lab this week:** model a chessboard with `char[8][8]`.
+- **Lab exercise:** model a chessboard with `char[8][8]`.
 
 ---
 

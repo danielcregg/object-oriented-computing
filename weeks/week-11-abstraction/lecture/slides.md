@@ -35,8 +35,8 @@ source: "Abstraction.pptx"
 
 ## Four major principles of OOP
 
-* Recall from week 7: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
-* This week we finish the set with the final pillar: **Abstraction**.
+* Recall: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
+* This lecture we finish the set with the final pillar: **Abstraction**.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)

@@ -96,8 +96,8 @@ the Irish October bank holiday (the last Monday of October).
 [Lab](../weeks/week-07-encapsulation/lab/lab.md)
 
 Opens the four-pillars block; this deck is the canonical home of the
-"four major principles of OOP" overview (later decks recap and point back
-here). Why encapsulation matters, its definition (bundling state with
+"four major principles of OOP" overview (later pillar decks open with a
+recap of it). Why encapsulation matters, its definition (bundling state with
 behaviour + data hiding), Java's access modifiers, and the implementation
 recipe: private fields behind public getters and setters. A long worked
 sequence on *why* getters/setters earn their keep — validation, read-only

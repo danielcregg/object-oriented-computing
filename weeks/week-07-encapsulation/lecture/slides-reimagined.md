@@ -12,8 +12,8 @@ source: authored
 
 <style>
 /* Deck-local visual system: capsule, gates, pillars, visibility matrix —
-   all drawn in CSS, no images. Base components shared with the week-04
-   reimagined deck (.mem/.callout/.legend/.kicker). */
+   all drawn in CSS, no images. Base components:
+   .mem/.callout/.legend/.kicker. */
 section .mem {
   display: flex; margin: 34px 0 10px 0;
   font-family: 'Cascadia Code', Consolas, monospace;
@@ -55,7 +55,7 @@ section .pill {
 section .pill .ph-l { background: #101B26; color: #9DB4C8; padding: 13px 24px 13px 30px; }
 section .pill .ph-r { background: #E76F00; color: #FFFFFF; padding: 13px 30px 13px 24px; font-weight: 600; }
 
-/* four-pillars strip — the canonical OOP roadmap (weeks 8/10/11 recap this) */
+/* four-pillars strip — the canonical OOP roadmap */
 section .pillars { display: flex; gap: 18px; margin: 34px 0 16px 0; }
 section .pillar {
   flex: 1; display: flex; flex-direction: column;
@@ -243,7 +243,7 @@ account.balance = -1_000_000;   // some file. some line. some Tuesday.
 
 ## Agenda
 
-- The four pillars of OOP — your map for the next five weeks
+- The four pillars of OOP — your map for everything ahead
 - What encapsulation means: **bundle** + **hide**
 - Access modifiers — Java's four visibility settings
 - The recipe: private fields, public getters and setters
@@ -253,21 +253,21 @@ account.balance = -1_000_000;   // some file. some line. some Tuesday.
 
 ---
 
-<!-- Speaker notes: ~0:07. This strip is the module's canonical four-pillars overview — weeks 8, 10 and 11 open by recapping it, highlight moved along. Spend a full minute here. -->
+<!-- Speaker notes: ~0:07. This strip is the canonical four-pillars overview. Spend a full minute here. -->
 
 ## The four pillars of OOP
 
-- Everything in this half of the module hangs off **four big ideas**:
+- Everything in OOP hangs off **four big ideas**:
 
 <div class="pillars">
-<div class="pillar now"><span class="p-chip">this week</span><span class="p-name">Encapsulation</span><span class="p-line">objects guard their own data behind a small public face</span><span class="p-wk">week 07</span></div>
-<div class="pillar"><span class="p-name">Inheritance</span><span class="p-line">build new classes on top of existing ones</span><span class="p-wk">week 08</span></div>
-<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call, many different behaviours</span><span class="p-wk">week 10</span></div>
-<div class="pillar"><span class="p-name">Abstraction</span><span class="p-line">expose the what, hide the how</span><span class="p-wk">week 11</span></div>
+<div class="pillar now"><span class="p-chip">this lecture</span><span class="p-name">Encapsulation</span><span class="p-line">objects guard their own data behind a small public face</span><span class="p-wk">pillar 1</span></div>
+<div class="pillar"><span class="p-name">Inheritance</span><span class="p-line">build new classes on top of existing ones</span><span class="p-wk">pillar 2</span></div>
+<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call, many different behaviours</span><span class="p-wk">pillar 3</span></div>
+<div class="pillar"><span class="p-name">Abstraction</span><span class="p-line">expose the what, hide the how</span><span class="p-wk">pillar 4</span></div>
 </div>
 
 - Encapsulation goes **first** because the other three build on classes that protect their own state.
-- We'll reopen with this strip each pillar week — watch the highlight move right.
+- The strip returns as each pillar arrives — watch the highlight move right.
 
 ---
 
@@ -296,7 +296,7 @@ account.balance = -1_000_000;   // some file. some line. some Tuesday.
 <tbody>
 <tr><td class="kw">private<span class="mchip hero">your default</span></td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td></tr>
 <tr><td class="kw">(default)</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
-<tr><td class="kw">protected<span class="mchip soon">week 08</span></td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td></tr>
+<tr><td class="kw">protected<span class="mchip soon">inheritance</span></td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td></tr>
 <tr><td class="kw">public</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
 </tbody>
 </table>
@@ -309,8 +309,8 @@ account.balance = -1_000_000;   // some file. some line. some Tuesday.
 
 - **`private`** — from today, your default for **every field**. This is the capsule wall.
 - **`public`** — for the methods you *mean* the world to call: the gates.
-- **`protected`** — also visible to subclasses. Meaningless until inheritance — **next week's tool**.
-- **(default)** — package-only; what you get by forgetting a keyword. In this module, treat it as an accident, not a choice.
+- **`protected`** — also visible to subclasses. Meaningless until **inheritance** arrives.
+- **(default)** — package-only; what you get by forgetting a keyword. Treat it as an accident, not a choice.
 
 <div class="callout"><strong>House rule:</strong> start everything <code>private</code>; promote to <code>public</code> only with a reason you can say out loud.</div>
 
@@ -334,7 +334,7 @@ class Main {
 
 * **No** — `balance has private access in Account`. The compiler refuses the assignment.
 * That is the hook resolved: the 3 a.m. mystery write is now a **red underline before the program even runs**.
-* Week 4 taught that errors live at compile time or run time. `private` *drags this bug from run time to compile time* — from "found by a victim, weeks later" to "found by you, instantly".
+* Remember: errors live at compile time or run time. `private` *drags this bug from run time to compile time* — from "found by a victim, weeks later" to "found by you, instantly".
 
 ---
 
@@ -594,7 +594,7 @@ class Main {
 ```
 
 * Prints **0**. The field was private — and the caller changed it anyway.
-* Week 4 told you why: an array variable is an **arrow**. The getter handed out *the arrow to the sealed core*.
+* You know why: an array variable is an **arrow**. The getter handed out *the arrow to the sealed core*.
 
 ---
 
@@ -626,7 +626,7 @@ public class Gradebook {
 
 ---
 
-<!-- Speaker notes: ~0:52. Landing movement — backward link to week 6, forward link to week 8, then benefits and out. -->
+<!-- Speaker notes: ~0:52. Landing movement — backward link to Strings, forward link to inheritance, then benefits and out. -->
 
 ## You've been trusting a capsule for weeks
 
@@ -640,7 +640,7 @@ System.out.println(name);   // ada — the original is untouched
 System.out.println(loud);   // ADA — every "change" is a new String
 ```
 
-- That's *why* week 6's Strings never changed: **immutable = a capsule with no write gates**.
+- That's *why* Strings never change: **immutable = a capsule with no write gates**.
 - No guards to get wrong, nothing to leak — which is what makes Strings safe to share anywhere. Sealing data isn't paranoia; it's what makes objects trustworthy.
 
 ---
@@ -650,7 +650,7 @@ System.out.println(loud);   // ADA — every "change" is a new String
 - **Protection** — the guard: invalid state is stopped at the door, once, where the data lives.
 - **Flexibility** — the disguise: internals can be rebuilt while every caller compiles on, unaware.
 - **Maintainability** — one address: when `balance` is wrong, the suspect list is *one class*, not 40,000 lines.
-* Next week the wall grows a family entrance: **inheritance** lets one class build on another — and `protected`, the modifier we parked today, finally earns its row in the matrix.
+* Next pillar: the wall grows a family entrance — **inheritance** lets one class build on another, and `protected`, the modifier we parked today, finally earns its row in the matrix.
 
 ---
 

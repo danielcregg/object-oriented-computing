@@ -187,20 +187,20 @@ a.speak();
 
 ---
 
-<!-- Speaker notes: ~0:05. Orientation, fast. Point back at the week-7 pillars slide; two are behind them already. -->
+<!-- Speaker notes: ~0:05. Orientation, fast. Point at the pillars strip; two are behind them already. -->
 
 ## The four pillars — you are here
 
-- Week 7 drew the map of OOP: four pillars. Today the third one lights up.
+- The map of OOP has four pillars. Today the third one lights up.
 
 <div class="pillars">
-<div class="pill done"><b>Encapsulation</b><span>week 7 — done</span></div>
-<div class="pill done"><b>Inheritance</b><span>week 8 — done</span></div>
-<div class="pill now"><b>Polymorphism</b><span>week 10 — today</span></div>
-<div class="pill"><b>Abstraction</b><span>week 11 — next</span></div>
+<div class="pill done"><b>Encapsulation</b><span>pillar 1 — done</span></div>
+<div class="pill done"><b>Inheritance</b><span>pillar 2 — done</span></div>
+<div class="pill now"><b>Polymorphism</b><span>pillar 3 — today</span></div>
+<div class="pill"><b>Abstraction</b><span>pillar 4 — next</span></div>
 </div>
 
-- Polymorphism stands **on top of inheritance**: everything today starts from a superclass and the subclasses that `extends` it (week 8).
+- Polymorphism stands **on top of inheritance**: everything today starts from a superclass and the subclasses that `extends` it.
 - It's the pillar the other pillars were scaffolding for — the one that changes how programs are *designed*, not just how they're organised.
 
 ---
@@ -350,7 +350,7 @@ class Dog extends Animal {
 
 <!-- no-compile -->
 ```java
-Animal a = new Cat();     // legal: every Cat IS an Animal (week 8)
+Animal a = new Cat();     // legal: every Cat IS an Animal
 ```
 
 <div class="tt">
@@ -464,7 +464,7 @@ Cat c = new Cat();
 Animal a = c;          // upcast: automatic, no cast syntax needed
 ```
 
-- **Always safe**, so Java does it silently: every `Cat` *is an* `Animal` — the guarantee `extends` signed in week 8.
+- **Always safe**, so Java does it silently: every `Cat` *is an* `Animal` — the guarantee `extends` signed.
 - The **object never changes** — you only swapped a specific leash for a more general one.
 * Lost: the `Animal` leash can't reach `purr()` any more — the menu shrank.
 * Gained: your `Cat` now fits **anywhere an `Animal` fits**. Hold that thought — payoff in two slides.
@@ -509,11 +509,11 @@ if (a instanceof Cat) {      // the safe gate -- checks the OBJECT, at run time
 
 ---
 
-<!-- Speaker notes: ~0:44. THE payoff. Say it out loud: this is week 4's drawing with upgraded contents. -->
+<!-- Speaker notes: ~0:44. THE payoff. Say it out loud: this is the classic array drawing with upgraded contents. -->
 
 ## The payoff — one loop, many animals
 
-- Week 4's contract: every box holds **one type**. Upcasting bends it — an `Animal` box accepts **any** `Animal`:
+- The array contract: every box holds **one type**. Upcasting bends it — an `Animal` box accepts **any** `Animal`:
 
 <!-- no-compile -->
 ```java
@@ -565,7 +565,7 @@ Cat second = (Cat) zoo[1];     // line 2 -- what happens?
 
 * Line 1: works — box 0 really holds a `Cat`. The promise was true.
 * Line 2: **compiles** — the cast silenced the compiler — then dies at run time: `ClassCastException`, a `Tiger` is not a `Cat`.
-* Week 4 echo: bad *index* → run-time crash. Week 10: bad *cast* → run-time crash. `instanceof` is how you check before you leap.
+* An old echo: bad *index* → run-time crash. Today: bad *cast* → run-time crash. `instanceof` is how you check before you leap.
 
 ---
 
@@ -629,7 +629,7 @@ public class Trap {
 
 - **Write once, welcome all** — code against the superclass and every subclass fits, including ones not written yet.
 - **Extensibility** — a new subclass is a new file. Old loops, old methods, old arrays: untouched.
-- **Uniform collections** — one mixed `Animal[]` instead of one variable per creature (week 4 + week 10, combined).
+- **Uniform collections** — one mixed `Animal[]` instead of one variable per creature (arrays + polymorphism, combined).
 - **Separation of concerns** — callers say *what* ("speak"); each object decides *how*.
 - **Dynamic dispatch is the engine of OOP** — encapsulation protects, inheritance shares, polymorphism *adapts*.
 
@@ -644,4 +644,4 @@ public class Trap {
 - **Overriding** (run time): a subclass redefines an inherited method with the **same signature**; the **JVM** picks by the object's actual type — **dynamic dispatch**. Always wear `@Override`; `static` methods never dispatch (hiding).
 - Every reference has **two types**: the reference type gates what you *may call*; the object type decides what *runs*.
 - **Upcasting** is free and always safe; **downcasting** needs a cast plus the `instanceof` gate — or `ClassCastException` bites at run time.
-- The payoff: one loop over a mixed `Animal[]`, every element answering in its own voice — week 4's dream, delivered.
+- The payoff: one loop over a mixed `Animal[]`, every element answering in its own voice — the array dream, delivered.

@@ -160,11 +160,11 @@ Hide the machinery. Expose the contract.
 
 ---
 
-<!-- Speaker notes: ~0:06. Arc moment — week 7 promised four pillars; this is the last one. Milk the "set complete" beat, it pays off again on the summary slide. -->
+<!-- Speaker notes: ~0:06. Arc moment — four pillars were promised; this is the last one. Milk the "set complete" beat, it pays off again on the summary slide. -->
 
 ## The four pillars — completing the set
 
-- Week 7 made a promise: OOP stands on **four pillars**. Three are already yours:
+- OOP makes a promise: it stands on **four pillars**. Three are already yours:
 
 <div class="pillars">
 <div class="pill">Encapsulation<small>✓ collected</small></div>

@@ -184,7 +184,7 @@ Write it once. Every child gets it.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open on the duplication pain — they'll recognise week 2's Person on sight. Let the pasted comments land before the fragment. -->
+<!-- Speaker notes: ~0:00. Cold open on the duplication pain — they'll recognise the classic Person class on sight. Let the pasted comments land before the fragment. -->
 
 ## A true story
 
@@ -193,7 +193,7 @@ section pre { padding: 14px 20px; margin: 10px 0; font-size: 18px; line-height: 
 section pre code { font-size: 18px; }
 </style>
 
-- It's week 8. Your timetable app needs **students** and **lecturers** — and every one of them has a name and an age.
+- Your timetable app needs **students** and **lecturers** — and every one of them has a name and an age.
 
 ```java
 class Person {
@@ -257,7 +257,7 @@ class Lecturer extends Person { }
 
 - The four pillars — where inheritance sits
 - is-a: the relationship, the arrow, the names
-- `extends` — Person and Employee, continued from week 2
+- `extends` — Person and Employee, the classic pair
 - `Object`: the ancestor of everything
 - The five shapes of inheritance — and the forbidden one
 - Vehicles, animals, and is-a vs has-a
@@ -269,16 +269,16 @@ class Lecturer extends Person { }
 
 ## The four pillars — you are here
 
-- Recall week 7: OOP stands on four pillars, and **encapsulation** — private fields behind public gates — was pillar one.
+- Recall: OOP stands on four pillars, and **encapsulation** — private fields behind public gates — is pillar one.
 
 <div class="pillars">
-<div class="pillar done"><span class="pname">Encapsulation</span><span class="pwk">week 07 · done ✓</span></div>
-<div class="pillar now"><span class="pname">Inheritance</span><span class="pwk">week 08 · today</span></div>
-<div class="pillar soon"><span class="pname">Polymorphism</span><span class="pwk">week 10</span></div>
-<div class="pillar soon"><span class="pname">Abstraction</span><span class="pwk">week 11</span></div>
+<div class="pillar done"><span class="pname">Encapsulation</span><span class="pwk">pillar 1 · done ✓</span></div>
+<div class="pillar now"><span class="pname">Inheritance</span><span class="pwk">pillar 2 · today</span></div>
+<div class="pillar soon"><span class="pname">Polymorphism</span><span class="pwk">pillar 3</span></div>
+<div class="pillar soon"><span class="pname">Abstraction</span><span class="pwk">pillar 4</span></div>
 </div>
 
-- Today is pillar two — the load-bearing one: polymorphism (week 10) only exists **because of** inheritance.
+- Today is pillar two — the load-bearing one: polymorphism only exists **because of** inheritance.
 
 ---
 
@@ -321,9 +321,9 @@ class Subclass extends Superclass {
 
 ---
 
-<!-- Speaker notes: ~0:12. The extends movement — Person/Employee, direct continuity from week 2 (same class) and week 7 (same getters). -->
+<!-- Speaker notes: ~0:12. The extends movement — Person/Employee: the familiar Person class, the familiar getters. -->
 
-## Meet the parent — week 2's Person
+## Meet the parent — a plain Person
 
 ```java
 public class Person {
@@ -334,7 +334,7 @@ public class Person {
 }
 ```
 
-- Private field, public gates — week 7's **encapsulation**, unchanged. It's about to matter.
+- Private field, public gates — **encapsulation**, unchanged. It's about to matter.
 - Notice what's *missing*: nothing here mentions inheritance. Being extended costs the parent **nothing**, and it never knows.
 
 ---
@@ -412,11 +412,11 @@ class Employee extends Person {
 * **No.** `age` has private access in `Person` — the child cannot touch it.
 * `Employee` **inherits the room but not the key** — the `age` box exists in every `Employee` object, but `private` keeps access inside `Person`.
 * The fix that always works: `return getAge() > 65;`.
-* Week 7's **`protected`** exists for exactly this — open to subclasses, closed to strangers.
+* **`protected`** exists for exactly this — open to subclasses, closed to strangers.
 
 ---
 
-<!-- Speaker notes: ~0:20. Object movement — week 4's array-printing gibberish finally gets explained. Enjoy the reveal. -->
+<!-- Speaker notes: ~0:20. Object movement — the array-printing gibberish finally gets explained. Enjoy the reveal. -->
 
 ## The ancestor of everything — Object
 
@@ -428,7 +428,7 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 ```
 
 - Write no `extends` and Java adds one: **every class descends from `java.lang.Object`**.
-- That gibberish is `Object`'s `toString()` — the very one you met printing an array in week 4. `equals` and `hashCode` ride along too.
+- That gibberish is `Object`'s `toString()` — the very one you see when printing an array. `equals` and `hashCode` ride along too.
 
 <div class="tree tight">
 <div class="tnode hot">Object</div>
@@ -549,7 +549,7 @@ class TeachingAssistant extends Student, Employee { }   // one child, two parent
 
 * Java **refuses**: a class extends **exactly one** class. Multiple inheritance of classes does not exist in Java.
 * Why: if both parents defined `getRole()`, which one would the child inherit? Java won't guess (the classic *diamond problem*).
-* The legal route is **interfaces** — multiple inheritance of *type*, without the ambiguity. That story is **week 11**.
+* The legal route is **interfaces** — multiple inheritance of *type*, without the ambiguity.
 
 ---
 
@@ -646,7 +646,7 @@ class SportsCar extends Car { }
 
 - `Library` and `Book`?
 
-* **has-a** — a library isn't a book; it *holds* thousands of them (an array of them, says week 4).
+* **has-a** — a library isn't a book; it *holds* thousands of them (an array of them, most likely).
 * When genuinely torn: prefer **has-a**. A field is easy to change later — `extends` is a public promise that X is a Y, forever.
 
 ---
@@ -732,7 +732,7 @@ class Student extends Person {
 ```
 
 * The `Student() { }` line — its invisible `super();` asks `Person` for a no-arg constructor, and there isn't one.
-* Week 2's rule strikes again: declaring `Person(String)` **cost `Person` its free default constructor**.
+* An old rule strikes again: declaring `Person(String)` **cost `Person` its free default constructor**.
 * The fix: call the parent **yourself**, with arguments — next slide.
 
 ---
@@ -752,12 +752,12 @@ class Cat extends Mammal {
 ```
 
 - `super(...)` invokes the superclass constructor — write it, or accept the invisible no-arg version. **First statement, always.**
-- `super.member` picks the parent's version when names collide — a week 10 (overriding) preview.
+- `super.member` picks the parent's version when names collide — a preview of *overriding*.
 - There is no `super.super` — you may speak to your parent, never *past* them to an ancestor.
 
 ---
 
-<!-- Speaker notes: ~0:53. Landing movement — pay off the hook explicitly; the facts table is revision fuel for MCQ 2. -->
+<!-- Speaker notes: ~0:53. Landing movement — pay off the hook explicitly; the facts table is revision fuel. -->
 
 ## Why inheritance earns its keep
 
@@ -765,7 +765,7 @@ class Cat extends Mammal {
 - **Organisation** — common code has one home at the top of the tree; every class states only its *difference*.
 - **Flexibility** — code written for `Person` accepts `Student`, `Lecturer` and `Employee` without edits — any subclass, forever.
 
-* That last superpower has a name — **polymorphism** — and it headlines week 10.
+* That last superpower has a name — **polymorphism** — and it deserves an hour of its own.
 
 ---
 
@@ -788,6 +788,6 @@ class Cat extends Mammal {
 - Inheritance moves shared code **up**: `class Child extends Parent` acquires the parent's fields and methods — written once, fixed once, copy-paste debt cancelled.
 - The relationship is **is-a**, checked with the sentence test; the drawn arrowhead always sits at the parent. is-a → `extends`; has-a → a **field**.
 - Superclass = base = parent; subclass = child = derived. Every class has exactly **one** direct superclass, and every chain ends at **`Object`** — source of `toString` and `equals`.
-- Legal tree shapes: single, multilevel, hierarchical, hybrid. **Multiple inheritance of classes is forbidden** — interfaces (week 11) fill that gap.
+- Legal tree shapes: single, multilevel, hierarchical, hybrid. **Multiple inheritance of classes is forbidden** — interfaces fill that gap.
 - Constructors are **not inherited**: every subclass constructor starts with `super(...)` — written or invisible — so construction climbs to `Object` and bodies run back down, **oldest first**.
 - If the parent has no no-arg constructor, the invisible `super()` breaks the build — call `super(args)` yourself, as the first statement.

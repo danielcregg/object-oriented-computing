@@ -202,7 +202,7 @@ double gpa2 = 3.40;
 
 * Six variables. Zero students. Nothing in the program says these belong together.
 * Try declaring the thing you actually mean — `int student`? Nonsense. **Java has no Student type.**
-* So this week we do something new. When Java's types run out, **you mint your own.**
+* So today we do something new. When Java's types run out, **you mint your own.**
 
 ---
 
@@ -217,7 +217,7 @@ class Student {
 ```
 
 - After these five lines, `Student` is a real type — the compiler treats it with the same respect as `int` or `String`.
-- You can declare a `Student` variable, pass a `Student` to a method, and — week 4 — build a whole array of them.
+- You can declare a `Student` variable, pass a `Student` to a method, and even build a whole array of them.
 - One variable now carries a complete student: name, age and GPA travel as a unit.
 
 <div class="tyrow">
@@ -249,7 +249,7 @@ class Student {
 ## You've been inside a class all along
 
 - Java is an **object-oriented** language: programs are built from *objects* — bundles of data plus behaviour — and every object is stamped out from a *class*.
-- Which is why even week 1's Hello World refused to run without this line:
+- Which is why even Hello World refused to run without this line:
 
 ```java
 public class Main {
@@ -403,7 +403,7 @@ System.out.println(a.topSpeed);
 
 ---
 
-<!-- Speaker notes: ~0:22. The deepest idea of the hour — slow right down. This arrow model must survive to week 12. -->
+<!-- Speaker notes: ~0:22. The deepest idea of the hour — slow right down. This arrow model must stick for good. -->
 
 ## What's inside the variable?
 
@@ -421,7 +421,7 @@ System.out.println(a.topSpeed);
 <span class="legend">primitive variable — the box holds the value itself</span>
 </div>
 
-<div class="callout"><strong>The variable holds the arrow, not the object.</strong> Say it until it's boring. It explains assignment, <code>==</code>, <code>null</code>, and — in week 4 — every surprise arrays will throw at you.</div>
+<div class="callout"><strong>The variable holds the arrow, not the object.</strong> Say it until it's boring. It explains assignment, <code>==</code>, <code>null</code>, and every surprise arrays will ever throw at you.</div>
 
 - `null` now has an exact meaning: a box whose arrow **points at nothing**. Following a null arrow is the `NullPointerException` from Predict 1.
 
@@ -582,7 +582,7 @@ class Puppy {
 }
 ```
 
-- Both can live in one class — same name, different parameter lists. (That trick is called *overloading*; next week it gets a whole section.)
+- Both can live in one class — same name, different parameter lists. (That trick is called *overloading*.)
 - **The gift:** declare no constructor at all, and the compiler quietly writes you a **default constructor** — no-arg, empty, invisible.
 - **The catch:** declare *any* constructor yourself, and *the gift is withdrawn*.
 
@@ -667,8 +667,8 @@ section pre code { font-size: 19px; line-height: 1.35; }
 ```java
 public class Student {
     private String name;    // private: only this class touches
-    private int age;        // these directly — the full story
-    private double gpa;     // is week 7, encapsulation
+    private int age;        // these directly — a discipline
+    private double gpa;     // called encapsulation
 
     public Student(String name, int age, double gpa) {
         this.name = name;
@@ -681,7 +681,7 @@ public class Student {
 }
 ```
 
-- Everything from this hour in one file: fields, a parameterised constructor, the `this.x = x` idiom, and two small methods. This is the shape of every class you'll write this semester.
+- Everything from this hour in one file: fields, a parameterised constructor, the `this.x = x` idiom, and two small methods. This is the shape of every class you'll write from now on.
 
 ---
 
@@ -762,11 +762,11 @@ System.out.println(c.count);
 
 ## Where this goes
 
-- **Next week — methods, the deep dive:** parameters, return values, and overloading for real (you met it today in those twin `Puppy` constructors).
-- **Week 4 — arrays,** with a twist you're now equipped for: *arrays are objects*. `int[] b = a;` copies… an arrow. You'll draw today's diagram again.
-- **Week 6 — Strings:** objects too — including why `==` on Strings betrays you. You already know the answer.
-- **Weeks 7 to 11 — the OOP pillars:** encapsulation, inheritance, polymorphism, abstraction. Every one is a story about classes and objects; today was the foundation stone.
-- **This week's lab:** build and break all of it — classes, `new`, constructors, `this`, and the `==` traps.
+- **Methods, the deep dive:** parameters, return values, and overloading for real (you met it today in those twin `Puppy` constructors).
+- **Arrays,** with a twist you're now equipped for: *arrays are objects*. `int[] b = a;` copies… an arrow. You'll draw today's diagram again.
+- **Strings:** objects too — including why `==` on Strings betrays you. You already know the answer.
+- **The OOP pillars:** encapsulation, inheritance, polymorphism, abstraction. Every one is a story about classes and objects; today was the foundation stone.
+- **Lab exercise:** build and break all of it — classes, `new`, constructors, `this`, and the `==` traps.
 
 ---
 

@@ -81,7 +81,7 @@ The object you can never change.
 
 ## A tiny mystery
 
-- You've used Strings since your very first `"Hello, World!"` — week 1, line 1.
+- You've used Strings since your very first `"Hello, World!"` — day 1, line 1.
 - Time to find out what they've been hiding. Three lines, no tricks — **what prints?**
 
 ```java
@@ -98,7 +98,7 @@ System.out.println(s);
 
 ## A String is an object
 
-- Week 2's rule, still undefeated: a variable of object type holds an **arrow**, not the thing.
+- The old rule, still undefeated: a variable of object type holds an **arrow**, not the thing.
 - `String` is a **class** (capital S, lives in `java.lang`, imported for free) — not a primitive.
 
 ```java
@@ -113,7 +113,7 @@ String s = "hello";
 <p class="legend">one variable · one arrow · one object holding the characters</p>
 
 - `int n = 5` puts the **value** in the box; `String s` puts an **arrow** in the box.
-- Inside the object, the characters sit in an **array** (week 4 really is everywhere).
+- Inside the object, the characters sit in an **array** (arrays really are everywhere).
 
 ---
 
@@ -133,9 +133,9 @@ String s = "hello";
 ## Two ways to make a String
 
 ```java
-String a = "hello";                // the literal — week 1 syntax
+String a = "hello";                // the literal — day-1 syntax
 String b = "hello";                // the same literal again
-String c = new String("hello");    // 'new', like any other object (week 2)
+String c = new String("hello");    // 'new', like any other object
 ```
 
 - All three hold the text `hello`. Same characters, same methods, same behaviour…
@@ -165,7 +165,7 @@ String c = new String("hello");    // 'new', like any other object (week 2)
 
 <p class="legend">three variables · two objects — the pool recycles literals; new refuses, every time</p>
 
-- `a` and `b` are week-4 aliasing on purpose: **two arrows, one shared object**.
+- `a` and `b` are aliasing on purpose: **two arrows, one shared object**.
 - `new String(...)` always builds a fresh object — even with an identical String sitting in the pool.
 
 ---
@@ -182,7 +182,7 @@ System.out.println(a == c);
 System.out.println(a.equals(c));
 ```
 
-* `true` — `==` compares **arrows** (week 4's rule), and `a`, `b` share the pooled object.
+* `true` — `==` compares **arrows**, and `a`, `b` share the pooled object.
 * `false` — `c` is a different object: identical text, different arrow.
 * `true` — `.equals()` reads the actual **characters**.
 
@@ -259,13 +259,13 @@ int      n       = s.length();          // 16 — just a number
 char     first   = s.charAt(2);         // 'J' — just a char
 String   trimmed = s.trim();            // NEW String: "Java Strings"
 String   loud    = trimmed.toUpperCase();   // NEW String: "JAVA STRINGS"
-char[]   letters = trimmed.toCharArray();   // week 4! the chars, as an array
-String[] words   = trimmed.split(" ");      // week 4! {"Java", "Strings"}
+char[]   letters = trimmed.toCharArray();   // the chars, as an array
+String[] words   = trimmed.split(" ");      // {"Java", "Strings"}
 ```
 
 - Read the return types: nothing is `void`, nothing edits `s` — reads hand back values, "edits" hand back **new Strings**.
 
-<div class="callout"><strong>Spot the echo:</strong> arrays carry <code>.length</code> — a field, no brackets. Strings answer <code>.length()</code> — a method call. Week 4 called mixing them up a rite of passage; today you've met both sides.</div>
+<div class="callout"><strong>Spot the echo:</strong> arrays carry <code>.length</code> — a field, no brackets. Strings answer <code>.length()</code> — a method call. Mixing them up is a rite of passage; today you've met both sides.</div>
 
 ---
 
@@ -273,7 +273,7 @@ String[] words   = trimmed.split(" ");      // week 4! {"Java", "Strings"}
 
 ```java
 String a = "ha";
-String b = a;              // week-4 flashback: two arrows, one object
+String b = a;              // aliasing again: two arrows, one object
 a = a + "!";
 System.out.println(a);
 System.out.println(b);
@@ -281,7 +281,7 @@ System.out.println(b);
 
 * `ha!` — `+` ran the factory: a new String, and `a`'s arrow moved to it.
 * `ha` — `b` still points at the original… which **cannot have changed**.
-* Week 4's aliasing trap (`yours[0] = 99` wrecking `mine`) **cannot happen** with Strings — sharing an object nobody can edit is perfectly safe.
+* The array aliasing trap (`yours[0] = 99` wrecking `mine`) **cannot happen** with Strings — sharing an object nobody can edit is perfectly safe.
 
 ---
 
@@ -352,7 +352,7 @@ System.out.println(sb.length());  // 11 — it genuinely grew
 
 <p class="legend">the same box before and after — append wrote into spare capacity</p>
 
-- Under the hood: a resizable `char` array — week 4's "bigger array and copy" chore, automated.
+- Under the hood: a resizable `char` array — the "bigger array and copy" chore, automated.
 
 ---
 
@@ -385,7 +385,7 @@ sb.setCharAt(0, 'L');      // Lava Strings!
 System.out.println(sb);    // Lava Strings!
 ```
 
-- Ranges are half-open — `delete(0, 5)` removes indexes `0..4`, exactly like week 4's `i < 5` loops.
+- Ranges are half-open — `delete(0, 5)` removes indexes `0..4`, exactly like your `i < 5` loops.
 
 ---
 
@@ -421,7 +421,7 @@ System.out.println(sb);
 
 * `hello` — the opening mystery, now no mystery: the upper-case String was manufactured and dropped.
 * `dlrow olleh` — both calls **edited the one object in place**; nothing needed catching.
-* If you can explain *why the two halves differ*, this week is yours.
+* If you can explain *why the two halves differ*, this hour is yours.
 
 ---
 
@@ -460,7 +460,7 @@ System.out.println(sb);
 
 - **`String`** — the default: text you read, pass, compare, store. This is 95% of your code.
 - **`StringBuilder`** — the moment you're *assembling*: loops, accumulation, reports. Build, then `toString()`, then back to String-land.
-- **`StringBuffer`** — several threads hammering one shared builder. If you're not sure that's you — it isn't. You'll meet it in legacy code, not in this module.
+- **`StringBuffer`** — several threads hammering one shared builder. If you're not sure that's you — it isn't. You'll meet it in legacy code, not in anything new.
 
 * The whole decision in one line: **building in steps? Builder. Otherwise: String.**
 
@@ -491,8 +491,8 @@ for (int i = 0; i < 9999; i++) {
 
 - Immutability is not a quirk — it's a **design decision**. Java's designers *removed* the ability to change a String, and every guarantee this hour — safe sharing, the pool, thread safety — fell out of that one choice.
 - **Deciding what may change is designing.** So far, you've only consumed that decision.
-- Next teaching week (after reading week recharges you): **encapsulation** — making that choice for your *own* classes: `private` fields, controlled access, no changes you didn't authorise.
-- You've spent six weeks driving the JDK's best-designed class. Now you learn to build one.
+- The natural next step: **encapsulation** — making that choice for your *own* classes: `private` fields, controlled access, no changes you didn't authorise.
+- You've been driving the JDK's best-designed class all along. Now you learn to build one.
 
 ---
 

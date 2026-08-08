@@ -381,7 +381,7 @@ public static void main(String[] args) {
 
 ---
 
-<!-- Speaker notes: ~0:22. Scope-and-copies movement — the photocopy rule is the deepest idea of the hour; slow right down and connect it back to week 2's arrows. -->
+<!-- Speaker notes: ~0:22. Scope-and-copies movement — the photocopy rule is the deepest idea of the hour; slow right down and connect it back to the object-variables-are-arrows rule. -->
 
 ## What a method can see
 
@@ -444,7 +444,7 @@ public static void main(String[] args) {
 
 <p class="legend">two names · two arrows · ONE set of boxes — scores lives in main, s lives in curve</p>
 
-* Week 2's rule, next week's star: an object variable holds an **arrow**, and an `int[]` array is an object. Copy the arrow — both point at the **same boxes**.
+* Remember: an object variable holds an **arrow**, and an `int[]` array is an object. Copy the arrow — both point at the **same boxes**.
 
 ---
 
@@ -554,7 +554,7 @@ public class Counter {
 
 ## The magic words, decoded
 
-- Since week 1 you've typed this line on faith. You can now read **every word**:
+- Until now you've typed this line on faith. You can now read **every word**:
 
 ```java
 public static void main(String[] args) {
@@ -565,7 +565,7 @@ public static void main(String[] args) {
 * `static` — when the program starts, **no objects exist yet**; the JVM calls it on the class.
 * `void` — `main` answers to no caller; there's nothing to hand back.
 * `main` — the exact name the JVM is hard-wired to look for.
-* `(String[] args)` — an **array** of Strings… and arrays are next week's whole hour.
+* `(String[] args)` — an **array** of Strings… a topic worth an hour of its own.
 
 ---
 
@@ -691,7 +691,7 @@ public class Receipts {
 }
 ```
 
-- Monday's program, done right: the VAT rule lives in exactly **one place** — and `printReceipt` calls `vatOf`, a stack you can now trace in your head.
+- The opening program, done right: the VAT rule lives in exactly **one place** — and `printReceipt` calls `vatOf`, a stack you can now trace in your head.
 
 ---
 

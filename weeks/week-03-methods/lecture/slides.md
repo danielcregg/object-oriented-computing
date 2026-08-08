@@ -158,7 +158,7 @@ System.out.println("Area: " + roomArea);
 * private - only accessible within the same class
   - Used for helper methods that other classes shouldn't call
   - Example: private void validateInput()
-* Default: Use public for now, we'll cover private later in detail
+* Default: Use public for now — private shines in encapsulation
 
 ---
 

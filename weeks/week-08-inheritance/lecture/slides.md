@@ -37,8 +37,8 @@ source: "Inheritance.pptx"
 
 ## Four major principles of OOP
 
-* Recall from week 7: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
-* Last week we covered Encapsulation. This week: **Inheritance**.
+* Recall: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
+* Encapsulation is in hand. This lecture: **Inheritance**.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
@@ -178,7 +178,7 @@ public class Main {
 
 * Multiple Inheritance - refers to the concept where one class inherits from more than one class, i.e. a subclass with two superclasses.
 * Java does not allow a class to extend more than one class and therefore DOES NOT support multiple inheritance.
-* However, Java supports Multiple Inheritance of type, which is the ability of a class to implement more than one interface. More on this in week 11.
+* However, Java supports Multiple Inheritance of type, which is the ability of a class to implement more than one interface.
 * Structure: `class C extends A, B` — **not valid Java**, shown for illustration only.
 
 <!-- diagram source: img/diagram-multiple.mmd -->

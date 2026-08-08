@@ -35,8 +35,8 @@ source: "Encalsulation.pptx"
 
 ## Four major principles of OOP
 
-* Object-Oriented Programming rests on **four pillars**: Encapsulation, Inheritance, Polymorphism and Abstraction — the roadmap for the rest of this module.
-* **Encapsulation** is the first pillar and this week's topic — everything else builds on classes that protect their own data.
+* Object-Oriented Programming rests on **four pillars**: Encapsulation, Inheritance, Polymorphism and Abstraction — the roadmap for all of OOP.
+* **Encapsulation** is the first pillar and this lecture's topic — everything else builds on classes that protect their own data.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:300 Four pillars of OOP](img/diagram-four-pillars.svg)

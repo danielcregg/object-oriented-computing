@@ -55,6 +55,27 @@ jobs:
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pdf"
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pptx"
           done
+          # TEMPORARY preview: publish the slides-reimagined.md drafts (HTML
+          # only) under /reimagined/ for review. Remove this whole block once
+          # the adoption decision is made.
+          mapfile -t drafts < <(find weeks -type f -path '*/lecture/slides-reimagined.md' | sort)
+          mkdir -p build/reimagined
+          {
+            printf '%s\n' "<!doctype html><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>"
+            printf '%s\n' "<title>Reimagined decks (preview)</title>"
+            printf '%s\n' "<style>body{font-family:Consolas,monospace;background:#FBFAF7;color:#1E2833;padding:28px;line-height:2.1}a{color:#33698C}h2 b{color:#E76F00}</style>"
+            printf '%s\n' "<h2><b>//</b> reimagined decks — preview</h2><ul>"
+          } > build/reimagined/index.html
+          for f in "${drafts[@]}"; do
+            lecture_dir=$(dirname "$f")
+            week_dir=$(basename "$(dirname "$lecture_dir")")
+            out="build/reimagined/$week_dir"
+            mkdir -p "$out"
+            if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
+            marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
+            printf '%s\n' "<li><a href='$week_dir/'>$week_dir</a></li>" >> build/reimagined/index.html
+          done
+          echo '</ul>' >> build/reimagined/index.html
 
       - name: Upload rendered decks as artifact
         uses: actions/upload-artifact@v4

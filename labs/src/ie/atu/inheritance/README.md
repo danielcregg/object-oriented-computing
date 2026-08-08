@@ -1,29 +1,37 @@
 # Java Inheritance Lab
 
-> **Setup note:** this lab's package (`ie.atu.inheritance`) and a runnable `Main.java` already exist in this folder — skip any “create the package” setup steps and write your classes right here, beside this README.
+## What you'll learn
+
+By the end of this lab you will be able to:
+
+- Explain inheritance and the "Is-A" relationship, and use `extends` to let one class acquire the fields and methods of another
+- Describe a class hierarchy using the core terminology: superclass (parent class) and subclass (child class)
+- Recognise single, multilevel and hierarchical inheritance, and explain why Java does not support multiple inheritance of classes
+- Explain the role of `Object` as the root superclass that every Java class implicitly inherits from
+- Initialise inherited state correctly by chaining constructors with the `super` keyword
+
 ## Table of Contents
+
 1. [Definition and Basics of Inheritance](#1-definition-and-basics-of-inheritance)
 2. [Terminology](#2-terminology)
 3. [Types of Inheritance](#3-types-of-inheritance)
 4. [The Object Class](#4-the-object-class)
 5. [Constructors in Inheritance](#5-constructors-in-inheritance)
 
-## Lab Setup
-1. Create a package called `ie.atu.inheritance`.
-2. Create a `Main` class inside this package.
-3. Place all the below classes from the DIY sections into this package.
+## Getting started
+
+This lab lives in the package `ie.atu.inheritance` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Definition and Basics of Inheritance
 
-### Learning Objective
-Understand the concept of inheritance in Java, how it is implemented and how it allows one class to acquire the properties and behaviours of another class.
-
 ### Explanation
+
 Inheritance is a fundamental principle in object-oriented programming (OOP) that allows a new class (subclass) to inherit properties and methods from an existing class (superclass). This promotes code reusability and logical organisation of classes. The subclass inherits characteristics (fields and methods) from the superclass, allowing you to create specialised classes based on more general ones.
 
 An **"Is-A"** relationship is established between the subclass and superclass. For example, an Employee is a Person; hence, Employee can inherit from Person.
 
 ### Example
+
 ```java
 public class Person {
     private String name;
@@ -59,6 +67,7 @@ public static void main(String[] args) {
 ```
 
 ### Visual Representation
+
 ```mermaid
 classDiagram
     Person <|-- Employee
@@ -74,23 +83,29 @@ classDiagram
     }
 ```
 
-### DIY Exercise: Animals
-1. Create 2 classes. An `Animal` class and a `Dog` class. The `Dog` class will extend (i.e. inherit from) the `Animal` class. Place both classes inside the `ie.atu.inheritance` package you created previously.
+### DIY 1: Animals
 
-**The Animal Class will contain:**
--   A `private` field for `species` (String).
--   `Getter` and `setter` methods for the species field.
+1. Create an `Animal` class in this package with:
+   - A `private` field `species` (String).
+   - Getter and setter methods for the `species` field.
+2. Create a `Dog` class that `extends` (i.e. inherits from) `Animal`, with:
+   - A `private` field `name` (String).
+   - Getter and setter methods for the `name` field.
+3. In `Main`, create an instance of `Dog`, call `setSpecies()` and `setName()`, then print both values to the terminal using `getSpecies()` and `getName()`.
 
-**The Dog Class will contain:**
--   A `private` field for `name` (String).
--   `Getter` and `setter` methods for the name field.
+**Expected output**
 
-**In the `Main` class:**
--   Create an instance of `Dog`.
--   Call the setSpecies() and setName() methods. Then print the results to the terminal using the getSpecies() and setSpecies() methods. 
- -   Call the setSpecies() and setName() methods. Then print the results to the terminal using the getSpecies() and setSpecies() methods. 
+```text
+Species: Canine
+Name: Rex
+```
 
-### Suggested Solution (UML)
+(Sample values shown — use any species and name you like.)
+
+<details><summary>Hint</summary>
+
+Only `Dog` needs the `extends` keyword — it picks up `species` and its getter and setter from `Animal` automatically. Suggested design:
+
 ```mermaid
 classDiagram
     Animal <|-- Dog
@@ -105,27 +120,35 @@ classDiagram
         + setName(name: String) void
     }
 ```
+
+</details>
+
 ## 2. Terminology
 
-### Learning Objective
-Familiarise yourself with key terms in inheritance, such as superclass and subclass, and understand their roles.
-
 ### Explanation
--   **Superclass (Parent Class):** The class from which properties and methods are inherited. It represents a general concept.
--   **Subclass (Child Class):** The class that inherits from the superclass. It represents a specialised version of the superclass.
+
+- **Superclass (Parent Class):** The class from which properties and methods are inherited. It represents a general concept.
+- **Subclass (Child Class):** The class that inherits from the superclass. It represents a specialised version of the superclass.
 
 Inheritance establishes a hierarchy between classes, where the subclass extends the functionality of the superclass.
 
-### DIY Exercise: Vehicles
-1.  **Superclass:** Create a class `Vehicle` with a method `move()` that prints "The vehicle is moving."
-2.  **Subclass:** Create a class `Car` that extends `Vehicle` and adds a method `playRadio()` that prints "Playing radio."
+### DIY 2: Vehicles
 
-**In your `Main` class:**
--   Create an instance of `Car`.
--   Call `move()` and `playRadio()`.
- -   Call `move()` and `playRadio()`.
+1. **Superclass:** create a class `Vehicle` with a method `move()` that prints "The vehicle is moving."
+2. **Subclass:** create a class `Car` that extends `Vehicle` and adds a method `playRadio()` that prints "Playing radio."
+3. In `Main`, create an instance of `Car` and call both `move()` and `playRadio()` on it.
 
-### Suggested Solution (UML)
+**Expected output**
+
+```text
+The vehicle is moving.
+Playing radio.
+```
+
+<details><summary>Hint</summary>
+
+`Car` never declares `move()`, yet a `Car` object can call it — that is inheritance at work. Suggested design:
+
 ```mermaid
 classDiagram
     Vehicle <|-- Car
@@ -136,10 +159,10 @@ classDiagram
         + playRadio()
     }
 ```
-## 3. Types of Inheritance
 
-### Learning Objective
-Explore different types of inheritance and understand Java's inheritance model.
+</details>
+
+## 3. Types of Inheritance
 
 ### Explanation and Examples
 
@@ -266,63 +289,85 @@ classDiagram
 ```
 
 Java doesn't support multiple inheritance with classes to avoid:
-1.  Ambiguity when same method exists in multiple parent classes
-2.  Complexity in method resolution
-3.  Potential naming conflicts
+1. Ambiguity when same method exists in multiple parent classes
+2. Complexity in method resolution
+3. Potential naming conflicts
 
 Instead, Java provides interfaces for implementing multiple inheritance of behaviour.
 
-### DIY Exercise: Hybrid Inheritance
-Create the classes listed below inside the `ie.atu.inheritance` package. 
+### DIY 3: Electric Car
 
-Required classes:
+Create (or evolve from DIY 2) the classes listed below in this package, building a multilevel inheritance chain:
 
-1. `Vehicle` (superclass)
-    - Private field: `String type`.
-    - Constructor: `Vehicle(String type)` to initialise `type`.
-    - Getter and setter for `type`.
-    - Method: `void move()` that prints a short message, e.g. "The <type> is moving".
+1. `Vehicle` (superclass):
+   - Private field: `String type`.
+   - Constructor: `Vehicle(String type)` to initialise `type`.
+   - Getter and setter for `type`.
+   - Method: `void move()` that prints a short message, e.g. "The <type> is moving".
+2. `Car` (subclass of `Vehicle`):
+   - Private field: `int doors`.
+   - Constructor: `Car(String type, int doors)` which calls `super(type)`.
+   - Getter and setter for `doors`.
+   - Method: `void honk()` that prints a short message, e.g. "Beep!".
+3. `ElectricCar` (subclass of `Car`):
+   - Private field: `int batteryCapacity` (e.g. in kWh).
+   - Constructor: `ElectricCar(String type, int doors, int batteryCapacity)` which calls `super(type, doors)`.
+   - Getter and setter for `batteryCapacity`.
+   - Method: `void charge()` that prints a short message, e.g. "Charging...".
+4. In `Main`:
+   - Create an instance of `ElectricCar` using the constructor.
+   - Call `move()`, `honk()`, and `charge()` on the instance.
+   - Use the getters to retrieve and print the `type`, `doors`, and `batteryCapacity` values.
 
-2. `Car` (subclass of `Vehicle`)
-    - Private field: `int doors`.
-    - Constructor: `Car(String type, int doors)` which calls `super(type)`.
-    - Getter and setter for `doors`.
-    - Method: `void honk()` that prints a short message, e.g. "Beep!".
+Keep the method implementations simple — print statements are fine. The key skill here is using `extends` and `super(...)` correctly to pass values up the inheritance chain.
 
-3. `ElectricCar` (subclass of `Car`)
-    - Private field: `int batteryCapacity` (e.g. in kWh).
-    - Constructor: `ElectricCar(String type, int doors, int batteryCapacity)` which calls `super(type, doors)`.
-    - Getter and setter for `batteryCapacity`.
-    - Method: `void charge()` that prints a short message, e.g. "Charging...".
+**Expected output**
 
-In the `Main` class:
-- Create an instance of `ElectricCar` using the constructor.
-- Call `move()`, `honk()`, and `charge()` on the instance.
-- Use getters to retrieve and print the `type`, `doors`, and `batteryCapacity` values.
+```text
+The electric car is moving
+Beep!
+Charging...
+Type: electric car
+Doors: 4
+Battery capacity: 75 kWh
+```
 
-Notes:
-- Keep method implementations simple (print statements are fine).
-- Use `extends` and `super(...)` correctly to pass values up the inheritance chain.
+(Sample values — yours will match whatever you pass to the constructor.)
 
-Learning outcome: This exercise gives practice implementing a multi-level class inheritance chain, constructors that call `super(...)`, and using getters/setters to access private fields.
+<details><summary>Hint</summary>
 
-Extra (Hierarchical Inheritance) — `Motorbike`:
-Add a `Motorbike` class to demonstrate hierarchical inheritance where multiple subclasses share the same superclass.
+The first statement of each subclass constructor must be its `super(...)` call: `ElectricCar` hands `type` and `doors` up to `Car`, and `Car` hands `type` up to `Vehicle`. Each class initialises only its own field.
 
-Requirements for `Motorbike`:
-- `Motorbike` should extend `Vehicle` (do not extend `Car`).
-- Private field: `boolean hasSidecar`.
-- Constructor: `Motorbike(String type, boolean hasSidecar)` which calls `super(type)`.
-- Getter and setter for `hasSidecar`.
-- Method: `void ride()` that prints a short message, e.g. "Riding the <type>" and indicates whether it has a sidecar.
+</details>
 
-In `Main` show that `Motorbike` and `Car` are both `Vehicle` instances by:
-- Creating a `Motorbike` instance and calling its methods (`move()`, `ride()`).
-- Using `Vehicle` references where appropriate (e.g. `Vehicle v = new Motorbike(...);`) to demonstrate polymorphism.
+### DIY 4: Motorbike
 
-This addition demonstrates hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`).
+Add a `Motorbike` class to the DIY 3 hierarchy to demonstrate hierarchical inheritance, where multiple subclasses share the same superclass:
 
-### Suggested Solution (UML)
+1. Create `Motorbike` extending `Vehicle` (do **not** extend `Car`), with:
+   - Private field: `boolean hasSidecar`.
+   - Constructor: `Motorbike(String type, boolean hasSidecar)` which calls `super(type)`.
+   - Getter and setter for `hasSidecar`.
+   - Method: `void ride()` that prints a short message, e.g. "Riding the <type>", and indicates whether it has a sidecar.
+2. In `Main`, create a `Motorbike` instance and call its methods (`move()`, `ride()`).
+3. Use a `Vehicle` reference where appropriate (e.g. `Vehicle v = new Motorbike(...);`) and call `v.move()` — this demonstrates polymorphism: `Motorbike` and `Car` are both `Vehicle` instances.
+
+This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy — sometimes called hybrid inheritance.
+
+**Expected output**
+
+```text
+The motorbike is moving
+Riding the motorbike (no sidecar)
+The motorbike is moving
+```
+
+(Exact wording will vary with your messages; the third line comes from calling `move()` through the `Vehicle` reference.)
+
+<details><summary>Hint</summary>
+
+Suggested design for the full hierarchy from DIY 3 and DIY 4:
+
 ```mermaid
 classDiagram
     Vehicle <|-- Car
@@ -354,13 +399,16 @@ classDiagram
     }
 ```
 
+</details>
 
 ## 4. The Object Class
 
-### Learning Objective
-Understand that `Object` is the root superclass of all classes in Java and its significance in the class hierarchy.
+### Explanation
+
+Every class in Java ultimately inherits from `Object` — it is the root superclass of the entire class hierarchy. Even when you write a class with no `extends` clause, it implicitly extends `Object`, which is why methods such as `toString()`, `equals()` and `hashCode()` are available on every object you create.
 
 ### Visual Representation
+
 ```mermaid
 classDiagram
     Object <|-- Cat
@@ -374,16 +422,25 @@ classDiagram
     }
 ```
 
-### DIY Exercise: Implicit Inheritance
-Create a class `Gadget`:
--   Do not specify a superclass.
+### DIY 5: Implicit Inheritance
 
-**In your `Main` class:**
--   Create an instance of `Gadget`.
--   Call the `toString()` method on the object.
--   Call another method from the dot operator list. 
+1. Create a class `Gadget` — do not specify a superclass.
+2. In `Main`, create an instance of `Gadget` and print the result of calling `toString()` on it.
+3. Type the variable name followed by a dot (`.`) and look at the list of methods your editor suggests — call one more method inherited from `Object` (e.g. `hashCode()`) and print its result.
 
-### Suggested Solution (UML)
+**Expected output**
+
+```text
+ie.atu.inheritance.Gadget@7a81197d
+2055281021
+```
+
+(The hex code and hash number will differ on your machine — they identify your particular object.)
+
+<details><summary>Hint</summary>
+
+You never wrote `toString()` or `hashCode()`, so where do they come from? Suggested design:
+
 ```mermaid
 classDiagram
     Object <|-- Gadget
@@ -392,27 +449,27 @@ classDiagram
     }
 ```
 
-## 5. Constructors in Inheritance
+</details>
 
-### Learning Objective
-Learn how constructors are used in inheritance, including how to invoke superclass constructors using the `super` keyword.
+## 5. Constructors in Inheritance
 
 ### Explanation
 
 In Java inheritance, constructors play a crucial role in object initialization. When you create an instance of a subclass:
 
-1.  The superclass constructor must be called first before the subclass constructor executes
-2.  If not explicitly called, Java automatically calls the no-argument constructor of the superclass
-3.  Use the `super()` keyword to call a specific superclass constructor
-4.  The `super()` call must be the first statement in the subclass constructor
+1. The superclass constructor must be called first before the subclass constructor executes
+2. If not explicitly called, Java automatically calls the no-argument constructor of the superclass
+3. Use the `super()` keyword to call a specific superclass constructor
+4. The `super()` call must be the first statement in the subclass constructor
 
 Key points to remember:
 
--   Every constructor must invoke a constructor from its superclass, either explicitly or implicitly
--   If the superclass doesn't have a no-argument constructor, the subclass must explicitly call a superclass constructor using `super()`
--   The `super` keyword can also be used to access superclass methods and fields
+- Every constructor must invoke a constructor from its superclass, either explicitly or implicitly
+- If the superclass doesn't have a no-argument constructor, the subclass must explicitly call a superclass constructor using `super()`
+- The `super` keyword can also be used to access superclass methods and fields
 
 ### Example
+
 ```java
 public class Person {
     protected String name;
@@ -433,6 +490,7 @@ public class Employee extends Person {
 ```
 
 ### Visual Representation
+
 ```mermaid
 sequenceDiagram
     Main->>+Employee: new Employee("Alice", 123)
@@ -443,22 +501,31 @@ sequenceDiagram
     Employee-->>-Main: Employee object created
 ```
 
-### DIY Exercise: School Management
-1.  Create a `Person` class with:
-    *   Private fields: `name` (String) and `age` (int)
-    *   A constructor that initializes both fields.
-    *   Getters and setters for the fields.
+### DIY 6: School Management
 
-2.  Create a `Student` class that extends `Person` with:
-    *   A private field: `studentId` (String)
-    *   A constructor that initializes `name`, `age`, and `studentId`.
-    *   Getters and setters for its field.
+1. Create a `Person` class with:
+   - Private fields: `name` (String) and `age` (int).
+   - A constructor that initializes both fields.
+   - Getters and setters for the fields.
+2. Create a `Student` class that extends `Person` with:
+   - A private field: `studentId` (String).
+   - A constructor that initializes `name`, `age`, and `studentId`.
+   - Getters and setters for its field.
+3. In `Main`, create instances of both `Person` and `Student`, and print the details of both using the getter methods.
 
-**In your `Main` class:**
--   Create instances of both `Person` and `Student`.
--   Print the details of both using the getter methods.
+**Expected output**
 
-### Suggested Solution (UML)
+```text
+Person: Alice, Age: 30
+Student: Bob, Age: 20, ID: S12345
+```
+
+(Sample values — print whichever details you passed to the constructors.)
+
+<details><summary>Hint</summary>
+
+`Student`'s constructor must start with `super(name, age)` so `Person` initialises its fields first. Suggested design:
+
 ```mermaid
 classDiagram
     Person <|-- Student
@@ -477,17 +544,16 @@ classDiagram
     }
 ```
 
-## Summary
--   Definition and Basics of Inheritance
--   Terminology
--   Types of Inheritance
--   The Object Class
--   Constructors in Inheritance
+</details>
 
-## Further Reading
--   [Java Documentation: Inheritance](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)
--   Book: [Effective Java by Joshua Bloch](https://www.oreilly.com/library/view/effective-java/9780134686097/)
--   Book: [Java: A Beginner's Guide by Herbert Schildt](https://www.accessengineeringlibrary.com/content/book/9781265242211)
--   Online Resource: [Inheritance in Java - GeeksforGeeks](https://www.geeksforgeeks.org/inheritance-in-java/)
+## Summary
+
+In this lab you covered:
+
+- Definition and Basics of Inheritance
+- Terminology
+- Types of Inheritance
+- The Object Class
+- Constructors in Inheritance
 
 Happy coding! Remember to test your classes and understand how inheritance affects the behaviour and structure of your objects.

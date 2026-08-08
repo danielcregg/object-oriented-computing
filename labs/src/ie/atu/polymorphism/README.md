@@ -1,26 +1,31 @@
 # Java Polymorphism Lab
 
-> **Setup note:** this lab's package (`ie.atu.polymorphism`) and a runnable `Main.java` already exist in this folder — skip any “create the package” setup steps and write your classes right here, beside this README.
+## What you'll learn
+
+By the end of this lab you will be able to:
+
+- Use method overriding so the same call behaves differently at runtime depending on the actual object type (runtime polymorphism)
+- Overload methods with the same name but different signatures, and explain how the compiler chooses between them (compile-time polymorphism)
+- Convert references up and down an inheritance hierarchy safely using upcasting, downcasting and `instanceof`
+- Store different subclasses in a single collection of their parent type and process them uniformly (heterogeneous collections)
+
 ## Table of Contents
+
 1. [Runtime Polymorphism: Understanding "Many Forms"](#1-runtime-polymorphism-understanding-many-forms)
 2. [Compile-time Polymorphism (Method Overloading)](#2-compile-time-polymorphism-method-overloading)
 3. [Reference Type Conversions](#3-reference-type-conversions)
 4. [Heterogeneous Collections](#4-heterogeneous-collections)
 
-## Lab Setup
-1. Create a package called `ie.atu.polymorphism`
-2. Create a `Main` class inside this package
-3. Place all the below classes from the DIY sections into this package
+## Getting started
+
+This lab lives in the package `ie.atu.polymorphism` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Runtime Polymorphism: Understanding "Many Forms"
-
-### Learning Objective
-Understand how polymorphism allows objects to take different forms at runtime through method overriding.
 
 ### Explanation
 The word "polymorphism" comes from Greek, meaning "many forms." In Java, this concept allows us to write methods that can work differently depending on the type of object that uses them. Think of it like a universal remote control - while the "volume up" button does the same basic job (increase volume), it works slightly differently for each device it controls.
 
-Before we dive deeper, let's understand what makes a method unique - it's `signature`. A method signature consists of the method name and its parameter types (in order). For example, these two methods have different signatures even though they share the same name:
+Before we dive deeper, let's understand what makes a method unique - its `signature`. A method signature consists of the method name and its parameter types (in order). For example, these two methods have different signatures even though they share the same name:
 ```java
 public void displayInfo(String name) {
     System.out.println("Name: " + name);
@@ -30,7 +35,7 @@ public void displayInfo(String name, int age) {
     System.out.println("Name: " + name + ", Age: " + age);
 }
 ```
-In runtime polymorphism, we often override methods that have the exact same signature in the child class. When you override a method, you're saying "I want to provide my own version of this behavior while keeping the same signature." Think of it like a universal remote control - while the "volume up" button does the same basic job (increase volume), it works slightly differently for each device it controls.
+In runtime polymorphism, we often override methods that have the exact same signature in the child class. When you override a method, you're saying "I want to provide my own version of this behavior while keeping the same signature."
 
 Let's see this in action with a simple example using shapes.
 
@@ -115,35 +120,46 @@ public class Main {
 }
 ```
 
+When `circle.draw()` runs, the compiler only checks that the declared type (`Shape`) has a `draw()` method. At runtime the JVM looks at the object the reference actually points to and runs that class's override:
+
+```mermaid
+flowchart TD
+    A["s.draw();<br>(s is declared as Shape)"] --> B{"JVM checks at runtime:<br>what object is s<br>actually pointing to?"}
+    B -->|"a Circle"| C["runs Circle's draw()"]
+    B -->|"a Rectangle"| D["runs Rectangle's draw()"]
+    B -->|"a plain Shape"| E["runs Shape's draw()"]
+```
+
 ### Key Concepts Illustrated
 1. Method Overriding: Both Circle and Rectangle provide their own versions of draw() and getArea()
 2. Runtime Behavior: The correct method version is called based on the actual object type
 3. Common Interface: Both shapes can be treated as Shape references but maintain their specific behaviors
 4. Parent Class Reference: We can store a Circle or Rectangle in a Shape variable
 
-### DIY Exercise: Basic Shapes
+### DIY 1: Basic Shapes
 Create a simple shape hierarchy that demonstrates method overriding:
 
-1. Create a base Shape class with:
-   - A color property
-   - Methods: getPerimeter() and describe()
+1. Create a base `Shape` class with a color property and two methods: `getPerimeter()` (base version returns `0.0`) and `describe()` (base version prints a generic message).
+2. Create two subclasses: `Square` (add a side length) and `Circle` (add a radius).
+3. In each subclass, override `getPerimeter()` to calculate the correct perimeter, and override `describe()` to print shape-specific information in the form `A red square with side 4.0`.
+4. In your main program, create a red `Square` with side `4.0` and a blue `Circle` with radius `5.0`, store both in `Shape` variables, and for each one call `describe()` and then print `"Perimeter: " + getPerimeter()` to demonstrate overriding.
 
-2. Create two subclasses:
-   - Square
-   - Circle
+**Expected output**
 
-3. In each subclass:
-   - Override getPerimeter() to calculate the correct perimeter
-   - Override describe() to print shape-specific information
+```text
+A red square with side 4.0
+Perimeter: 16.0
+A blue circle with radius 5.0
+Perimeter: 31.41592653589793
+```
 
-4. Create a main program that:
-   - Creates instances of your shapes
-   - Calls methods on them to demonstrate overriding
+<details><summary>Hint</summary>
+
+Pass the color up with `super(color)` in each subclass constructor, and mark every override with `@Override` so the compiler checks that your signature matches. Perimeter formulas: `4 * side` for the square and `2 * Math.PI * radius` for the circle.
+
+</details>
 
 ## 2. Compile-time Polymorphism (Method Overloading)
-
-### Learning Objective
-Understand method overloading as a form of compile-time polymorphism, including how method signatures work and how the compiler resolves method calls.
 
 ### Explanation
 Method overloading occurs when we create multiple methods in the same class with the same name but different parameter lists. The compiler determines which version of the method to call based on the method signature. Think of it like having multiple doors to the same room - while the destination (method name) is the same, how you get there (parameters) can be different.
@@ -218,36 +234,45 @@ The term "compile-time" comes from when the decision about which method to call 
 
 Based on this information, it determines at compile time (before the program runs) which method should be called. If no matching method is found, you'll get a compilation error.
 
-### DIY Exercise: Shop Price Calculator
+### DIY 2: Shop Price Calculator
+Create a price calculator for a small shop that needs to handle various types of discounts. Your calculator should help the shop owner quickly determine final prices after applying different combinations of discounts. This exercise will help you understand how method overloading can solve real business problems by handling different discount scenarios with clearly named methods.
 
-Create a price calculator for a small shop that needs to handle various types of discounts. Your calculator should help the shop owner quickly determine final prices after applying different combinations of discounts.
+1. Create a `PriceCalculator` class with these overloaded methods:
+   * `calculatePrice(double basePrice)` - returns the regular price with no discount
+   * `calculatePrice(double basePrice, double discountPercent)` - returns the price after applying a percentage discount
+   * `calculatePrice(double basePrice, boolean hasStudentId)` - returns the price with the student discount ($5 off with valid ID)
+   * `calculatePrice(double basePrice, double discountPercent, boolean hasStudentId)` - returns the price with both discounts applied: the percentage discount first, then $5 off
+2. In your main method, create a test case with an item priced at $50.00.
+3. Show how the price changes with: no discount, a 10% discount, the student discount, and both the 10% and student discounts together.
+4. Print all results clearly showing which discount was applied, using the labels shown below.
 
-Create a PriceCalculator class with these overloaded methods:
+**Expected output**
 
-1. Create methods to calculate prices in different scenarios:
-   * calculatePrice(double basePrice) - returns the regular price with no discount
-   * calculatePrice(double basePrice, double discountPercent) - returns price after applying a percentage discount
-   * calculatePrice(double basePrice, boolean hasStudentId) - returns price with student discount ($5 off with valid ID)
-   * calculatePrice(double basePrice, double discountPercent, boolean hasStudentId) - returns price with both percentage and student discounts applied
+```text
+Regular price: $50.0
+After 10% discount: $45.0
+After student discount: $45.0
+After 10% + student discount: $40.0
+```
 
-2. In your main method:
-   * Create a test case with an item priced at $50.00
-   * Show how the price changes with:
-     - No discount
-     - 10% discount
-     - Student discount
-     - Both 10% discount and student discount
-   * Print all results clearly showing which discount was applied
+<details><summary>Hint</summary>
 
-This exercise will help you understand how method overloading can solve real business problems by handling different discount scenarios with clearly named methods.
+The compiler picks the overload from the argument types alone: `calculatePrice(50.00, 10.0)` matches `(double, double)`, while `calculatePrice(50.00, true)` matches `(double, boolean)`. In the three-argument version, apply the percentage discount first and subtract the $5 from the result - reusing your other methods keeps the code short.
+
+</details>
 
 ## 3. Reference Type Conversions
 
-### Learning Objective
-Understand how objects can be referenced through different types in the inheritance hierarchy and how to safely convert between these types.
-
 ### Explanation
 In Java, an object can be referenced through its own class type or any of its parent class types. This is like how a Square can always be referred to as a Shape - it's still a Square, but we're choosing to view it more generally. This ability to reference objects through different types is fundamental to polymorphism and comes in two forms: upcasting and downcasting.
+
+Upcasting moves a reference up the hierarchy and is always safe; downcasting moves it back down and only works if the object really is that type:
+
+```mermaid
+flowchart BT
+    C["Car reference<br>(more specific)"] -- "upcast: automatic, always safe<br>Vehicle v = car;" --> V["Vehicle reference<br>(more general)"]
+    V -. "downcast: explicit cast, guard with instanceof<br>Car c = (Car) v;" .-> C
+```
 
 ### Example
 
@@ -340,24 +365,82 @@ public class Main {
    - Should always use instanceof to check first
    - Example: Vehicle to Car
 
-### DIY Exercise: Shape Type Conversion
+### DIY 3: Shape Type Conversion
 Create a program that demonstrates type conversions with shapes:
 
-1. Create these classes:
-   - Shape (base class with getArea())
-   - Circle (with radius and getCircumference())
-   - Square (with side and getDiagonal())
+1. Reuse your `Shape`, `Circle` and `Square` classes from DIY 1, adding a `getArea()` method to `Shape` (return `0.0`), an overridden `getArea()` plus a `getCircumference()` method to `Circle`, and an overridden `getArea()` plus a `getDiagonal()` method to `Square`.
+2. Demonstrate upcasting: create a `Circle` with radius `5.0` and a `Square` with side `2.0`, store each in a `Shape` variable, and print both areas through the `Shape` references - method overriding means the subclass versions run even though the declared type is `Shape`.
+3. Demonstrate safe downcasting: use `instanceof` checks with explicit casts to get the `Circle` and `Square` references back, then print the circumference and the diagonal.
+4. Demonstrate what happens with unsafe downcasting: store a plain `Shape` object in a `Shape` variable and guard an attempted cast to `Circle` with `instanceof`, printing `Not a Circle - casting prevented!` when the check fails. (Try the cast once without the guard to see the `ClassCastException`, then put the guard back.)
 
-2. Demonstrate:
-   - Upcasting from Circle and Square to Shape
-   - Safe downcasting using instanceof
-   - What happens when attempting unsafe downcasting
-   - How method overriding works with different reference types
+**Expected output**
+
+```text
+Circle area: 78.53981633974483
+Square area: 4.0
+Circle circumference: 31.41592653589793
+Square diagonal: 2.8284271247461903
+Not a Circle - casting prevented!
+```
+
+<details><summary>Hint</summary>
+
+Upcasting needs no cast at all: `Shape s = new Circle("green", 5.0);`. Downcasting needs both the check and the cast:
+
+```java
+if (s instanceof Circle) {
+    Circle c = (Circle) s;
+    System.out.println("Circle circumference: " + c.getCircumference());
+}
+```
+
+Formulas: circumference = `2 * Math.PI * radius`, diagonal = `side * Math.sqrt(2)`.
+
+</details>
 
 ## 4. Heterogeneous Collections
 
-### Learning Objective
-Learn how polymorphism enables us to work with collections containing different types of objects that share a common parent class.
+Because every `Dog`, `Cat` and `Bird` is-an `Animal`, a single `List<Animal>` can hold all of them at once, and polymorphism decides whose `makeSound()` or `move()` runs on each loop iteration:
+
+```mermaid
+classDiagram
+    Animal <|-- Dog
+    Animal <|-- Cat
+    Animal <|-- Bird
+    AnimalShelter "1" o-- "0..*" Animal : holds
+
+    class Animal {
+        #String name
+        #int age
+        +makeSound()
+        +move()
+        +getInfo() String
+    }
+    class Dog {
+        -String breed
+        +makeSound()
+        +move()
+        +fetch()
+    }
+    class Cat {
+        -boolean isIndoor
+        +makeSound()
+        +move()
+        +scratch()
+    }
+    class Bird {
+        -double wingspan
+        +makeSound()
+        +move()
+        +soar()
+    }
+    class AnimalShelter {
+        -List~Animal~ animals
+        +addAnimal(Animal)
+        +makeAllSounds()
+        +exerciseAnimals()
+    }
+```
 
 ### Example: Animal Kingdom
 
@@ -528,10 +611,63 @@ public class Main {
 4. Flexibility: Easy to add new animal types without changing existing code
 5. Code Organization: Common behaviors in parent class, specific in subclasses
 
-### DIY Exercise: Shape Type Conversion
-1. Add a fourth animal class
-2. Add the new animal to the shelter
-3. Add a method to the AnimalShelter class to print all animal breeds and names
+### DIY 4: Extend the Shelter
+Grow the animal kingdom from the example above:
+
+1. Add a fourth animal class: a `Horse` with a `breed` field (plus the usual name and age), overriding `makeSound()` to print `<name> neighs: Neigh!` and `move()` to print `<name> gallops across the field`. Give it a `getBreed()` method.
+2. Add the new animal to the shelter in `main`, after the example's four animals: `new Horse("Star", 6, "Connemara")`. Run the program - `makeAllSounds()` and `exerciseAnimals()` pick it up without a single change to `AnimalShelter`.
+3. Add a `printRoster()` method to `AnimalShelter` that prints all the animals' names and breeds: a blank line and the heading `Shelter roster:`, then one line per animal showing `getInfo()`, plus ` - ` and the breed for animals that have one (give `Dog` a `getBreed()` method too). Call it at the end of `main`.
+
+**Expected output**
+
+```text
+
+All animals making sounds:
+Buddy barks: Woof! Woof!
+Whiskers meows: Meow!
+Tweety chirps: Tweet! Tweet!
+Rex barks: Woof! Woof!
+Star neighs: Neigh!
+
+Exercising all animals:
+Buddy runs on four legs
+Buddy the Golden Retriever fetches the ball
+---------------
+Whiskers prowls gracefully
+Whiskers scratches the furniture
+---------------
+Tweety flies with its 15.5cm wingspan
+Tweety soars high in the sky
+---------------
+Rex runs on four legs
+Rex the German Shepherd fetches the ball
+---------------
+Star gallops across the field
+---------------
+
+Shelter roster:
+Buddy (5 years old) - Golden Retriever
+Whiskers (3 years old)
+Tweety (1 years old)
+Rex (7 years old) - German Shepherd
+Star (6 years old) - Connemara
+```
+
+<details><summary>Hint</summary>
+
+Step 2 is the whole point of heterogeneous collections: `addAnimal(Animal animal)` already accepts any `Animal` subclass, so the shelter needs no changes. Notice that `exerciseAnimals()` still moves the horse but gives it no type-specific exercise - its `instanceof` chain doesn't know about `Horse`. For the roster, build each line with `instanceof` and a cast:
+
+```java
+String line = animal.getInfo();
+if (animal instanceof Dog) {
+    line += " - " + ((Dog) animal).getBreed();
+} else if (animal instanceof Horse) {
+    line += " - " + ((Horse) animal).getBreed();
+}
+System.out.println(line);
+```
+
+</details>
 
 ## Summary
 Through these examples and exercises, we've seen how polymorphism:
@@ -542,6 +678,3 @@ Through these examples and exercises, we've seen how polymorphism:
 - Promotes better code organization
 
 These benefits make polymorphism a fundamental concept in object-oriented programming, essential for creating maintainable and scalable applications.
-
-End of Lab
----

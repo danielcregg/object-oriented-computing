@@ -1,21 +1,24 @@
 # Java Abstraction Lab
 
-> **Setup note:** this lab's package (`ie.atu.abstraction`) and a runnable `Main.java` already exist in this folder — skip any “create the package” setup steps and write your classes right here, beside this README.
+## What you'll learn
+
+- Explain abstraction — hiding complex details while showing only what's needed — and why it leads to cleaner, better-organized code
+- Write abstract classes that act as blueprints for related objects, and extend them with concrete subclasses
+- Define interfaces as contracts and implement them in your own classes
+- Choose between an abstract class ("is-a") and an interface ("can-do") when designing a program
+- Program to an interface so new implementations can be added without changing existing code (the Open/Closed Principle)
+
 ## Table of Contents
 1. [Abstract Classes](#1-abstract-classes)
 2. [Interfaces](#2-interfaces)
 3. [Abstract Classes vs. Interfaces](#3-abstract-classes-vs-interfaces)
 4. [Practical Applications](#4-practical-applications)
 
-## Lab Setup
-1. Create a package called `ie.atu.abstraction`
-2. Create a `Main` class with a main() method inside this package
-3. Place all the below classes from the DIY sections into this package and test all your code in the `Main` class.
+## Getting started
+
+This lab lives in the package `ie.atu.abstraction` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Abstract Classes
-
-### Learning Objective
-Understand what abstraction is and how abstract classes help us write better code by hiding complicated details and creating blueprints for related objects.
 
 ### Real-World Example
 Think about driving a car. To drive a car, you only need to know about:
@@ -190,7 +193,7 @@ public class Main {
 }
 ```
 
-### DIY Exercise: Simple Shape System
+### DIY 1: Simple Shape System
 Create a basic shape system with three classes: `Shape`, `Circle`, `Square`, and a `Main` class to test them.
 
 ```mermaid
@@ -224,8 +227,7 @@ classDiagram
     note for Square "🟦 Area = side × side"
 ```
 
-#### Step 1: Create an abstract class named `Shape`
-Copy this code into a new file called `Shape.java`:
+1. Create an abstract class named `Shape` — copy this code into a new file called `Shape.java`:
 ```java
 public abstract class Shape {
     protected String color;
@@ -244,18 +246,17 @@ public abstract class Shape {
 }
 ```
 
-#### Step 2: Create a class named `Circle` which extends the `Shape` class
-- Add a `radius` instance variable (type `double`)
-- Add a constructor that takes `color` and `radius` as parameters
-- Implement the `getArea()` method using the formula: `π × radius²`
-  - Hint: Use `Math.PI * radius * radius`
+2. Create a class named `Circle` which extends the `Shape` class:
+   - Add a `radius` instance variable (type `double`)
+   - Add a constructor that takes `color` and `radius` as parameters
+   - Implement the `getArea()` method using the formula: `π × radius²`
 
-#### Step 3: Create a class named `Square` which extends the `Shape` class
-- Add a `sideLength` instance variable (type `double`)
-- Add a constructor that takes `color` and `sideLength` as parameters
-- Implement the `getArea()` method using the formula: `sideLength × sideLength`
+3. Create a class named `Square` which extends the `Shape` class:
+   - Add a `sideLength` instance variable (type `double`)
+   - Add a constructor that takes `color` and `sideLength` as parameters
+   - Implement the `getArea()` method using the formula: `sideLength × sideLength`
 
-#### Step 4: Create the `Main` class to test your shapes
+4. Update the `Main` class to test your shapes:
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -274,10 +275,21 @@ public class Main {
 
 > **Note:** We use `Shape` as the reference type (`Shape circle = ...`) instead of `Circle` to demonstrate polymorphism—the same principle shown in the Animal example above.
 
-## 2. Interfaces
+**Expected output**
+```text
+Circle area: 78.53981633974483
+I am Red in color
+Square area: 16.0
+I am Blue in color
+```
 
-### Learning Objective
-Understand interfaces as contracts that classes must follow.
+<details><summary>Hint</summary>
+
+Use `Math.PI * radius * radius` for the circle's area. To print an area with a label, use `System.out.println("Circle area: " + circle.getArea());` — and the same idea for the square.
+
+</details>
+
+## 2. Interfaces
 
 ### Real-World Example
 Think of a power outlet. Any device with the right plug can connect to it, regardless of what the device does. The power outlet is like an interface - it defines a standard way of connecting.
@@ -389,7 +401,7 @@ public class Guitar implements MusicalInstrument {
 }
 ```
 
-### DIY Exercise: Simple Game Characters
+### DIY 2: Simple Game Characters
 Create a simple game character system:
 
 1. Create an interface called `GameCharacter`:
@@ -422,10 +434,23 @@ public class Main {
 }
 ```
 
-## 3. Abstract Classes vs. Interfaces
+**Expected output**
+```text
+Hero charges forward!
+For justice!
+Hero uses health potion!
+Villain sneaks in shadows!
+You'll never stop me!
+Villain uses poison!
+```
 
-### Learning Objective
-Understand when to use abstract classes versus interfaces.
+<details><summary>Hint</summary>
+
+Follow the `Piano` and `Guitar` pattern above: declare `public class Hero implements GameCharacter { ... }`, then give each of `move()`, `speak()`, and `useItem()` an `@Override` implementation that prints the character's line.
+
+</details>
+
+## 3. Abstract Classes vs. Interfaces
 
 ### Simple Comparison
 Think of it this way:
@@ -589,7 +614,7 @@ public class Dog extends Pet implements Playable {
 }
 ```
 
-### DIY Exercise: School System
+### DIY 3: School System
 Create a simple school system:
 
 1. Create an interface `Teachable`:
@@ -634,10 +659,20 @@ public class Main {
 }
 ```
 
-## 4. Practical Applications
+**Expected output**
+```text
+Hi, I'm Alice and I'm 20 years old
+Alice is studying hard!
+Alice is doing homework...
+```
 
-### Learning Objective
-Understand the power of **programming to an interface** - writing code that works with any implementation of an interface, making your code flexible and easy to extend.
+<details><summary>Hint</summary>
+
+`Student` uses both keywords in one declaration: `public class Student extends Person implements Teachable`. Its constructor should call `super(name, age)` to pass the values up to `Person`.
+
+</details>
+
+## 4. Practical Applications
 
 ### Why Program to an Interface?
 When you write methods that accept an interface as a parameter, you can pass ANY class that implements that interface. This means:
@@ -718,7 +753,7 @@ flowchart TB
     class SMS,WA,EMAIL,SLACK implNode
 ```
 
-### DIY Exercise: Messaging System
+### DIY 4: Messaging System
 Create a messaging system that demonstrates programming to an interface:
 
 ```mermaid
@@ -748,7 +783,7 @@ classDiagram
     note for SMSService "📱 SMS Implementation"
 ```
 
-#### Step 1: Create the `MessageService` interface
+1. Create the `MessageService` interface:
 ```java
 public interface MessageService {
     void sendMessage(String message);
@@ -756,15 +791,15 @@ public interface MessageService {
 }
 ```
 
-#### Step 2: Create a `WhatsAppService` class that implements `MessageService`
-- Implement `sendMessage()` to print: "WhatsApp: Sending message - [message]"
-- Implement `receiveMessage()` to return: "WhatsApp: New message received!"
+2. Create a `WhatsAppService` class that implements `MessageService`:
+   - Implement `sendMessage()` to print: "WhatsApp: Sending message - [message]"
+   - Implement `receiveMessage()` to return: "WhatsApp: New message received!"
 
-#### Step 3: Create an `SMSService` class that implements `MessageService`
-- Implement `sendMessage()` to print: "SMS: Sending text - [message]"
-- Implement `receiveMessage()` to return: "SMS: New text received!"
+3. Create an `SMSService` class that implements `MessageService`:
+   - Implement `sendMessage()` to print: "SMS: Sending text - [message]"
+   - Implement `receiveMessage()` to return: "SMS: New text received!"
 
-#### Step 4: Create a `NotificationManager` class with a method that takes the interface as a parameter
+4. Create a `NotificationManager` class with a method that takes the interface as a parameter:
 ```java
 public class NotificationManager {
     
@@ -777,7 +812,7 @@ public class NotificationManager {
 }
 ```
 
-#### Step 5: Test everything in the `Main` class
+5. Test everything in the `Main` class:
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -805,8 +840,8 @@ public class Main {
 }
 ```
 
-**Expected Output:**
-```
+**Expected output**
+```text
 --- Sending via WhatsApp ---
 Preparing to send notification...
 WhatsApp: Sending message - Hello from WhatsApp!
@@ -820,6 +855,12 @@ Notification sent successfully!
 WhatsApp: New message received!
 SMS: New text received!
 ```
+
+<details><summary>Hint</summary>
+
+Watch the difference between the two methods: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String — `Main` does the printing.
+
+</details>
 
 > **Key Takeaway:** The `NotificationManager.sendNotification()` method doesn't care whether it receives a `WhatsAppService` or `SMSService` - it just knows how to work with any `MessageService`. This is the power of programming to an interface!
 
@@ -890,6 +931,3 @@ flowchart TD
 | Both shared code AND shared behavior | 🔷🟡 Both | `Pet` + `Playable` → `Dog` |
 
 Remember: Start simple, and add complexity only when needed!
-
-End of Lab
----

@@ -1,7 +1,14 @@
 # Java Strings Lab
 
-> **Setup note:** this lab's package (`ie.atu.strings`) and a runnable `Main.java` already exist in this folder — skip any “create the package” setup steps and write your classes right here, beside this README.
-## Agenda
+## What you'll learn
+
+- Create, inspect, and transform text with the core `String` API
+- Compare strings safely with `equals()`, `equalsIgnoreCase()`, and `compareTo()` instead of `==`
+- Explain immutability and the string pool, and prove both with identity hash codes
+- Use `StringBuilder` for efficient editing and measure how much faster it is inside loops
+- Spot and fix common string bugs, from missing null checks to `substring` bounds and regex traps
+
+## Table of Contents
 
 1. [Introduction](#1-introduction)
 2. [Creating and Inspecting Strings](#2-creating-and-inspecting-strings)
@@ -12,7 +19,10 @@
 7. [Common String Methods](#7-common-string-methods)
 8. [Strings in Memory](#8-strings-in-memory)
 9. [Common Mistakes and Debugging](#9-common-mistakes-and-debugging)
-10. [Summary and Further Reading](#10-summary-and-further-reading)
+
+## Getting started
+
+This lab lives in the package `ie.atu.strings` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ---
 
@@ -36,15 +46,23 @@ Strings are sequences of characters that power almost every Java application. Fr
 * **Immutability:** String contents never change; method calls return new objects instead.
 * **String Pool:** A JVM-managed cache for literal strings that saves memory.
 
-### DIY Coding Task
+### DIY 1: First strings
 
 **Objective:** Prepare your environment and experiment with basic strings.
-
-**Task:**
 
 1. Open the `Main` class in the `ie.atu.strings` package.
 2. In the `main` method, declare three string variables using literals.
 3. Print them to confirm everything compiles.
+
+**Expected output**
+
+```text
+Hello
+Java
+Strings
+```
+
+*A representative run — your three strings can hold any values you like.*
 
 ---
 
@@ -84,24 +102,18 @@ public class StringInspector {
 }
 ```
 
-### DIY Coding Task
+### DIY 2: Inspect strings
 
 **Objective:** Practice constructing strings and accessing their metadata.
 
-**Task:**
+1. In the `Main` class `main` method, create three test strings: `String normal = "Learning Java"`, `String empty = ""`, and `String whitespace = "   "`.
+2. For each string, use `length()` to get the number of characters and print it.
+3. For each string, use an `if` statement to check whether it is empty. If not empty, use `charAt(0)` to print the first character and `charAt(length - 1)` to print the last; if empty, print `(none)` for first and last.
+4. For each string, use `trim().isEmpty()` to check whether it is blank (or `isBlank()` if on Java 11+) and print the result.
 
-1. In the `Main` class `main` method, create three test strings:
-   * Declare a String variable called `normal` with the value `"Learning Java"`.
-   * Declare a String variable called `empty` with the value `""`.
-   * Declare a String variable called `whitespace` with the value `"   "`.
-2. For each string, test the inspection methods:
-   * Use `length()` to get the number of characters and print it.
-   * Use an if statement to check if the string is empty. If not empty, use `charAt(0)` to get the first character and `charAt(length-1)` to get the last character.
-   * If empty, print `"(none)"` for first and last.
-   * Use `trim().isEmpty()` to check if the string is blank (or `isBlank()` if on Java 11+) and print the result.
+**Expected output**
 
-**Sample Output:**
-```
+```text
 Input: "Learning Java"
 Length: 13
 First: L
@@ -120,6 +132,12 @@ First:
 Last:  
 Blank? true
 ```
+
+<details><summary>Hint</summary>
+
+The last character lives at index `length() - 1`. Guard the empty string first — calling `charAt(0)` on `""` throws `StringIndexOutOfBoundsException`. For the blank check, `"   ".trim().isEmpty()` is `true` because trimming removes every space.
+
+</details>
 
 ---
 
@@ -153,24 +171,28 @@ flowchart LR
     style Note fill:#f5f7fa,stroke:#d1d5db,stroke-dasharray: 5 5
 ```
 
-### DIY Coding Task
+### DIY 3: Concatenate and format
 
 **Objective:** Experiment with multiple concatenation strategies.
 
-**Task:**
+1. In the `Main` class `main` method, create two String variables `title` with value `"Java"` and `topic` with value `"Strings"`. Use the `+` operator to concatenate them with a space in between and display the result.
+2. Create three variables: `name` (String), `age` (int), and `course` (String). Use `String.format("Name: %s, Age: %d, Course: %s", name, age, course)` to create a formatted sentence and print it.
+3. Create a String array with the words `{"Java", "Strings", "are", "powerful"}`. Use `String.join(" ", array)` to join them with spaces and print the result.
+4. Add a comment describing when you would avoid the `+` operator inside loops.
 
-1. In the `Main` class `main` method, test different concatenation approaches:
-   * **Using + operator:** Create two String variables `title` with value `"Java"` and `topic` with value `"Strings"`. Use the `+` operator to concatenate them with a space in between and display the result.
-   * **Using String.format():** Create three variables: `name` (String), `age` (int), and `course` (String). Use `String.format("Name: %s, Age: %d, Course: %s", name, age, course)` to create a formatted sentence and print it.
-   * **Using String.join():** Create a String array with the words `{"Java", "Strings", "are", "powerful"}`. Use `String.join(" ", array)` to join them with spaces and print the result.
-2. Add a comment describing when you would avoid the `+` operator inside loops.
+**Expected output**
 
-**Sample Output:**
-```
-Using + : Java + Strings + Lab = Java Strings Lab
+```text
+Using + : Java Strings
 Formatted: Name: Ade, Age: 21, Course: OOP
 Joined: Java Strings are powerful
 ```
+
+<details><summary>Hint</summary>
+
+In a format string, `%s` is a placeholder for a String and `%d` for an int. `String.join(" ", words)` takes the separator first and the array second — no loop required.
+
+</details>
 
 ---
 
@@ -192,25 +214,29 @@ System.out.println(expected.equals(actual));          // false
 System.out.println(expected.equalsIgnoreCase(actual)); // true
 ```
 
-### DIY Coding Task
+### DIY 4: Compare strings
 
 **Objective:** Practice comparing strings safely.
 
-**Task:**
+1. In the `Main` class `main` method, create two String variables `str1` and `str2` both with the value `"Java"`. Use `equals()` to compare them and print the result.
+2. Create two String variables `str3` with value `"Java"` and `str4` with value `"java"`. Use `equalsIgnoreCase()` to compare them and print the result.
+3. Create two String variables `str5` with value `"Java"` and `str6` with value `"Kotlin"`. Use `compareTo()` to compare them alphabetically and print the result (negative means `str5` comes before `str6`).
+4. Create a String variable `str7` and assign it `null`. Before calling any string method on it, add an if statement to check `if (str7 != null)` to avoid a `NullPointerException`.
 
-1. In the `Main` class `main` method, test string comparisons:
-   * Create two String variables `str1` and `str2` both with the value `"Java"`. Use `equals()` to compare them and print the result.
-   * Create two String variables `str3` with value `"Java"` and `str4` with value `"java"`. Use `equalsIgnoreCase()` to compare them and print the result.
-   * Create two String variables `str5` with value `"Java"` and `str6` with value `"Kotlin"`. Use `compareTo()` to compare them alphabetically and print the result (negative means str5 comes before str6).
-   * Create a String variable `str7` and assign it `null`. Before calling any string method on it, add an if statement to check `if (str7 != null)` to avoid NullPointerException.
+**Expected output**
 
-**Sample Output:**
-```
+```text
 Equal? true
 Equal ignore case? true
 Order (Java vs Kotlin): -1
 Null-safe comparison passed.
 ```
+
+<details><summary>Hint</summary>
+
+`compareTo` works alphabetically: `"Java".compareTo("Kotlin")` is negative because `'J'` comes before `'K'`. In the null test, the `!= null` check must run first — `str7 != null && str7.equals("Java")` can never throw.
+
+</details>
 
 ---
 
@@ -255,20 +281,39 @@ sequenceDiagram
     Note right of Code: Original "Lab" remains<br/>unchanged in pool
 ```
 
-### DIY Coding Task
+### DIY 5: Prove immutability
 
 **Objective:** See immutability in action and contrast with StringBuilder's mutability.
 
-**Task:**
+1. In the `Main` class `main` method, test String immutability: create a String variable `original` with value `"Hello"`. Print its identity hash code using `System.identityHashCode(original)`. Now concatenate it: `original = original + " World"`. Print the new identity hash code and compare — they should be different, proving a new object was created.
+2. Test the String pool: create two String variables using literals: `String pooled1 = "Lab"` and `String pooled2 = "Lab"`. Compare them with `==` and print the result (should be `true` — same object in pool).
+3. Test `intern()`: create a String using the constructor: `String constructed = new String("Lab")`. Compare it with `pooled1` using `==` (should be `false`). Now call `constructed.intern()` and compare again with `pooled1` using `==` (should be `true`).
+4. Compare with StringBuilder: create a StringBuilder with value `"Hello"`. Print its identity hash code. Use `append(" World")` to modify it. Print the identity hash code again — it should be the same, proving the same object was modified.
+5. Add comments explaining why repeated `+` concatenations hurt performance (each creates a new object).
 
-1. In the `Main` class `main` method:
-   * **Test String immutability:** Create a String variable `original` with value `"Hello"`. Print its identity hash code using `System.identityHashCode(original)`. Now concatenate it: `original = original + " World"`. Print the new identity hash code and compare - they should be different, proving a new object was created.
-   * **Test String pool:** Create two String variables using literals: `String pooled1 = "Lab"` and `String pooled2 = "Lab"`. Compare them with `==` and print the result (should be true - same object in pool).
-   * **Test intern():** Create a String using constructor: `String constructed = new String("Lab")`. Compare it with `pooled1` using `==` (should be false). Now call `constructed.intern()` and compare again with `pooled1` using `==` (should be true).
-   * **Compare with StringBuilder:** Create a StringBuilder with value `"Hello"`. Print its identity hash code. Use `append(" World")` to modify it. Print the identity hash code again - it should be the same, proving the same object was modified.
-2. Add comments explaining why repeated `+` concatenations hurt performance (each creates a new object).
+**Expected output**
 
-### (Optional) Fun Method to Implement: `compareStringAndBuilder()`
+```text
+Original hash: 366712642
+After concat hash: 1829164700
+Same reference? false
+Literal A == Literal B? true
+Constructed == Literal? false
+Constructed.intern() == Literal? true
+Builder hash before: 1580066828
+Builder hash after: 1580066828
+Same builder object? true
+```
+
+*Identity hash codes vary from run to run — the pattern of matches is what matters.*
+
+<details><summary>Hint</summary>
+
+`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. Remember to reassign the result of concatenation — `original = original + " World";` — or nothing appears to change.
+
+</details>
+
+### Optional method: `compareStringAndBuilder()`
 
 **Objective:** Directly compare immutable String behavior with mutable StringBuilder behavior.
 
@@ -310,7 +355,8 @@ public void compareStringAndBuilder() {
 ```
 
 **Sample Output:**
-```
+
+```text
 === String vs StringBuilder Identity Test ===
 
 String before: Hello
@@ -330,13 +376,6 @@ Conclusion: StringBuilder modified SAME object
 KEY INSIGHT:
 - String: Every modification = NEW object (inefficient for loops)
 - StringBuilder: Modifications reuse SAME object (efficient for loops)
-
-Original hash: 366712642
-After concat hash: 1829164700
-Same reference? false
-Literal A == Literal B? true
-Constructed == Literal? false
-Constructed.intern() == Literal? true
 ```
 
 **Why This Matters:**
@@ -383,20 +422,46 @@ stateDiagram-v2
     end note
 ```
 
-### DIY Coding Task
+### DIY 6: Build with StringBuilder
 
 **Objective:** Gain hands-on experience with `StringBuilder` and **measure actual performance differences**.
 
-**Task:**
+1. In the `Main` class `main` method, build a menu: create a StringBuilder. Use a for loop (1 to 3) to append numbered menu items like `"1. Start\n"`, `"2. Settings\n"`, `"3. Exit\n"`. Convert to String with `toString()` and print.
+2. Reverse words: create a String `sentence = "learn to love strings"`. Use `split(" ")` to get a String array of words. Create a StringBuilder and use a reverse for loop to append words from end to start. Print the result.
+3. Build a report: create a StringBuilder. Append a title like `"Report\n"`, then use `"=".repeat(title.length())` for the underline, then append bullet points in a loop. Print the result.
+4. Performance test: record start time with `long start = System.nanoTime()`. Use a for loop (10,000 iterations) to concatenate with `+`. Record end time and calculate duration. Repeat with StringBuilder using `append()`. Compare and print the time difference.
+5. Add comments summarizing which approach is faster and by how much.
 
-1. In the `Main` class `main` method:
-   * **Build a menu:** Create a StringBuilder. Use a for loop (1 to 3) to append numbered menu items like `"1. Start\n"`, `"2. Settings\n"`, `"3. Exit\n"`. Convert to String with `toString()` and print.
-   * **Reverse words:** Create a String `sentence = "learn to love strings"`. Use `split(" ")` to get a String array of words. Create a StringBuilder and use a reverse for loop to append words from end to start. Print the result.
-   * **Build a report:** Create a StringBuilder. Append a title like `"Report\n"`, then use `"=".repeat(title.length())` for underline, then append bullet points in a loop. Print the result.
-   * **Performance test:** Record start time with `long start = System.nanoTime()`. Use a for loop (10,000 iterations) to concatenate with `+`. Record end time and calculate duration. Repeat with StringBuilder using `append()`. Compare and print the time difference.
-2. Add comments summarizing which approach is faster and by how much.
+**Expected output**
 
-### NEW Method to Implement: `measurePerformance()`
+```text
+Menu:
+1. Start
+2. Settings
+3. Exit
+
+Reversed: strings love to learn
+
+Report
+=======
+- Point one
+- Point two
+- Point three
+
+String (+) took: 1247 ms
+StringBuilder took: 1 ms
+Difference: 1246 ms
+```
+
+*A representative run — timings vary from machine to machine; the gap is what matters.*
+
+<details><summary>Hint</summary>
+
+Walk the words backwards with `for (int i = words.length - 1; i >= 0; i--)`, appending `words[i]` and a space each time. `System.nanoTime()` returns nanoseconds — divide by `1_000_000` to convert a duration to milliseconds.
+
+</details>
+
+### Guided method: `measurePerformance()`
 
 **Objective:** Prove StringBuilder's performance advantage with real measurements.
 
@@ -454,7 +519,8 @@ public void measurePerformance() {
 ```
 
 **Sample Output:**
-```
+
+```text
 === Performance Comparison: String vs StringBuilder ===
 
 Task: Concatenate 'a' 10000 times
@@ -478,17 +544,10 @@ KEY TAKEAWAY:
 ✅ Use StringBuilder for loops and repeated modifications
 ✅ Use String for simple, one-time concatenations
 ❌ NEVER use String concatenation (+) inside loops!
-
-Menu:
-1. Start
-2. Settings
-3. Exit
-
-Reverse: "learn to love strings"
 ```
 
-**Why This Addition Matters:**
-- Students **MEASURE** real performance differences (not just theory)
+**Why This Matters:**
+- You **measure** real performance differences (not just theory)
 - Concrete numbers make the point undeniable (~1000x speedup!)
 - Shows memory impact, not just speed
 - Provides clear recommendations (✅/❌)
@@ -530,25 +589,29 @@ String replaced = logEntry.replace("INFO", "DEBUG");
 String[] parts = logEntry.split(": ");
 ```
 
-### DIY Coding Task
+### DIY 7: Everyday string methods
 
 **Objective:** Collect and practice essential methods.
 
-**Task:**
+1. In the `Main` class `main` method, do a case-insensitive search: create a String `text = "Java is a powerful programming language"` and `keyword = "POWERFUL"`. Convert both to lowercase with `toLowerCase()` and use `contains()` to check if the text contains the keyword. Print the result.
+2. Extract initials: create a String `fullName = "John Doe"`. Use `split(" ")` to get an array of names. Loop through the array, use `charAt(0)` to get the first character of each name, and build the initials (e.g., `J.D.`). Print the result.
+3. Mask an email: create a String `email = "john@example.com"`. Use `indexOf('@')` to find the `@` position. Use `substring(0, atIndex)` to get the local part and `substring(atIndex)` to get the domain. Build a masked version: keep the first character, replace the other local-part characters with `*`, then append the domain. Print the result.
+4. Parse CSV: create a String `csv = "Java, Strings, Lab"`. Use `split(",")` to split by comma into an array. Loop through the array and use `trim()` on each element to remove spaces. Print the trimmed parts.
 
-1. In the `Main` class `main` method:
-   * **Case-insensitive search:** Create a String `text = "Java is a powerful programming language"` and `keyword = "POWERFUL"`. Convert both to lowercase with `toLowerCase()` and use `contains()` to check if text contains the keyword. Print the result.
-   * **Extract initials:** Create a String `fullName = "John Doe"`. Use `split(" ")` to get an array of names. Loop through the array, use `charAt(0)` to get the first character of each name, and build the initials (e.g., "J.D."). Print the result.
-   * **Mask email:** Create a String `email = "john@example.com"`. Use `indexOf('@')` to find the @ position. Use `substring(0, atIndex)` to get the local part and `substring(atIndex)` to get the domain. Build a masked version: keep first character, replace others with '*', then append the domain. Print the result.
-   * **Parse CSV:** Create a String `csv = "Java, Strings, Lab"`. Use `split(",")` to split by comma into an array. Loop through the array and use `trim()` on each element to remove spaces. Print the trimmed array.
+**Expected output**
 
-**Sample Output:**
-```
+```text
 Contains keyword? true
 Initials: J.D.
-Masked email: j****@example.com
+Masked email: j***@example.com
 CSV parts: ["Java", "Strings", "Lab"]
 ```
+
+<details><summary>Hint</summary>
+
+For the mask, everything between index `1` and `atIndex` needs replacing — `"*".repeat(atIndex - 1)` builds all the stars in one call. `split(",")` keeps the space after each comma, which is exactly why each part needs `trim()`.
+
+</details>
 
 ---
 
@@ -583,26 +646,36 @@ graph TD
     SB -->|contains| BUF
 ```
 
-### DIY Coding Task
+### DIY 8: Watch strings in memory
 
-**Objective:** Observe how JVM handles string memory.
+**Objective:** Observe how the JVM handles string memory.
 
-**Task:**
+1. In the `Main` class `main` method, test the string pool: create two string literals `String lit1 = "Hello"` and `String lit2 = "Hello"`. Print their identity hash codes with `System.identityHashCode()`. They should be the same because they share the pooled object.
+2. Test heap strings: create two strings with constructors: `String heap1 = new String("Hello")` and `String heap2 = new String("Hello")`. Print their identity hashes. They should be different because each creates a new heap object.
+3. Test `intern()`: create `String heap3 = new String("World")` and `String lit3 = "World"`. Compare them with `==` (should be `false`). Now assign `heap3 = heap3.intern()` and compare with `==` again (should be `true`).
+4. Test StringBuilder capacity: create a StringBuilder with `new StringBuilder()`. Print its initial capacity with `capacity()`. Append 50 characters in a loop. Print the capacity again to see how it grows automatically.
+5. Add comments documenting your observations about the string pool and memory allocation.
 
-1. In the `Main` class `main` method:
-   * **Test string pool:** Create two string literals: `String lit1 = "Hello"` and `String lit2 = "Hello"`. Print their identity hash codes with `System.identityHashCode()`. They should be the same because they share the pooled object.
-   * **Test heap strings:** Create two strings with constructors: `String heap1 = new String("Hello")` and `String heap2 = new String("Hello")`. Print their identity hashes. They should be different because each creates a new heap object.
-   * **Test intern():** Create `String heap3 = new String("World")` and `String lit3 = "World"`. Compare them with `==` (should be false). Now assign `heap3 = heap3.intern()` and compare with `==` again (should be true).
-   * **Test StringBuilder capacity:** Create a StringBuilder with `new StringBuilder()`. Print its initial capacity with `capacity()`. Append 50 characters in a loop. Print capacity again to see how it grows automatically.
-2. Add comments documenting your observations about the string pool and memory allocation.
+**Expected output**
 
-**Sample Output:**
+```text
+Literal 1 hash: 11258999
+Literal 2 hash: 11258999
+Heap 1 hash: 99887766
+Heap 2 hash: 87651234
+heap3 == lit3? false
+After intern == lit3? true
+Initial capacity: 16
+Capacity after 50 appends: 70
 ```
-Literal hash: 11258999
-Constructed hash: 99887766
-After intern equals literal? true
-Builder capacity: 64
-```
+
+*Identity hash codes vary from run to run — the pattern of matches is what matters.*
+
+<details><summary>Hint</summary>
+
+`capacity()` is a `StringBuilder` method — a `String` has no spare room to report. A default `new StringBuilder()` starts with capacity 16 and grows automatically as you append. `intern()` returns the pooled object rather than changing the variable, so assign the result: `heap3 = heap3.intern();`.
+
+</details>
 
 ---
 
@@ -653,11 +726,9 @@ Remember: `substring(start, end)` includes `start` but excludes `end`.
 * Use your IDE debugger to inspect string values step by step.
 * Consider third-party tools or profilers to detect excessive allocations.
 
-### DIY Coding Task
+### DIY 9: Fix the bugs
 
 **Objective:** Identify and correct common mistakes.
-
-**Task:**
 
 Fix the 10 labeled issues in the following class:
 
@@ -724,46 +795,59 @@ public class BuggyStrings {
 }
 ```
 
-**Your Task:**
+1. Create the `BuggyStrings` class from the listing above in the `ie.atu.strings` package and fix all 10 labeled issues.
+2. String comparison: in the `Main` class `main` method, create `String input = new String("YES")`. Try comparing with `==` to `"YES"` (returns `false`). Fix by using `equals()` instead.
+3. Null safety: create `String text = null`. Try calling `text.contains("test")` (throws an exception). Fix by adding an `if (text != null)` check before the method call.
+4. Loop concatenation: create an empty String. Use a for loop to concatenate 100 numbers with `+=` (slow). Fix by using StringBuilder with `append()` instead.
+5. Substring bounds: create `String str = "Java"`. Try `str.substring(0, 4)` to get the first 4 chars (works), then try `str.substring(0, 5)` — it throws an exception. Remember: the end index is exclusive.
+6. Replace vs replaceAll: create `String version = "1.2.3"`. Try `version.replaceAll(".", "-")` (every character becomes `-` because `.` is a regex wildcard). Fix by using `replace()` for a literal replacement.
+7. Add comments explaining each fix and why the original code failed. When you are done, your updated class should compile and every scenario should behave correctly.
 
-1. In the `Main` class `main` method, test and fix each buggy scenario:
-   * **String comparison:** Create `String input = new String("YES")`. Try comparing with `==` to `"YES"` (returns false). Fix by using `equals()` instead.
-   * **Null safety:** Create `String text = null`. Try calling `text.contains("test")` (throws exception). Fix by adding `if (text != null)` check before the method call.
-   * **Loop concatenation:** Create an empty String. Use a for loop to concatenate 100 numbers with `+=` (slow). Fix by using StringBuilder with `append()` instead.
-   * **Substring bounds:** Create `String str = "Java"`. Try `str.substring(0, 4)` to get first 4 chars (works, but try `str.substring(0, 5)` and it throws exception). Remember: end index is exclusive.
-   * **Replace vs replaceAll:** Create `String version = "1.2.3"`. Try `version.replaceAll(".", "-")` (removes everything because `.` is regex). Fix by using `replace()` for literal replacement.
-2. Add comments explaining each fix and why the original code failed.
+**Expected output**
 
-**Expected Result:**
+```text
+== comparison: false
+equals() comparison: true
+text is null - skipping contains()
+Joined with StringBuilder: 0,1,2,3, ... ,98,99,
+First four characters: Java
+replaceAll(".", "-"): -----
+replace(".", "-"): 1-2-3
 ```
-Your updated class compiles and all sample scenarios behave correctly.
-```
+
+*A representative run — the `...` stands in for the middle of the 100-number line, and your labels may differ.*
+
+<details><summary>Hint</summary>
+
+The same few fixes cover most of the errors: use `equals` (or `equalsIgnoreCase`) instead of `==`; check `!= null` before calling any method; capture returned values, because `text.toUpperCase()` on its own changes nothing; and prefer `replace` unless you genuinely need a regular expression.
+
+</details>
 
 ---
 
-## 10. Summary and Further Reading
+## Summary
 
 This lab guided you through essential string concepts:
 
 * Declaring, inspecting, and transforming strings.
 * Comparing strings safely and handling nulls.
 * Understanding immutability and the string pool.
-* **NEW:** Comparing String immutability with StringBuilder mutability using identity hash codes.
+* Comparing String immutability with StringBuilder mutability using identity hash codes.
 * Leveraging `StringBuilder` for efficient modifications.
-* **NEW:** Measuring actual performance differences between String and StringBuilder.
+* Measuring actual performance differences between String and StringBuilder.
 * Applying core string methods for real-world tasks.
 
 ### Key Takeaways
 
 ✅ Strings are immutable; every change creates a new object.
 
-✅ **NEW:** Identity hash codes prove String creates new objects vs StringBuilder reusing the same object.
+✅ Identity hash codes prove String creates new objects while StringBuilder reuses the same object.
 
 ✅ Avoid `==` for string comparisons—use `equals` or `equalsIgnoreCase`.
 
 ✅ `StringBuilder` is the go-to for repeated concatenation or heavy editing.
 
-✅ **NEW:** Performance measurements show StringBuilder is ~1000x faster than String concatenation in loops!
+✅ Performance measurements show StringBuilder is ~1000x faster than String concatenation in loops!
 
 ✅ Always validate inputs to prevent null pointer issues.
 
@@ -781,16 +865,4 @@ This lab guided you through essential string concepts:
 
 ✔ Profile string-heavy code paths to avoid hidden performance costs.
 
-✔ **NEW:** Always use StringBuilder for string concatenation inside loops!
-
-### Further Reading
-
-* [Official Java String Documentation](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html)
-* [StringBuilder API](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html)
-* [Java Strings Tutorial](https://www.baeldung.com/java-string)
-* [Java String Pool Explained](https://www.geeksforgeeks.org/string-pool-in-java/)
-* [Effective Java, Item 63: Beware the Performance of String Concatenation](https://www.oreilly.com/library/view/effective-java/9780134686097/)
-
----
-
-**Congratulations!** You now have a solid foundation for working with Java strings efficiently and effectively. You've not only learned the concepts but **measured and proven** the performance differences yourself!
+✔ Always use StringBuilder for string concatenation inside loops!

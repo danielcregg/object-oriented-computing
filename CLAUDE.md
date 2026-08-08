@@ -55,9 +55,9 @@ images) are read-only archives.
   code captions) stay immediate. A converter re-run emits `- ` everywhere,
   so re-apply fragments after any deck regeneration. Decks also set
   `transition: fade` (HTML-only slide transition; ignored in PDF/PPTX).
-- Every topic deck has one fragmented "Predict the Output" quiz slide
-  (week 4's quiz predates the convention); answers are `* ` bullets so they
-  reveal after the class commits to a guess.
+- Every topic deck has one fragmented predict-style quiz slide ("Predict
+  the Output" / "Predict: Does This Compile?"); answers are `* ` bullets
+  so they reveal after the class commits to a guess.
 - Speaker notes live in `<!-- Speaker notes: ... -->` comments.
 - Diagrams: concept diagrams are Mermaid, pre-rendered to SVG (Marp does not
   render mermaid fences). Each lives as `lecture/img/diagram-<name>.svg` with

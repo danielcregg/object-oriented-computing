@@ -135,7 +135,7 @@ values[5] = 12; // WRONG!! compiles, but throws an
 
 ---
 
-## Quiz time!
+## Predict: Does This Compile?
 
 - Is there an error in this code?
 
@@ -143,6 +143,9 @@ values[5] = 12; // WRONG!! compiles, but throws an
 ```java
 int[] values = {1, 2.5, 3, 3.5, 4};
 ```
+
+* **Compile error** — `2.5` and `3.5` are `double` literals, and an `int[]` can only hold ints; Java never narrows automatically.
+* The fix: `double[] values = {1, 2.5, 3, 3.5, 4};` — the int literals widen to doubles for free.
 
 ---
 

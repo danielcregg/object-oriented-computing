@@ -16,8 +16,7 @@ source: "Java_Methods.pptx"
 
 # Java Methods
 
-- Java Methods
-- Building Blocks of Java Programs
+The building blocks of Java programs
 
 ---
 
@@ -49,7 +48,7 @@ source: "Java_Methods.pptx"
 
 ## Method Syntax
 
-- Method Syntax
+- The general shape of every method, then a real example:
 <!-- no-compile -->
 ```java
 accessModifier void methodName(parameters) {
@@ -69,23 +68,21 @@ public void run(double distanceMeters) {
 
 ## Anatomy of a Method
 
-- Example: Simple Method
 ```java
 public void greet() {
     System.out.println("Hello, welcome to Java!");
 }
 ```
 - Breakdown:
-- • public - can be accessed from anywhere
-- • void - returns no value
-- • greet - method name
-- • () - no parameters
+  - public - can be accessed from anywhere
+  - void - returns no value
+  - greet - method name
+  - () - no parameters
 
 ---
 
 ## Methods with Parameters
 
-- Method with Parameters
 ```java
 public void greetUser(String name) {
     System.out.println("Hello, " + name + "!");
@@ -103,7 +100,6 @@ greetUser("Bob");    // Output: Hello, Bob!
 
 ## Methods with Return Values
 
-- Method with Return Value
 ```java
 public int add(int a, int b) {
     int sum = a + b;
@@ -136,7 +132,6 @@ System.out.println(result);  // Output: 8
 
 ## Working with Multiple Parameters
 
-- Multiple Parameters
 ```java
 public double calculateArea(double length, double width) {
     double area = length * width;
@@ -168,7 +163,6 @@ System.out.println("Area: " + roomArea);
 
 ## Private Helper Methods
 
-- Method Visibility Example
 ```java
 public class BankAccount {
     private double balance;
@@ -200,7 +194,6 @@ public class BankAccount {
 
 ## Calling a Static Method
 
-- Static Method Example
 ```java
 public class MathHelper {
     public static int square(int number) {
@@ -220,7 +213,6 @@ System.out.println(result);  // Output: 25
 
 ## Static vs Non-Static Members
 
-- Static vs Non-Static
 ```java
 public class Counter {
     static int staticCount = 0;      // Shared by all
@@ -233,8 +225,8 @@ public class Counter {
     }
 }
 ```
-- • Static: belongs to class, shared across all instances
-- • Non-static: belongs to object, unique for each instance
+- Static: belongs to class, shared across all instances
+- Non-static: belongs to object, unique for each instance
 
 ---
 
@@ -254,7 +246,6 @@ public class Counter {
 
 ## Tracing the Call Stack
 
-- Call Stack Example
 ```java
 public static void main(String[] args) {
     methodA();  // Step 1: Call methodA
@@ -293,7 +284,6 @@ section pre { padding: 12px 16px; margin: 8px 0; }
 section pre code { font-size: 17px; line-height: 1.3; }
 </style>
 
-- Common Mistakes - Examples
 - Missing return on all paths (WRONG):
 <!-- no-compile -->
 ```java
@@ -318,7 +308,6 @@ public int getValue(int x) {
 
 ## Putting It All Together
 
-- Complete Example
 ```java
 public class Calculator {
     public static double divide(double num, double den) {
@@ -358,4 +347,12 @@ public class Calculator {
 - Static methods belong to the class and are called without objects
 - Method call stack tracks execution order
 - Well-designed methods make code cleaner and easier to maintain
+
+---
+
+## Resources
+
+- Oracle Java Tutorials — Defining Methods: https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html
+- W3Schools Java Methods: https://www.w3schools.com/java/java_methods.asp
+- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20Java%20methods%20with%20clear%20examples%20suitable%20for%20beginner%20students
 

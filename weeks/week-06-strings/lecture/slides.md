@@ -26,12 +26,14 @@ source: "java_strings.pptx"
 ## Agenda
 
 - What is a String?
-- String Immutability
-- Why Strings are Immutable
+- Creating Strings
+- String Immutability — the good and the bad
 - String Pool & Memory
-- String vs StringBuffer vs String Builder
+- StringBuilder — mutable strings
+- String vs StringBuffer vs StringBuilder
 - Performance Comparison
-- Best Practices
+- Best Practices & Common Mistakes
+- Summary & resources
 
 ---
 
@@ -54,31 +56,25 @@ String str3 = new String(charArray);
 
 ## Creating Strings
 
-- String literal:
-  - String s1 = "Hello";
-- Using new keyword:
-  - String s2 = new String("World");
-- From char array:
-  - String s3 = new String(chars);
-- Concatenation:
-  - String s4 = "Hello" + " " + "World";
-- From StringBuilder:
-  - String s5 = sb.toString();
-
----
-
-## Creating Strings (continued)
+- There are several ways to create a String:
 
 ```java
-// String literal (uses String pool)
+// String literal (uses the String pool)
 String s1 = "Hello";
 
-// Using new keyword
+// Using the new keyword
 String s2 = new String("World");
 
-// From char array
+// From a char array
 char[] chars = {'J','a','v','a'};
 String s3 = new String(chars);
+
+// Concatenation
+String s4 = "Hello" + " " + "World";
+
+// From a StringBuilder
+StringBuilder sb = new StringBuilder("Hi");
+String s5 = sb.toString();
 ```
 
 ---
@@ -132,6 +128,8 @@ System.out.println(str);      // Now prints "HELLO"
 - s1 == s2 returns true (same reference)
 - String s3 = new String("Java"); // Creates new object in heap
 
+> Note: `==` compares *references* (same object?), not text. To compare the actual characters, always use `.equals()` — more in Common Mistakes at the end.
+
 ---
 
 ## String Pool & Memory (continued)
@@ -178,22 +176,6 @@ for (int i = 0; i < 1000; i++) {
 
 ---
 
-## Why StringBuilder Was Created
-
-- String and StringBuffer shipped together in Java 1.0 (1996): String immutable, StringBuffer mutable and synchronized — 90s Java valued "safe by default"
-- Java 5 (2004) added StringBuilder: same API as StringBuffer, no synchronization overhead — most code is single-threaded and never needed it
-- Solves String's slow-concatenation problem: loops, repeated modifications, building large strings
-- In practice: use StringBuilder unless multiple threads share the object
-
-```java
-StringBuilder sb = new StringBuilder();
-sb.append("Hello").append(" World");      // common case
-
-StringBuffer safeSb = new StringBuffer(); // only if threads share it
-```
-
----
-
 ## StringBuilder: Mutable Strings
 
 - StringBuilder provides MUTABLE character sequences
@@ -210,6 +192,22 @@ section img { max-height: 500px; }
 </style>
 
 ![](img/slide12-1.png)
+
+---
+
+## Why StringBuilder Was Created
+
+- String and StringBuffer shipped together in Java 1.0 (1996): String immutable, StringBuffer mutable and synchronized — 90s Java valued "safe by default"
+- Java 5 (2004) added StringBuilder: same API as StringBuffer, no synchronization overhead — most code is single-threaded and never needed it
+- Solves String's slow-concatenation problem: loops, repeated modifications, building large strings
+- In practice: use StringBuilder unless multiple threads share the object
+
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("Hello").append(" World");      // common case
+
+StringBuffer safeSb = new StringBuffer(); // only if threads share it
+```
 
 ---
 
@@ -346,3 +344,20 @@ if (s1 == s2) { }        // false!
 if (s1.equals(s2)) { }   // true
 ```
 
+---
+
+## Summary
+
+- Strings are immutable objects — every "change" quietly creates a new String.
+- Immutability buys safety and the String pool, but makes repeated concatenation slow.
+- StringBuilder is the mutable fix: use it for loops and heavy editing, then `toString()`.
+- StringBuffer is the thread-safe (slower) sibling — only when threads share the object.
+- Compare String *content* with `.equals()`, never `==`.
+
+---
+
+## Resources
+
+- Oracle Java Tutorials — Strings: https://docs.oracle.com/javase/tutorial/java/data/strings.html
+- W3Schools Java Strings: https://www.w3schools.com/java/java_strings.asp
+- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20Java%20Strings%20and%20StringBuilder%20with%20clear%20examples%20suitable%20for%20beginner%20students

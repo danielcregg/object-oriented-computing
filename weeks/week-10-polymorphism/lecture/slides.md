@@ -16,36 +16,29 @@ source: "Polymorphism.pptx"
 
 # Polymorphism
 
-- Same call, `speak()` — different sound, depending on the object.
+Same call, `speak()` — different sound, depending on the object.
 
 ---
 
 ## Agenda
 
+- The four pillars of OOP — where polymorphism fits
 - What is Polymorphism?
 - Types of Polymorphism
-- Examples of Polymorphism
+- Method Overloading & Method Overriding
 - Object Upcasting and Downcasting
 - Benefits of Polymorphism
+- Summary & resources
 
 ---
 
-<!-- _class: split -->
-
-<style scoped>
-section.split { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; align-content: start; }
-section.split h2 { grid-column: 1 / -1; }
-section.split ul { grid-column: 1; }
-section.split p:has(img) { grid-column: 2; grid-row: 2; align-self: center; margin: 0; }
-section.split img { max-height: 360px; object-fit: contain; }
-</style>
-
 ## Four major principles of OOP
 
-- Recall: OOP rests on 4 pillars — Abstraction, Polymorphism, Inheritance, Encapsulation.
-- Covered in full back in week 7 — this week we go deep on **Polymorphism**.
+- Recall from week 7: OOP rests on 4 pillars — Encapsulation, Inheritance, Polymorphism, Abstraction.
+- We've covered Encapsulation (week 7) and Inheritance (week 8) — this week we go deep on **Polymorphism**.
 
-![Image result for a pie](img/slide07-1.jpg)
+<!-- diagram source: img/diagram-four-pillars.mmd -->
+![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
 
 ---
 
@@ -72,39 +65,15 @@ section.split img { max-height: 360px; object-fit: contain; }
 
 - Polymorphism is the ability of the same method call to be bound to different method bodies
 - Binding refers to linking a method call to the method body that will run.
-- Compile time Polymorphism known as static or early binding
-- Runtime Polymorphism known as dynamic or late binding
-- Polymorphism
-  - Compile time → Overloading
-  - Runtime → Overriding
+- Compile time Polymorphism known as static or early binding → **Overloading**
+- Runtime Polymorphism known as dynamic or late binding → **Overriding**
+
+<!-- diagram source: img/diagram-binding.mmd -->
+![h:300 Types of polymorphism and binding](img/diagram-binding.svg)
 
 ---
 
-## Compile time Polymorphism
-
-- Compile time Polymorphism is polymorphism that is resolved during compile time i.e., binding of the method call to its definition happens at compile time.
-- The compiler can decide which method to call just by looking at the method signature (number and type of parameters).
-- Method Overloading is an example of compile time polymorphism.
-- Same name, different signatures:
-  - `void fun(int a)`
-  - `void fun(int a, int b)`
-  - `void fun(char a)`
-
----
-
-## Method Signature
-
-- A method signature is the method name and the number, type and order of its parameters.
-- Java can uniquely identify methods based on their method signatures:
-      - Number of parameters passed
-      - Data type of parameters
-      - Sequence of data type of parameters
-- Example: `max(int, int)`
-- A class cannot have two methods with the same signature.
-
----
-
-## Method Structure
+## Method Structure (recap from week 3)
 
 ```java
 public int max (int x, int y)
@@ -121,6 +90,30 @@ public int max (int x, int y)
 - **method-name** — `max`
 - **parameter-list** — `(int x, int y)`
 - **body of the method** — the `{ }` block
+
+---
+
+## Method Signature
+
+- A method signature is the method name and the number, type and order of its parameters.
+- Java can uniquely identify methods based on their method signatures:
+      - Number of parameters passed
+      - Data type of parameters
+      - Sequence of data type of parameters
+- Example: `max(int, int)`
+- A class cannot have two methods with the same signature.
+
+---
+
+## Compile time Polymorphism
+
+- Compile time Polymorphism is polymorphism that is resolved during compile time i.e., binding of the method call to its definition happens at compile time.
+- The compiler can decide which method to call just by looking at the method signature (number and type of parameters).
+- Method Overloading is an example of compile time polymorphism.
+- Same name, different signatures:
+  - `void fun(int a)`
+  - `void fun(int a, int b)`
+  - `void fun(char a)`
 
 ---
 
@@ -182,7 +175,7 @@ public class Main {
 
 ```java
 // Animal.java
-package ie.gmit.javaLabs.polymorphism.overriding.animal;
+package ie.atu.oop.polymorphism.overriding.animal;
 
 public class Animal {
     public void sound() {
@@ -202,6 +195,7 @@ public class Dog extends Animal {
 // Cat.java (same package)
 public class Cat extends Animal {
 
+    @Override
     public void sound() {
         System.out.println("Meow");
     }
@@ -231,7 +225,7 @@ public class Cat extends Animal {
 |---|---|
 | `Cat` | "Meow!" |
 | `Dog` | "Woof!" |
-| `Duck` | "Quack!" |
+| `Tiger` | "Roar!" |
 
 ---
 
@@ -274,6 +268,13 @@ a.sound();
   - Superclass → Subclass
   - Explicit cast required, can fail at runtime.
 
+<!-- diagram source: img/diagram-casting.mmd -->
+![h:260 Upcasting and downcasting between Cat and Animal](img/diagram-casting.svg)
+
+---
+
+## Objects: Upcasting & Downcasting (continued)
+
 <!-- no-compile -->
 ```java
 Cat c = new Cat();
@@ -281,10 +282,6 @@ Animal a = c;  // upcasting, automatic
 ```
 
 Why safe? Because every `Cat` IS an `Animal`.
-
----
-
-## Objects: Upcasting & Downcasting (continued)
 
 <!-- no-compile -->
 ```java
@@ -472,7 +469,7 @@ public class Main {
 
 ---
 
-## Quick Recap
+## Summary
 
 - Method overloading allows methods that perform similar or closely related functions to be accessed through a common name. For example, a program performs operations on an array of numbers which can be int, float, or double type. Method overloading allows you to define three methods with the same name and different types of parameters to handle the array operations.
 - Method overloading can be implemented on constructors allowing different ways to initialise objects of a class. This enables you to define multiple constructors for handling different types of initialisations.
@@ -486,5 +483,4 @@ public class Main {
 - [Explain Polymorphism in Java. Use coding examples. Demonstrate method overridding and method overloading. - Your Personalized AI Assistant.](https://you.com/search?q=Explain%20Polymorphism%20in%20Java.%20Use%20coding%20examples.%20Demonstrate%20method%20overridding%20and%20method%20overloading.&fromSearchBar=true&tbm=youchat&chatMode=default)
 - https://beginnersbook.com/2013/03/polymorphism-in-java/
 - http://www.geeksforgeeks.org/overloading-in-java/
-- [http://www.c-sharpcorner.com/UploadFile/433c33/polymorphism-in-java/](https://beginnersbook.com/2013/03/polymorphism-in-java/)
 - https://www.simplilearn.com/tutorials/java-tutorial/java-polymorphism

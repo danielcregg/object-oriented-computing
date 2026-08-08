@@ -20,7 +20,7 @@ source: "Encalsulation.pptx"
 
 ## Agenda
 
-- Why learn encapsulation
+- The four pillars of OOP — where encapsulation fits
 - Definition & OOP context
 - Access modifiers (private, default, protected, public)
 - Implementing encapsulation (private fields, getters & setters)
@@ -28,13 +28,17 @@ source: "Encalsulation.pptx"
 - Validation via setters (e.g., username length)
 - Coding example: BankAccount
 - Benefits: protection, flexibility, maintainability
-- Wrap-up & resources
+- Summary & resources
 
 ---
 
-## Why are we learning about Encapsulation
+## Four major principles of OOP
 
-![A four pillars with different colored columns AI-generated content may be incorrect.](img/slide03-1.png)
+- Object-Oriented Programming rests on **four pillars**: Encapsulation, Inheritance, Polymorphism and Abstraction — the roadmap for the rest of this module.
+- **Encapsulation** is the first pillar and this week's topic — everything else builds on classes that protect their own data.
+
+<!-- diagram source: img/diagram-four-pillars.mmd -->
+![h:300 Four pillars of OOP](img/diagram-four-pillars.svg)
 
 ---
 
@@ -138,19 +142,20 @@ class Main {
 
 ---
 
-## Why use Getters and Setter Methods?
+## Why use Getters and Setters at all?
 
 - You may have concluded that we could just change the private fields of the class definition to be public and achieve the same results.
 - However, hiding the instance variables of an object (i.e., making them private) and using public methods to access them allows us to:
   - Change how the data is handled behind the scenes.
   - Impose validation on the values that the instance variables are being set to.
+- The next slides show one example of each.
 
 ---
 
-## Why use Getters and Setter Methods?
+## Reason 1: Hide Implementation Changes
 
-- Let us say we decide to modify how we store middle names in the person class. Instead of just one String we want to use an array of Strings.
-- The implementation inside the class has changed but the outside world is not affected. The way the methods are called remains the same.
+- Let us say we decide to modify how we store middle names in the Person class. Instead of just one String we want to use an array of Strings.
+- **Version 1 (before the change)** — one plain String:
 ```java
 public class Person {
     // Private instance variable
@@ -165,17 +170,18 @@ public class Person {
     }
 }
 ```
+- On the next two slides the internal storage changes — but callers never notice, because the method signatures stay the same.
 
 ---
 
-## Why use Getters and Setter Methods?
+## Reason 1: Hide Implementation Changes (the new getter)
 
 <style scoped>
 section pre { padding: 12px 18px; margin: 8px 0; }
 section pre code { font-size: 18px; line-height: 1.3; }
 </style>
 
-- Internally, `middleNames` becomes a `String[]` — the getter/setter signatures don't change:
+- **Version 2 (after the change)** — internally, `middleNames` becomes a `String[]`; the getter's signature doesn't change:
 ```java
 public class Person {
     // Private instance variable - array to store multiple middle names
@@ -193,7 +199,6 @@ public class Person {
             return "";
         }
         // Use String.join() to combine array elements with spaces
-        // More efficient and cleaner than StringBuffer for this purpose
         return String.join(" ", middleNames);
     }
 }
@@ -201,21 +206,20 @@ public class Person {
 
 ---
 
-## Why use Getters and Setter Methods?
+## Reason 1: Hide Implementation Changes (the new setter)
 
 <style scoped>
 section pre { padding: 12px 18px; margin: 8px 0; }
 section pre code { font-size: 18px; line-height: 1.3; }
 </style>
 
-- The matching setter validates the input and rebuilds the array:
+- The matching setter validates the input and rebuilds the array — again, same signature as Version 1:
 ```java
 public class Person {
     private String[] middleNames;
 
     /**
      * Setter method to set middle names from a String input
-     * Demonstrates encapsulation: controlled modification of private data
      * The setter transforms the input (String) into internal format (array)
      * @param middleNames String containing middle names separated by spaces
      */
@@ -226,8 +230,7 @@ public class Person {
             this.middleNames = new String[0];
         } else {
             // Split the string into an array using whitespace as delimiter
-            // trim() removes leading/trailing spaces
-            // \\s+ splits on one or more whitespace characters (handles multiple spaces)
+            // \\s+ splits on one or more whitespace characters
             this.middleNames = middleNames.trim().split("\\s+");
         }
     }
@@ -236,19 +239,17 @@ public class Person {
 
 ---
 
-<style scoped>section pre code { font-size: 18px; } section pre { padding: 14px 18px; }</style>
-
-## Why use Getters and Setter Methods?
+## Reason 2: Validate Input in the Setter
 
 - Let us say Person class objects can only accept usernames that have a maximum of ten characters.
 - We can add validation in the setUsername setter method to make sure the username conforms to this requirement.
-- If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated (e.g. the output below is `theRedRhin`)
+- If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated — the next two slides show the class and the calling code (which prints `theRedRhin`).
 
 ---
 
 <style scoped>section pre code { font-size: 19px; } section pre { padding: 14px 18px; }</style>
 
-## Why use Getters and Setter Methods? (continued)
+## Reason 2: Validate Input in the Setter (the Person class)
 
 ```java
 public class Person {
@@ -271,7 +272,7 @@ public class Person {
 
 ---
 
-## Why use Getters and Setter Methods?
+## Reason 2: Validate Input in the Setter (the calling code)
 
 - Calling code sees only the public `getUsername()`/`setUsername(String)` interface — truncation happens invisibly inside the setter:
 
@@ -282,7 +283,7 @@ public class Main {
     public static void main(String[] args) {
         Person perObj1 = new Person();
         perObj1.setUsername("theRedRhino"); // 11 characters in username
-        System.out.println(perObj1.getUsername());
+        System.out.println(perObj1.getUsername()); // prints "theRedRhin"
     }
 }
 ```
@@ -357,10 +358,11 @@ public class BankAccount {
 
 ---
 
-## End note
+## Summary
 
 - Core Concept: Encapsulation is a fundamental principle in object-oriented programming (OOP). It involves bundling data (instance variables) and the code that operates on that data (methods) together into a single unit, such as a class.
 - Controlling Access: Access control mechanisms (like private, public, and protected) are central to encapsulation. By making instance variables private, you prevent direct access to them from outside the class. This forces interaction through the provided methods (getters and setters).
+- Two reasons to route access through getters/setters: hide implementation changes, and validate input before it touches your data.
 
 ---
 
@@ -368,4 +370,3 @@ public class BankAccount {
 
 - https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20encapsulation%20in%20Java%20with%20clear%20examples%20and%20explanations%20suitable%20for%20beginner%20students
 - https://chat.openai.com/?q=Explain+encapsulation+in+Java+for+beginners+in+a+study+mode
-

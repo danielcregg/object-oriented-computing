@@ -88,6 +88,10 @@ section img {
   background: #FFFFFF; border: 1px solid #E5E1D6;
   border-radius: 8px; padding: 6px;
 }
+/* a paragraph holding a single image (e.g. a pre-rendered mermaid diagram,
+   sized via Marp's ![h:NNN] hint) is centered; src-based selectors would
+   break in PDF export where images become data URIs */
+section p:has(> img:only-child) { text-align: center; }
 /* lead: title + section dividers — inverted ink, no gutter */
 section.lead {
   background: linear-gradient(150deg, #14202C 0%, #23405A 100%);

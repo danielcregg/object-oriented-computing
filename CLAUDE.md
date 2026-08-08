@@ -53,6 +53,16 @@ images) are read-only archives.
   a converter re-run emits `- ` everywhere, so re-apply fragments after any
   deck regeneration.
 - Speaker notes live in `<!-- Speaker notes: ... -->` comments.
+- Diagrams: concept diagrams are Mermaid, pre-rendered to SVG (Marp does not
+  render mermaid fences). Each lives as `lecture/img/diagram-<name>.svg` with
+  its editable source beside it (`diagram-<name>.mmd`), referenced by a
+  `<!-- diagram source: img/diagram-<name>.mmd -->` comment above the image.
+  Edit the `.mmd`, then re-render with the shared theme config:
+  `npx @mermaid-js/mermaid-cli -c themes/ooc-mermaid.json -i <file>.mmd -o <file>.svg -b transparent`.
+- Topic decks (weeks 2+) share one flow: title → agenda → context/recap
+  (the four-pillars slide on OOP-pillar weeks) → concepts with examples →
+  benefits/common mistakes → summary → resources. Week 1 (module intro)
+  is exempt.
 
 ## Editing rules
 

@@ -1,0 +1,14 @@
+classDiagram
+  Drawable <|.. Circle
+  Drawable <|.. Square
+  class Drawable {
+    <<interface>>
+    +draw()
+  }
+  class Circle {
+    +draw()
+  }
+  class Square {
+    +draw()
+  }
+  note for Drawable "a contract: every implementing class MUST provide draw()"

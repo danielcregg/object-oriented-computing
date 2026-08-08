@@ -22,85 +22,87 @@ source: "Abstraction.pptx"
 
 ## Agenda
 
+- The four pillars of OOP — where abstraction fits
 - What is Abstraction?
-- Abstract Classes
-- Abstract Methods
+- Abstract Classes & Abstract Methods
 - Interfaces
-- Examples of Abstraction
+- Class vs Abstract Class vs Interface
 - Benefits of Abstraction
+- Summary & resources
 
 ---
 
 ## Four major principles of OOP
 
-- Recall: OOP rests on 4 pillars — Abstraction, Polymorphism, Inheritance, Encapsulation.
-- Covered in full back in week 7 — this week we go deep on **Abstraction**.
+- Recall from week 7: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
+- This week we finish the set with the final pillar: **Abstraction**.
+
+<!-- diagram source: img/diagram-four-pillars.mmd -->
+![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
 
 ---
 
 ## What is Abstraction?
 
 - Abstraction is the process of hiding the implementation details (i.e., the body) of methods and showing only method signatures.
+- A full **method** — signature *and* body:
 ```java
 public int add(int a, int b) {
   return a + b;
 }
 ```
+- Just the **method signature** — what callers see, no body:
 <!-- no-compile -->
 ```java
 public int add(int a, int b);
 ```
-- METHOD
-- METHOD SIGNATURE
 
 ---
 
 ## Abstraction Vs Encapsulation
 
-- Abstraction means hiding method  implementation details using abstract classes and interfaces.
+- Abstraction means hiding method implementation details using abstract classes and interfaces.
 - Encapsulation means hiding data with access modifiers and allowing access via getters and setters.
 
 ---
 
 ## Real Life Abstraction Examples
 
-- A remote control
-- Email
-- A calculator
+- A remote control — you press "volume up"; the infrared circuitry doing the work is hidden inside.
+- Email — you write and click send; the mail servers and protocols underneath are invisible to you.
+- A calculator — you press `÷` and get an answer; the division algorithm is not your problem.
+- In each case you use a simple **interface** and never see the **implementation**.
 
 ---
 
-## How do we implement abstraction in Java?
+## Abstraction in Java
 
-- In Java we implement abstraction by using the abstract keyword
-
----
-
-## Types of Abstraction in Java
-
-- Abstract Classes
-- Abstract Methods
-- Interfaces
+- Java gives us two tools to implement abstraction:
+  - The **`abstract` keyword** — creating abstract classes and abstract methods.
+  - **Interfaces** — fully abstract contracts that classes implement.
+- We will look at abstract classes and methods first, then interfaces.
 
 ---
 
 ## Abstract Classes
 
-- A class which contains the abstract keyword in its declaration is known as abstract class.
+- A class which contains the abstract keyword in its declaration is known as abstract class.
 - If a class is declared abstract, it cannot be instantiated.
 - To use an abstract class, you have to inherit it from another class.
 - If you inherit an abstract class, you have to provide implementations to all the abstract methods in it.
-- Abstract classes may or may not contain abstract methods.
-- If a class has at least one abstract method, then the class must be declared abstract.
+- Abstract classes may or may not contain abstract methods.
+- If a class has at least one abstract method, then the class must be declared abstract.
 
 ---
 
-## Abstraction Coding Example
+## Declaring an Abstract Class
 
-- public abstract class AbstractClass {
-- // Instance Variables and Methods
-- }
-- Note: The abstract keyword is placed before the class keyword in the class declaration
+```java
+public abstract class AbstractClass {
+    // Instance Variables and Methods
+}
+```
+- Note: The abstract keyword is placed before the class keyword in the class declaration
 
 ---
 
@@ -116,7 +118,7 @@ public int add(int a, int b);
 ## Abstract Methods
 
 - If you want a class to contain a particular method but you want the actual implementation of that method to be determined by any sub class which inherits said method then you can declare the method in the abstract super class as an abstract method.
-- The abstract keyword is used to declare a method as abstract.
+- The abstract keyword is used to declare a method as abstract.
 - An abstract method contains a method signature, but no method body.
 - Instead of curly braces, an abstract method will have a semicolon (;) at the end.
 
@@ -124,13 +126,22 @@ public int add(int a, int b);
 
 ## Abstract Methods Vs Concrete Methods
 
-- Abstract methods have no body.
-- public abstract int methodName();
-- Note: The abstract keyword is placed after the access modifier and before the return type.
-- Concrete methods have a body.
-- public int methodName() {
-- return number;
-- }
+- Abstract methods have no body — note the `;` and the abstract keyword placed after the access modifier and before the return type:
+```java
+public abstract class Shape {
+    public abstract int area();
+}
+```
+- Concrete methods have a body:
+```java
+public class Square {
+    private int side;
+
+    public int area() {
+        return side * side;
+    }
+}
+```
 
 ---
 
@@ -138,7 +149,7 @@ public int add(int a, int b);
 
 - The class containing it MUST be declared as abstract.
 - Any class inheriting the current class must either override the abstract method or declare itself as abstract.
-- Note: Eventually, a descendant class has to implement the abstract method; otherwise, you would have a hierarchy of abstract classes that cannot be instantiated.
+- Note: Eventually, a descendant class has to implement the abstract method; otherwise, you would have a hierarchy of abstract classes that cannot be instantiated.
 
 ---
 
@@ -149,7 +160,12 @@ public int add(int a, int b);
 - What should be the abstract concept for these entities?
 - Vehicle can be the general idea of a car or a truck. It retains only the information on general vehicle attributes and behaviour, eliminating the other characteristics of a particular car or a truck.
 
-![](img/slide18-1.png)
+---
+
+## Abstraction Example (visualised)
+
+<!-- diagram source: img/diagram-vehicle-abstraction.mmd -->
+![h:430 Vehicle as the abstraction of Car and Truck](img/diagram-vehicle-abstraction.svg)
 
 ---
 
@@ -159,6 +175,7 @@ public int add(int a, int b);
 - An interface contains only method signatures (i.e. name and parameters) of the methods. Method signatures have no braces { } and are terminated with a semicolon.
 - Interfaces provide a way to ensure that a class adheres to a certain contract.
 - You can use interfaces in Java as a way to achieve polymorphism.
+- *(Since Java 8 an interface may also carry `default` and `static` methods with bodies — the comparison table later covers this.)*
 
 ---
 
@@ -166,9 +183,9 @@ public int add(int a, int b);
 
 - Defining an interface is similar to creating a new class. An interface is declared using the interface keyword.
 - Just like with classes, an interface can be declared public.
-- Interfaces cannot be instantiated. They can only be implemented by classes or extended by other interfaces. implements is the keyword used in class definitions to implement an interface.
+- Interfaces cannot be instantiated. They can only be implemented by classes or extended by other interfaces. implements is the keyword used in class definitions to implement an interface.
 - When a class implements an interface, it provides a method body for each of the abstract methods declared in the interface.
-- A class can implement multiple interfaces.
+- A class can implement multiple interfaces.
 
 ---
 
@@ -176,49 +193,46 @@ public int add(int a, int b);
 
 ```java
 public interface ExampleInterface {
-/* An interface can contain constant declarations. All constant values
- * defined in an interface are implicitly public, static, and final. You
- * can omit these modifiers e.g. double PI = 3.1415;
- */
-/* All method declarations in an interface are implicitly public and
- * abstract so you can omit the public modifier and abstract keyword.
- */
-public abstract void method1();
-void method2();
+    /* An interface can contain constant declarations. All constant values
+     * defined in an interface are implicitly public, static, and final. You
+     * can omit these modifiers e.g. double PI = 3.1415;
+     */
+
+    /* All method declarations in an interface are implicitly public and
+     * abstract so you can omit the public modifier and abstract keyword.
+     */
+    public abstract void method1();
+    void method2();
 }
 ```
 
 ---
 
 ## Implementing an Interface
-
-<style scoped>
-section pre { padding: 8px 14px; margin: 4px 0; }
-section pre code { font-size: 16px; line-height: 1.25; }
-</style>
 
 - Before you can use an interface, it must be implemented by some class. Here `ExampleClass` implements `ExampleInterface`:
 ```java
 interface ExampleInterface {
-void method1();
-void method2();
+    void method1();
+    void method2();
 }
 
 public class ExampleClass implements ExampleInterface {
-@Override
-public void method1() {
-	System.out.println("This is method 1");
-}
-@Override
-public void method2() {
-	System.out.println("This is method 2");
-}
+    @Override
+    public void method1() {
+        System.out.println("This is method 1");
+    }
+
+    @Override
+    public void method2() {
+        System.out.println("This is method 2");
+    }
 }
 ```
 
 ---
 
-## Implementing an Interface
+## Implementing an Interface (continued)
 
 - A class that implements an interface must implement ALL the abstract methods declared in the interface before it can be instantiated.
 - The methods must have the exact same method signature (name and parameters) as declared in the interface.
@@ -246,6 +260,15 @@ public class Circle implements Drawable {
 
 ---
 
+## Real world Interface Example (visualised)
+
+- Unrelated classes can each sign the same contract — dashed arrows mean *implements*:
+
+<!-- diagram source: img/diagram-interface.mmd -->
+![h:330 The Drawable contract and its implementers](img/diagram-interface.svg)
+
+---
+
 ## What can an Interface contain?
 
 - Constants
@@ -269,14 +292,14 @@ public class Circle implements Drawable {
 - It can contain constructors. Interface cannot contain constructors.
 - Instance variables and methods in a class can be declared using any access modifier (i.e. public, private, default, protected). All variables and methods in an interface are implicitly public.
 - Instance variables in a class can be public, static, final or none of these. All instance variables in an interface are implicitly public, static and final.
-- Classes can not contain abstract methods. An interface contains only abstract methods.
+- A concrete class cannot contain abstract methods (only an abstract class can). An interface's methods are implicitly abstract — though since Java 8, default and static methods may carry bodies.
 
 ---
 
 ## Why use Interfaces?
 
 - Interfaces increase flexibility: a class can implement several of them (see comparison table).
-- An interface is a contract (or a protocol, or a common understanding) of what the classes can do. When a class implements a certain interface, it promises to provide implementation to all the abstract methods declared in the interface.
+- An interface is a contract (or a protocol, or a common understanding) of what the classes can do. When a class implements a certain interface, it promises to provide implementation to all the abstract methods declared in the interface.
 - Interfaces facilitate polymorphism.
 
 ---
@@ -300,15 +323,13 @@ public class Circle implements Drawable {
 |---|---|---|---|
 | Definition | A standard class that can be instantiated. | A class declared with abstract that cannot be instantiated. | A blueprint of behavior; a contract that implementing classes must follow. |
 | Instantiation | Yes (e.g., new Student()). | No. You cannot create an object directly. | No. You cannot create an object directly. |
-| Methods | All methods must have a body (implementation). | Can have both abstract (no body) and concrete (with body) methods. | Methods are implicitly abstract (no body).<br>(Since Java 8: default and static methods can have bodies).* |
+| Methods | All methods must have a body (implementation). | Can have both abstract (no body) and concrete (with body) methods. | Methods are implicitly abstract (no body).<br>(Since Java 8: default and static methods can have bodies).* | 
 | Inheritance Limit | A class can extend only one other class. | A class can extend only one abstract class (Single Inheritance). | A class can implement multiple interfaces (Multiple Inheritance of Type). |
 | Variables (State) | Can have any type of variable (instance, static, final, etc.). | Can have instance variables to hold state (non-final, non-static, etc.). | Variables are implicitly public static final (Constants only). |
 | Constructors | Yes. Used to initialize the object. | Yes. Called by subclasses (via super()) to initialize the parent part of the object. | No. Interfaces do not have constructors. |
 | Access Modifiers | Members can be private, protected, public, or default. | Members can use any access modifier. | Methods are implicitly public. (Java 9 allows private methods for internal logic). |
 | Keyword | class Name { ... } | abstract class Name { ... } | interface Name { ... } |
 | Relationship | "Is-a" relationship (e.g., A Dog is an Animal). | "Is-a" relationship (Partial implementation). | "Can-do" relationship (Capability/Contract, e.g., Runnable, Serializable). |
-
-- Class vs Abstract Class vs Interface
 
 ---
 
@@ -322,15 +343,31 @@ public class Circle implements Drawable {
 
 ## Benefits of Abstraction
 
-- Reduces Complexity & Improves Maintainability
-- Separates frequently changing code from stable code.
+- Reduces complexity & improves maintainability
+  - Separates frequently changing code from stable code.
 - Enforces the Open/Closed Principle
-- Open (The Extension):
-  - We can add new features by creating new classes that implement the interface.
-- Closed (The Protection):
-  - The existing system (client code) relies only on the interface, so it does not need to be modified when new features are added.
-- Provides "Class-Level" Protection
-- Similar to private/protected modifiers for data, abstract protects the class usage.
+  - Open (the extension): we can add new features by creating new classes that implement the interface.
+  - Closed (the protection): the existing system (client code) relies only on the interface, so it does not need to be modified when new features are added.
+- Provides "class-level" protection
+  - Similar to private/protected modifiers for data, abstract protects the class usage.
 - Safety
-- Prevents incorrect usage by making instantiation impossible.
+  - Prevents incorrect usage by making instantiation impossible.
 
+---
+
+## Summary
+
+- Abstraction hides *how* something works and exposes only *what* it does — the fourth and final OOP pillar.
+- `abstract` classes cannot be instantiated; they may mix abstract methods (signature only) with concrete ones.
+- A class with even one abstract method must itself be abstract, and some descendant must eventually implement it.
+- Interfaces are pure contracts: a class `implements` them (as many as it likes) and must supply every method body.
+- Choose an abstract class to share state/code among close relatives; choose an interface for a capability any class can adopt.
+
+---
+
+## Resources
+
+- Oracle Java Tutorials — Abstract Methods and Classes: https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html
+- Oracle Java Tutorials — Interfaces: https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
+- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20abstraction%20in%20Java%20with%20clear%20examples%20and%20explanations%20suitable%20for%20beginner%20students
+- https://chat.openai.com/?q=Explain+abstraction+in+Java+for+beginners+in+a+study+mode

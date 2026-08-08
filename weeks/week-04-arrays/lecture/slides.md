@@ -20,24 +20,14 @@ source: "Java Arrays.pptx"
 
 ## Agenda
 
-- What is an Array?
-- Declaring and Assigning an array
-- Array Length
-- Array editing
-- Multidimensional Arrays
-
----
-
-## Array Construction
-
-```java
-double[] battingAverages = new double[7];
-```
-- `battingAverages` refers to the new array; every element starts at the default value for `double` (`0.0`):
-
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 |
-|---|---|---|---|---|---|---|
-| 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+- What is an array?
+- Characteristics: length & homogeneity
+- Elements, indices & bounds
+- Declaring and creating arrays
+- The `length` property
+- Looping through arrays (`for` and for-each)
+- Multidimensional arrays
+- Kahoot, summary & resources
 
 ---
 
@@ -60,34 +50,31 @@ double[] battingAverages = new double[7];
   - Length (i.e., the number of variables (AKA components) it stores) The length of an array cannot be changed (i.e., it is fixed upon creation).
   - Homogeneity (i.e., every variable in an array has the same data type).
 
----
-
-## Array Length and Homogeneity
-
 ```java
 // Declare an array of ints to store student ages
 int[] studentAgesArray;
 
 // Allocate memory for 5 ints
-studentAgesArray= new int[5];
+studentAgesArray = new int[5];
 ```
-- Below is the studentAgesArray. It can store 5 ages of type int. I have populated it with 5 ages which are all ints. The length of this array is 5. The length cannot be changed. If I wanted to add more ages, I would need to create a new array.
+- Below is the studentAgesArray populated with 5 ages, all of type int. Its length is 5 and cannot be changed — to store more ages I would need to create a new array.
 
 | 17 | 21 | 18 | 18 | 19 |
 |---|---|---|---|---|
 
 ---
 
-## Arrays Details
+## Elements and Indices
 
 - The individual values in an array are called elements (or components).
 - The type of those elements (which must be the same because arrays are homogeneous) is called the element type.
 - The number of elements is called the length of the array.
 - Each element is identified by its position number in the array, which is called its index.
-- Index numbers always begin with 0 and therefore extends up to one less than the length of the array.
+- Index numbers always begin with 0 and therefore extend up to one less than the length of the array — positions 0 through n-1:
 
-| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|---|---|---|---|---|---|---|---|---|---|
+| 5.0 | 2.44 | 9.01 | 1.0 | -9.9 |
+|---|---|---|---|---|
+| 0 | 1 | 2 | 3 | n-1 |
 
 ---
 
@@ -104,6 +91,19 @@ int [ ] num = new int [ 10 ];
 
 ---
 
+## Default Values on Construction
+
+```java
+double[] battingAverages = new double[7];
+```
+- `battingAverages` refers to the new array; every element starts at the default value for `double` (`0.0`):
+
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+
+---
+
 ## Another way to declare and assign an Array
 
 - We can declare an array variable that holds an array of strings.
@@ -115,34 +115,20 @@ String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
 
 ---
 
-## Array Indices
-
-- An array, with index positions 0 through n-1:
-
-| 0 | 1 | 2 | 3 | ... | n-1 |
-|---|---|---|---|---|---|
-
----
-
-## Array Indices (Example)
-
-- Example: `double[]`
-
-| 5.0 | 2.44 | 9.01 | 1.0 | -9.9 |
-|---|---|---|---|---|
-| 0 | 1 | 2 | 3 | n-1 |
-
----
-
-## Arrays
+## Index Bounds
 
 - The index starts at zero and ends at length-1.
 - Example:
+
 ```java
-int[] values = new int[5];  values[0] = 12; // CORRECT  values[4] = 12; // CORRECT
-values[5] = 12; // WRONG!! compiles but
-// throws an Exception
-// at run-time
+int[] values = new int[5];
+values[0] = 12; // CORRECT — first element
+values[4] = 12; // CORRECT — last element
+```
+<!-- no-compile -->
+```java
+values[5] = 12; // WRONG!! compiles, but throws an
+                // Exception at run-time
 ```
 - Will test in Lab
 
@@ -159,26 +145,21 @@ int[] values = {1, 2.5, 3, 3.5, 4};
 
 ---
 
-## Array Length
+## The length Property
 
-- To find out how many elements an array have, use the length property:
-- What does this output?
+- Each array has a length variable built-in that contains the length of the array:
 
-```java
-String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
-System.out.println(cars.length);
-```
-
----
-
-## The length variable
-
-- Each array has a length variable built-in that  contains the length of the array.
 ```java
 int[] values = new int[12];
 int size = values.length; // 12
 int[] values2 = {1,2,3,4,5};
 int size2 = values2.length; // 5
+```
+- What does this output?
+
+```java
+String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
+System.out.println(cars.length);
 ```
 
 ---
@@ -244,7 +225,7 @@ System.out.println(x);
 board[1][2] = 'd';
 System.out.println(board[1][2]);
 ```
-- Create a chess board
+- Lab exercise: use a `char[8][8]` to model a chess board
 
 ---
 
@@ -254,4 +235,18 @@ System.out.println(board[1][2]);
 
 ---
 
+## Summary
+
+- An array holds a fixed number of values of a single type — its length is set at creation and cannot change.
+- Indices run from `0` to `length - 1`; going past the end throws an exception at run-time.
+- Create arrays with `new type[n]` (elements get default values) or with a literal `{...}`.
+- Use `arrayName.length` to size loops; for-each is the cleanest way to visit every element.
+- Multidimensional arrays are arrays of arrays — index with `[row][column]`.
+
+---
+
 ## Resources
+
+- Oracle Java Tutorials — Arrays: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html
+- W3Schools Java Arrays: https://www.w3schools.com/java/java_arrays.asp
+- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20Java%20arrays%20with%20clear%20examples%20suitable%20for%20beginner%20students

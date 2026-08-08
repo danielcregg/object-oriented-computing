@@ -1,0 +1,12 @@
+flowchart TB
+  subgraph C["A typical compiled language (e.g. C)"]
+    direction LR
+    c1["hello.c\nsource code"] -- "compiler" --> c2["hello.exe\nmachine code"] --> c3["runs on ONE platform\n(e.g. Windows + Intel)"]
+  end
+  subgraph J["Java — Write Once, Run Anywhere"]
+    direction LR
+    j1["MyProgram.java\nsource code"] -- "javac (compiler)" --> j2["MyProgram.class\nbytecode"] --> j3["JVM\n(interprets bytecode)"] --> j4["runs on ANY platform\nWindows · macOS · Linux"]
+  end
+  C ~~~ J
+  style j2 fill:#FDEBD7,stroke:#E76F00
+  style j3 fill:#FDEBD7,stroke:#E76F00

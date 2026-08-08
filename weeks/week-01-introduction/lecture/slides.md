@@ -90,21 +90,21 @@ On completion of this module the learner will/should be able to;
 
 ---
 
+## Assessment Details
+
+* All assessments are completed **in-person in a lab**.
+* MCQ questions can be sourced from **Lecture and Lab** materials.
+* Use AI to generate sample MCQ questions for you. Google's **NotebookLM** is a great tool to do this.
+* MCQs will involve standard MCQ questions **plus some Coderunner coding questions**.
+
+---
+
 ## Lab Coding Environment
 
 * We will use **GitHub Codespaces** as our coding environment.
 * GitHub Codespaces is VS Code running on a virtual machine which you connect to via a browser. It is a cloud based IDE.
 * If you are familiar with VS Code then you will notice no difference.
 * We will be using **AI** to assist in answering questions.
-
----
-
-## Assessments
-
-* All assessments are completed **in-person in a lab**.
-* MCQ questions can be sourced from **Lecture and Lab** materials.
-* Use AI to generate sample MCQ questions for you. Google's **NotebookLM** is a great tool to do this.
-* MCQs will involve standard MCQ questions **plus some Coderunner coding questions**.
 
 ---
 
@@ -176,7 +176,6 @@ Background · running code · JVM, JDK · IDEs · common errors
 
 ## Java Key Words
 
-* A **computer program** is a sequence of human-readable instructions that are converted by software into machine-executable instructions.
 * List of 50 Java key words:
 
 | Range | Keywords |
@@ -195,17 +194,19 @@ Background · running code · JVM, JDK · IDEs · common errors
 
 ## Compiler vs Interpreter
 
+* A **computer program** is a sequence of human-readable instructions that are converted by software into machine-executable instructions.
 * A **compiler** is a program that converts instructions into a machine-code or lower-level form so that they can be read and executed by a computer.
 * An **interpreter** is a computer program that directly executes, i.e. performs, instructions written in a programming or scripting language, without previously compiling them into a machine language program.
 * Java is **both compiled and interpreted**. Java source code is first compiled into bytecode by the Java compiler. Then, the bytecode is executed by the Java Virtual Machine (JVM), which is a software-based interpreter.
 
 ---
 
-<!-- _class: grid2 -->
-
 ## non-Java program VS Java Program
 
-![C compilation pipeline](img/slide22-1.png) ![Java compile: .java to .class](img/slide22-2.png) ![Computer](img/slide22-3.png) ![JVM](img/slide22-4.jpg)
+* A typical compiled language stops at machine code for **one** platform — Java compiles to **bytecode** which the JVM runs **anywhere**.
+
+<!-- diagram source: img/diagram-compile-pipeline.mmd -->
+![h:420 C compilation vs Java compilation](img/diagram-compile-pipeline.svg)
 
 ---
 
@@ -232,6 +233,7 @@ Background · running code · JVM, JDK · IDEs · common errors
 ## Your First Program
 
 * Traditional **'Hello World'** program in Java
+* Every application has the same basic layout — your 'code' goes inside the **main method**
 * We will examine this program in the lab
   * Be careful of spelling — `JaVa iS CaSe SeNsItiVe`
   * Java uses special characters, e.g. `{}`
@@ -282,23 +284,6 @@ D:\temp\hello>
 * **Output** — where the program speaks back
 
 ![VS Code running Hello World](img/slide29-1.png)
-
----
-
-## Syntax 1.1: The Java Program
-
-* Every application has the same basic layout
-  * Add your 'code' inside the **main method**
-
-```java
-public class HelloPrinter
-{
-    public static void main(String[] args)
-    {
-        System.out.println("Hello, World!");
-    }
-}
-```
 
 ---
 

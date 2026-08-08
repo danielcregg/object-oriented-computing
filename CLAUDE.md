@@ -1,18 +1,20 @@
 # CLAUDE.md — how to work in this repo
 
 Source-of-truth repo for the Object-Oriented Computing module (Java, ATU).
-Editable sources are Markdown, JSON, and HTML; binaries (`original/*.pptx`,
-images) are read-only archives.
+Editable sources are Markdown, Java (labs), JSON, and HTML; images are
+read-only assets.
 
 ## Map
 
-- `weeks/week-NN-<topic>/lecture/slides.md` — Marp deck, THE canonical lecture.
-  Edit this, never the pptx. `lecture/img/` holds extracted images;
-  `lecture/original/*.pptx` is the untouched source deck (read-only reference).
-- `weeks/week-NN-<topic>/lab/lab.md` — lab page: Classroom invitation link,
-  starter repo, and a synced snapshot of the starter repo's README (the
-  canonical lab instructions). Edits made here must be pushed to the starter
-  repo too. Weeks without labs say so explicitly.
+- `weeks/week-NN-<topic>/lecture/slides.md` — Marp deck, THE canonical
+  lecture. `lecture/img/` holds its images. (The original pptx archives
+  were deleted 2026-08-08; they survive in git history only.)
+- `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
+  instructions students follow) + `Main.java` starter per lab. Students
+  fork the repo and work here (devcontainer provided); CI compiles every
+  lab source file. GitHub Classroom is retired.
+- `weeks/week-NN-<topic>/lab/lab.md` — thin pointer to the lab's canonical
+  home in `labs/`. Weeks without labs say so explicitly.
 - `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` — assessment weeks.
   MCQ question content lives in Moodle only — never commit it here.
 - `module/` — module-overview (weekly topics + per-week summaries),
@@ -112,10 +114,9 @@ Safety audit before any push (must print nothing):
 
     python scripts/safety_audit.py
 
-Checks tracked extensions, path placement (including pptx location),
-tracked text content, and every pptx's internal XML/rels parts (plus
-any embedded office object inside a pptx, flagged for manual review)
-for leaked student data and Moodle tokens. A known-safe mention (a
+Checks tracked extensions, path placement, and tracked text content
+for leaked student data and Moodle tokens (pptx-internal checks remain
+in the script but are vacuous since the pptx archives were deleted). A known-safe mention (a
 whitelisted Classroom URL, or this pattern's own name — plain or backtick-quoted) only clears
 a match it fully covers — real content extending past one, even glued
 on with no separating space, still surfaces. Classroom `/classrooms/`

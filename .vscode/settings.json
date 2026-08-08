@@ -2,5 +2,6 @@
   "markdown.marp.themes": [
     "./themes/ooc.css"
   ],
-  "markdown.marp.enableHtml": true
+  "markdown.marp.enableHtml": true,
+  "java.project.sourcePaths": ["labs/src"]
 }

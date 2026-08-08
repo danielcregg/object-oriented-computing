@@ -36,9 +36,15 @@ are preserved untouched in each week's `lecture/original/`.
 October bank holiday, with 6 teaching weeks before it and 6 after.
 
 **Assessment:** three MCQs (weeks 5, 9, 12), held during lab slots —
-no projects. Extra unscheduled Classroom labs exist for
-[control flow](REDACTED) and structure
-(topics without dedicated lecture weeks).
+no projects.
+
+## Labs
+
+All labs live in this repository — **[labs/](labs/README.md)** — one
+folder per lab with the instructions (README) and a runnable `Main.java`
+starter. Students: **fork this repo, open a Codespace on your fork**
+(the devcontainer gives you a ready Java IDE), pick a lab folder, and
+follow its README. GitHub Classroom is retired.
 
 ## Module info
 
@@ -53,10 +59,8 @@ no projects. Extra unscheduled Classroom labs exist for
 
 | Repo | Purpose |
 |---|---|
-| [ooc-lab-template](https://github.com/danielcregg/ooc-lab-template) | GitHub Classroom lab template (Codespaces-ready) |
 | [REDACTED](https://github.com/danielcregg/REDACTED) | Worked lab solutions by topic |
 | [marp-to-pages-template](https://github.com/danielcregg/marp-to-pages-template) | Origin of the Marp CI workflow |
-| [OOC GitHub Classroom](https://classroom.github.com/classrooms/REDACTED) | Lab distribution — assignments, invitations, starter repos |
 
 ## For AI tools
 

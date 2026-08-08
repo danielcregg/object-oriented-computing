@@ -1,0 +1,16 @@
+{
+  "name": "OOC Java Labs",
+  "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "marp-team.marp-vscode"
+      ],
+      "settings": {
+        "java.project.sourcePaths": ["labs/src"]
+      }
+    }
+  },
+  "postCreateCommand": "java -version"
+}

@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the GitHub Pages landing page (index.html) for the lecture decks.
+"""Generate the GitHub Pages landing page(s) for the lecture decks.
 
-Scans weeks/ in folder order and emits one timeline row per week:
-  - lecture weeks  -> title from the deck's frontmatter + slides/pdf/pptx links
-  - MCQ weeks      -> a "// comment" marker row (no deck to run)
-  - reading week   -> a "// comment" marker row
+Main page (OUTPUT_DIR/index.html): scans weeks/ in folder order and emits
+one timeline row per week — lecture weeks get title + slides/pdf/pptx
+links, MCQ weeks and reading week render as "// comment" marker rows.
 
-The page carries the same visual identity as themes/ooc.css ("the lecture
-as source code"): paper background, editor-gutter rail, week numbers set
+Draft preview (OUTPUT_DIR/reimagined/index.html): built automatically
+whenever any weeks/*/lecture/slides-reimagined.md exists — a mobile-first
+list of the reimagined draft decks. Disappears once the drafts are gone.
+
+Both pages carry the visual identity of themes/ooc.css ("the lecture as
+source code"): paper background, editor-gutter rail, week numbers set
 like line numbers, mono headings ending in an orange semicolon.
 
 Usage:
@@ -36,15 +39,7 @@ FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
            "font-size='26' font-weight='700' fill='%23E76F00' "
            "text-anchor='middle'%3E;%3C/text%3E%3C/svg%3E")
 
-HEAD = """<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Lecture decks for the Object-Oriented Computing module (Java), Atlantic Technological University.">
-<title>Object-Oriented Computing &mdash; Lecture Decks</title>
-<link rel="icon" href="__FAVICON__">
-<style>
+STYLE = """<style>
   :root {
     --paper: #FBFAF7; --ink: #1E2833; --blue: #33698C; --orange: #E76F00;
     --slate: #46536B; --rule: #DED8C9; --muted: #8B8471; --gutter-num: #AFA893;
@@ -56,21 +51,15 @@ HEAD = """<!doctype html>
   * { box-sizing: border-box; margin: 0; }
   body {
     font-family: var(--sans); color: var(--ink);
-    /* the decks' editor-gutter rail, painted into the page background */
     background: linear-gradient(to right,
       var(--paper) 0, var(--paper) 86px,
       var(--rule) 86px, var(--rule) 88px,
       var(--paper) 88px, var(--paper) 100%);
     min-height: 100vh; line-height: 1.5;
   }
-  a:focus-visible, .row a:focus-visible {
-    outline: 2px solid var(--orange); outline-offset: 2px; border-radius: 4px;
-  }
+  a:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; border-radius: 4px; }
   header { padding: 64px 40px 40px 122px; max-width: 980px; }
-  .kicker {
-    font-family: var(--mono); font-size: 15px; color: var(--muted);
-    letter-spacing: 0.01em;
-  }
+  .kicker { font-family: var(--mono); font-size: 15px; color: var(--muted); letter-spacing: 0.01em; }
   .kicker::before { content: '// '; color: var(--orange); }
   h1 {
     font-family: var(--mono); font-weight: 600; letter-spacing: -0.015em;
@@ -94,10 +83,7 @@ HEAD = """<!doctype html>
   }
   .lecture:hover { background: var(--tint); }
   .lecture:hover .num, .lecture:focus-within .num { color: var(--orange); }
-  .topic {
-    font-family: var(--mono); font-weight: 600; font-size: 21px;
-    letter-spacing: -0.01em;
-  }
+  .topic { font-family: var(--mono); font-weight: 600; font-size: 21px; letter-spacing: -0.01em; }
   .topic a { color: var(--ink); text-decoration: none; }
   .topic a:hover { color: var(--blue); }
   .actions {
@@ -120,22 +106,36 @@ HEAD = """<!doctype html>
   }
   footer p + p { margin-top: 4px; }
   footer .comment::before { content: '// '; color: var(--orange); }
+  footer a { color: var(--slate); }
   @media (max-width: 760px) {
     body { background: var(--paper); }
-    header { padding: 40px 20px 28px; }
+    header { padding: 36px 20px 24px; }
     footer { padding: 26px 20px 44px; }
-    .row { grid-template-columns: 1fr; row-gap: 10px; padding: 16px 20px; }
+    .row { grid-template-columns: 1fr; row-gap: 12px; padding: 18px 20px; }
     .num { text-align: left; padding: 0; }
     .num[data-week]::before { content: 'week '; }
-    .actions { white-space: normal; flex-wrap: wrap; }
+    .actions { white-space: normal; flex-wrap: wrap; gap: 14px; }
+    .actions .open { padding: 12px 26px; font-size: 16.5px; }
+    .actions .dl { padding: 10px 6px; font-size: 15px; }
+    .topic { font-size: 23px; }
+    .topic a { display: block; padding: 2px 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .row, .num, .actions .open { transition: none; }
   }
-</style>
-</head>
-<body>
-<header>
+</style>"""
+
+
+def page_head(title: str) -> str:
+    return (f'<!doctype html>\n<html lang="en">\n<head>\n'
+            f'<meta charset="utf-8">\n'
+            f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            f'<meta name="description" content="Lecture decks for the '
+            f'Object-Oriented Computing module (Java), Atlantic Technological University.">\n'
+            f'<title>{title}</title>\n'
+            f'<link rel="icon" href="{FAVICON}">\n{STYLE}\n</head>\n<body>\n')
+
+MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
   <p class="standfirst">One lecture deck per teaching week. Open the slides in
@@ -145,11 +145,31 @@ HEAD = """<!doctype html>
 <ol class="timeline">
 """
 
-FOOT = """</ol>
+MAIN_FOOT = """</ol>
 </main>
 <footer>
   <p class="comment">rebuilt automatically from the module's markdown sources</p>
   <p class="comment">Atlantic Technological University</p>
+</footer>
+</body>
+</html>
+"""
+
+PREVIEW_HEADER = """<header>
+  <p class="kicker">draft preview &middot; not the published decks</p>
+  <h1>Reimagined Decks</h1>
+  <p class="standfirst">From-scratch rebuilds of every lecture, up for review.
+  Tap a week to open its draft &mdash; tap or swipe inside to advance.</p>
+</header>
+<main>
+<ol class="timeline">
+"""
+
+PREVIEW_FOOT = """</ol>
+</main>
+<footer>
+  <p class="comment"><a href="../">back to the published decks</a></p>
+  <p class="comment">drafts rebuild on every push &mdash; this page retires at adoption</p>
 </footer>
 </body>
 </html>
@@ -172,6 +192,18 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
             f'  </li>\n')
 
 
+def preview_row(folder: str, week_no: str, title: str) -> str:
+    t = html.escape(title)
+    return (f'  <li class="row lecture">\n'
+            f'    <span class="num" data-week aria-hidden="true">{week_no}</span>\n'
+            f'    <span class="topic"><a href="{folder}/">{t}</a></span>\n'
+            f'    <span class="actions">\n'
+            f'      <a class="open" href="{folder}/"'
+            f' aria-label="Week {week_no}: {t} — open draft">open</a>\n'
+            f'    </span>\n'
+            f'  </li>\n')
+
+
 def marker_row(week_no: str, label: str) -> str:
     num_attr = ' data-week' if week_no else ''
     return (f'  <li class="row marker">\n'
@@ -181,7 +213,14 @@ def marker_row(week_no: str, label: str) -> str:
             f'  </li>\n')
 
 
-def build_rows() -> tuple[str, int, int]:
+def deck_title(deck: Path, slug: str) -> str:
+    m = TITLE_RE.search(deck.read_text(encoding="utf-8"))
+    if m:
+        return re.sub(r"\s*\(reimagined\)$", "", m.group(1))
+    return slug.replace("-", " ").title()
+
+
+def build_main_rows() -> tuple[str, int, int]:
     rows, lectures, markers = [], 0, 0
     for folder in sorted(p for p in WEEKS.iterdir() if p.is_dir()):
         name = folder.name
@@ -196,22 +235,41 @@ def build_rows() -> tuple[str, int, int]:
             rows.append(marker_row("", READING_LABEL))
             markers += 1
         elif deck.is_file():
-            text = deck.read_text(encoding="utf-8")
-            m = TITLE_RE.search(text)
-            title = m.group(1) if m else slug.replace("-", " ").title()
-            rows.append(lecture_row(name, week_no, title))
+            rows.append(lecture_row(name, week_no, deck_title(deck, slug)))
             lectures += 1
     return "".join(rows), lectures, markers
+
+
+def build_preview_rows() -> tuple[str, int]:
+    rows, count = [], 0
+    for deck in sorted(WEEKS.glob("*/lecture/slides-reimagined.md")):
+        name = deck.parent.parent.name
+        week_match = WEEK_NO_RE.match(name)
+        week_no = week_match.group(1).lstrip("0") if week_match else ""
+        slug = name.split("-", 2)[-1]
+        rows.append(preview_row(name, week_no, deck_title(deck, slug)))
+        count += 1
+    return "".join(rows), count
 
 
 def main() -> None:
     out_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "build")
     out_dir.mkdir(parents=True, exist_ok=True)
-    rows, lectures, markers = build_rows()
-    page = HEAD.replace("__FAVICON__", FAVICON) + rows + FOOT
-    out = out_dir / "index.html"
-    out.write_text(page, encoding="utf-8", newline="\n")
-    print(f"wrote {out} ({lectures} lectures, {markers} marker rows)")
+
+    rows, lectures, markers = build_main_rows()
+    page = (page_head("Object-Oriented Computing &mdash; Lecture Decks")
+            + MAIN_HEADER + rows + MAIN_FOOT)
+    (out_dir / "index.html").write_text(page, encoding="utf-8", newline="\n")
+    print(f"wrote {out_dir / 'index.html'} ({lectures} lectures, {markers} marker rows)")
+
+    drafts, count = build_preview_rows()
+    if count:
+        preview_dir = out_dir / "reimagined"
+        preview_dir.mkdir(parents=True, exist_ok=True)
+        page = (page_head("Reimagined Decks &mdash; draft preview")
+                + PREVIEW_HEADER + drafts + PREVIEW_FOOT)
+        (preview_dir / "index.html").write_text(page, encoding="utf-8", newline="\n")
+        print(f"wrote {preview_dir / 'index.html'} ({count} draft decks)")
 
 
 if __name__ == "__main__":

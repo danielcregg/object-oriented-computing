@@ -105,6 +105,8 @@ section.lead .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 21px; color: #E76F00; letter-spacing: 0.06em;
 }
+/* title-slide artwork must never spill off the slide */
+section.lead img { max-height: 340px; object-fit: contain; }
 /* cols: two-column bullet flow for dense slides */
 section.cols ul { columns: 2; column-gap: 52px; font-size: 21px; }
 section.cols li { break-inside: avoid; margin: 0 0 12px 0; }
@@ -121,3 +123,18 @@ section.logos p:has(img) {
 section.logos img { border: none; background: transparent; padding: 0; max-height: 100px; max-width: 30%; object-fit: contain; }
 /* dense: slightly smaller body for prose-heavy slides */
 section.dense { font-size: 22px; }
+/* side: bullets left, ONE image right (slides pairing a list with a figure).
+   Expects exactly one list and one image paragraph per slide. */
+section.side {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-areas: "head head" "body figure";
+  column-gap: 44px;
+  align-content: start !important;
+}
+section.side h2 { grid-area: head; }
+section.side ul, section.side ol { grid-area: body; align-self: center; }
+section.side p:has(img) {
+  grid-area: figure; align-self: center; justify-self: center; margin: 0;
+}
+section.side img { max-width: 100%; max-height: 460px; object-fit: contain; }

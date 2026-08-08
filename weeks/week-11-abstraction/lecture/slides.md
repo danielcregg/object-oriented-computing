@@ -107,6 +107,8 @@ public abstract class AbstractClass {
 
 ---
 
+<!-- _class: side -->
+
 ## Concrete Classes Vs Abstract classes
 
 * Abstract classes cannot be instantiated. Declaring a class as abstract means that you do not want it to be instantiated and that the class can only be inherited. You are imposing a rule in your code.

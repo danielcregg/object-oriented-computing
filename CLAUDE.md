@@ -46,7 +46,8 @@ images) are read-only archives.
   edit the theme file to restyle every deck at once. Per-slide classes via
   `<!-- _class: ... -->`: `lead` (title/divider), `cols` (2-column bullets),
   `grid2` (side-by-side images), `logos` (borderless logo row), `dense`
-  (smaller body), `centered-table`. Kicker lines use
+  (smaller body), `centered-table`, `side` (bullets left, one image
+  right). Kicker lines use
   `<span class="kicker">// ...</span>` (requires the workflow's `--html`).
 - Bullet markers carry meaning: `* ` = fragmented (revealed one per keypress in
   the HTML presentation), `- ` = shown immediately. Every deck fragments its

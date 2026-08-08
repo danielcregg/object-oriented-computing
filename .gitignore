@@ -11,3 +11,6 @@ __pycache__/
 
 # SDD scratch workspace (plan execution artifacts, never repo content)
 .superpowers/
+
+# local Moodle web-service token — never commit
+moodle-api-key.txt

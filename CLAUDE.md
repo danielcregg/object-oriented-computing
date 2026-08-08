@@ -69,8 +69,9 @@ images) are read-only archives.
   `scripts/check_diagrams.py` — never edit a rendered `.svg` by hand.
 - Topic decks (weeks 2+) share one flow: title → agenda → context/recap
   (the four-pillars slide on OOP-pillar weeks) → concepts with examples →
-  benefits/common mistakes → summary → resources. Week 1 (module intro)
-  is exempt.
+  benefits/common mistakes → summary. Every deck ends on its Summary
+  slide — no resources slides. Week 1 (module intro) is exempt from the
+  flow but also ends on a Summary.
 
 ## Editing rules
 

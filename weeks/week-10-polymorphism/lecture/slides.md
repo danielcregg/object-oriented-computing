@@ -29,7 +29,7 @@ Same call, `speak()` — different sound, depending on the object.
 - Method Overloading & Method Overriding
 - Object Upcasting and Downcasting
 - Benefits of Polymorphism
-- Summary & resources
+- Summary
 
 ---
 
@@ -494,12 +494,3 @@ public class Main {
 - Method overloading can be implemented on constructors allowing different ways to initialise objects of a class. This enables you to define multiple constructors for handling different types of initialisations.
 - Method overriding allows a sub class to use all the general definitions that a super class provides and add specialized definitions through overridden methods.
 - Method overriding works together with inheritance to enable code reuse of existing classes without the need for re-compilation.
-
----
-
-## Resources
-
-- [Explain Polymorphism in Java. Use coding examples. Demonstrate method overridding and method overloading. - Your Personalized AI Assistant.](https://you.com/search?q=Explain%20Polymorphism%20in%20Java.%20Use%20coding%20examples.%20Demonstrate%20method%20overridding%20and%20method%20overloading.&fromSearchBar=true&tbm=youchat&chatMode=default)
-- https://beginnersbook.com/2013/03/polymorphism-in-java/
-- http://www.geeksforgeeks.org/overloading-in-java/
-- https://www.simplilearn.com/tutorials/java-tutorial/java-polymorphism

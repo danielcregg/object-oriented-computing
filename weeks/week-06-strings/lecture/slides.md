@@ -34,7 +34,7 @@ source: "java_strings.pptx"
 - String vs StringBuffer vs StringBuilder
 - Performance Comparison
 - Best Practices & Common Mistakes
-- Summary & resources
+- Summary
 
 ---
 
@@ -371,11 +371,3 @@ if (s1.equals(s2)) { }   // true
 - StringBuilder is the mutable fix: use it for loops and heavy editing, then `toString()`.
 - StringBuffer is the thread-safe (slower) sibling — only when threads share the object.
 - Compare String *content* with `.equals()`, never `==`.
-
----
-
-## Resources
-
-- Oracle Java Tutorials — Strings: https://docs.oracle.com/javase/tutorial/java/data/strings.html
-- W3Schools Java Strings: https://www.w3schools.com/java/java_strings.asp
-- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20Java%20Strings%20and%20StringBuilder%20with%20clear%20examples%20suitable%20for%20beginner%20students

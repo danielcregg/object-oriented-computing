@@ -29,7 +29,7 @@ source: "Abstraction.pptx"
 - Interfaces
 - Class vs Abstract Class vs Interface
 - Benefits of Abstraction
-- Summary & resources
+- Summary
 
 ---
 
@@ -383,12 +383,3 @@ d.draw();                    // line 3
 - A class with even one abstract method must itself be abstract, and some descendant must eventually implement it.
 - Interfaces are pure contracts: a class `implements` them (as many as it likes) and must supply every method body.
 - Choose an abstract class to share state/code among close relatives; choose an interface for a capability any class can adopt.
-
----
-
-## Resources
-
-- Oracle Java Tutorials — Abstract Methods and Classes: https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html
-- Oracle Java Tutorials — Interfaces: https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
-- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20abstraction%20in%20Java%20with%20clear%20examples%20and%20explanations%20suitable%20for%20beginner%20students
-- https://chat.openai.com/?q=Explain+abstraction+in+Java+for+beginners+in+a+study+mode

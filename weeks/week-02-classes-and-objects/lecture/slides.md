@@ -33,7 +33,7 @@ source: "Classes and Objects.pptx"
 - Reference Variables vs Object Identity
 - this keyword (when & why)
 - Single Responsibility Principle
-- Wrap-Up & resources
+- Summary
 
 ---
 
@@ -384,7 +384,7 @@ public Cat(int age) {
 
 ---
 
-## Wrap-Up
+## Summary
 
 - Class = blueprint (fields + methods).
 - Object = instance with its own state; method code is shared via the class.
@@ -392,11 +392,3 @@ public Cat(int age) {
 - Reference variables ≠ identity; many refs can point to one object.
 - Use this to disambiguate names and refer to the current object.
 - Aim for SRP: one responsibility per class.
-
----
-
-## Resources
-
-- Oracle Java Tutorials — Classes and Objects: https://docs.oracle.com/javase/tutorial/java/javaOO/index.html
-- W3Schools Java Classes/Objects: https://www.w3schools.com/java/java_classes.asp
-- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20classes%20and%20objects%20in%20Java%20with%20clear%20examples%20suitable%20for%20beginner%20students

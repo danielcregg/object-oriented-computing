@@ -28,7 +28,7 @@ source: "Java Arrays.pptx"
 - The `length` property
 - Looping through arrays (`for` and for-each)
 - Multidimensional arrays
-- Kahoot, summary & resources
+- Kahoot & summary
 
 ---
 
@@ -243,11 +243,3 @@ System.out.println(board[1][2]);
 - Create arrays with `new type[n]` (elements get default values) or with a literal `{...}`.
 - Use `arrayName.length` to size loops; for-each is the cleanest way to visit every element.
 - Multidimensional arrays are arrays of arrays — index with `[row][column]`.
-
----
-
-## Resources
-
-- Oracle Java Tutorials — Arrays: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html
-- W3Schools Java Arrays: https://www.w3schools.com/java/java_arrays.asp
-- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20Java%20arrays%20with%20clear%20examples%20suitable%20for%20beginner%20students

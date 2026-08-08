@@ -29,7 +29,7 @@ source: "Encalsulation.pptx"
 - Validation via setters (e.g., username length)
 - Coding example: BankAccount
 - Benefits: protection, flexibility, maintainability
-- Summary & resources
+- Summary
 
 ---
 
@@ -381,10 +381,3 @@ System.out.println(acct.getBalance());
 - Core Concept: Encapsulation is a fundamental principle in object-oriented programming (OOP). It involves bundling data (instance variables) and the code that operates on that data (methods) together into a single unit, such as a class.
 - Controlling Access: Access control mechanisms (like private, public, and protected) are central to encapsulation. By making instance variables private, you prevent direct access to them from outside the class. This forces interaction through the provided methods (getters and setters).
 - Two reasons to route access through getters/setters: hide implementation changes, and validate input before it touches your data.
-
----
-
-## Resources
-
-- https://claude.ai/new?q=Give%20me%20an%20introductory%20overview%20of%20encapsulation%20in%20Java%20with%20clear%20examples%20and%20explanations%20suitable%20for%20beginner%20students
-- https://chat.openai.com/?q=Explain+encapsulation+in+Java+for+beginners+in+a+study+mode

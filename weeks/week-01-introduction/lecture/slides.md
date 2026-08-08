@@ -328,3 +328,13 @@ public class HelloPrinter
 }
 ```
 
+
+---
+
+## Summary
+
+* This module: **object-oriented programming in Java** — 12 teaching weeks, three in-lab MCQs (weeks 5, 9 and 12).
+* Java compiles to **bytecode** that runs on the **JVM** — write once, run anywhere.
+* Your toolkit: the **JDK** plus an IDE — we'll use **GitHub Codespaces** in the labs.
+* Precision matters: capitalisation, semicolons and braces are where beginner errors live.
+* This week: enrol on Moodle, grab the **GitHub Student Developer Pack**, and research Codespaces.

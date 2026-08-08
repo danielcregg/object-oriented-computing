@@ -31,7 +31,7 @@ source: "Inheritance.pptx"
 - Types of inheritance in Java
 - Class hierarchies
 - Constructors & the `super` keyword
-- Benefits, key facts, summary & resources
+- Benefits, key facts & summary
 
 ---
 
@@ -314,13 +314,3 @@ public class Main {
 - Java supports single, multilevel and hierarchical inheritance; multiple inheritance of classes is not allowed (interfaces cover that gap).
 - Constructors are not inherited — a subclass constructor calls the superclass constructor first, implicitly or via `super(...)`.
 - Move common code up the hierarchy for reuse, organisation and flexibility.
-
----
-
-## Resources
-
-- [Show me an example of java inheritance. Use coding examples with commentary. - Your Personalized AI Assistant.](https://you.com/search?q=Show%20me%20an%20example%20of%20java%20inheritance.%20Use%20coding%20examples%20with%20commentary.%20&fromSearchBar=true&tbm=youchat&chatMode=default)
-- https://www.youtube.com/watch?v=gQTzUpqeLH4
-- http://www.geeksforgeeks.org/inheritance-in-java/
-- https://www.javatpoint.com/inheritance-in-java
-- http://ccm.net/contents/422-oop-inheritance

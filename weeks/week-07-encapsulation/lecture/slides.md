@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Encapsulation"
 week: 7
 topic: encapsulation
@@ -34,8 +35,8 @@ source: "Encalsulation.pptx"
 
 ## Four major principles of OOP
 
-- Object-Oriented Programming rests on **four pillars**: Encapsulation, Inheritance, Polymorphism and Abstraction — the roadmap for the rest of this module.
-- **Encapsulation** is the first pillar and this week's topic — everything else builds on classes that protect their own data.
+* Object-Oriented Programming rests on **four pillars**: Encapsulation, Inheritance, Polymorphism and Abstraction — the roadmap for the rest of this module.
+* **Encapsulation** is the first pillar and this week's topic — everything else builds on classes that protect their own data.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:300 Four pillars of OOP](img/diagram-four-pillars.svg)
@@ -44,9 +45,9 @@ source: "Encalsulation.pptx"
 
 ## Encapsulation Definition
 
-- English meaning of encapsulation
+* English meaning of encapsulation
   - To encase in, as if in a capsule
-- Encapsulation meaning in OOP:
+* Encapsulation meaning in OOP:
   - Encapsulation in Java refers to the bundling of data (aka fields or instance variables) and methods that operate on that data (AKA Getters and Setters) within a single unit (a class), while restricting direct access to some of the object's components.
   - In Encapsulation, the instance variables of a class are hidden (i.e., made private) from other classes and can only be accessed through the methods of their own class.
   - Data hiding is the practice of making fields private to prevent direct external access — a key aspect of encapsulation.
@@ -84,8 +85,8 @@ A class is a capsule: private data on one side, the methods that operate on it o
 
 ## How to Implement Encapsulation
 
-- Declare instance variables private.
-- Provide a public getter and setter method for each private instance variable.
+* Declare instance variables private.
+* Provide a public getter and setter method for each private instance variable.
 ```java
 public class Student {
     // Private instance variable
@@ -107,9 +108,9 @@ public class Student {
 
 ## Getters and Setters
 
-- Getter methods are used to "get" (i.e., retrieve) the current value of a private instance variable — sometimes called accessor methods.
-- Setter methods are used to "set" (i.e., update) the value of a private instance variable — sometimes called mutator methods.
-- It is a common convention to name these methods after the corresponding field, prefixed with `get` or `set`.
+* Getter methods are used to "get" (i.e., retrieve) the current value of a private instance variable — sometimes called accessor methods.
+* Setter methods are used to "set" (i.e., update) the value of a private instance variable — sometimes called mutator methods.
+* It is a common convention to name these methods after the corresponding field, prefixed with `get` or `set`.
 
 ---
 
@@ -144,11 +145,11 @@ class Main {
 
 ## Why use Getters and Setters at all?
 
-- You may have concluded that we could just change the private fields of the class definition to be public and achieve the same results.
-- However, hiding the instance variables of an object (i.e., making them private) and using public methods to access them allows us to:
+* You may have concluded that we could just change the private fields of the class definition to be public and achieve the same results.
+* However, hiding the instance variables of an object (i.e., making them private) and using public methods to access them allows us to:
   - Change how the data is handled behind the scenes.
   - Impose validation on the values that the instance variables are being set to.
-- The next slides show one example of each.
+* The next slides show one example of each.
 
 ---
 
@@ -241,9 +242,9 @@ public class Person {
 
 ## Reason 2: Validate Input in the Setter
 
-- Let us say Person class objects can only accept usernames that have a maximum of ten characters.
-- We can add validation in the setUsername setter method to make sure the username conforms to this requirement.
-- If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated — the next two slides show the class and the calling code (which prints `theRedRhin`).
+* Let us say Person class objects can only accept usernames that have a maximum of ten characters.
+* We can add validation in the setUsername setter method to make sure the username conforms to this requirement.
+* If the username passed to the setUsername() setter method is longer than ten characters, it is automatically truncated — the next two slides show the class and the calling code (which prints `theRedRhin`).
 
 ---
 
@@ -298,10 +299,10 @@ public class Main {
 
 ## Coding Example
 
-- Private Data: The accountHolder and balance are private, ensuring controlled access.
-- Constructor: Initializes a new bank account object.
-- Getters: Allow for reading the account holder's name and the current balance.
-- Transaction Methods: The deposit() and withdraw() methods encapsulate the logic of transactions while enforcing basic rules (preventing negative deposits and overdrafts).
+* Private Data: The accountHolder and balance are private, ensuring controlled access.
+* Constructor: Initializes a new bank account object.
+* Getters: Allow for reading the account holder's name and the current balance.
+* Transaction Methods: The deposit() and withdraw() methods encapsulate the logic of transactions while enforcing basic rules (preventing negative deposits and overdrafts).
 
 ---
 
@@ -344,15 +345,32 @@ public class BankAccount {
 
 ---
 
+## Predict the Output
+
+- Using the BankAccount class from the previous slide — what does this print?
+
+<!-- no-compile -->
+```java
+BankAccount acct = new BankAccount("Anna", 100.00);
+acct.deposit(-50);
+acct.withdraw(500);
+acct.deposit(25);
+System.out.println(acct.getBalance());
+```
+
+* `125.0` — the safeguards inside deposit() and withdraw() silently reject the negative deposit and the overdraft. That protection is encapsulation at work.
+
+---
+
 ## Benefits of Encapsulation
 
-- Data Protection (Validation & Security):
+* Data Protection (Validation & Security):
   - Getters and setters allow you to validate data before it's modified, preventing invalid or harmful changes to the object's internal state.
   - Example: Ensuring a PIN is 4 digits, or a balance is never negative.
-- Flexibility (Implementation Independence):
+* Flexibility (Implementation Independence):
   - You can change the internal implementation of a class without breaking external code, as long as the public interface (the methods) remains the same.
   - Example: Changing middleNames from an array to an ArrayList internally—external code still works.
-- Code Maintainability:
+* Code Maintainability:
   - Encapsulation promotes organised, modular code that is easier to understand and maintain.
   - Changes are localised to the class, reducing ripple effects throughout the codebase.
 

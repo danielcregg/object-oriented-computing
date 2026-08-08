@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Java Arrays"
 week: 4
 topic: arrays
@@ -33,8 +34,8 @@ source: "Java Arrays.pptx"
 
 ## What is an Array?
 
-- An array is a container object that holds a fixed number of values of a single type. - Oracle
-- An array is a structure which can store multiple values of the same data type. This prevents the need to declare separate variables for each value.
+* An array is a container object that holds a fixed number of values of a single type. - Oracle
+* An array is a structure which can store multiple values of the same data type. This prevents the need to declare separate variables for each value.
 
 | Without an array | With an array |
 |---|---|
@@ -46,7 +47,7 @@ source: "Java Arrays.pptx"
 
 ## Characteristics of an Array
 
-- An array has two distinguishing characteristics:
+* An array has two distinguishing characteristics:
   - Length (i.e., the number of variables (AKA components) it stores) The length of an array cannot be changed (i.e., it is fixed upon creation).
   - Homogeneity (i.e., every variable in an array has the same data type).
 
@@ -57,7 +58,7 @@ int[] studentAgesArray;
 // Allocate memory for 5 ints
 studentAgesArray = new int[5];
 ```
-- Below is the studentAgesArray populated with 5 ages, all of type int. Its length is 5 and cannot be changed — to store more ages I would need to create a new array.
+* Below is the studentAgesArray populated with 5 ages, all of type int. Its length is 5 and cannot be changed — to store more ages I would need to create a new array.
 
 | 17 | 21 | 18 | 18 | 19 |
 |---|---|---|---|---|
@@ -66,11 +67,11 @@ studentAgesArray = new int[5];
 
 ## Elements and Indices
 
-- The individual values in an array are called elements (or components).
-- The type of those elements (which must be the same because arrays are homogeneous) is called the element type.
-- The number of elements is called the length of the array.
-- Each element is identified by its position number in the array, which is called its index.
-- Index numbers always begin with 0 and therefore extend up to one less than the length of the array — positions 0 through n-1:
+* The individual values in an array are called elements (or components).
+* The type of those elements (which must be the same because arrays are homogeneous) is called the element type.
+* The number of elements is called the length of the array.
+* Each element is identified by its position number in the array, which is called its index.
+* Index numbers always begin with 0 and therefore extend up to one less than the length of the array — positions 0 through n-1:
 
 | 5.0 | 2.44 | 9.01 | 1.0 | -9.9 |
 |---|---|---|---|---|
@@ -80,14 +81,14 @@ studentAgesArray = new int[5];
 
 ## Declaring and Assigning an Array
 
-- As with any other variable, array variables must be declared before you use them. e.g., `String[] cars;`
-- The most common syntax for declaring and assigning an array variable looks like this: int[] ages = new int[100];
-- The part of the line to the left of the equal sign declares the variable. The part to the right creates an array value with the specified number of elements and then assigns it to the array variable.
+* As with any other variable, array variables must be declared before you use them. e.g., `String[] cars;`
+* The most common syntax for declaring and assigning an array variable looks like this: int[] ages = new int[100];
+* The part of the line to the left of the equal sign declares the variable. The part to the right creates an array value with the specified number of elements and then assigns it to the array variable.
 
 ```java
 int [ ] num = new int [ 10 ];
 ```
-- `int` is the type of each element, `num` is the name of the array, and `10` is the subscript: an integer or constant expression for the number of elements.
+* `int` is the type of each element, `num` is the name of the array, and `10` is the subscript: an integer or constant expression for the number of elements.
 
 ---
 
@@ -202,13 +203,13 @@ for (String i : cars) {
 
 ## Multidimensional Arrays
 
-- A multidimensional array is an array containing one or more arrays.
-- To create a two-dimensional array, add each array within its own set of curly braces:
+* A multidimensional array is an array containing one or more arrays.
+* To create a two-dimensional array, add each array within its own set of curly braces:
 ```java
 char[][] board = { {'a', 'b', 'c'}, {'a', 'b', 'c'}, {'a', 'b', 'c'} };
 ```
-- Board is an array with 3 elements
-- To access the elements of the board array, specify two indexes:
+* Board is an array with 3 elements
+* To access the elements of the board array, specify two indexes:
   - For the array
   - For the element inside that array.
 

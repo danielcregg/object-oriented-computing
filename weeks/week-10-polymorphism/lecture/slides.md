@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Polymorphism"
 week: 10
 topic: polymorphism
@@ -34,8 +35,8 @@ Same call, `speak()` — different sound, depending on the object.
 
 ## Four major principles of OOP
 
-- Recall from week 7: OOP rests on 4 pillars — Encapsulation, Inheritance, Polymorphism, Abstraction.
-- We've covered Encapsulation (week 7) and Inheritance (week 8) — this week we go deep on **Polymorphism**.
+* Recall from week 7: OOP rests on 4 pillars — Encapsulation, Inheritance, Polymorphism, Abstraction.
+* We've covered Encapsulation (week 7) and Inheritance (week 8) — this week we go deep on **Polymorphism**.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
@@ -54,8 +55,8 @@ section.split img { max-height: 360px; object-fit: contain; }
 
 ## What is Polymorphism
 
-- Polymorphism comes from the Greek word poly meaning “many” or “much” and morphē meaning “form” or  “shape”.
-- Polymorphism is the capability of a method to do different things based on the object that it is acting upon.
+* Polymorphism comes from the Greek word poly meaning “many” or “much” and morphē meaning “form” or  “shape”.
+* Polymorphism is the capability of a method to do different things based on the object that it is acting upon.
 
 ![A statue of a person with a beard Description automatically generated](img/slide08-1.png)
 
@@ -63,10 +64,10 @@ section.split img { max-height: 360px; object-fit: contain; }
 
 ## Types of Polymorphism
 
-- Polymorphism is the ability of the same method call to be bound to different method bodies
-- Binding refers to linking a method call to the method body that will run.
-- Compile time Polymorphism known as static or early binding → **Overloading**
-- Runtime Polymorphism known as dynamic or late binding → **Overriding**
+* Polymorphism is the ability of the same method call to be bound to different method bodies
+* Binding refers to linking a method call to the method body that will run.
+* Compile time Polymorphism known as static or early binding → **Overloading**
+* Runtime Polymorphism known as dynamic or late binding → **Overriding**
 
 <!-- diagram source: img/diagram-binding.mmd -->
 ![h:300 Types of polymorphism and binding](img/diagram-binding.svg)
@@ -85,32 +86,32 @@ public int max (int x, int y)
 }
 ```
 
-- **modifier** — `public`
-- **return-type** — `int`
-- **method-name** — `max`
-- **parameter-list** — `(int x, int y)`
-- **body of the method** — the `{ }` block
+* **modifier** — `public`
+* **return-type** — `int`
+* **method-name** — `max`
+* **parameter-list** — `(int x, int y)`
+* **body of the method** — the `{ }` block
 
 ---
 
 ## Method Signature
 
-- A method signature is the method name and the number, type and order of its parameters.
-- Java can uniquely identify methods based on their method signatures:
+* A method signature is the method name and the number, type and order of its parameters.
+* Java can uniquely identify methods based on their method signatures:
       - Number of parameters passed
       - Data type of parameters
       - Sequence of data type of parameters
-- Example: `max(int, int)`
-- A class cannot have two methods with the same signature.
+* Example: `max(int, int)`
+* A class cannot have two methods with the same signature.
 
 ---
 
 ## Compile time Polymorphism
 
-- Compile time Polymorphism is polymorphism that is resolved during compile time i.e., binding of the method call to its definition happens at compile time.
-- The compiler can decide which method to call just by looking at the method signature (number and type of parameters).
-- Method Overloading is an example of compile time polymorphism.
-- Same name, different signatures:
+* Compile time Polymorphism is polymorphism that is resolved during compile time i.e., binding of the method call to its definition happens at compile time.
+* The compiler can decide which method to call just by looking at the method signature (number and type of parameters).
+* Method Overloading is an example of compile time polymorphism.
+* Same name, different signatures:
   - `void fun(int a)`
   - `void fun(int a, int b)`
   - `void fun(char a)`
@@ -154,10 +155,10 @@ public class Main {
 
 ## Runtime Polymorphism
 
-- Runtime Polymorphism is polymorphism which is resolved at runtime i.e., it is implemented dynamically when a program being executed
-- Java supports run-time polymorphism by dynamically dispatching methods at run time through Method Overriding i.e., method invocations are resolved at run time by the JVM and not at the compile time.
-- Method Overriding is an example of runtime polymorphism
-- Same signature, subclass supplies its own body:
+* Runtime Polymorphism is polymorphism which is resolved at runtime i.e., it is implemented dynamically when a program being executed
+* Java supports run-time polymorphism by dynamically dispatching methods at run time through Method Overriding i.e., method invocations are resolved at run time by the JVM and not at the compile time.
+* Method Overriding is an example of runtime polymorphism
+* Same signature, subclass supplies its own body:
   - `Base.fun(int a)`
   - `Derived.fun(int a)` — overrides it
 
@@ -165,9 +166,9 @@ public class Main {
 
 ## What is Method Overriding?
 
-- Method Overriding allows us to declare a method in a subclass which has already been declared in a superclass.
-- Method Overriding is done so that a subclass can provide its own implementation of a method which is already provided by the super class.
-- The method in the superclass is called the Overridden Method and the method in subclass is called the Overriding Method.
+* Method Overriding allows us to declare a method in a subclass which has already been declared in a superclass.
+* Method Overriding is done so that a subclass can provide its own implementation of a method which is already provided by the super class.
+* The method in the superclass is called the Overridden Method and the method in subclass is called the Overriding Method.
 
 ---
 
@@ -231,8 +232,8 @@ public class Cat extends Animal {
 
 ## Why Method Overriding has to be done at Runtime and not Compile time
 
-- The exact method to call depends on the actual object created at runtime — not just the variable type.
-- The compiler cannot know which object you will actually create.
+* The exact method to call depends on the actual object created at runtime — not just the variable type.
+* The compiler cannot know which object you will actually create.
 
 <!-- no-compile -->
 ```java
@@ -240,10 +241,10 @@ Animal a = new Dog();
 a.sound();
 ```
 
-- At compile time → `a` is just an `Animal`
-- At runtime → it becomes a `Dog`
-- Only **during execution** can the program determine which `sound()` method to call.
-- This is essential for: Inheritance, Interfaces, Real OOP behavior, and writing code that works for multiple object types.
+* At compile time → `a` is just an `Animal`
+* At runtime → it becomes a `Dog`
+* Only **during execution** can the program determine which `sound()` method to call.
+* This is essential for: Inheritance, Interfaces, Real OOP behavior, and writing code that works for multiple object types.
 
 ---
 
@@ -261,10 +262,10 @@ a.sound();
 
 ## Objects: Upcasting & Downcasting
 
-- Upcasting (Widening)
+* Upcasting (Widening)
   - Subclass → Superclass
   - Safe, automatic.
-- Downcasting (Narrowing)
+* Downcasting (Narrowing)
   - Superclass → Subclass
   - Explicit cast required, can fail at runtime.
 
@@ -306,9 +307,9 @@ section pre { padding: 12px 16px; margin: 8px 0; }
 section pre code { font-size: 17px; line-height: 1.3; }
 </style>
 
-- Upcasting allows you to store different subclasses inside a single array or list of the superclass type.
-- This is one of the most important uses of upcasting → polymorphism.
-- Here is an array of Animals holding different types of Cats
+* Upcasting allows you to store different subclasses inside a single array or list of the superclass type.
+* This is one of the most important uses of upcasting → polymorphism.
+* Here is an array of Animals holding different types of Cats
 
 ```java
 class Animal {
@@ -359,9 +360,9 @@ public class Main {
 
 ## WHY this works
 
-- Even though the array is typed as Animal[], the objects inside retain their true type (Cat, Tiger).
-- That lets Java call the correct overridden method at runtime.
-- Without Upcasting, you would need one reference variable per object! This is exactly what polymorphism is for.
+* Even though the array is typed as Animal[], the objects inside retain their true type (Cat, Tiger).
+* That lets Java call the correct overridden method at runtime.
+* Without Upcasting, you would need one reference variable per object! This is exactly what polymorphism is for.
 
 ---
 
@@ -404,12 +405,30 @@ for (Animal a : zoo) {
 
 ---
 
+## Predict the Output
+
+- Using the zoo classes (Animal, Cat, Tiger) — what happens on each line?
+
+<!-- no-compile -->
+```java
+Animal a = new Cat();
+a.speak();                 // line 1 — what prints?
+
+Animal plain = new Animal();
+Cat c = (Cat) plain;       // line 2 — what happens?
+```
+
+* Line 1: `Cat meows` — the JVM dispatches on the actual object (a Cat), not the reference type.
+* Line 2: compiles fine, but throws `ClassCastException` at runtime — plain is not a Cat.
+
+---
+
 ## Full Program Demonstrating Everything
 
-- Upcasting and downcasting are not polymorphism by themselves.
-- BUT
-- ➡️ Upcasting is what enables polymorphism. Polymorphism happens when an upcast reference calls overridden methods.
-- Downcasting is not polymorphism — it's just a way to get back a more specific type.
+* Upcasting and downcasting are not polymorphism by themselves.
+* BUT
+* ➡️ Upcasting is what enables polymorphism. Polymorphism happens when an upcast reference calls overridden methods.
+* Downcasting is not polymorphism — it's just a way to get back a more specific type.
 
 ```java
 class Animal {
@@ -461,11 +480,11 @@ public class Main {
 
 ## Benefits of Polymorphism
 
-- Code Reusability: Polymorphism allows us to define one interface and have multiple implementations. We can write methods that work on the superclass, and they will work with any subclass type. This means we can write less code, which is always a good thing.
-- Flexibility: With polymorphism, objects of a subclass can be treated as objects of a superclass. This provides flexibility for methods to handle arguments of the superclass type, which can actually be any subclass type.
-- Separation of Concerns: By using polymorphism, we can separate operations and objects. The objects do what they are supposed to do, and the operations act on the interfaces of the objects. This leads to clean, modular, and understandable code.
-- Dynamic Method Dispatch: Polymorphism enables Java's ability to select the appropriate method at runtime based on the actual object, which is a key aspect of what makes Java an object-oriented language.
-- Extensibility: In a system designed using polymorphism, new subclasses can be easily added with little or no modification to the general portions of the program, as long as the new classes are part of the inheritance hierarchy.
+* Code Reusability: Polymorphism allows us to define one interface and have multiple implementations. We can write methods that work on the superclass, and they will work with any subclass type. This means we can write less code, which is always a good thing.
+* Flexibility: With polymorphism, objects of a subclass can be treated as objects of a superclass. This provides flexibility for methods to handle arguments of the superclass type, which can actually be any subclass type.
+* Separation of Concerns: By using polymorphism, we can separate operations and objects. The objects do what they are supposed to do, and the operations act on the interfaces of the objects. This leads to clean, modular, and understandable code.
+* Dynamic Method Dispatch: Polymorphism enables Java's ability to select the appropriate method at runtime based on the actual object, which is a key aspect of what makes Java an object-oriented language.
+* Extensibility: In a system designed using polymorphism, new subclasses can be easily added with little or no modification to the general portions of the program, as long as the new classes are part of the inheritance hierarchy.
 
 ---
 

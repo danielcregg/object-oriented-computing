@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Inheritance"
 week: 8
 topic: inheritance
@@ -36,8 +37,8 @@ source: "Inheritance.pptx"
 
 ## Four major principles of OOP
 
-- Recall from week 7: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
-- Last week we covered Encapsulation. This week: **Inheritance**.
+* Recall from week 7: OOP rests on four pillars — **Encapsulation, Inheritance, Polymorphism, Abstraction**.
+* Last week we covered Encapsulation. This week: **Inheritance**.
 
 <!-- diagram source: img/diagram-four-pillars.mmd -->
 ![h:330 Four pillars of OOP](img/diagram-four-pillars.svg)
@@ -46,9 +47,9 @@ source: "Inheritance.pptx"
 
 ## Definition
 
-- Inheritance is the mechanism by which one class acquires the instance variables and methods of another class.
-- Inheritance is a mechanism for expressing an "Is-A" relationship (AKA parent-child relationship) in an Object-Oriented programming language.
-- In the diagram below, the Employee class is inheriting from (AKA derived from) the Person class. Note the direction of the arrow — it points at the superclass.
+* Inheritance is the mechanism by which one class acquires the instance variables and methods of another class.
+* Inheritance is a mechanism for expressing an "Is-A" relationship (AKA parent-child relationship) in an Object-Oriented programming language.
+* In the diagram below, the Employee class is inheriting from (AKA derived from) the Person class. Note the direction of the arrow — it points at the superclass.
 
 <!-- diagram source: img/diagram-is-a.mmd -->
 ![h:290 Employee IS-A Person](img/diagram-is-a.svg)
@@ -57,8 +58,8 @@ source: "Inheritance.pptx"
 
 ## Important terminology
 
-- Superclass - The class that has its instance variables and methods inherited is known as the super class (AKA base class, AKA parent class).
-- Subclass - The class that inherits instance variables and methods from another class is known as a subclass (AKA child class, AKA derived class, AKA extended class). The subclass can add its own instance variables and methods in addition to the superclass fields and methods it inherited.
+* Superclass - The class that has its instance variables and methods inherited is known as the super class (AKA base class, AKA parent class).
+* Subclass - The class that inherits instance variables and methods from another class is known as a subclass (AKA child class, AKA derived class, AKA extended class). The subclass can add its own instance variables and methods in addition to the superclass fields and methods it inherited.
 
 ---
 
@@ -109,11 +110,11 @@ public class Main {
 
 ## The Object class
 
-- Every class has one and only one direct superclass.
-- If you do not supply a superclass for your class, then your class is a subclass of the Object class (i.e., The Object class is the parent class of all classes by default.)
-- The Object class is defined in the java.lang package.
-- The Object class provides some common behaviours to all objects such as object comparison and object cloning.
-- Classes can be derived from classes that are derived from classes, and so on — ultimately every chain leads back to the topmost class, Object. Such a class is said to be descended from all the classes in its inheritance chain.
+* Every class has one and only one direct superclass.
+* If you do not supply a superclass for your class, then your class is a subclass of the Object class (i.e., The Object class is the parent class of all classes by default.)
+* The Object class is defined in the java.lang package.
+* The Object class provides some common behaviours to all objects such as object comparison and object cloning.
+* Classes can be derived from classes that are derived from classes, and so on — ultimately every chain leads back to the topmost class, Object. Such a class is said to be descended from all the classes in its inheritance chain.
 
 <!-- diagram source: img/diagram-object-root.mmd -->
 ![h:190 Object is the root of every class hierarchy](img/diagram-object-root.svg)
@@ -122,11 +123,11 @@ public class Main {
 
 ## Types of Inheritance in Java
 
-- Java supports **3 types** of class inheritance:
+* Java supports **3 types** of class inheritance:
   - Single
   - Multilevel
   - Hierarchical
-- Two more appear in OOP theory, and you should be able to recognise them:
+* Two more appear in OOP theory, and you should be able to recognise them:
   - Hybrid — a combination of the above
   - Multiple — **not allowed** for classes in Java (interfaces only)
 
@@ -175,10 +176,10 @@ public class Main {
 
 ## Multiple Inheritance (not supported)
 
-- Multiple Inheritance - refers to the concept where one class inherits from more than one class, i.e. a subclass with two superclasses.
-- Java does not allow a class to extend more than one class and therefore DOES NOT support multiple inheritance.
-- However, Java supports Multiple Inheritance of type, which is the ability of a class to implement more than one interface. More on this in week 11.
-- Structure: `class C extends A, B` — **not valid Java**, shown for illustration only.
+* Multiple Inheritance - refers to the concept where one class inherits from more than one class, i.e. a subclass with two superclasses.
+* Java does not allow a class to extend more than one class and therefore DOES NOT support multiple inheritance.
+* However, Java supports Multiple Inheritance of type, which is the ability of a class to implement more than one interface. More on this in week 11.
+* Structure: `class C extends A, B` — **not valid Java**, shown for illustration only.
 
 <!-- diagram source: img/diagram-multiple.mmd -->
 ![h:200 Multiple inheritance — not allowed for classes](img/diagram-multiple.svg)
@@ -204,30 +205,30 @@ public class Main {
 
 ## Inheritance and Constructors
 
-- The components of a class, such as its instance variables and methods are called the members of a class or "class members".
-- With inheritance, the subclass class can see public and protected members of the superclass.
-- Constructors are NOT members of a class.
-- Constructors are not inherited by subclasses; however, constructors of a superclass can be called from a subclass!
+* The components of a class, such as its instance variables and methods are called the members of a class or "class members".
+* With inheritance, the subclass class can see public and protected members of the superclass.
+* Constructors are NOT members of a class.
+* Constructors are not inherited by subclasses; however, constructors of a superclass can be called from a subclass!
 
 ---
 
 ## Inheritance and Constructors (continued)
 
-- The subclass constructor implicitly calls the default constructor of superclass when we create an object of the subclass.
-- The superclass constructor can be also be called explicitly, using the super keyword.
-- With inheritance, subclass objects are constructed top-down. The superclass constructor must be called first in a subclass constructor.
-- The super keyword refers to the superclass from which the subclass was derived in a hierarchy.
-- The use of multiple super keywords to access an ancestor superclass other than the direct superclass is not permitted.
+* The subclass constructor implicitly calls the default constructor of superclass when we create an object of the subclass.
+* The superclass constructor can be also be called explicitly, using the super keyword.
+* With inheritance, subclass objects are constructed top-down. The superclass constructor must be called first in a subclass constructor.
+* The super keyword refers to the superclass from which the subclass was derived in a hierarchy.
+* The use of multiple super keywords to access an ancestor superclass other than the direct superclass is not permitted.
 
 ---
 
 ## The super keyword
 
-- The super keyword is like the this keyword – the super keyword is used to access methods of the superclass while this keyword is used to access methods of the current class.
-- The following are scenarios where the super keyword is used:
+* The super keyword is like the this keyword – the super keyword is used to access methods of the superclass while this keyword is used to access methods of the current class.
+* The following are scenarios where the super keyword is used:
   - To differentiate the members of superclass from the members of subclass, if they have same names.
   - To invoke the superclass constructor from subclass.
-- If a class is inheriting the properties of another class, the subclass automatically acquires the default constructor of the superclass. If you want to call a parameterized constructor of the superclass, you need to use the super keyword as shown on the next slide.
+* If a class is inheriting the properties of another class, the subclass automatically acquires the default constructor of the superclass. If you want to call a parameterized constructor of the superclass, you need to use the super keyword as shown on the next slide.
 
 ---
 
@@ -254,23 +255,55 @@ public class Cat extends Mammal {
 
 ---
 
+## Predict the Output
+
+<style scoped>
+section pre { padding: 10px 16px; margin: 6px 0; }
+section pre code { font-size: 15px; line-height: 1.25; }
+</style>
+
+```java
+class Animal {
+    Animal() { System.out.println("Animal constructor"); }
+    void greet() { System.out.println("Hello from Animal"); }
+}
+class Dog extends Animal {
+    Dog() { System.out.println("Dog constructor"); }
+}
+public class Main {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.greet();
+    }
+}
+```
+
+* `Animal constructor`, then `Dog constructor` — the superclass is always constructed first (implicit `super()`).
+* `Hello from Animal` — `greet()` is inherited from Animal.
+
+---
+
 ## Benefits of Inheritance
 
-- Code Reusability (i.e., Minimising duplicate code)
+* Code Reusability (i.e., Minimising duplicate code)
   - If duplicate code (variable and methods) exists in two related classes, we can refactor that hierarchy by moving that common code up to the common superclass.
-- Better organization of code
+* Better organization of code
   - Moving of common code to superclass results in better organization of code.
-- Code more flexible to change
+* Code more flexible to change
   - Classes that inherit from a common superclass can be used interchangeably: a method whose parameter or return type is the superclass accepts and returns any of its subclasses.
 
 ---
 
+<!-- _class: dense -->
+
 ## Important facts about inheritance in Java
 
-- Default superclass: Except Object class, which has no superclass, every class has one and only one direct superclass (single inheritance). In the absence of any other explicit superclass, every class is implicitly a subclass of Object class.
-- Superclass can only be one: A superclass can have any number of subclasses. But a subclass can have only one superclass. This is because Java does not support multiple inheritance with classes. Although with interfaces, multiple inheritance is supported by java.
-- Inheriting Constructors: A subclass inherits all the members (fields, methods, and nested classes) from its superclass. Constructors are not members, so they are not inherited by subclasses, but the constructor of the superclass can be invoked from the subclass using the super keyword.
-- Private member inheritance: A subclass does not inherit the private members of its superclass. However, if the superclass has public or protected methods (like getters and setters) for accessing its private fields, these can also be used by the subclass.
+| Fact | Detail |
+|---|---|
+| Default superclass | Every class except `Object` has exactly one direct superclass; with no explicit `extends`, that superclass is `Object`. |
+| One superclass only | A superclass can have any number of subclasses, but a subclass extends exactly one class — multiple inheritance needs interfaces. |
+| Constructors | Not members of a class, so never inherited — but the subclass can invoke them via `super(...)`. |
+| Private members | Not inherited — reachable only through the superclass's public/protected methods (e.g. getters and setters). |
 
 ---
 

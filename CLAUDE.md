@@ -49,9 +49,14 @@ images) are read-only archives.
   (smaller body), `centered-table`. Kicker lines use
   `<span class="kicker">// ...</span>` (requires the workflow's `--html`).
 - Bullet markers carry meaning: `* ` = fragmented (revealed one per keypress in
-  the HTML presentation), `- ` = shown immediately. Week 1 uses fragments;
-  a converter re-run emits `- ` everywhere, so re-apply fragments after any
-  deck regeneration.
+  the HTML presentation), `- ` = shown immediately. Every deck fragments its
+  build-up slides; reference slides (agendas, summaries, resources, tables,
+  code captions) stay immediate. A converter re-run emits `- ` everywhere,
+  so re-apply fragments after any deck regeneration. Decks also set
+  `transition: fade` (HTML-only slide transition; ignored in PDF/PPTX).
+- Every topic deck has one fragmented "Predict the Output" quiz slide
+  (week 4's quiz predates the convention); answers are `* ` bullets so they
+  reveal after the class commits to a guess.
 - Speaker notes live in `<!-- Speaker notes: ... -->` comments.
 - Diagrams: concept diagrams are Mermaid, pre-rendered to SVG (Marp does not
   render mermaid fences). Each lives as `lecture/img/diagram-<name>.svg` with

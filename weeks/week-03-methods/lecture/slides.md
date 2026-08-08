@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Java Methods"
 week: 3
 topic: methods
@@ -37,8 +38,8 @@ The building blocks of Java programs
 
 ## What is a Method?
 
-- A method is a block of code that performs a specific task
-- Methods help us:
+* A method is a block of code that performs a specific task
+* Methods help us:
   - Organize code into reusable pieces
   - Break complex problems into smaller, manageable parts
   - Avoid repeating the same code
@@ -73,7 +74,7 @@ public void greet() {
     System.out.println("Hello, welcome to Java!");
 }
 ```
-- Breakdown:
+* Breakdown:
   - public - can be accessed from anywhere
   - void - returns no value
   - greet - method name
@@ -118,12 +119,12 @@ System.out.println(result);  // Output: 8
 
 ## void vs Return Types
 
-- Choosing between void and a return type:
-- Use void when:
+* Choosing between void and a return type:
+* Use void when:
   - The method performs an action (printing, updating a variable)
   - You don't need to send any value back
   - Example: displayMenu(), saveToFile()
-- Use a return type when:
+* Use a return type when:
   - The method calculates or produces a value
   - You need to use the result elsewhere in your program
   - Example: calculateTotal(), getName(), isValid()
@@ -150,14 +151,14 @@ System.out.println("Area: " + roomArea);
 
 ## Method Scope and Visibility
 
-- Access modifiers control who can call your methods:
-- public - accessible from anywhere
+* Access modifiers control who can call your methods:
+* public - accessible from anywhere
   - Most common for methods you want others to use
   - Example: public void displayMenu()
-- private - only accessible within the same class
+* private - only accessible within the same class
   - Used for helper methods that other classes shouldn't call
   - Example: private void validateInput()
-- Default: Use public for now, we'll cover private later in detail
+* Default: Use public for now, we'll cover private later in detail
 
 ---
 
@@ -182,13 +183,13 @@ public class BankAccount {
 
 ## Static Methods
 
-- A static method belongs to the class itself, not to individual objects
-- Key characteristics:
+* A static method belongs to the class itself, not to individual objects
+* Key characteristics:
   - Called using the class name, not an object
   - Can be used without creating an instance
   - Cannot access non-static variables directly
   - Commonly used for utility functions
-- Example: Math.sqrt(), Math.pow() are static methods
+* Example: Math.sqrt(), Math.pow() are static methods
 
 ---
 
@@ -232,12 +233,12 @@ public class Counter {
 
 ## Method Call Stack
 
-- When methods call other methods, Java tracks them in a call stack:
-- Stack behavior:
+* When methods call other methods, Java tracks them in a call stack:
+* Stack behavior:
   - Methods are added to the top when called
   - Methods are removed from the top when they finish
   - Last In, First Out (LIFO) - like a stack of plates
-- Why it matters:
+* Why it matters:
   - Shows the order of execution
   - Helps understand method flow and debugging
   - Each method waits for methods it calls to finish
@@ -263,16 +264,35 @@ public static void methodB() {
 
 ---
 
+## Predict the Output
+
+```java
+public static int mystery(int x) {
+    if (x > 3) {
+        return x * 2;
+    }
+    return x;
+}
+
+public static void main(String[] args) {
+    System.out.println(mystery(5) + mystery(2));
+}
+```
+
+* `12` — mystery(5) returns 10, mystery(2) returns 2.
+
+---
+
 ## Common Mistakes with Methods
 
-- Missing return statement:
+* Missing return statement:
   - If method has return type, must return a value on all paths
-- Wrong parameter types:
+* Wrong parameter types:
   - add(5, "3") will fail if add expects two ints
-- Forgetting to use return value:
+* Forgetting to use return value:
   - int x = calculateTotal();  // Good
   - calculateTotal();  // Bad - result is lost
-- Calling non-static method from static context:
+* Calling non-static method from static context:
   - Can't call instance methods from main without object
 
 ---
@@ -328,13 +348,13 @@ public class Calculator {
 
 ## Best Practices
 
-- Use descriptive method names that explain what the method does
-- Keep methods short and focused on a single task
-- Use parameters to make methods flexible and reusable
-- Add comments to explain complex logic
-- Choose static for utility methods that don't need object state
-- Follow Java naming conventions: camelCase for method names
-- Always return a value on all paths if method has return type
+* Use descriptive method names that explain what the method does
+* Keep methods short and focused on a single task
+* Use parameters to make methods flexible and reusable
+* Add comments to explain complex logic
+* Choose static for utility methods that don't need object state
+* Follow Java naming conventions: camelCase for method names
+* Always return a value on all paths if method has return type
 
 ---
 

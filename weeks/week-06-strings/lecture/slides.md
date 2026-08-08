@@ -2,6 +2,7 @@
 marp: true
 theme: ooc
 paginate: true
+transition: fade
 title: "Java Strings"
 week: 6
 topic: strings
@@ -39,11 +40,11 @@ source: "java_strings.pptx"
 
 ## What is a String?
 
-- A String is a sequence of characters representing text
-- Strings are objects, not primitive types
-- Part of java.lang package (imported automatically)
-- Most commonly used class in Java programming
-- Since Java 9, every character in a string is stored in an 8-bit byte array with an additional coder field to indicate the encoding.
+* A String is a sequence of characters representing text
+* Strings are objects, not primitive types
+* Part of java.lang package (imported automatically)
+* Most commonly used class in Java programming
+* Since Java 9, every character in a string is stored in an 8-bit byte array with an additional coder field to indicate the encoding.
 
 ```java
 String str1 = "Hello";
@@ -81,9 +82,9 @@ String s5 = sb.toString();
 
 ## String Immutability
 
-- Once created, a String's value can not be changed
-- Any modification creates a NEW String object
-- Original String remains unchanged in memory
+* Once created, a String's value can not be changed
+* Any modification creates a NEW String object
+* Original String remains unchanged in memory
 
 ![](img/slide05-1.png)
 
@@ -110,11 +111,11 @@ System.out.println(str);      // Now prints "HELLO"
 
 ## Why is String Immutability Good?
 
-- Security: Prevents malicious code from modifying String values
-- Thread Safety: Multiple threads can share Strings safely
-- String Pool Optimization: Enables efficient memory usage
-- HashCode Caching: Hash value computed once and reused
-- Class Loading: Class names are Strings and must not change
+* Security: Prevents malicious code from modifying String values
+* Thread Safety: Multiple threads can share Strings safely
+* String Pool Optimization: Enables efficient memory usage
+* HashCode Caching: Hash value computed once and reused
+* Class Loading: Class names are Strings and must not change
 
 ![String | bartleby](img/slide07-1.png)
 
@@ -122,11 +123,11 @@ System.out.println(str);      // Now prints "HELLO"
 
 ## String Pool & Memory
 
-- String Pool: Special memory area in heap for String literals
-- String s1 = "Java"; // Stored in pool
-- String s2 = "Java"; // Reuses same object from pool
-- s1 == s2 returns true (same reference)
-- String s3 = new String("Java"); // Creates new object in heap
+* String Pool: Special memory area in heap for String literals
+* String s1 = "Java"; // Stored in pool
+* String s2 = "Java"; // Reuses same object from pool
+* s1 == s2 returns true (same reference)
+* String s3 = new String("Java"); // Creates new object in heap
 
 > Note: `==` compares *references* (same object?), not text. To compare the actual characters, always use `.equals()` — more in Common Mistakes at the end.
 
@@ -140,11 +141,11 @@ System.out.println(str);      // Now prints "HELLO"
 
 ## Why is String Immutability bad?
 
-- String concatenation in loops creates many temporary objects
-- Each + operation creates a new String object
-- Memory intensive and slow for repeated modifications
-- Example: Building a String in a loop of 1000 iterations
-- Creates 1000 temporary String objects!
+* String concatenation in loops creates many temporary objects
+* Each + operation creates a new String object
+* Memory intensive and slow for repeated modifications
+* Example: Building a String in a loop of 1000 iterations
+* Creates 1000 temporary String objects!
 
 ---
 
@@ -178,10 +179,10 @@ for (int i = 0; i < 1000; i++) {
 
 ## StringBuilder: Mutable Strings
 
-- StringBuilder provides MUTABLE character sequences
-- Modifies the same object instead of creating new ones
-- Much more efficient for string manipulation
-- Introduced in Java 5 as faster alternative to StringBuffer
+* StringBuilder provides MUTABLE character sequences
+* Modifies the same object instead of creating new ones
+* Much more efficient for string manipulation
+* Introduced in Java 5 as faster alternative to StringBuffer
 
 ---
 
@@ -195,12 +196,29 @@ section img { max-height: 500px; }
 
 ---
 
+## Predict the Output
+
+```java
+String s = "hello";
+s.toUpperCase();
+System.out.println(s);
+
+StringBuilder sb = new StringBuilder("hello");
+sb.append(" world");
+System.out.println(sb);
+```
+
+* `hello` — Strings are immutable; the upper-case copy was created and thrown away.
+* `hello world` — StringBuilder mutates the same object in place.
+
+---
+
 ## Why StringBuilder Was Created
 
-- String and StringBuffer shipped together in Java 1.0 (1996): String immutable, StringBuffer mutable and synchronized — 90s Java valued "safe by default"
-- Java 5 (2004) added StringBuilder: same API as StringBuffer, no synchronization overhead — most code is single-threaded and never needed it
-- Solves String's slow-concatenation problem: loops, repeated modifications, building large strings
-- In practice: use StringBuilder unless multiple threads share the object
+* String and StringBuffer shipped together in Java 1.0 (1996): String immutable, StringBuffer mutable and synchronized — 90s Java valued "safe by default"
+* Java 5 (2004) added StringBuilder: same API as StringBuffer, no synchronization overhead — most code is single-threaded and never needed it
+* Solves String's slow-concatenation problem: loops, repeated modifications, building large strings
+* In practice: use StringBuilder unless multiple threads share the object
 
 ```java
 StringBuilder sb = new StringBuilder();
@@ -213,11 +231,11 @@ StringBuffer safeSb = new StringBuffer(); // only if threads share it
 
 ## Key StringBuilder Methods
 
-- append(): Add text to end
-- insert(): Add text at specific position
-- delete(): Remove characters from range
-- reverse(): Reverse the character sequence
-- toString(): Convert to String object
+* append(): Add text to end
+* insert(): Add text at specific position
+* delete(): Remove characters from range
+* reverse(): Reverse the character sequence
+* toString(): Convert to String object
 
 ---
 
@@ -320,21 +338,21 @@ section img { max-height: 500px; }
 
 ## Best Practices
 
-- Use String for simple, unchanging text
-- Use StringBuilder for loops and repeated modifications
-- Use StringBuffer only when thread safety is required
-- Avoid string concatenation in loops (use StringBuilder)
-- For simple concatenations, + operator is fine (compiler optimizes)
+* Use String for simple, unchanging text
+* Use StringBuilder for loops and repeated modifications
+* Use StringBuffer only when thread safety is required
+* Avoid string concatenation in loops (use StringBuilder)
+* For simple concatenations, + operator is fine (compiler optimizes)
 
 ---
 
 ## Common Mistakes to Avoid
 
-- Forgetting that Strings are immutable
-- Using == to compare String values (use .equals() instead)
-- String concatenation in loops without StringBuilder
-- Not converting StringBuilder to String when needed
-- Using StringBuffer when StringBuilder would suffice
+* Forgetting that Strings are immutable
+* Using == to compare String values (use .equals() instead)
+* String concatenation in loops without StringBuilder
+* Not converting StringBuilder to String when needed
+* Using StringBuffer when StringBuilder would suffice
 
 ```java
 String s1 = new String("Hi");

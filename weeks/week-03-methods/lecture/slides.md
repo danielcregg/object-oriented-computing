@@ -263,7 +263,7 @@ printReceipt(2.75, 6);
 <div class="tok bod"><span class="albl">body — the work happens here</span>{ return amount * 0.135; }</div>
 </div>
 
-<p class="legend">the first line — modifiers, return type, name, parameters — is the method's signature</p>
+<p class="legend">the first line is the method header — its name + parameter list are the method's signature</p>
 
 * Read it aloud: *a `public`, `static` method named `vatOf`, taking one `double`, handing back a `double`.*
 * The **name + parameter list** is what the compiler matches every call against.

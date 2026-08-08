@@ -13,6 +13,12 @@ read-only assets.
   instructions students follow) + `Main.java` starter per lab. Students
   fork the repo and work here (devcontainer provided); CI compiles every
   lab source file. GitHub Classroom is retired.
+- Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
+  you'll learn" → "Table of Contents" → "Getting started" (standard
+  block) → numbered sections → exercises as `### DIY k: <name>` with
+  numbered steps + an `**Expected output**` ```text block + hints in
+  `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
+  no week/module references (self-contained, like the decks).
 - `weeks/week-NN-<topic>/lab/lab.md` — thin pointer to the lab's canonical
   home in `labs/`. Weeks without labs say so explicitly.
 - `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` — assessment weeks.

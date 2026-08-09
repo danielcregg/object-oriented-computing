@@ -10,6 +10,12 @@ The page carries the visual identity of themes/ooc.css ("the lecture as
 source code"): paper background, editor-gutter rail, "week N" labels set
 like line numbers, mono headings ending in an orange semicolon.
 
+A few lines of inline JS highlight the current teaching week like an
+editor's current line — same derived calendar as
+scripts/update_current_week.py (reading week = the week of the last
+Monday of October, week 1 six weeks earlier), computed in the browser so
+it stays correct without a rebuild. `?date=YYYY-MM-DD` previews any date.
+
 Usage:
     python scripts/build_index.py [OUTPUT_DIR]     # default: build
 """
@@ -96,6 +102,12 @@ STYLE = """<style>
   .actions .open:hover { background: var(--blue); color: var(--paper); }
   .marker { color: var(--muted); font-family: var(--mono); font-size: 15.5px; }
   .marker .comment::before { content: '// '; color: var(--orange); }
+  .row.current { background: var(--tint); box-shadow: inset 3px 0 0 var(--orange); }
+  .row.current .num { color: var(--orange); }
+  .now {
+    font-family: var(--mono); font-weight: 400; font-size: 13.5px;
+    color: var(--orange); margin-left: 14px; white-space: nowrap;
+  }
   footer {
     padding: 30px 40px 56px 140px; max-width: 980px;
     font-family: var(--mono); font-size: 13.5px; color: var(--gutter-num);
@@ -149,6 +161,45 @@ MAIN_FOOT = """</ol>
   <p class="comment">rebuilt automatically from the module's markdown sources</p>
   <p class="comment">Atlantic Technological University</p>
 </footer>
+<script>
+// Highlight the current teaching week — same derived calendar as the README
+// banner (scripts/update_current_week.py): reading week is the week of the
+// Irish October bank holiday (last Monday of October); week 1 begins six
+// weeks earlier; 6 teaching weeks each side. ?date=YYYY-MM-DD to preview.
+(function () {
+  var q = new URLSearchParams(location.search).get('date');
+  var now = q ? new Date(q + 'T12:00:00') : new Date();
+  if (isNaN(now)) now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var monday = new Date(today);
+  monday.setDate(today.getDate() - (today.getDay() + 6) % 7);
+  var oct31 = new Date(today.getFullYear(), 9, 31);
+  var reading = new Date(oct31);
+  reading.setDate(31 - (oct31.getDay() + 6) % 7);
+  var week1 = new Date(reading);
+  week1.setDate(reading.getDate() - 42);
+  var index = Math.round((monday - week1) / 6048e5); // whole weeks; rounding absorbs DST
+  if (index < 0 || index > 12) return;
+  var row;
+  if (index === 6) {
+    row = document.querySelector('.row[data-reading]');
+  } else {
+    var n = index < 6 ? index + 1 : index;
+    var num = document.querySelector('.num[data-week="' + n + '"]');
+    row = num && num.closest('.row');
+  }
+  if (!row) return;
+  row.classList.add('current');
+  row.setAttribute('aria-current', 'true');
+  var cell = row.querySelector('.topic, .comment');
+  if (cell) {
+    var tag = document.createElement('span');
+    tag.className = 'now';
+    tag.textContent = '// this week';
+    cell.appendChild(tag);
+  }
+})();
+</script>
 </body>
 </html>
 """
@@ -164,7 +215,7 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
     lab = (f'      <a class="open" href="labs/{slug}/"'
            f' aria-label="Week {week_no}: {t} — lab">lab</a>\n') if slug else ""
     return (f'  <li class="row lecture">\n'
-            f'    <span class="num" data-week aria-hidden="true">{week_no}</span>\n'
+            f'    <span class="num" data-week="{week_no}" aria-hidden="true">{week_no}</span>\n'
             f'    <span class="topic"><a href="{folder}/index.html">{t}</a></span>\n'
             f'    <span class="actions">\n'
             f'      <a class="open" href="{folder}/index.html"'
@@ -175,8 +226,9 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
 
 
 def marker_row(week_no: str, label: str) -> str:
-    num_attr = ' data-week' if week_no else ''
-    return (f'  <li class="row marker">\n'
+    num_attr = f' data-week="{week_no}"' if week_no else ''
+    row_attr = '' if week_no else ' data-reading'  # the only unnumbered row is reading week
+    return (f'  <li class="row marker"{row_attr}>\n'
             f'    <span class="num"{num_attr} aria-hidden="true">{week_no}</span>\n'
             f'    <span class="comment">{label}</span>\n'
             f'    <span></span>\n'

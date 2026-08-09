@@ -24,6 +24,10 @@ Usage:
 
 --date overrides "today" for testing. Exit 0 always; the caller decides
 whether the README changed (git diff).
+
+The Pages landing page mirrors this calendar client-side (inline JS in
+scripts/build_index.py) — change the formula in BOTH places or the README
+and the site will disagree.
 """
 import argparse
 import datetime

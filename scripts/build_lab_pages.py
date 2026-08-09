@@ -8,8 +8,11 @@ previews — each carries a banner telling students to fork the repo and
 work in a Codespace.
 
 Mermaid fences render client-side (pinned mermaid, same version as the
-repo's Moodle assets). Requires the `markdown` package (pip install
-markdown).
+repo's Moodle assets), and ```java fences get client-side highlight.js
+colouring — pinned to the same highlight.js version marp-core bundles,
+with the token palette copied from themes/ooc.css, so lab code looks
+exactly like deck code. ```text fences (Expected output) stay flat.
+Requires the `markdown` package (pip install markdown).
 
 Usage:
     python scripts/build_lab_pages.py [OUTPUT_DIR]     # default: build
@@ -24,6 +27,9 @@ import markdown
 LABS = Path("labs/src/ie/atu")
 REPO_URL = "https://github.com/danielcregg/object-oriented-computing"
 MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"
+# Same major.minor.patch as marp-core's bundled highlight.js — keeps lab
+# token classes identical to the rendered decks'.
+HLJS_JS = "https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"
 
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
            "viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' "
@@ -71,6 +77,11 @@ STYLE = """<style>
     overflow-x: auto; line-height: 1.5;
   }
   pre code { background: transparent; color: #E8ECF1; padding: 0; font-size: 14.5px; }
+  /* java token colours — same palette as section pre code in themes/ooc.css */
+  pre code .hljs-string { color: #F0B26B; }
+  pre code .hljs-keyword { color: #7FB4D8; }
+  pre code .hljs-title, pre code .hljs-built_in { color: #A8D3EE; }
+  pre code .hljs-comment { color: #7C8B99; }
   pre.mermaid { background: #FFFFFF; border: 1px solid var(--rule); text-align: center; }
   table { border-collapse: collapse; margin: 14px 0; font-size: 15.5px; }
   th { font-family: var(--mono); text-align: left; color: var(--slate);
@@ -131,16 +142,20 @@ def preprocess(md_text: str) -> str:
 
 
 def page(title: str, kicker_html: str, body_html: str, needs_mermaid: bool,
-         banner_html: str = "") -> str:
+         banner_html: str = "", needs_hljs: bool = False) -> str:
     mermaid = (f'<script src="{MERMAID_JS}"></script>'
                '<script>mermaid.initialize({startOnLoad:true,theme:"neutral"});</script>'
                if needs_mermaid else "")
+    hljs = (f'<script src="{HLJS_JS}"></script>'
+            "<script>document.querySelectorAll('pre code.language-java')"
+            ".forEach(function(el){hljs.highlightElement(el);});</script>"
+            if needs_hljs else "")
     return (f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             f'<title>{title}</title>\n<link rel="icon" href="{FAVICON}">\n{STYLE}\n'
             f"</head>\n<body>\n<div class=\"wrap\">\n"
             f'<p class="kicker">{kicker_html}</p>\n{banner_html}{body_html}\n'
-            f"</div>\n{mermaid}</body>\n</html>\n")
+            f"</div>\n{hljs}{mermaid}</body>\n</html>\n")
 
 
 def main() -> None:
@@ -168,7 +183,8 @@ def main() -> None:
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(
             page(html.escape(title), kicker, body, "```mermaid" in text or
-                 'class="mermaid"' in body, banner),
+                 'class="mermaid"' in body, banner,
+                 needs_hljs='language-java' in body),
             encoding="utf-8", newline="\n")
 
     rows = "".join(

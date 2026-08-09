@@ -2,15 +2,12 @@
 """Generate the GitHub Pages landing page(s) for the lecture decks.
 
 Main page (OUTPUT_DIR/index.html): scans weeks/ in folder order and emits
-one timeline row per week — lecture weeks get title + slides/pdf/pptx
-links, MCQ weeks and reading week render as "// comment" marker rows.
+one timeline row per week — lecture weeks get title + slides/lab buttons
+(downloads live in the repo, linked once from the intro), MCQ weeks and
+reading week render as "// comment" marker rows.
 
-Draft preview (OUTPUT_DIR/reimagined/index.html): built automatically
-whenever any weeks/*/lecture/slides-reimagined.md exists — a mobile-first
-list of the reimagined draft decks. Disappears once the drafts are gone.
-
-Both pages carry the visual identity of themes/ooc.css ("the lecture as
-source code"): paper background, editor-gutter rail, week numbers set
+The page carries the visual identity of themes/ooc.css ("the lecture as
+source code"): paper background, editor-gutter rail, "week N" labels set
 like line numbers, mono headings ending in an orange semicolon.
 
 Usage:
@@ -52,13 +49,13 @@ STYLE = """<style>
   body {
     font-family: var(--sans); color: var(--ink);
     background: linear-gradient(to right,
-      var(--paper) 0, var(--paper) 86px,
-      var(--rule) 86px, var(--rule) 88px,
-      var(--paper) 88px, var(--paper) 100%);
+      var(--paper) 0, var(--paper) 104px,
+      var(--rule) 104px, var(--rule) 106px,
+      var(--paper) 106px, var(--paper) 100%);
     min-height: 100vh; line-height: 1.5;
   }
   a:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; border-radius: 4px; }
-  header { padding: 64px 40px 40px 122px; max-width: 980px; }
+  header { padding: 64px 40px 40px 140px; max-width: 980px; }
   .kicker { font-family: var(--mono); font-size: 15px; color: var(--muted); letter-spacing: 0.01em; }
   .kicker::before { content: '// '; color: var(--orange); }
   h1 {
@@ -70,7 +67,7 @@ STYLE = """<style>
   main { max-width: 980px; padding-bottom: 24px; }
   ol.timeline { list-style: none; padding: 0; }
   .row {
-    display: grid; grid-template-columns: 86px minmax(0, 1fr) auto;
+    display: grid; grid-template-columns: 104px minmax(0, 1fr) auto;
     align-items: baseline; column-gap: 34px;
     border-bottom: 1px solid var(--rule); padding: 18px 40px 18px 0;
     transition: background-color 120ms ease;
@@ -81,6 +78,7 @@ STYLE = """<style>
     text-align: right; padding-right: 16px;
     transition: color 120ms ease;
   }
+  .num[data-week]::before { content: 'week '; }
   .lecture:hover { background: var(--tint); }
   .lecture:hover .num, .lecture:focus-within .num { color: var(--orange); }
   .topic { font-family: var(--mono); font-weight: 600; font-size: 21px; letter-spacing: -0.01em; }
@@ -96,12 +94,10 @@ STYLE = """<style>
     transition: background-color 120ms ease, color 120ms ease;
   }
   .actions .open:hover { background: var(--blue); color: var(--paper); }
-  .actions .dl { color: var(--slate); text-decoration: none; }
-  .actions .dl:hover { color: var(--blue); text-decoration: underline; }
   .marker { color: var(--muted); font-family: var(--mono); font-size: 15.5px; }
   .marker .comment::before { content: '// '; color: var(--orange); }
   footer {
-    padding: 30px 40px 56px 122px; max-width: 980px;
+    padding: 30px 40px 56px 140px; max-width: 980px;
     font-family: var(--mono); font-size: 13.5px; color: var(--gutter-num);
   }
   footer p + p { margin-top: 4px; }
@@ -113,10 +109,8 @@ STYLE = """<style>
     footer { padding: 26px 20px 44px; }
     .row { grid-template-columns: 1fr; row-gap: 12px; padding: 18px 20px; }
     .num { text-align: left; padding: 0; }
-    .num[data-week]::before { content: 'week '; }
     .actions { white-space: normal; flex-wrap: wrap; gap: 14px; }
     .actions .open { padding: 12px 26px; font-size: 16.5px; }
-    .actions .dl { padding: 10px 6px; font-size: 15px; }
     .topic { font-size: 23px; }
     .topic a { display: block; padding: 2px 0; }
   }
@@ -138,9 +132,11 @@ def page_head(title: str) -> str:
 MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
-  <p class="standfirst">One lecture deck per teaching week. Open the slides in
-  your browser, or take the PDF or PowerPoint version with you.
-  Also here: <a href="labs/">the labs</a> &middot;
+  <p class="standfirst">One lecture deck per teaching week — slides and lab
+  open right in your browser. PDF and PowerPoint versions of every deck live
+  <a href="https://github.com/danielcregg/object-oriented-computing/tree/gh-pages">in
+  the repository</a> if you want a download. Also here:
+  <a href="labs/">all the labs</a> &middot;
   <a href="practice/">MCQ practice</a>.</p>
 </header>
 <main>
@@ -165,7 +161,7 @@ def lab_slug(folder: str) -> str | None:
 def lecture_row(folder: str, week_no: str, title: str) -> str:
     t = html.escape(title)
     slug = lab_slug(folder)
-    lab = (f'      <a class="dl" href="labs/{slug}/"'
+    lab = (f'      <a class="open" href="labs/{slug}/"'
            f' aria-label="Week {week_no}: {t} — lab">lab</a>\n') if slug else ""
     return (f'  <li class="row lecture">\n'
             f'    <span class="num" data-week aria-hidden="true">{week_no}</span>\n'
@@ -173,10 +169,6 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
             f'    <span class="actions">\n'
             f'      <a class="open" href="{folder}/index.html"'
             f' aria-label="Week {week_no}: {t} — open slides">slides</a>\n'
-            f'      <a class="dl" href="{folder}/slides.pdf"'
-            f' aria-label="Week {week_no}: {t} — PDF">pdf</a>\n'
-            f'      <a class="dl" href="{folder}/slides.pptx"'
-            f' aria-label="Week {week_no}: {t} — PowerPoint">pptx</a>\n'
             f'{lab}'
             f'    </span>\n'
             f'  </li>\n')

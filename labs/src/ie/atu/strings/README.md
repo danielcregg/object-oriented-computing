@@ -22,7 +22,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.strings` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.strings` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ---
 
@@ -34,7 +34,7 @@ Strings are sequences of characters that power almost every Java application. Fr
 
 **Why Focus on Strings?**
 
-* **Universal:** Text is everywhere—log messages, prompts, file formats, and user interfaces.
+* **Universal:** Text is everywhere - log messages, prompts, file formats, and user interfaces.
 * **Feature-Rich API:** `String` offers dozens of methods for searching, replacing, slicing, formatting, and more.
 * **Immutable by Design:** Java strings cannot change once created, a feature that simplifies reasoning but affects performance.
 * **Interoperability:** Strings integrate seamlessly with Java's standard library, including collections, streams, and I/O.
@@ -62,7 +62,7 @@ Java
 Strings
 ```
 
-*A representative run — your three strings can hold any values you like.*
+*A representative run - your three strings can hold any values you like.*
 
 ---
 
@@ -79,10 +79,10 @@ String constructedGreeting = new String("Welcome to Java Strings"); // forces ne
 
 **Inspection Methods:**
 
-* `length()` – counts characters.
-* `charAt(int index)` – retrieves a single character.
-* `isEmpty()` / `isBlank()` – checks for empty or whitespace-only strings (Java 11+).
-* `toUpperCase()` / `toLowerCase()` – returns uppercase or lowercase versions.
+* `length()` - counts characters.
+* `charAt(int index)` - retrieves a single character.
+* `isEmpty()` / `isBlank()` - checks for empty or whitespace-only strings (Java 11+).
+* `toUpperCase()` / `toLowerCase()` - returns uppercase or lowercase versions.
 
 ### Example
 
@@ -135,7 +135,7 @@ Blank? true
 
 <details><summary>Hint</summary>
 
-The last character lives at index `length() - 1`. Guard the empty string first — calling `charAt(0)` on `""` throws `StringIndexOutOfBoundsException`. For the blank check, `"   ".trim().isEmpty()` is `true` because trimming removes every space.
+The last character lives at index `length() - 1`. Guard the empty string first - calling `charAt(0)` on `""` throws `StringIndexOutOfBoundsException`. For the blank check, `"   ".trim().isEmpty()` is `true` because trimming removes every space.
 
 </details>
 
@@ -190,7 +190,7 @@ Joined: Java Strings are powerful
 
 <details><summary>Hint</summary>
 
-In a format string, `%s` is a placeholder for a String and `%d` for an int. `String.join(" ", words)` takes the separator first and the array second — no loop required.
+In a format string, `%s` is a placeholder for a String and `%d` for an int. `String.join(" ", words)` takes the separator first and the array second - no loop required.
 
 </details>
 
@@ -202,10 +202,10 @@ In a format string, `%s` is a placeholder for a String and `%d` for an int. `Str
 
 String comparisons must use methods, not `==`, which only checks whether references point to the same object.
 
-* `equals(Object obj)` – case-sensitive equality.
-* `equalsIgnoreCase(String other)` – case-insensitive equality.
-* `compareTo(String other)` – lexicographic comparison (negative, zero, positive).
-* `regionMatches(...)` – compare substrings.
+* `equals(Object obj)` - case-sensitive equality.
+* `equalsIgnoreCase(String other)` - case-insensitive equality.
+* `compareTo(String other)` - lexicographic comparison (negative, zero, positive).
+* `regionMatches(...)` - compare substrings.
 
 ```java
 String expected = "SUCCESS";
@@ -234,7 +234,7 @@ Null-safe comparison passed.
 
 <details><summary>Hint</summary>
 
-`compareTo` works alphabetically: `"Java".compareTo("Kotlin")` is negative because `'J'` comes before `'K'`. In the null test, the `!= null` check must run first — `str7 != null && str7.equals("Java")` can never throw.
+`compareTo` works alphabetically: `"Java".compareTo("Kotlin")` is negative because `'J'` comes before `'K'`. In the null test, the `!= null` check must run first - `str7 != null && str7.equals("Java")` can never throw.
 
 </details>
 
@@ -244,7 +244,7 @@ Null-safe comparison passed.
 
 ### Explanation
 
-Strings are immutable—once created, their value cannot change. Any method that appears to modify a string actually returns a new instance.
+Strings are immutable - once created, their value cannot change. Any method that appears to modify a string actually returns a new instance.
 
 **Benefits:**
 
@@ -285,10 +285,10 @@ sequenceDiagram
 
 **Objective:** See immutability in action and contrast with StringBuilder's mutability.
 
-1. In the `Main` class `main` method, test String immutability: create a String variable `original` with value `"Hello"`. Print its identity hash code using `System.identityHashCode(original)`. Now concatenate it: `original = original + " World"`. Print the new identity hash code and compare — they should be different, proving a new object was created.
-2. Test the String pool: create two String variables using literals: `String pooled1 = "Lab"` and `String pooled2 = "Lab"`. Compare them with `==` and print the result (should be `true` — same object in pool).
+1. In the `Main` class `main` method, test String immutability: create a String variable `original` with value `"Hello"`. Print its identity hash code using `System.identityHashCode(original)`. Now concatenate it: `original = original + " World"`. Print the new identity hash code and compare - they should be different, proving a new object was created.
+2. Test the String pool: create two String variables using literals: `String pooled1 = "Lab"` and `String pooled2 = "Lab"`. Compare them with `==` and print the result (should be `true` - same object in pool).
 3. Test `intern()`: create a String using the constructor: `String constructed = new String("Lab")`. Compare it with `pooled1` using `==` (should be `false`). Now call `constructed.intern()` and compare again with `pooled1` using `==` (should be `true`).
-4. Compare with StringBuilder: create a StringBuilder with value `"Hello"`. Print its identity hash code. Use `append(" World")` to modify it. Print the identity hash code again — it should be the same, proving the same object was modified.
+4. Compare with StringBuilder: create a StringBuilder with value `"Hello"`. Print its identity hash code. Use `append(" World")` to modify it. Print the identity hash code again - it should be the same, proving the same object was modified.
 5. Add comments explaining why repeated `+` concatenations hurt performance (each creates a new object).
 
 **Expected output**
@@ -305,11 +305,11 @@ Builder hash after: 1580066828
 Same builder object? true
 ```
 
-*Identity hash codes vary from run to run — the pattern of matches is what matters.*
+*Identity hash codes vary from run to run - the pattern of matches is what matters.*
 
 <details><summary>Hint</summary>
 
-`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. Remember to reassign the result of concatenation — `original = original + " World";` — or nothing appears to change.
+`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. Remember to reassign the result of concatenation - `original = original + " World";` - or nothing appears to change.
 
 </details>
 
@@ -394,11 +394,11 @@ KEY INSIGHT:
 
 **Key Methods:**
 
-* `append(...)` – add text or values.
-* `insert(int offset, String str)` – insert at position.
-* `delete(int start, int end)` – remove a range.
-* `reverse()` – reverse contents.
-* `toString()` – produce an immutable `String` snapshot.
+* `append(...)` - add text or values.
+* `insert(int offset, String str)` - insert at position.
+* `delete(int start, int end)` - remove a range.
+* `reverse()` - reverse contents.
+* `toString()` - produce an immutable `String` snapshot.
 
 ```java
 StringBuilder sb = new StringBuilder("Java");
@@ -453,11 +453,11 @@ StringBuilder took: 1 ms
 Difference: 1246 ms
 ```
 
-*A representative run — timings vary from machine to machine; the gap is what matters.*
+*A representative run - timings vary from machine to machine; the gap is what matters.*
 
 <details><summary>Hint</summary>
 
-Walk the words backwards with `for (int i = words.length - 1; i >= 0; i--)`, appending `words[i]` and a space each time. `System.nanoTime()` returns nanoseconds — divide by `1_000_000` to convert a duration to milliseconds.
+Walk the words backwards with `for (int i = words.length - 1; i >= 0; i--)`, appending `words[i]` and a space each time. `System.nanoTime()` returns nanoseconds - divide by `1_000_000` to convert a duration to milliseconds.
 
 </details>
 
@@ -609,7 +609,7 @@ CSV parts: ["Java", "Strings", "Lab"]
 
 <details><summary>Hint</summary>
 
-For the mask, everything between index `1` and `atIndex` needs replacing — `"*".repeat(atIndex - 1)` builds all the stars in one call. `split(",")` keeps the space after each comma, which is exactly why each part needs `trim()`.
+For the mask, everything between index `1` and `atIndex` needs replacing - `"*".repeat(atIndex - 1)` builds all the stars in one call. `split(",")` keeps the space after each comma, which is exactly why each part needs `trim()`.
 
 </details>
 
@@ -669,11 +669,11 @@ Initial capacity: 16
 Capacity after 50 appends: 70
 ```
 
-*Identity hash codes vary from run to run — the pattern of matches is what matters.*
+*Identity hash codes vary from run to run - the pattern of matches is what matters.*
 
 <details><summary>Hint</summary>
 
-`capacity()` is a `StringBuilder` method — a `String` has no spare room to report. A default `new StringBuilder()` starts with capacity 16 and grows automatically as you append. `intern()` returns the pooled object rather than changing the variable, so assign the result: `heap3 = heap3.intern();`.
+`capacity()` is a `StringBuilder` method - a `String` has no spare room to report. A default `new StringBuilder()` starts with capacity 16 and grows automatically as you append. `intern()` returns the pooled object rather than changing the variable, so assign the result: `heap3 = heap3.intern();`.
 
 </details>
 
@@ -799,7 +799,7 @@ public class BuggyStrings {
 2. String comparison: in the `Main` class `main` method, create `String input = new String("YES")`. Try comparing with `==` to `"YES"` (returns `false`). Fix by using `equals()` instead.
 3. Null safety: create `String text = null`. Try calling `text.contains("test")` (throws an exception). Fix by adding an `if (text != null)` check before the method call.
 4. Loop concatenation: create an empty String. Use a for loop to concatenate 100 numbers with `+=` (slow). Fix by using StringBuilder with `append()` instead.
-5. Substring bounds: create `String str = "Java"`. Try `str.substring(0, 4)` to get the first 4 chars (works), then try `str.substring(0, 5)` — it throws an exception. Remember: the end index is exclusive.
+5. Substring bounds: create `String str = "Java"`. Try `str.substring(0, 4)` to get the first 4 chars (works), then try `str.substring(0, 5)` - it throws an exception. Remember: the end index is exclusive.
 6. Replace vs replaceAll: create `String version = "1.2.3"`. Try `version.replaceAll(".", "-")` (every character becomes `-` because `.` is a regex wildcard). Fix by using `replace()` for a literal replacement.
 7. Add comments explaining each fix and why the original code failed. When you are done, your updated class should compile and every scenario should behave correctly.
 
@@ -815,7 +815,7 @@ replaceAll(".", "-"): -----
 replace(".", "-"): 1-2-3
 ```
 
-*A representative run — the `...` stands in for the middle of the 100-number line, and your labels may differ.*
+*A representative run - the `...` stands in for the middle of the 100-number line, and your labels may differ.*
 
 <details><summary>Hint</summary>
 
@@ -843,7 +843,7 @@ This lab guided you through essential string concepts:
 
 ✅ Identity hash codes prove String creates new objects while StringBuilder reuses the same object.
 
-✅ Avoid `==` for string comparisons—use `equals` or `equalsIgnoreCase`.
+✅ Avoid `==` for string comparisons - use `equals` or `equalsIgnoreCase`.
 
 ✅ `StringBuilder` is the go-to for repeated concatenation or heavy editing.
 

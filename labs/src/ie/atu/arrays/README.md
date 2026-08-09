@@ -22,7 +22,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.arrays` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.arrays` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Introduction
 
@@ -106,7 +106,7 @@ null null null
     
 ```
 
-*(The line looks blank: each `char` element defaults to `'\u0000'`, the invisible NUL character, so you are printing four characters that have no visible glyph — only their separating spaces show.)*
+*(The line looks blank: each `char` element defaults to `'\u0000'`, the invisible NUL character, so you are printing four characters that have no visible glyph - only their separating spaces show.)*
 
 <details>
 <summary>Hint</summary>
@@ -524,7 +524,7 @@ Sorted array: [1, 2, 3, 4, 5]
 ### DIY 7: Copy, then sort
 
 1. Start with `int[] original = {5, 3, 2, 4, 1};`.
-2. Copy it into a new array, then sort the copy — the original must stay unchanged.
+2. Copy it into a new array, then sort the copy - the original must stay unchanged.
 3. Print both arrays using `Arrays.toString()`, labelled as shown below.
 
 **Expected output**

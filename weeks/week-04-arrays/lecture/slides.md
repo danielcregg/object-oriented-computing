@@ -11,7 +11,7 @@ source: authored
 ---
 
 <style>
-/* Deck-local visual system: memory boxes, drawn in CSS — no images. */
+/* Deck-local visual system: memory boxes, drawn in CSS - no images. */
 section .mem {
   display: flex; margin: 40px 0 10px 0;
   font-family: 'Cascadia Code', Consolas, monospace;
@@ -104,38 +104,38 @@ int score300 = 95;
 
 <p class="legend">one name (scores) · five boxes · every box an int · every box numbered</p>
 
-- 300 students? Same one line of code — the array doesn't care.
+- 300 students? Same one line of code - the array doesn't care.
 - The number of a box is its **index**. The count of boxes is the array's **length**.
 
 ---
 
 ## Agenda
 
-- Creating arrays — declare, construct, fill
+- Creating arrays - declare, construct, fill
 - The contract: one type, fixed length, and what happens when you break it
 - Looping: the counting loop and for-each
-- Arrays are objects — the aliasing trap
+- Arrays are objects - the aliasing trap
 - Three loop patterns you'll use forever
 - Grids: 2D arrays
 - The `java.util.Arrays` toolbox
 
 ---
 
-<!-- Speaker notes: ~0:06. Mechanics movement — keep tempo brisk, the ideas are small. -->
+<!-- Speaker notes: ~0:06. Mechanics movement - keep tempo brisk, the ideas are small. -->
 
-## Step 1 — declare
+## Step 1 - declare
 
 ```java
 int[] scores;
 ```
 
 - Read the type aloud: "**int-array**". The `[]` is part of the type.
-- This creates the **name only** — no boxes exist yet.
-- Java also allows `int scores[];` — it's legal and you should never write it. The type belongs together: `int[]`.
+- This creates the **name only** - no boxes exist yet.
+- Java also allows `int scores[];` - it's legal and you should never write it. The type belongs together: `int[]`.
 
 ---
 
-## Step 2 — construct
+## Step 2 - construct
 
 ```java
 int[] scores = new int[5];
@@ -150,7 +150,7 @@ int[] scores = new int[5];
 <div class="cell"><span class="idx">4</span>0</div>
 </div>
 
-- `new int[5]` builds the boxes — the size goes in the brackets, decided **once**.
+- `new int[5]` builds the boxes - the size goes in the brackets, decided **once**.
 - Java never hands you garbage memory. Every box starts at its type's **default**:
 
 | Element type | Default value |
@@ -162,7 +162,7 @@ int[] scores = new int[5];
 
 ---
 
-## Step 3 — read and write
+## Step 3 - read and write
 
 ```java
 int[] scores = new int[5];
@@ -180,26 +180,26 @@ System.out.println(mine);          // 78
 <div class="cell"><span class="idx">4</span>0</div>
 </div>
 
-- `name[index]` is just a variable — anything a variable can do, a box can do.
+- `name[index]` is just a variable - anything a variable can do, a box can do.
 
 ---
 
 ## Or: skip the ceremony
 
-- Know the values already? Use an **array literal** — Java counts them for you:
+- Know the values already? Use an **array literal** - Java counts them for you:
 
 ```java
 int[] scores = {83, 91, 78, 65, 95};
 String[] names = {"Ada", "Linus", "Grace"};
 ```
 
-- Literal form only works **in the declaration line** — it's a birth certificate, not a general expression.
+- Literal form only works **in the declaration line** - it's a birth certificate, not a general expression.
 
 ---
 
 ## Why do indices start at zero?
 
-- The index is not a position — it's a **distance from the start**.
+- The index is not a position - it's a **distance from the start**.
 
 <div class="mem">
 <div class="name">a</div>
@@ -210,19 +210,19 @@ String[] names = {"Ada", "Linus", "Grace"};
 </div>
 
 - The first box is zero steps from the front door: `a[0]`.
-- Which is why the **last** box of a length-`n` array is `a[n - 1]` — not `a[n]`.
+- Which is why the **last** box of a length-`n` array is `a[n - 1]` - not `a[n]`.
 - Burn this in now and every off-by-one error you ever meet gets easier.
 
 ---
 
-## The contract, part 1 — one type
+## The contract, part 1 - one type
 
 - Every box holds the **same type**. The compiler enforces it **before the program ever runs**:
 
 <!-- no-compile -->
 ```java
 int[] values = {1, 2.5, 3, 3.5, 4};   // compile error:
-                                      // 2.5 is a double — won't narrow to int
+                                      // 2.5 is a double - won't narrow to int
 ```
 
 - The fix is to change the contract, not fight it:
@@ -233,7 +233,7 @@ double[] values = {1, 2.5, 3, 3.5, 4};   // ints widen to double for free
 
 ---
 
-## The contract, part 2 — fixed length
+## The contract, part 2 - fixed length
 
 - Length is decided at construction and **never changes**. There is no `add`.
 - And the compiler **cannot** protect you from a bad index:
@@ -270,15 +270,15 @@ System.out.println(s[0]);
 System.out.println(a.length);
 ```
 
-* `0` — ints default to zero.
-* `null` — object boxes hold *references*, and an empty reference is `null`.
-* `3` — `length` is the box count, and it's built into every array.
+* `0` - ints default to zero.
+* `null` - object boxes hold *references*, and an empty reference is `null`.
+* `3` - `length` is the box count, and it's built into every array.
 
 ---
 
-<!-- Speaker notes: ~0:20. Loops movement. The idiom slide is the single most useful slide in the deck — go slow. -->
+<!-- Speaker notes: ~0:20. Loops movement. The idiom slide is the single most useful slide in the deck - go slow. -->
 
-## `.length` — the array knows its own size
+## `.length` - the array knows its own size
 
 ```java
 int[] scores = {83, 91, 78, 65, 95};
@@ -287,11 +287,11 @@ System.out.println(scores.length);   // 5
 
 - Every array carries its length with it. You never track it separately.
 
-<div class="callout"><strong>Spot the difference:</strong> arrays have <code>.length</code> — no parentheses. Strings have <code>.length()</code> — a method call. Mixing them up is a rite of passage; now it's one you can skip.</div>
+<div class="callout"><strong>Spot the difference:</strong> arrays have <code>.length</code> - no parentheses. Strings have <code>.length()</code> - a method call. Mixing them up is a rite of passage; now it's one you can skip.</div>
 
 ---
 
-## The counting loop — learn this shape
+## The counting loop - learn this shape
 
 ```java
 int[] scores = {83, 91, 78, 65, 95};
@@ -301,14 +301,14 @@ for (int i = 0; i < scores.length; i++) {
 }
 ```
 
-- `int i = 0` — start at the front door.
-- `i < scores.length` — strictly less than: `length` itself is out of bounds.
-- Written with `.length`, the loop **survives the array changing size** — edit the data, never the loop.
-- This exact shape visits every box of any array ever. It's pure muscle memory — practise it until your fingers type it alone.
+- `int i = 0` - start at the front door.
+- `i < scores.length` - strictly less than: `length` itself is out of bounds.
+- Written with `.length`, the loop **survives the array changing size** - edit the data, never the loop.
+- This exact shape visits every box of any array ever. It's pure muscle memory - practise it until your fingers type it alone.
 
 ---
 
-## For-each — when you don't need the index
+## For-each - when you don't need the index
 
 ```java
 int[] scores = {83, 91, 78, 65, 95};
@@ -318,7 +318,7 @@ for (int score : scores) {
 }
 ```
 
-- Read `:` as "**in**" — *for each score in scores*.
+- Read `:` as "**in**" - *for each score in scores*.
 - No counter, no bounds, nothing to get off by one.
 
 | Use **for-each** when… | Use the **counting loop** when… |
@@ -342,21 +342,21 @@ System.out.println(a[0]);
 ```
 
 * Prints **5**. The array is untouched.
-* `x` is a **copy** of each element — assigning to the copy changes nothing in the box.
+* `x` is a **copy** of each element - assigning to the copy changes nothing in the box.
 * This is exactly the "read-only" caveat from the table: to write, you need the index.
 
 ---
 
-<!-- Speaker notes: ~0:30. References movement — the deepest idea of the hour, and the payoff of the object-identity lesson. -->
+<!-- Speaker notes: ~0:30. References movement - the deepest idea of the hour, and the payoff of the object-identity lesson. -->
 
 ## Arrays are objects
 
-- Remember: a variable of object type holds a **reference** — an arrow, not the thing.
+- Remember: a variable of object type holds a **reference** - an arrow, not the thing.
 - **Arrays are objects.** Same rule, same consequences:
 
 ```java
 int[] a = {5, 10, 15};
-int[] b = a;             // copies the ARROW — not the boxes
+int[] b = a;             // copies the ARROW - not the boxes
 b[0] = 99;
 ```
 
@@ -370,7 +370,7 @@ b[0] = 99;
 
 <p class="legend">two names · two arrows · ONE array</p>
 
-- Change it through either name — there is only one array to change.
+- Change it through either name - there is only one array to change.
 
 ---
 
@@ -385,8 +385,8 @@ System.out.println(mine[0]);
 System.out.println(mine == yours);
 ```
 
-* `99` — `mine` and `yours` are two arrows to one array.
-* `true` — `==` on arrays compares **arrows**, not contents. Two names for one object are equal.
+* `99` - `mine` and `yours` are two arrows to one array.
+* `true` - `==` on arrays compares **arrows**, not contents. Two names for one object are equal.
 
 ---
 
@@ -400,7 +400,7 @@ int[] a = {5, 10, 15};
 int[] b = java.util.Arrays.copyOf(a, a.length);   // new boxes, values copied
 b[0] = 99;                                        // a[0] is still 5
 
-boolean sameObject = (a == b);                    // false — different arrays
+boolean sameObject = (a == b);                    // false - different arrays
 boolean sameValues = java.util.Arrays.equals(a, b); // compares box by box
 ```
 
@@ -408,9 +408,9 @@ boolean sameValues = java.util.Arrays.equals(a, b); // compares box by box
 
 ---
 
-<!-- Speaker notes: ~0:38. Patterns movement — name the patterns; names make them stick and they map straight onto MCQ questions. -->
+<!-- Speaker notes: ~0:38. Patterns movement - name the patterns; names make them stick and they map straight onto MCQ questions. -->
 
-## Pattern 1 — the accumulator
+## Pattern 1 - the accumulator
 
 - One variable gathers a result as the loop sweeps the array:
 
@@ -425,11 +425,11 @@ public static double average(int[] scores) {
 ```
 
 - Start at zero → add every element → divide at the end.
-- Same skeleton computes sums, counts, products — anything that *gathers*.
+- Same skeleton computes sums, counts, products - anything that *gathers*.
 
 ---
 
-## Pattern 2 — the champion
+## Pattern 2 - the champion
 
 - Track the best-so-far; every element gets its challenge:
 
@@ -445,12 +445,12 @@ public static int highest(int[] scores) {
 }
 ```
 
-- Start with the **first element** as champion — never with `0` (what if all scores are negative?).
+- Start with the **first element** as champion - never with `0` (what if all scores are negative?).
 - Flip the `>` to `<` and you've written *minimum*. One idea, two functions.
 
 ---
 
-## Pattern 3 — the search
+## Pattern 3 - the search
 
 - Walk the array; return the moment you find it:
 
@@ -458,21 +458,21 @@ public static int highest(int[] scores) {
 public static int find(String[] names, String target) {
     for (int i = 0; i < names.length; i++) {
         if (names[i].equals(target)) {
-            return i;                 // found — stop immediately
+            return i;                 // found - stop immediately
         }
     }
-    return -1;                        // swept everything — not there
+    return -1;                        // swept everything - not there
 }
 ```
 
-- `-1` is the classic "not found" answer — it can never be a real index.
-- These three patterns — accumulate, champion, search — are the engine room of half the programs you'll ever write.
+- `-1` is the classic "not found" answer - it can never be a real index.
+- These three patterns - accumulate, champion, search - are the engine room of half the programs you'll ever write.
 
 ---
 
 ## Arrays of objects
 
-- The boxes hold **references** — the objects live elsewhere:
+- The boxes hold **references** - the objects live elsewhere:
 
 ```java
 String[] crew = new String[3];   // three boxes, all null
@@ -483,32 +483,32 @@ System.out.println(crew[1].length());   // 5
 System.out.println(crew[2].length());   // NullPointerException!
 ```
 
-- An unfilled box is `null` — call a method through it and the program dies.
+- An unfilled box is `null` - call a method through it and the program dies.
 - Strings live right here too: a `String[]` is arrows to String objects.
 
 ---
 
-<!-- Speaker notes: ~0:46. Grids — connect to the lab immediately; the chessboard is their lab exercise. -->
+<!-- Speaker notes: ~0:46. Grids - connect to the lab immediately; the chessboard is their lab exercise. -->
 
-## Two dimensions — the grid
+## Two dimensions - the grid
 
-- A 2D array is an **array of arrays** — rows first, then columns:
+- A 2D array is an **array of arrays** - rows first, then columns:
 
 ```java
 char[][] board = new char[8][8];
-board[0][0] = 'R';     // row 0, column 0 — top-left corner
+board[0][0] = 'R';     // row 0, column 0 - top-left corner
 board[7][4] = 'K';     // row 7, column 4
 ```
 
-- Read `board[row][col]` — **row first, always**.
-- Spreadsheets, pixel grids, game boards, seating plans — every grid in computing is this.
+- Read `board[row][col]` - **row first, always**.
+- Spreadsheets, pixel grids, game boards, seating plans - every grid in computing is this.
 - **Lab exercise:** model a chessboard with `char[8][8]`.
 
 ---
 
 ## Sweeping the grid
 
-- One loop per dimension — rows outside, columns inside:
+- One loop per dimension - rows outside, columns inside:
 
 ```java
 char[][] board = new char[8][8];
@@ -520,12 +520,12 @@ for (int row = 0; row < board.length; row++) {
 }
 ```
 
-- `board.length` — how many **rows**. `board[row].length` — boxes in *that* row.
-- Asking each row for its own length even survives ragged grids (rows of different lengths — legal, rare, good to recognise).
+- `board.length` - how many **rows**. `board[row].length` - boxes in *that* row.
+- Asking each row for its own length even survives ragged grids (rows of different lengths - legal, rare, good to recognise).
 
 ---
 
-## The toolbox — `java.util.Arrays`
+## The toolbox - `java.util.Arrays`
 
 - You've met two already. The class is full of loops you now never write by hand:
 
@@ -543,16 +543,16 @@ public class Toolbox {
 }
 ```
 
-- `Arrays.toString` is the debugging one — printing an array directly gives gibberish (`[I@1b6d3586`), because you're printing the *arrow*.
+- `Arrays.toString` is the debugging one - printing an array directly gives gibberish (`[I@1b6d3586`), because you're printing the *arrow*.
 
 ---
 
 ## What arrays can't do
 
 - The fixed length eventually hurts: no insert, no remove, no grow.
-- "Add a student mid-semester" means building a **bigger array and copying** — clumsy.
-- Java's answer is `ArrayList` — an array that resizes itself. It's built **on top of arrays**, and you'll meet it later in your Java journey.
-- Every clever collection you'll ever use — lists, stacks, hash tables — has an array like this one beating underneath. **This hour is the foundation.**
+- "Add a student mid-semester" means building a **bigger array and copying** - clumsy.
+- Java's answer is `ArrayList` - an array that resizes itself. It's built **on top of arrays**, and you'll meet it later in your Java journey.
+- Every clever collection you'll ever use - lists, stacks, hash tables - has an array like this one beating underneath. **This hour is the foundation.**
 
 ---
 
@@ -562,5 +562,5 @@ public class Toolbox {
 - Wrong type fails at **compile time**; wrong index fails at **run time**.
 - The counting loop `for (int i = 0; i < a.length; i++)` and for-each split the work: index when you need *where*, for-each when you only need *what*.
 - Arrays are **objects**: `b = a` copies an arrow, `Arrays.copyOf` copies boxes, `==` compares arrows, `Arrays.equals` compares contents.
-- Accumulator, champion, search — three loop patterns that solve half of everything.
+- Accumulator, champion, search - three loop patterns that solve half of everything.
 - Grids are arrays of arrays: `board[row][col]`, one loop per dimension.

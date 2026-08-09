@@ -12,7 +12,7 @@ source: authored
 
 <style>
 /* Deck-local visual system: semester strip, assessment cards, build
-   pipeline, IDE window — all drawn in CSS, no image files. */
+   pipeline, IDE window - all drawn in CSS, no image files. */
 section .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
@@ -24,7 +24,7 @@ section .callout {
 section .callout strong { color: #B94E00; }
 section .legend { font-size: 17px; color: #8B8471; margin-top: 4px; }
 
-/* semester strip — 13 calendar weeks in one row */
+/* semester strip - 13 calendar weeks in one row */
 section .tl {
   display: flex; margin: 46px 0 12px 0;
   font-family: 'Cascadia Code', Consolas, monospace;
@@ -64,7 +64,7 @@ section .cards .card .cpct {
 }
 section .cards .card .csub { font-size: 16px; color: #8B8471; }
 
-/* build pipeline — source to running program */
+/* build pipeline - source to running program */
 section .pipe { display: flex; align-items: center; margin: 24px 0; }
 section .pipe .plane {
   width: 108px; flex: none;
@@ -141,11 +141,11 @@ section.lead .pipe .parrow .plab { color: #F0B26B; }
 <div class="pnode"><span class="pfile">anywhere</span><span class="psub">it runs</span></div>
 </div>
 
-Week 1 · Module Introduction — one semester, one language, and by December you'll think in objects.
+Week 1 · Module Introduction - one semester, one language, and by December you'll think in objects.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open — don't introduce yourself yet. Put the code up and let it look alien. Land the fragment; the point is distance travelled, not the code itself. -->
+<!-- Speaker notes: ~0:00. Cold open - don't introduce yourself yet. Put the code up and let it look alien. Land the fragment; the point is distance travelled, not the code itself. -->
 
 ## Fast-forward to December
 
@@ -171,33 +171,33 @@ public class December {
 }
 ```
 
-* A type **you designed**, objects built from it, methods doing your bidding. Today it may read as noise — by week 12 you'll write it without notes.
+* A type **you designed**, objects built from it, methods doing your bidding. Today it may read as noise - by week 12 you'll write it without notes.
 
 ---
 
-## The catch — and the plan
+## The catch - and the plan
 
 - You can't cram this subject, and you can't absorb it by watching me. Programming is best learned through **constant practice over an extended period of time**.
-- **Practice makes perfect** — and practice means *breaking things*: expect **constructive failure**. Broken code isn't the opposite of progress; it's how progress feels from the inside.
-- So the module is built for reps: delivered in an **incremental and iterative** fashion — ideas and concepts expanded and expounded week by week.
+- **Practice makes perfect** - and practice means *breaking things*: expect **constructive failure**. Broken code isn't the opposite of progress; it's how progress feels from the inside.
+- So the module is built for reps: delivered in an **incremental and iterative** fashion - ideas and concepts expanded and expounded week by week.
 - The traits of a good programmer: **patience · consistency · diligence · dedication**.
 
 * Talent is optional. Reps are not.
 
 ---
 
-<!-- Speaker notes: ~0:05. Frame the hour as two acts, then move — the agenda earns nothing by being lingered on. -->
+<!-- Speaker notes: ~0:05. Frame the hour as two acts, then move - the agenda earns nothing by being lingered on. -->
 
-## Agenda — one hour, two acts
+## Agenda - one hour, two acts
 
-- **Act 1 — your module**
+- **Act 1 - your module**
   - learning outcomes, and how the module is delivered
   - the 13-week map · assessment: three MCQs (weeks 5, 9, 12)
   - your coding environment · Moodle enrolment · this week's tasks
-- **Act 2 — Java fast-start**
+- **Act 2 - Java fast-start**
   - why Java, and where it came from
   - compiler vs interpreter · bytecode · the JVM · the JDK
-  - your first program — and the errors everyone makes
+  - your first program - and the errors everyone makes
 
 ---
 
@@ -213,15 +213,15 @@ public class December {
 
 - One assumption coming in: you have **some prior fundamental programming experience**.
 - One shift going out: this module is about the **object-oriented paradigm** of programming.
-- Officially — on completion you will be able to:
-  - **Explain** the fundamentals of programming — variables, operators, conditional and iterative statements
-  - **Understand** the fundamentals of OOP — defining classes, instantiating objects, invoking methods
+- Officially - on completion you will be able to:
+  - **Explain** the fundamentals of programming - variables, operators, conditional and iterative statements
+  - **Understand** the fundamentals of OOP - defining classes, instantiating objects, invoking methods
   - **Set up** and configure a software development environment
   - **Develop** basic object-oriented applications
 
 ---
 
-<!-- Speaker notes: ~0:11. Walk the strip left to right. Point at the dashed cell: reading week is the October bank-holiday week — say it twice, someone will still turn up. -->
+<!-- Speaker notes: ~0:11. Walk the strip left to right. Point at the dashed cell: reading week is the October bank-holiday week - say it twice, someone will still turn up. -->
 
 ## The shape of the semester
 
@@ -241,9 +241,9 @@ public class December {
 <div class="twk mcq"><span class="ttag">MCQ 3</span>12</div>
 </div>
 
-<p class="legend">numbers = teaching weeks · RW = reading week — the Irish October bank-holiday week</p>
+<p class="legend">numbers = teaching weeks · RW = reading week - the Irish October bank-holiday week</p>
 
-- **12 teaching weeks over 13 calendar weeks** — the gap is a 1-week break for reading week.
+- **12 teaching weeks over 13 calendar weeks** - the gap is a 1-week break for reading week.
 - **Labs start week 2.** This week: lecture only, plus your setup tasks.
 - The full timetable sits at the **top of the Moodle page**.
 
@@ -251,7 +251,7 @@ public class December {
 
 <!-- Speaker notes: ~0:14. Let the three cards breathe before the fragment. The message is steady pressure, not one terrifying day. -->
 
-## Assessment — three checkpoints
+## Assessment - three checkpoints
 
 <div class="cards">
 <div class="card"><span class="cwk">week 5</span><span class="cname">MCQ 1</span><span class="cpct">33%</span><span class="csub">in person · in a lab</span></div>
@@ -259,24 +259,24 @@ public class December {
 <div class="card"><span class="cwk">week 12</span><span class="cname">MCQ 3</span><span class="cpct">33%</span><span class="csub">in person · in a lab</span></div>
 </div>
 
-- Three MCQs, worth **33% each** — all completed **in person, in a lab**.
+- Three MCQs, worth **33% each** - all completed **in person, in a lab**.
 
 * Your grade is spread across the semester: three chances, no single make-or-break day.
-* First checkpoint is week 5 — **four teaching weeks from today**. The reps start now.
+* First checkpoint is week 5 - **four teaching weeks from today**. The reps start now.
 
 ---
 
-## What's on the MCQs — and how to prepare
+## What's on the MCQs - and how to prepare
 
-- Questions can be sourced from **lecture AND lab materials** — the labs are examinable, not optional extras.
-- Format: **standard MCQ questions plus some Coderunner coding questions** — so you'll be *writing* code under assessment, not just recognising definitions.
-- Preparation that actually works: **use AI to generate sample MCQ questions** from the materials — Google's **NotebookLM** is a great tool for this.
+- Questions can be sourced from **lecture AND lab materials** - the labs are examinable, not optional extras.
+- Format: **standard MCQ questions plus some Coderunner coding questions** - so you'll be *writing* code under assessment, not just recognising definitions.
+- Preparation that actually works: **use AI to generate sample MCQ questions** from the materials - Google's **NotebookLM** is a great tool for this.
 
 <div class="callout"><strong>Feed it, then fight it.</strong> Give NotebookLM the week's lecture and lab material, ask for a practice quiz, and take it cold. Wrong answers tell you exactly what to revise.</div>
 
 ---
 
-<!-- Speaker notes: ~0:18. First predict beat. Make them commit out loud before revealing — all three are false, which is the joke and the lesson. -->
+<!-- Speaker notes: ~0:18. First predict beat. Make them commit out loud before revealing - all three are false, which is the joke and the lesson. -->
 
 ## Predict: true or false?
 
@@ -284,54 +284,54 @@ public class December {
 - **2.** You can sit the MCQs from home.
 - **3.** If it wasn't in a lecture, it can't be on an MCQ.
 
-* **1 — false.** Labs start **week 2**. This week you set up; next week you build.
-* **2 — false.** All three MCQs are completed **in person, in a lab**.
-* **3 — false.** Questions draw on **lecture and lab** materials alike.
-* A clean sweep of falses — worth catching now. This slide pays 33%, three times.
+* **1 - false.** Labs start **week 2**. This week you set up; next week you build.
+* **2 - false.** All three MCQs are completed **in person, in a lab**.
+* **3 - false.** Questions draw on **lecture and lab** materials alike.
+* A clean sweep of falses - worth catching now. This slide pays 33%, three times.
 
 ---
 
-<!-- Speaker notes: ~0:21. Tools movement. Sell the "no installs" point hard — it removes the classic week-1 failure mode of broken local setups. -->
+<!-- Speaker notes: ~0:21. Tools movement. Sell the "no installs" point hard - it removes the classic week-1 failure mode of broken local setups. -->
 
 ## Your coding environment: GitHub Codespaces
 
-- Labs run in **GitHub Codespaces** — **VS Code running on a virtual machine**, which you connect to **through your browser**.
-- It's a **cloud-based IDE**: nothing to install, and your laptop's spec doesn't matter — the VM does the heavy lifting.
+- Labs run in **GitHub Codespaces** - **VS Code running on a virtual machine**, which you connect to **through your browser**.
+- It's a **cloud-based IDE**: nothing to install, and your laptop's spec doesn't matter - the VM does the heavy lifting.
 - Already familiar with VS Code? Then you will notice **no difference**.
-- We'll also be using **AI to assist in answering questions** — more on that in the labs.
+- We'll also be using **AI to assist in answering questions** - more on that in the labs.
 
 ---
 
-## Enrol on Moodle — today
+## Enrol on Moodle - today
 
 - Go to <https://vlegalwaymayo.atu.ie/>
 - Search for course: **8963**
 - Enrolment key: `object`
 
-* **Careful:** I teach **two** Object Oriented Computing modules — make sure you select the correct one.
+* **Careful:** I teach **two** Object Oriented Computing modules - make sure you select the correct one.
 
 ---
 
 <!-- Speaker notes: ~0:24. Two tasks plus the enrolment you just showed. Point out that week 2 assumes all three are done. -->
 
-## Your tasks — before the week-2 lab
+## Your tasks - before the week-2 lab
 
-- **Enrol on Moodle** — course **8963**, key `object` — you've just seen how.
-- **Sign up for the [GitHub Student Developer Pack](https://education.github.com/pack)** — free developer tools for as long as you're a student.
-- **Research GitHub Codespaces** — arrive at the first lab already knowing roughly what it is. You'll be coding inside one within minutes.
+- **Enrol on Moodle** - course **8963**, key `object` - you've just seen how.
+- **Sign up for the [GitHub Student Developer Pack](https://education.github.com/pack)** - free developer tools for as long as you're a student.
+- **Research GitHub Codespaces** - arrive at the first lab already knowing roughly what it is. You'll be coding inside one within minutes.
 
 <div class="callout"><strong>Week 2 assumes all three are done.</strong> Ten quiet minutes this week buys you a running start next week.</div>
 
 ---
 
-<!-- Speaker notes: ~0:26. Bridge. Get actual hands up for the first two questions — it calibrates the room for you. Then promise the second list and deliver it. -->
+<!-- Speaker notes: ~0:26. Bridge. Get actual hands up for the first two questions - it calibrates the room for you. Then promise the second list and deliver it. -->
 
 ## Six questions before the deep end
 
-- **You tell me** — show of hands:
+- **You tell me** - show of hands:
   - What programming experience do you have? What languages have you used?
   - Have you used an **object-oriented** language before?
-- **I'll answer** — in the next thirty minutes:
+- **I'll answer** - in the next thirty minutes:
   - What do we need to **run** a Java program?
   - When do we need to **compile** a Java program?
   - What is an **IDE**?
@@ -346,11 +346,11 @@ public class December {
 
 # Java Fast-Start
 
-From a text file to a running program — background · bytecode · the JVM · your first errors
+From a text file to a running program - background · bytecode · the JVM · your first errors
 
 ---
 
-<!-- Speaker notes: ~0:28. Second predict beat. Let them guess wildly — image? virus? Then reveal, and point at CA FE BA BE for the coffee joke. -->
+<!-- Speaker notes: ~0:28. Second predict beat. Let them guess wildly - image? virus? Then reveal, and point at CA FE BA BE for the coffee joke. -->
 
 ## Predict: what is this file?
 
@@ -361,26 +361,26 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 69 74 3E 01 00 03 28 29 56 08 00 12 01 00 0D 48
 ```
 
-* It's **Hello World** — `HelloPrinter.class`, the version of the program your machine actually meets.
+* It's **Hello World** - `HelloPrinter.class`, the version of the program your machine actually meets.
 * Everything you write this semester becomes this: **bytecode**.
 * The first four bytes of every Java class file ever compiled: `CA FE BA BE`. The compiler's little coffee joke.
-* Act 2 is the story of that transformation — and why it conquered the world.
+* Act 2 is the story of that transformation - and why it conquered the world.
 
 ---
 
-<!-- Speaker notes: ~0:31. Background movement — brisk. These two slides are context, not content to memorise (except for the names and numbers, which are MCQ-friendly). -->
+<!-- Speaker notes: ~0:31. Background movement - brisk. These two slides are context, not content to memorise (except for the names and numbers, which are MCQ-friendly). -->
 
 <!-- _class: cols -->
 
 ## Why Java
 
-- **Object-oriented to its core** — real-world concepts are modelled using classes and objects.
-- **Strong static typing** — whole categories of error get caught early, and it promotes disciplined coding habits.
-- **Clear, readable syntax** — encapsulation, inheritance and polymorphism are easy to see on the page.
-- **Everywhere in industry** — the skills you build are directly applicable to real-world development.
-- **A rich standard library** — especially for data structures and algorithms, so meaningful examples come easy.
-- **Excellent IDEs and tools** — IntelliJ, VS Code: debugging and code completion that help you learn.
-- **The ideas travel** — OO principles learned in Java translate easily to Python, C# and Kotlin.
+- **Object-oriented to its core** - real-world concepts are modelled using classes and objects.
+- **Strong static typing** - whole categories of error get caught early, and it promotes disciplined coding habits.
+- **Clear, readable syntax** - encapsulation, inheritance and polymorphism are easy to see on the page.
+- **Everywhere in industry** - the skills you build are directly applicable to real-world development.
+- **A rich standard library** - especially for data structures and algorithms, so meaningful examples come easy.
+- **Excellent IDEs and tools** - IntelliJ, VS Code: debugging and code completion that help you learn.
+- **The ideas travel** - OO principles learned in Java translate easily to Python, C# and Kotlin.
 
 ---
 
@@ -388,12 +388,12 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 
 ## From Oak to 45 billion machines
 
-- **1991** — **James Gosling** designs a new language at **Sun Microsystems**.
-- He names it **Oak** — after the oak tree outside his office window.
+- **1991** - **James Gosling** designs a new language at **Sun Microsystems**.
+- He names it **Oak** - after the oak tree outside his office window.
 - The name doesn't stick. It becomes **Java**, after Java coffee.
-- **2010** — **Oracle Corporation** completes its acquisition of Sun and becomes the steward of Java.
+- **2010** - **Oracle Corporation** completes its acquisition of Sun and becomes the steward of Java.
 - Today, over **45 billion** active Java Virtual Machines are deployed across devices and servers.
-- Over **10 million developers** worldwide — and growing.
+- Over **10 million developers** worldwide - and growing.
 - It powers Android apps, enterprise systems, cloud platforms and IoT devices.
 
 ---
@@ -402,15 +402,15 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 
 ## The whole language fits on one slide
 
-- Java reserves just **50 keywords** — here they all are:
+- Java reserves just **50 keywords** - here they all are:
 
 | Range | Keywords |
 |---|---|
-| A–C | abstract, assert, boolean, break, byte, case, catch, char, class, *const* |
-| C–F | continue, default, do, double, else, enum, extends, final, finally, float |
-| F–N | for, *goto*, if, implements, import, instanceof, int, interface, long, native |
-| N–S | new, package, private, protected, public, return, short, static, strictfp, super |
-| S–W | switch, synchronized, this, throw, throws, transient, try, void, volatile, while |
+| A-C | abstract, assert, boolean, break, byte, case, catch, char, class, *const* |
+| C-F | continue, default, do, double, else, enum, extends, final, finally, float |
+| F-N | for, *goto*, if, implements, import, instanceof, int, interface, long, native |
+| N-S | new, package, private, protected, public, return, short, static, strictfp, super |
+| S-W | switch, synchronized, this, throw, throws, transient, try, void, volatile, while |
 
 - *`const` and `goto` are reserved but not currently used in Java.*
 - Today's deck alone uses seven of them: `class`, `public`, `private`, `static`, `void`, `int`, `new`.
@@ -423,10 +423,10 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 
 - A **computer program** is a sequence of human-readable instructions, converted by software into machine-executable instructions.
 - A **compiler** converts instructions into machine code (or a lower-level form) **ahead of time**, so a computer can read and execute them.
-- An **interpreter** **directly executes** instructions written in a programming or scripting language — no prior compilation into a machine-language program.
+- An **interpreter** **directly executes** instructions written in a programming or scripting language - no prior compilation into a machine-language program.
 
 * So which is Java? **Both.**
-* Source code is compiled into **bytecode** by the Java compiler — then the bytecode is executed by the **JVM**, which is a software-based interpreter.
+* Source code is compiled into **bytecode** by the Java compiler - then the bytecode is executed by the **JVM**, which is a software-based interpreter.
 
 ---
 
@@ -450,47 +450,47 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 <div class="pnode"><span class="pfile">every platform</span><span class="psub">Windows · macOS · Linux</span></div>
 </div>
 
-<div class="callout"><strong>A typical compiled language stops at machine code for one platform.</strong> Java stops halfway — at bytecode — and lets each platform's JVM carry it the rest of the way.</div>
+<div class="callout"><strong>A typical compiled language stops at machine code for one platform.</strong> Java stops halfway - at bytecode - and lets each platform's JVM carry it the rest of the way.</div>
 
 ---
 
 ## Write once, run anywhere
 
-- A computer **platform** = a hardware device plus an operating system that programs run upon — e.g. *a PC with an Intel processor running Windows 10*.
+- A computer **platform** = a hardware device plus an operating system that programs run upon - e.g. *a PC with an Intel processor running Windows 10*.
 - Machine code is married to its platform. **Bytecode is married to none.**
 - You write `myprogram.java` **once**, and compile it to bytecode: `myprogram.class`.
-- The **JVM** — which can be installed on any platform — then runs that same bytecode, unchanged.
+- The **JVM** - which can be installed on any platform - then runs that same bytecode, unchanged.
 
-* This is why Java is **platform independent**: **W**rite **O**nce, **R**un **A**nywhere — *WORA*.
+* This is why Java is **platform independent**: **W**rite **O**nce, **R**un **A**nywhere - *WORA*.
 
 ---
 
-<!-- Speaker notes: ~0:44. Third predict beat — WORA applied. The wrong instinct is "send the .java and recompile"; surface it, then correct it. -->
+<!-- Speaker notes: ~0:44. Third predict beat - WORA applied. The wrong instinct is "send the .java and recompile"; surface it, then correct it. -->
 
 ## Predict: the Mac problem
 
 - You write and compile `HelloPrinter.java` on your Windows laptop.
-- Your friend runs macOS — and wants to run your program.
+- Your friend runs macOS - and wants to run your program.
 - **What do you send them, and what do they need?**
 
-* Send **`HelloPrinter.class`** — bytecode isn't Windows code; it belongs to no platform.
-* They need a **JVM built for macOS** — the JVM is platform-specific *so your program doesn't have to be*.
-* No recompiling, no edits: **write once, run anywhere** — working exactly as designed.
+* Send **`HelloPrinter.class`** - bytecode isn't Windows code; it belongs to no platform.
+* They need a **JVM built for macOS** - the JVM is platform-specific *so your program doesn't have to be*.
+* No recompiling, no edits: **write once, run anywhere** - working exactly as designed.
 
 ---
 
-## The JDK — your toolkit
+## The JDK - your toolkit
 
-- To develop Java programs you install the **JDK** — the *Java Development Kit*.
+- To develop Java programs you install the **JDK** - the *Java Development Kit*.
 - On Windows it lands in `C:\Program Files\Java\jdk1.8.x`.
 - Inside are the programs this act has been talking about, including:
-  - `javac.exe` — the **Java compiler**: your source in, bytecode out
-  - `javadoc.exe` — the **Javadoc generator**: documentation straight from your code
-- In our labs there's nothing to install — the Codespace arrives with the JDK ready. But now you know what's under the floorboards.
+  - `javac.exe` - the **Java compiler**: your source in, bytecode out
+  - `javadoc.exe` - the **Javadoc generator**: documentation straight from your code
+- In our labs there's nothing to install - the Codespace arrives with the JDK ready. But now you know what's under the floorboards.
 
 ---
 
-<!-- Speaker notes: ~0:47. First-program movement. Don't dissect every token — that's the lab's job. Sell the shape: same skeleton every time, your code goes in main. -->
+<!-- Speaker notes: ~0:47. First-program movement. Don't dissect every token - that's the lab's job. Sell the shape: same skeleton every time, your code goes in main. -->
 
 ## Your first program
 
@@ -504,16 +504,16 @@ public class HelloPrinter
 }
 ```
 
-- The traditional **'Hello World'** — and every Java application has this same basic layout.
+- The traditional **'Hello World'** - and every Java application has this same basic layout.
 - Your 'code' goes inside the **main method**; we'll examine the program line by line in the lab.
-- Be careful of spelling — `JaVa iS CaSe SeNsItiVe` — and Java leans on special characters: `{ }` do real work.
+- Be careful of spelling - `JaVa iS CaSe SeNsItiVe` - and Java leans on special characters: `{ }` do real work.
 
 ---
 
-## The hard way — a text editor and a console
+## The hard way - a text editor and a console
 
 - No IDE required: type the code into a simple text editor such as **Notepad** and save it as `HelloPrinter.java`.
-- Then, in a console window — **compile**, then **run**:
+- Then, in a console window - **compile**, then **run**:
 
 ```text
 D:\temp\hello>javac HelloPrinter.java
@@ -524,24 +524,24 @@ Hello, World!
 
 - `javac` turns your source into `HelloPrinter.class`; `java` starts a JVM and hands it the bytecode.
 
-* Do this by hand once in your life. Every IDE you ever meet is automating exactly these steps — and now you've seen behind the scenes.
+* Do this by hand once in your life. Every IDE you ever meet is automating exactly these steps - and now you've seen behind the scenes.
 
 ---
 
 <!-- Speaker notes: ~0:51. The mock window is the payoff: name the two panes, because "where the program speaks back" is the thing beginners lose first. -->
 
-## The IDE — a toolkit around your code
+## The IDE - a toolkit around your code
 
-- An **Integrated Development Environment** is a complete toolkit for developing software — a suite of productivity tools in one place.
-- Common Java IDEs: **Eclipse**, **NetBeans** and **IntelliJ** — our Codespaces run **VS Code**.
+- An **Integrated Development Environment** is a complete toolkit for developing software - a suite of productivity tools in one place.
+- Common Java IDEs: **Eclipse**, **NetBeans** and **IntelliJ** - our Codespaces run **VS Code**.
 
 <div class="ide">
-<div class="ibar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>HelloPrinter.java — VS Code</div>
+<div class="ibar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>HelloPrinter.java - VS Code</div>
 <div class="ied"><span class="itag">editor</span><div class="irow"><span class="iln">1</span><span class="icode">public class HelloPrinter {</span></div><div class="irow"><span class="iln">2</span><span class="icode">    public static void main(String[] args) {</span></div><div class="irow"><span class="iln">3</span><span class="icode">        System.out.println(<span class="istr">"Hello, World!"</span>);</span></div><div class="irow"><span class="iln">4</span><span class="icode">    }</span></div><div class="irow"><span class="iln">5</span><span class="icode">}</span></div></div>
 <div class="iout"><span class="itag">output</span>Hello, World!</div>
 </div>
 
-<p class="legend">editor — where the code is written · output — where the program speaks back</p>
+<p class="legend">editor - where the code is written · output - where the program speaks back</p>
 
 ---
 
@@ -557,15 +557,15 @@ System.out.println("C")      // 3
 ```
 
 * **None of them.**
-* **1** — `system` is not `System`. Capitalisation carries meaning — always.
-* **2** — `ou` is not `out`. Misspell one word and the compiler stops understanding you.
-* **3** — a missing semicolon. And that one deserves its own slide…
+* **1** - `system` is not `System`. Capitalisation carries meaning - always.
+* **2** - `ou` is not `out`. Misspell one word and the compiler stops understanding you.
+* **3** - a missing semicolon. And that one deserves its own slide…
 
 ---
 
 ## The semicolon, from the compiler's chair
 
-- In Java, **every statement must end in a semicolon** — the compiler uses `;` to find where one statement ends and the next starts.
+- In Java, **every statement must end in a semicolon** - the compiler uses `;` to find where one statement ends and the next starts.
 - Forget one, and the compiler sees this code…
 
 <!-- no-compile -->
@@ -581,7 +581,7 @@ System.out.println("World!");
 System.out.println("Hello") System.out.println("World!");
 ```
 
-- Same family of trouble: **leave out a word** (drop `void` from `main`), or **fail to match a curly brace** — the code stops meaning anything, and the error message often points somewhere strange.
+- Same family of trouble: **leave out a word** (drop `void` from `main`), or **fail to match a curly brace** - the code stops meaning anything, and the error message often points somewhere strange.
 
 ---
 
@@ -589,8 +589,8 @@ System.out.println("Hello") System.out.println("World!");
 
 ## Summary
 
-- This module: **object-oriented programming in Java** — you arrive with programming basics, you leave designing classes and objects of your own.
-- **12 teaching weeks over 13 calendar weeks** — reading week is the October bank-holiday week — and **labs start week 2**.
-- Assessment: **three MCQs — weeks 5, 9 and 12, worth 33% each — in person, in a lab**, drawing on lecture *and* lab material, with standard questions **plus Coderunner coding questions**. Practise with AI-generated MCQs — **NotebookLM**.
-- Java compiles source to **bytecode**; the **JVM** runs it on any platform — *write once, run anywhere*. The **JDK** (`javac`, `javadoc`, …) is your toolkit, and precision — case, semicolons, braces — is the price of entry.
-- **This week:** enrol on Moodle — course **8963**, key `object`, pick the right module of the two; sign up for the **GitHub Student Developer Pack**; research **GitHub Codespaces**.
+- This module: **object-oriented programming in Java** - you arrive with programming basics, you leave designing classes and objects of your own.
+- **12 teaching weeks over 13 calendar weeks** - reading week is the October bank-holiday week - and **labs start week 2**.
+- Assessment: **three MCQs - weeks 5, 9 and 12, worth 33% each - in person, in a lab**, drawing on lecture *and* lab material, with standard questions **plus Coderunner coding questions**. Practise with AI-generated MCQs - **NotebookLM**.
+- Java compiles source to **bytecode**; the **JVM** runs it on any platform - *write once, run anywhere*. The **JDK** (`javac`, `javadoc`, …) is your toolkit, and precision - case, semicolons, braces - is the price of entry.
+- **This week:** enrol on Moodle - course **8963**, key `object`, pick the right module of the two; sign up for the **GitHub Student Developer Pack**; research **GitHub Codespaces**.

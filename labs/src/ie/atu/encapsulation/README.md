@@ -18,7 +18,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.encapsulation` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.encapsulation` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Access Modifiers
 

@@ -20,7 +20,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.classesandobjects` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.classesandobjects` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ---
 
@@ -79,7 +79,7 @@ classDiagram
 2. Add fields: `String studentID`, `int age`, `boolean isRegistered`.
 3. Write a method `displayInfo()` that prints the student's details. Make sure the output is neatly formatted.
 
-**Expected output** (when `displayInfo()` is called — here for a student with ID `S00123`, age `20`, registered):
+**Expected output** (when `displayInfo()` is called - here for a student with ID `S00123`, age `20`, registered):
 
 ```text
 Student ID: S00123
@@ -98,7 +98,7 @@ Model `displayInfo()` on the `Person` class's `introduce()` method: build each l
 
 ## 3. Creating Objects
 
-A class is just a blueprint; to actually use it, you need to create an *object* – an instance of the class. This is done using the `new` keyword, followed by a call to the class's constructor (we'll cover constructors in detail next).
+A class is just a blueprint; to actually use it, you need to create an *object* - an instance of the class. This is done using the `new` keyword, followed by a call to the class's constructor (we'll cover constructors in detail next).
 
 **Syntax:**
 
@@ -149,7 +149,7 @@ sequenceDiagram
 2. Assign values to its fields (`studentID`, `age`, `isRegistered`). This requires a default constructor, or setting the values after creating the object, as we did in the `Person` example.
 3. Call the `displayInfo()` method to print the student's details.
 
-**Expected output** (a representative run — yours shows whatever values you assigned):
+**Expected output** (a representative run - yours shows whatever values you assigned):
 
 ```text
 Student ID: S00123
@@ -250,7 +250,7 @@ Registered: true
 <details>
 <summary>Hint</summary>
 
-A constructor has the same name as the class and no return type — not even `void`. The parameterized constructor should copy each parameter into the matching field.
+A constructor has the same name as the class and no return type - not even `void`. The parameterized constructor should copy each parameter into the matching field.
 
 </details>
 
@@ -340,7 +340,7 @@ class Student {
 3. Use `this` in the `displayInfo()` method where appropriate (though it's not strictly necessary here).
 4. Verify that your program still works as expected.
 
-**Expected output** (unchanged from DIY 3 — this refactor must not change behavior):
+**Expected output** (unchanged from DIY 3 - this refactor must not change behavior):
 
 ```text
 Student ID: N/A
@@ -453,7 +453,7 @@ System.out.println(s1.toString()); // or just System.out.println(s1);
 1. Refactor `displayInfo()` into a `toString()` method in `Student` that *returns* the formatted string instead of printing it.
 2. In `Main`, print your students with `System.out.println(...)` instead of calling `displayInfo()`.
 
-**Expected output** (representative — format as in the example above; your values may differ):
+**Expected output** (representative - format as in the example above; your values may differ):
 
 ```text
 Student{id='S00234', age=22, registered=true}

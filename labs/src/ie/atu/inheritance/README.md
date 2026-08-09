@@ -20,7 +20,7 @@ By the end of this lab you will be able to:
 
 ## Getting started
 
-This lab lives in the package `ie.atu.inheritance` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.inheritance` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Definition and Basics of Inheritance
 
@@ -100,11 +100,11 @@ Species: Canine
 Name: Rex
 ```
 
-(Sample values shown — use any species and name you like.)
+(Sample values shown - use any species and name you like.)
 
 <details><summary>Hint</summary>
 
-Only `Dog` needs the `extends` keyword — it picks up `species` and its getter and setter from `Animal` automatically. Suggested design:
+Only `Dog` needs the `extends` keyword - it picks up `species` and its getter and setter from `Animal` automatically. Suggested design:
 
 ```mermaid
 classDiagram
@@ -147,7 +147,7 @@ Playing radio.
 
 <details><summary>Hint</summary>
 
-`Car` never declares `move()`, yet a `Car` object can call it — that is inheritance at work. Suggested design:
+`Car` never declares `move()`, yet a `Car` object can call it - that is inheritance at work. Suggested design:
 
 ```mermaid
 classDiagram
@@ -319,7 +319,7 @@ Create (or evolve from DIY 2) the classes listed below in this package, building
    - Call `move()`, `honk()`, and `charge()` on the instance.
    - Use the getters to retrieve and print the `type`, `doors`, and `batteryCapacity` values.
 
-Keep the method implementations simple — print statements are fine. The key skill here is using `extends` and `super(...)` correctly to pass values up the inheritance chain.
+Keep the method implementations simple - print statements are fine. The key skill here is using `extends` and `super(...)` correctly to pass values up the inheritance chain.
 
 **Expected output**
 
@@ -332,7 +332,7 @@ Doors: 4
 Battery capacity: 75 kWh
 ```
 
-(Sample values — yours will match whatever you pass to the constructor.)
+(Sample values - yours will match whatever you pass to the constructor.)
 
 <details><summary>Hint</summary>
 
@@ -350,9 +350,9 @@ Add a `Motorbike` class to the DIY 3 hierarchy to demonstrate hierarchical inher
    - Getter and setter for `hasSidecar`.
    - Method: `void ride()` that prints a short message, e.g. "Riding the <type>", and indicates whether it has a sidecar.
 2. In `Main`, create a `Motorbike` instance and call its methods (`move()`, `ride()`).
-3. Use a `Vehicle` reference where appropriate (e.g. `Vehicle v = new Motorbike(...);`) and call `v.move()` — this demonstrates polymorphism: `Motorbike` and `Car` are both `Vehicle` instances.
+3. Use a `Vehicle` reference where appropriate (e.g. `Vehicle v = new Motorbike(...);`) and call `v.move()` - this demonstrates polymorphism: `Motorbike` and `Car` are both `Vehicle` instances.
 
-This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy — sometimes called hybrid inheritance.
+This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy - sometimes called hybrid inheritance.
 
 **Expected output**
 
@@ -405,7 +405,7 @@ classDiagram
 
 ### Explanation
 
-Every class in Java ultimately inherits from `Object` — it is the root superclass of the entire class hierarchy. Even when you write a class with no `extends` clause, it implicitly extends `Object`, which is why methods such as `toString()`, `equals()` and `hashCode()` are available on every object you create.
+Every class in Java ultimately inherits from `Object` - it is the root superclass of the entire class hierarchy. Even when you write a class with no `extends` clause, it implicitly extends `Object`, which is why methods such as `toString()`, `equals()` and `hashCode()` are available on every object you create.
 
 ### Visual Representation
 
@@ -424,9 +424,9 @@ classDiagram
 
 ### DIY 5: Implicit Inheritance
 
-1. Create a class `Gadget` — do not specify a superclass.
+1. Create a class `Gadget` - do not specify a superclass.
 2. In `Main`, create an instance of `Gadget` and print the result of calling `toString()` on it.
-3. Type the variable name followed by a dot (`.`) and look at the list of methods your editor suggests — call one more method inherited from `Object` (e.g. `hashCode()`) and print its result.
+3. Type the variable name followed by a dot (`.`) and look at the list of methods your editor suggests - call one more method inherited from `Object` (e.g. `hashCode()`) and print its result.
 
 **Expected output**
 
@@ -435,7 +435,7 @@ ie.atu.inheritance.Gadget@7a81197d
 2055281021
 ```
 
-(The hex code and hash number will differ on your machine — they identify your particular object.)
+(The hex code and hash number will differ on your machine - they identify your particular object.)
 
 <details><summary>Hint</summary>
 
@@ -520,7 +520,7 @@ Person: Alice, Age: 30
 Student: Bob, Age: 20, ID: S12345
 ```
 
-(Sample values — print whichever details you passed to the constructors.)
+(Sample values - print whichever details you passed to the constructors.)
 
 <details><summary>Hint</summary>
 

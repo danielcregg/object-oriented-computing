@@ -18,7 +18,7 @@ By the end of this lab you will be able to:
 
 ## Getting started
 
-This lab lives in the package `ie.atu.polymorphism` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.polymorphism` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Runtime Polymorphism: Understanding "Many Forms"
 

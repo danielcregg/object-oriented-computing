@@ -12,7 +12,7 @@ source: authored
 
 <style>
 /* Deck-local visual system: pillar strip, type-tag cards, dispatch fan,
-   comparison columns, zoo array strips — all drawn in CSS, no images. */
+   comparison columns, zoo array strips - all drawn in CSS, no images. */
 section .mem {
   display: flex; margin: 40px 0 10px 0;
   font-family: 'Cascadia Code', Consolas, monospace;
@@ -139,7 +139,7 @@ One call. Many forms.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open — run the mystery before naming it. Pause after the third sound; let "compiled once" sink in before advancing. -->
+<!-- Speaker notes: ~0:00. Cold open - run the mystery before naming it. Pause after the third sound; let "compiled once" sink in before advancing. -->
 
 ## One line of code
 
@@ -153,14 +153,14 @@ a.speak();
 * Run the program: it prints **Woof**.
 * Run it again: **Meow**. Once more: **Roar**.
 * Same line. Compiled **once**. Three different behaviours.
-* The compiler can't tell you which sound comes out — when it did its job, the answer *didn't exist yet*.
+* The compiler can't tell you which sound comes out - when it did its job, the answer *didn't exist yet*.
 * Something is choosing **while the program runs**. Finding that something is this hour's job.
 
 ---
 
 ## The trick has a name
 
-- **Polymorphism** — Greek *poly* (many) + *morphē* (form): **one call, many forms**.
+- **Polymorphism** - Greek *poly* (many) + *morphē* (form): **one call, many forms**.
 - A method call that does different things depending on **the object it lands on**.
 - **Binding** = linking a call site to the method body that runs. Java draws that link at two different moments:
 
@@ -176,11 +176,11 @@ a.speak();
 
 ## Agenda
 
-- The four pillars — where polymorphism sits
-- Method **signatures** — what makes two methods "different"
-- Act I — **overloading**: the compile-time trick
-- Act II — **overriding**: the run-time trick, and dynamic dispatch
-- Reference type vs object type — the two-types rule
+- The four pillars - where polymorphism sits
+- Method **signatures** - what makes two methods "different"
+- Act I - **overloading**: the compile-time trick
+- Act II - **overriding**: the run-time trick, and dynamic dispatch
+- Reference type vs object type - the two-types rule
 - **Upcasting**, **downcasting**, and the `instanceof` gate
 - The payoff: one loop over a mixed `Animal[]`
 - Predict rounds all the way through
@@ -189,19 +189,19 @@ a.speak();
 
 <!-- Speaker notes: ~0:05. Orientation, fast. Point at the pillars strip; two are behind them already. -->
 
-## The four pillars — you are here
+## The four pillars - you are here
 
 - The map of OOP has four pillars. Today the third one lights up.
 
 <div class="pillars">
-<div class="pill done"><b>Encapsulation</b><span>pillar 1 — done</span></div>
-<div class="pill done"><b>Inheritance</b><span>pillar 2 — done</span></div>
-<div class="pill now"><b>Polymorphism</b><span>pillar 3 — today</span></div>
-<div class="pill"><b>Abstraction</b><span>pillar 4 — next</span></div>
+<div class="pill done"><b>Encapsulation</b><span>pillar 1 - done</span></div>
+<div class="pill done"><b>Inheritance</b><span>pillar 2 - done</span></div>
+<div class="pill now"><b>Polymorphism</b><span>pillar 3 - today</span></div>
+<div class="pill"><b>Abstraction</b><span>pillar 4 - next</span></div>
 </div>
 
 - Polymorphism stands **on top of inheritance**: everything today starts from a superclass and the subclasses that `extends` it.
-- It's the pillar the other pillars were scaffolding for — the one that changes how programs are *designed*, not just how they're organised.
+- It's the pillar the other pillars were scaffolding for - the one that changes how programs are *designed*, not just how they're organised.
 
 ---
 
@@ -216,9 +216,9 @@ public int max(int x, int y) {
 ```
 
 - Anatomy: `public` modifier · `int` return type · `max` name · `(int x, int y)` parameter list · `{ }` body.
-- The **signature** is the **name + parameter list**: the number, types, and *order* of the parameters — `max(int, int)`.
+- The **signature** is the **name + parameter list**: the number, types, and *order* of the parameters - `max(int, int)`.
 - **Not** part of the signature: the return type, the parameter *names*, the modifiers.
-- A class can't hold two methods with the same signature — the compiler couldn't tell them apart:
+- A class can't hold two methods with the same signature - the compiler couldn't tell them apart:
 
 <!-- no-compile -->
 ```java
@@ -232,9 +232,9 @@ long max(int x, int y) {              // error: same signature!
 
 ---
 
-<!-- Speaker notes: ~0:09. Act I — brisk tempo; the deep water is Act II. Overloading should feel familiar, almost obvious. -->
+<!-- Speaker notes: ~0:09. Act I - brisk tempo; the deep water is Act II. Overloading should feel familiar, almost obvious. -->
 
-## Act I — overloading
+## Act I - overloading
 
 - **Method overloading** (compile-time polymorphism): one class, one method name, several **different signatures**.
 
@@ -254,13 +254,13 @@ public class Greeter {
 }
 ```
 
-- Three different signatures — `greet()`, `greet(String)`, `greet(int)` — so all three may share the name.
+- Three different signatures - `greet()`, `greet(String)`, `greet(int)` - so all three may share the name.
 - One *idea*, several input shapes. Callers remember one word: `greet`.
-- Constructors overload the same way — several recipes for building the same kind of object.
+- Constructors overload the same way - several recipes for building the same kind of object.
 
 ---
 
-## The compiler picks — by the arguments
+## The compiler picks - by the arguments
 
 <!-- no-compile -->
 ```java
@@ -269,7 +269,7 @@ g.greet("Ada");     // matches greet(String)   -> "Hello, Ada"
 g.greet(2027);      // matches greet(int)      -> "Hello, class of 2027"
 ```
 
-- At each call site the compiler reads the **argument list** and binds the call to the matching signature — **before the program ever runs**. That's <span class="ct">early binding</span>.
+- At each call site the compiler reads the **argument list** and binds the call to the matching signature - **before the program ever runs**. That's <span class="ct">early binding</span>.
 - And you've used overloading since day one:
 
 ```java
@@ -278,7 +278,7 @@ System.out.println(42);        // println(int)
 System.out.println(true);      // println(boolean)
 ```
 
-- One name, ten signatures — `println` is overloading hiding in plain sight.
+- One name, ten signatures - `println` is overloading hiding in plain sight.
 
 ---
 
@@ -301,10 +301,10 @@ public static void main(String[] args) {
 }
 ```
 
-* `fun(5)` prints **int** — exact match wins.
-* `fun(5.0)` prints **double** — `5.0` is a `double` literal.
-* `fun('A')` prints **int** — no `fun(char)` exists, so the `char` **widens** to the nearest fit, and `int` beats `double`.
-* All three choices were inked at **compile time**. Run it a million times — they never change.
+* `fun(5)` prints **int** - exact match wins.
+* `fun(5.0)` prints **double** - `5.0` is a `double` literal.
+* `fun('A')` prints **int** - no `fun(char)` exists, so the `char` **widens** to the nearest fit, and `int` beats `double`.
+* All three choices were inked at **compile time**. Run it a million times - they never change.
 
 ---
 
@@ -312,23 +312,23 @@ public static void main(String[] args) {
 
 ## The hook, revisited
 
-- Overloading is real polymorphism — but it *cannot* be the hook's trick:
+- Overloading is real polymorphism - but it *cannot* be the hook's trick:
 
 <!-- no-compile -->
 ```java
 a.speak();     // empty argument list -- nothing to choose between
 ```
 
-* One call site, one argument list, one matching signature. The compiler's pick is **forced** — overloading is out of moves.
+* One call site, one argument list, one matching signature. The compiler's pick is **forced** - overloading is out of moves.
 * Yet the behaviour still varied: Woof, Meow, Roar.
-* So the variation must live inside **`a`** — in the *object* behind the name.
+* So the variation must live inside **`a`** - in the *object* behind the name.
 * Act II: let each subclass bring its **own body** to the *same* signature.
 
 ---
 
-## Act II — overriding
+## Act II - overriding
 
-- **Method overriding** (run-time polymorphism): a subclass re-declares an inherited method — **same signature**, new body.
+- **Method overriding** (run-time polymorphism): a subclass re-declares an inherited method - **same signature**, new body.
 
 <!-- _class: code-xs -->
 
@@ -359,9 +359,9 @@ class Tiger extends Animal {
 
 ---
 
-## `@Override` — the seatbelt
+## `@Override` - the seatbelt
 
-- The annotation is optional. **Write it anyway** — it asks the compiler to *verify you really are overriding*.
+- The annotation is optional. **Write it anyway** - it asks the compiler to *verify you really are overriding*.
 
 <!-- no-compile -->
 ```java
@@ -373,14 +373,14 @@ class Dog extends Animal {
 }
 ```
 
-* Without `@Override`, the typo compiles **silently** as a brand-new method `speek` — your Dog keeps making the generic Animal sound, and you lose an evening finding out why.
+* Without `@Override`, the typo compiles **silently** as a brand-new method `speek` - your Dog keeps making the generic Animal sound, and you lose an evening finding out why.
 * With it, the mistake dies at <span class="ct">compile time</span>: *"method does not override or implement a method from a supertype"*.
 
 <div class="callout"><strong>House rule:</strong> every overriding method wears <code>@Override</code>. A free bug detector with zero run-time cost.</div>
 
 ---
 
-<!-- Speaker notes: ~0:27. The deepest idea of the hour. The leash picture must land before dispatch — draw it on the board too. -->
+<!-- Speaker notes: ~0:27. The deepest idea of the hour. The leash picture must land before dispatch - draw it on the board too. -->
 
 ## One line, two types
 
@@ -390,9 +390,9 @@ Animal a = new Cat();     // legal: every Cat IS an Animal
 ```
 
 <div class="tt">
-<div class="box"><span class="tag">REFERENCE TYPE — fixed at compile time</span><span class="val">Animal a</span><span class="sub">the leash: decides what you MAY call</span></div>
+<div class="box"><span class="tag">REFERENCE TYPE - fixed at compile time</span><span class="val">Animal a</span><span class="sub">the leash: decides what you MAY call</span></div>
 <div class="link">→</div>
-<div class="box obj"><span class="tag">OBJECT TYPE — known at run time</span><span class="val">new Cat()</span><span class="sub">the animal: decides what actually HAPPENS</span></div>
+<div class="box obj"><span class="tag">OBJECT TYPE - known at run time</span><span class="val">new Cat()</span><span class="sub">the animal: decides what actually HAPPENS</span></div>
 </div>
 
 - Mental model: **the leash and the animal**. `a` is a leash labelled *Animal*; the creature on the end of it is a *Cat*.
@@ -400,7 +400,7 @@ Animal a = new Cat();     // legal: every Cat IS an Animal
 
 ---
 
-## Dynamic dispatch — the run-time pick
+## Dynamic dispatch - the run-time pick
 
 - At the call, the JVM asks exactly one question: **what's on the end of the leash right now?**
 
@@ -413,9 +413,9 @@ Animal a = new Cat();     // legal: every Cat IS an Animal
 </div>
 </div>
 
-<p class="legend">one call site, compiled once — this run the object is a Cat, so Cat.speak() wins</p>
+<p class="legend">one call site, compiled once - this run the object is a Cat, so Cat.speak() wins</p>
 
-- This is **dynamic dispatch** (<span class="rt">late binding</span>): the body is chosen at run time, call by call, by the **object's actual type** — never by the reference type.
+- This is **dynamic dispatch** (<span class="rt">late binding</span>): the body is chosen at run time, call by call, by the **object's actual type** - never by the reference type.
 
 ---
 
@@ -434,7 +434,7 @@ if (Math.random() < 0.5) {
 a.speak();     // Woof or Meow -- unknowable until THIS instant, THIS run
 ```
 
-* The compiler's entire knowledge: "`a` is some kind of `Animal`, and `Animal` has `speak()` — legal call." That is *all it can ever know*.
+* The compiler's entire knowledge: "`a` is some kind of `Animal`, and `Animal` has `speak()` - legal call." That is *all it can ever know*.
 * The JVM at run time: "the object that just arrived is a `Dog`" → dispatch `Dog.speak()`.
 * Overloading's choice sits **in the source code** → bind early. Overriding's choice sits **in the live object** → it *must* bind late.
 
@@ -467,13 +467,13 @@ a.speak();     // line 1 -- what happens?
 a.purr();      // line 2 -- what happens?
 ```
 
-* Line 1: prints **Meow** — dispatch reads the **object type**, and the Cat answers.
-* Line 2: **compile error** — the leash is `Animal`, and `Animal` owns no `purr()`.
+* Line 1: prints **Meow** - dispatch reads the **object type**, and the Cat answers.
+* Line 2: **compile error** - the leash is `Animal`, and `Animal` owns no `purr()`.
 * The reference type gates the **menu**; the object type picks the **behaviour**.
 
 ---
 
-## Overloading vs overriding — side by side
+## Overloading vs overriding - side by side
 
 <div class="vs">
 <div class="col">
@@ -481,7 +481,7 @@ a.purr();      // line 2 -- what happens?
 <div class="row">lives in <b>one class</b></div>
 <div class="row">same name, <b>different signatures</b></div>
 <div class="row">picked by the <b>arguments</b></div>
-<div class="row">bound at <b>compile time</b> — early, static</div>
+<div class="row">bound at <b>compile time</b> - early, static</div>
 <div class="row">decided by the <b>compiler</b></div>
 </div>
 <div class="col late">
@@ -489,7 +489,7 @@ a.purr();      // line 2 -- what happens?
 <div class="row">spans <b>superclass and subclass</b></div>
 <div class="row"><b>identical signature</b>, new body</div>
 <div class="row">picked by the <b>object's actual type</b></div>
-<div class="row">bound at <b>run time</b> — late, dynamic</div>
+<div class="row">bound at <b>run time</b> - late, dynamic</div>
 <div class="row">decided by the <b>JVM</b></div>
 </div>
 </div>
@@ -500,9 +500,9 @@ a.purr();      // line 2 -- what happens?
 
 ---
 
-<!-- Speaker notes: ~0:38. Casting movement. Keep momentum — the payoff is two slides away and it needs these tools. -->
+<!-- Speaker notes: ~0:38. Casting movement. Keep momentum - the payoff is two slides away and it needs these tools. -->
 
-## Upcasting — up the family tree, for free
+## Upcasting - up the family tree, for free
 
 <!-- no-compile -->
 ```java
@@ -510,14 +510,14 @@ Cat c = new Cat();
 Animal a = c;          // upcast: automatic, no cast syntax needed
 ```
 
-- **Always safe**, so Java does it silently: every `Cat` *is an* `Animal` — the guarantee `extends` signed.
-- The **object never changes** — you only swapped a specific leash for a more general one.
-* Lost: the `Animal` leash can't reach `purr()` any more — the menu shrank.
-* Gained: your `Cat` now fits **anywhere an `Animal` fits**. Hold that thought — payoff in two slides.
+- **Always safe**, so Java does it silently: every `Cat` *is an* `Animal` - the guarantee `extends` signed.
+- The **object never changes** - you only swapped a specific leash for a more general one.
+* Lost: the `Animal` leash can't reach `purr()` any more - the menu shrank.
+* Gained: your `Cat` now fits **anywhere an `Animal` fits**. Hold that thought - payoff in two slides.
 
 ---
 
-## Downcasting — back down, on your honour
+## Downcasting - back down, on your honour
 
 <!-- no-compile -->
 ```java
@@ -527,7 +527,7 @@ c.purr();              // full Cat menu restored
 ```
 
 - General → specific. The compiler **can't prove** the object really is a `Cat`, so *you* sign a promise: the `(Cat)` cast.
-- Break the promise and the JVM calls it in — at <span class="rt">run time</span>:
+- Break the promise and the JVM calls it in - at <span class="rt">run time</span>:
 
 <!-- no-compile -->
 ```java
@@ -537,7 +537,7 @@ Cat impostor = (Cat) plain;    // compiles fine... then ClassCastException
 
 ---
 
-## `instanceof` — look before you cast
+## `instanceof` - look before you cast
 
 - Ask the object first: `a instanceof Cat` is `true` exactly when the **object** really is a `Cat` (or a subclass of one).
 
@@ -549,7 +549,7 @@ if (a instanceof Cat) {      // the safe gate -- checks the OBJECT, at run time
 }
 ```
 
-- Newer Java fuses gate and cast: `if (a instanceof Cat c) { c.purr(); }` — test, cast, and name in one move.
+- Newer Java fuses gate and cast: `if (a instanceof Cat c) { c.purr(); }` - test, cast, and name in one move.
 
 <div class="callout"><strong>Rule of thumb:</strong> a downcast without an <code>instanceof</code> gate is a <code>ClassCastException</code> waiting for demo day.</div>
 
@@ -557,9 +557,9 @@ if (a instanceof Cat) {      // the safe gate -- checks the OBJECT, at run time
 
 <!-- Speaker notes: ~0:44. THE payoff. Say it out loud: this is the classic array drawing with upgraded contents. -->
 
-## The payoff — one loop, many animals
+## The payoff - one loop, many animals
 
-- The array contract: every box holds **one type**. Upcasting bends it — an `Animal` box accepts **any** `Animal`:
+- The array contract: every box holds **one type**. Upcasting bends it - an `Animal` box accepts **any** `Animal`:
 
 <!-- no-compile -->
 ```java
@@ -577,19 +577,19 @@ for (Animal x : zoo) {
 <div class="cell"><span class="idx">2 · Animal</span>Cat</div>
 </div>
 
-<p class="legend">every box typed Animal — every object still knows exactly what it is</p>
+<p class="legend">every box typed Animal - every object still knows exactly what it is</p>
 
-* One loop, mixed contents: dispatch runs **per element, per lap** — each animal answers in its own voice.
+* One loop, mixed contents: dispatch runs **per element, per lap** - each animal answers in its own voice.
 
 ---
 
 ## Why this changes how you design
 
-* The loop is written against **`Animal`** — it has never heard of `Cat` or `Tiger`, and never needs to.
+* The loop is written against **`Animal`** - it has never heard of `Cat` or `Tiger`, and never needs to.
 * Tomorrow you add `class Wolf extends Animal` with its own `speak()`. Drop one into the array…
 * …and **the loop does not change**. No old code changes anywhere. That property has a name: **extensibility**.
 * Without upcasting you'd need one variable and one call *per animal*. With it: any zoo, three lines.
-* Every framework you'll ever meet works this way — a loop over a supertype, written years before your class existed. Polymorphism is the socket your code plugs into.
+* Every framework you'll ever meet works this way - a loop over a supertype, written years before your class existed. Polymorphism is the socket your code plugs into.
 
 ---
 
@@ -609,19 +609,19 @@ Cat second = (Cat) zoo[1];     // line 2 -- what happens?
 <div class="cell"><span class="idx">2</span>Cat</div>
 </div>
 
-* Line 1: works — box 0 really holds a `Cat`. The promise was true.
-* Line 2: **compiles** — the cast silenced the compiler — then dies at run time: `ClassCastException`, a `Tiger` is not a `Cat`.
+* Line 1: works - box 0 really holds a `Cat`. The promise was true.
+* Line 2: **compiles** - the cast silenced the compiler - then dies at run time: `ClassCastException`, a `Tiger` is not a `Cat`.
 * An old echo: bad *index* → run-time crash. Today: bad *cast* → run-time crash. `instanceof` is how you check before you leap.
 
 ---
 
-<!-- Speaker notes: ~0:50. The whole hour on one screen — walk it top to bottom, slowly. This is the lab's starting point. -->
+<!-- Speaker notes: ~0:50. The whole hour on one screen - walk it top to bottom, slowly. This is the lab's starting point. -->
 
-## The whole story — the family
+## The whole story - the family
 
 <!-- _class: code-sm -->
 
-- One superclass, two subclasses, one overridden method — everything Act II built:
+- One superclass, two subclasses, one overridden method - everything Act II built:
 
 ```java
 class Animal {
@@ -646,7 +646,7 @@ class Tiger extends Animal {
 
 ---
 
-## The whole story — the program
+## The whole story - the program
 
 <!-- _class: code-sm -->
 
@@ -667,7 +667,7 @@ public class Zoo {                           // Animal, Cat and Tiger as opposit
 }
 ```
 
-<p class="legend">overriding + upcasting + dispatch + instanceof + downcasting — one loop</p>
+<p class="legend">overriding + upcasting + dispatch + instanceof + downcasting - one loop</p>
 
 ---
 
@@ -695,29 +695,29 @@ public class Trap {
 }
 ```
 
-* Prints **Base** — not `Sub`.
+* Prints **Base** - not `Sub`.
 * No object, no dispatch: `static` methods belong to the **class**, so the **reference type** decides, at <span class="ct">compile time</span>. This is called **hiding**, not overriding.
-* `@Override` on `Sub.whoAmI` would refuse to compile — the seatbelt knows. Dynamic dispatch is an **instance-method** superpower.
+* `@Override` on `Sub.whoAmI` would refuse to compile - the seatbelt knows. Dynamic dispatch is an **instance-method** superpower.
 
 ---
 
 ## What polymorphism buys you
 
-- **Write once, welcome all** — code against the superclass and every subclass fits, including ones not written yet.
-- **Extensibility** — a new subclass is a new file. Old loops, old methods, old arrays: untouched.
-- **Uniform collections** — one mixed `Animal[]` instead of one variable per creature (arrays + polymorphism, combined).
-- **Separation of concerns** — callers say *what* ("speak"); each object decides *how*.
-- **Dynamic dispatch is the engine of OOP** — encapsulation protects, inheritance shares, polymorphism *adapts*.
+- **Write once, welcome all** - code against the superclass and every subclass fits, including ones not written yet.
+- **Extensibility** - a new subclass is a new file. Old loops, old methods, old arrays: untouched.
+- **Uniform collections** - one mixed `Animal[]` instead of one variable per creature (arrays + polymorphism, combined).
+- **Separation of concerns** - callers say *what* ("speak"); each object decides *how*.
+- **Dynamic dispatch is the engine of OOP** - encapsulation protects, inheritance shares, polymorphism *adapts*.
 
 ---
 
-<!-- Speaker notes: ~0:56. Land the plane on the two moments — point back at the slide-3 table; they can now read every cell of it. -->
+<!-- Speaker notes: ~0:56. Land the plane on the two moments - point back at the slide-3 table; they can now read every cell of it. -->
 
 ## Summary
 
-- **Polymorphism** = one call, many forms; **binding** links a call to the body that runs — Java binds at two moments.
-- **Overloading** (compile time): same class, same name, different **signatures** — signature = name + parameter list, *never* the return type. The **compiler** picks by the arguments.
-- **Overriding** (run time): a subclass redefines an inherited method with the **same signature**; the **JVM** picks by the object's actual type — **dynamic dispatch**. Always wear `@Override`; `static` methods never dispatch (hiding).
+- **Polymorphism** = one call, many forms; **binding** links a call to the body that runs - Java binds at two moments.
+- **Overloading** (compile time): same class, same name, different **signatures** - signature = name + parameter list, *never* the return type. The **compiler** picks by the arguments.
+- **Overriding** (run time): a subclass redefines an inherited method with the **same signature**; the **JVM** picks by the object's actual type - **dynamic dispatch**. Always wear `@Override`; `static` methods never dispatch (hiding).
 - Every reference has **two types**: the reference type gates what you *may call*; the object type decides what *runs*.
-- **Upcasting** is free and always safe; **downcasting** needs a cast plus the `instanceof` gate — or `ClassCastException` bites at run time.
-- The payoff: one loop over a mixed `Animal[]`, every element answering in its own voice — the array dream, delivered.
+- **Upcasting** is free and always safe; **downcasting** needs a cast plus the `instanceof` gate - or `ClassCastException` bites at run time.
+- The payoff: one loop over a mixed `Animal[]`, every element answering in its own voice - the array dream, delivered.

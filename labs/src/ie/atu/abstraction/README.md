@@ -2,7 +2,7 @@
 
 ## What you'll learn
 
-- Explain abstraction — hiding complex details while showing only what's needed — and why it leads to cleaner, better-organized code
+- Explain abstraction - hiding complex details while showing only what's needed - and why it leads to cleaner, better-organized code
 - Write abstract classes that act as blueprints for related objects, and extend them with concrete subclasses
 - Define interfaces as contracts and implement them in your own classes
 - Choose between an abstract class ("is-a") and an interface ("can-do") when designing a program
@@ -16,7 +16,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.abstraction` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.abstraction` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ## 1. Abstract Classes
 
@@ -58,7 +58,7 @@ flowchart TB
     class E,T,ES,FS,BS hiddenClass
 ```
 
-> **Key Concept:** Abstraction is like the dashboard of a car — it shows you only what you need to operate the vehicle while hiding all the complex machinery underneath.
+> **Key Concept:** Abstraction is like the dashboard of a car - it shows you only what you need to operate the vehicle while hiding all the complex machinery underneath.
 
 ### What is an Abstract Class?
 
@@ -227,7 +227,7 @@ classDiagram
     note for Square "🟦 Area = side × side"
 ```
 
-1. Create an abstract class named `Shape` — copy this code into a new file called `Shape.java`:
+1. Create an abstract class named `Shape` - copy this code into a new file called `Shape.java`:
 ```java
 public abstract class Shape {
     protected String color;
@@ -273,7 +273,7 @@ public class Main {
 }
 ```
 
-> **Note:** We use `Shape` as the reference type (`Shape circle = ...`) instead of `Circle` to demonstrate polymorphism—the same principle shown in the Animal example above.
+> **Note:** We use `Shape` as the reference type (`Shape circle = ...`) instead of `Circle` to demonstrate polymorphism - the same principle shown in the Animal example above.
 
 **Expected output**
 ```text
@@ -285,7 +285,7 @@ I am Blue in color
 
 <details><summary>Hint</summary>
 
-Use `Math.PI * radius * radius` for the circle's area. To print an area with a label, use `System.out.println("Circle area: " + circle.getArea());` — and the same idea for the square.
+Use `Math.PI * radius * radius` for the circle's area. To print an area with a label, use `System.out.println("Circle area: " + circle.getArea());` - and the same idea for the square.
 
 </details>
 
@@ -322,7 +322,7 @@ flowchart LR
     class D1,D2,D3,D4 deviceNode
 ```
 
-> **Key Concept:** An interface is like a contract — any class that "signs" the contract (implements the interface) promises to provide specific behaviors.
+> **Key Concept:** An interface is like a contract - any class that "signs" the contract (implements the interface) promises to provide specific behaviors.
 
 ### Simple Code Example: Musical Instruments
 
@@ -858,7 +858,7 @@ SMS: New text received!
 
 <details><summary>Hint</summary>
 
-Watch the difference between the two methods: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String — `Main` does the printing.
+Watch the difference between the two methods: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `Main` does the printing.
 
 </details>
 

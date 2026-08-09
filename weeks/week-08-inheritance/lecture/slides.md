@@ -12,7 +12,7 @@ source: authored
 
 <style>
 /* Deck-local visual system: family trees, the constructor ladder, the pillar
-   strip and the is-a/has-a card — all drawn in CSS, no image files. */
+   strip and the is-a/has-a card - all drawn in CSS, no image files. */
 section .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
@@ -24,7 +24,7 @@ section .callout {
 section .callout strong { color: #B94E00; }
 section .legend { font-size: 17px; color: #8B8471; margin-top: 4px; text-align: center; }
 
-/* — family trees: root at the top, arrowhead at the parent — */
+/* - family trees: root at the top, arrowhead at the parent - */
 section .tree {
   display: flex; flex-direction: column; align-items: center;
   margin: 20px 0 6px 0; font-family: 'Cascadia Code', Consolas, monospace;
@@ -67,7 +67,7 @@ section .tree.tight .tnode { padding: 3px 16px; font-size: 20px; }
 section .tree.tight .tdown { height: 20px; }
 section .tcap { text-align: center; font-size: 18px; color: #46536B; margin: 10px 0 0 0; }
 
-/* — the forbidden shape: two parents merging into one child — */
+/* - the forbidden shape: two parents merging into one child - */
 section .trow2 { display: flex; gap: 60px; justify-content: center; }
 section .trow2 .tnode { min-width: 170px; }
 section .tmerge { width: 230px; height: 54px; position: relative; }
@@ -88,7 +88,7 @@ section .tmerge .ah {
 section .tmerge .ah.l { left: -7px; }
 section .tmerge .ah.r { right: -7px; }
 
-/* — the four-pillar strip — */
+/* - the four-pillar strip - */
 section .pillars { display: flex; gap: 16px; margin: 26px 0 14px 0; }
 section .pillar {
   flex: 1; border: 2px solid #33698C; border-radius: 10px;
@@ -101,7 +101,7 @@ section .pillar.now { background: #FDEFD9; border-color: #E76F00; }
 section .pillar.now .pname { color: #B94E00; }
 section .pillar.soon { border-style: dashed; opacity: 0.8; }
 
-/* — the constructor ladder — */
+/* - the constructor ladder - */
 section .ladder { display: grid; grid-template-columns: 200px 1fr 200px; column-gap: 20px; margin: 20px 0 6px 0; }
 section .floors { display: flex; flex-direction: column; gap: 16px; }
 section .floor {
@@ -133,7 +133,7 @@ section .rail.dn .arrowline::after {
 }
 section .rail .rlabel { font-size: 16px; color: #46536B; text-align: center; }
 
-/* — side-by-side halves & the is-a/has-a card — */
+/* - side-by-side halves & the is-a/has-a card - */
 section .duo { display: flex; gap: 30px; margin: 18px 0 6px 0; }
 section .duo .half { flex: 1; display: flex; flex-direction: column; align-items: center; }
 section .duo .tree { margin: 8px 0 4px 0; }
@@ -184,7 +184,7 @@ Write it once. Every child gets it.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open on the duplication pain — they'll recognise the classic Person class on sight. Let the pasted comments land before the fragment. -->
+<!-- Speaker notes: ~0:00. Cold open on the duplication pain - they'll recognise the classic Person class on sight. Let the pasted comments land before the fragment. -->
 
 ## A true story
 
@@ -193,7 +193,7 @@ section pre { padding: 14px 20px; margin: 10px 0; font-size: 18px; line-height: 
 section pre code { font-size: 18px; }
 </style>
 
-- Your timetable app needs **students** and **lecturers** — and every one of them has a name and an age.
+- Your timetable app needs **students** and **lecturers** - and every one of them has a name and an age.
 
 ```java
 class Person {
@@ -221,13 +221,13 @@ class Student {
 
 ## Then the requirement changes
 
-- Small ask from the registrar: rename `name` to `fullName`. Easy — it's *one field*.
+- Small ask from the registrar: rename `name` to `fullName`. Easy - it's *one field*.
 
-* Edit #1 — `Person`. Done.
-* Edit #2 — `Student`. Done.
-* Edit #3 — `Lecturer`… you were sure you did it. You didn't.
-* And nothing fails loudly — the three classes don't even *know* they're copies of each other. The bug waits.
-* Every duplicated line is **copy-paste debt** — and today it fell due. **There has to be a better way.**
+* Edit #1 - `Person`. Done.
+* Edit #2 - `Student`. Done.
+* Edit #3 - `Lecturer`… you were sure you did it. You didn't.
+* And nothing fails loudly - the three classes don't even *know* they're copies of each other. The bug waits.
+* Every duplicated line is **copy-paste debt** - and today it fell due. **There has to be a better way.**
 
 ---
 
@@ -253,27 +253,27 @@ class Lecturer extends Person { }
 
 <p class="legend">one copy of the common code · two one-line classes · rename a field? one edit</p>
 
-* `extends` is the whole trick — everything `Person` has, `Student` and `Lecturer` now have too.
+* `extends` is the whole trick - everything `Person` has, `Student` and `Lecturer` now have too.
 
 ---
 
 ## Agenda
 
-- The four pillars — where inheritance sits
+- The four pillars - where inheritance sits
 - is-a: the relationship, the arrow, the names
-- `extends` — Person and Employee, the classic pair
+- `extends` - Person and Employee, the classic pair
 - `Object`: the ancestor of everything
-- The five shapes of inheritance — and the forbidden one
+- The five shapes of inheritance - and the forbidden one
 - Vehicles, animals, and is-a vs has-a
 - Constructors: the ancestor ladder and `super`
 
 ---
 
-<!-- Speaker notes: ~0:07. Orientation movement — place today on the four-pillar map, then define the relationship precisely. -->
+<!-- Speaker notes: ~0:07. Orientation movement - place today on the four-pillar map, then define the relationship precisely. -->
 
-## The four pillars — you are here
+## The four pillars - you are here
 
-- Recall: OOP stands on four pillars, and **encapsulation** — private fields behind public gates — is pillar one.
+- Recall: OOP stands on four pillars, and **encapsulation** - private fields behind public gates - is pillar one.
 
 <div class="pillars">
 <div class="pillar done"><span class="pname">Encapsulation</span><span class="pwk">pillar 1 · done ✓</span></div>
@@ -282,7 +282,7 @@ class Lecturer extends Person { }
 <div class="pillar soon"><span class="pname">Abstraction</span><span class="pwk">pillar 4</span></div>
 </div>
 
-- Today is pillar two — the load-bearing one: polymorphism only exists **because of** inheritance.
+- Today is pillar two - the load-bearing one: polymorphism only exists **because of** inheritance.
 
 ---
 
@@ -297,7 +297,7 @@ class Lecturer extends Person { }
 <div class="tnode hot">Employee</div>
 </div>
 
-<p class="legend">the arrowhead always sits at the parent — the child points up and says "I am one of those"</p>
+<p class="legend">the arrowhead always sits at the parent - the child points up and says "I am one of those"</p>
 
 - The **sentence test**: say "*X is a Y*" out loud. Sounds true? Inheritance fits. Sounds silly? It doesn't. We'll weaponise this shortly.
 
@@ -321,13 +321,13 @@ class Subclass extends Superclass {
 | base class | derived / extended class |
 | parent class | child class |
 
-- Docs, exams and Stack Overflow rotate freely through all six — perfect synonyms.
+- Docs, exams and Stack Overflow rotate freely through all six - perfect synonyms.
 
 ---
 
-<!-- Speaker notes: ~0:12. The extends movement — Person/Employee: the familiar Person class, the familiar getters. -->
+<!-- Speaker notes: ~0:12. The extends movement - Person/Employee: the familiar Person class, the familiar getters. -->
 
-## Meet the parent — a plain Person
+## Meet the parent - a plain Person
 
 ```java
 public class Person {
@@ -342,12 +342,12 @@ public class Person {
 }
 ```
 
-- Private field, public gates — **encapsulation**, unchanged. It's about to matter.
+- Private field, public gates - **encapsulation**, unchanged. It's about to matter.
 - Notice what's *missing*: nothing here mentions inheritance. Being extended costs the parent **nothing**, and it never knows.
 
 ---
 
-## One word — extends
+## One word - extends
 
 <style scoped>
 section pre { padding: 12px 18px; margin: 8px 0; font-size: 17px; line-height: 1.3; }
@@ -377,7 +377,7 @@ public class Employee extends Person {
 }
 ```
 
-* `Employee` declares one field and two methods — but delivers two fields and four methods. `extends` wrote the other half.
+* `Employee` declares one field and two methods - but delivers two fields and four methods. `extends` wrote the other half.
 
 ---
 
@@ -419,7 +419,7 @@ public class Main {
 }
 ```
 
-* Prints `25 : Developer` — two of those calls ran code `Employee` never wrote.
+* Prints `25 : Developer` - two of those calls ran code `Employee` never wrote.
 
 ---
 
@@ -442,16 +442,16 @@ class Employee extends Person {
 }
 ```
 
-* **No.** `age` has private access in `Person` — the child cannot touch it.
-* `Employee` **inherits the room but not the key** — the `age` box exists in every `Employee` object, but `private` keeps access inside `Person`.
+* **No.** `age` has private access in `Person` - the child cannot touch it.
+* `Employee` **inherits the room but not the key** - the `age` box exists in every `Employee` object, but `private` keeps access inside `Person`.
 * The fix that always works: `return getAge() > 65;`.
-* **`protected`** exists for exactly this — open to subclasses, closed to strangers.
+* **`protected`** exists for exactly this - open to subclasses, closed to strangers.
 
 ---
 
-<!-- Speaker notes: ~0:20. Object movement — the array-printing gibberish finally gets explained. Enjoy the reveal. -->
+<!-- Speaker notes: ~0:20. Object movement - the array-printing gibberish finally gets explained. Enjoy the reveal. -->
 
-## The ancestor of everything — Object
+## The ancestor of everything - Object
 
 ```java
 class Person { }              // you wrote no extends...
@@ -461,7 +461,7 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 ```
 
 - Write no `extends` and Java adds one: **every class descends from `java.lang.Object`**.
-- That gibberish is `Object`'s `toString()` — the very one you see when printing an array. `equals` and `hashCode` ride along too.
+- That gibberish is `Object`'s `toString()` - the very one you see when printing an array. `equals` and `hashCode` ride along too.
 
 <div class="tree tight">
 <div class="tnode hot">Object</div>
@@ -471,23 +471,23 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 <div class="tnode">Employee</div>
 </div>
 
-<p class="legend">every chain of extends ends at Object — no exceptions, no orphans</p>
+<p class="legend">every chain of extends ends at Object - no exceptions, no orphans</p>
 
 ---
 
-<!-- Speaker notes: ~0:24. Shapes movement — five names, four small trees, one forbidden. The names are pure recognition marks for MCQs. -->
+<!-- Speaker notes: ~0:24. Shapes movement - five names, four small trees, one forbidden. The names are pure recognition marks for MCQs. -->
 
 ## The five shapes of inheritance
 
-- One keyword — `extends` — but the **trees** it grows have names:
+- One keyword - `extends` - but the **trees** it grows have names:
 
 | Shape | The tree | Java classes? |
 |---|---|---|
 | Single | one parent, one child | yes |
-| Multilevel | a child of a child — a chain | yes |
+| Multilevel | a child of a child - a chain | yes |
 | Hierarchical | many children, one parent | yes |
 | Hybrid | any mix of the above | yes |
-| **Multiple** | **one child, two parents** | **no — interfaces only** |
+| **Multiple** | **one child, two parents** | **no - interfaces only** |
 
 - Next three slides: one small tree each, all grown from our university.
 
@@ -495,11 +495,11 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 
 ## Single & multilevel
 
-- Read every arrow aloud as "**is a**" — if the whole tree reads true, the design is sound.
+- Read every arrow aloud as "**is a**" - if the whole tree reads true, the design is sound.
 
 <div class="duo">
 <div class="half">
-<p class="tcap"><strong>single</strong> — one extends</p>
+<p class="tcap"><strong>single</strong> - one extends</p>
 <div class="tree">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
@@ -508,7 +508,7 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 <p class="tcap"><code>class Student extends Person</code></p>
 </div>
 <div class="half">
-<p class="tcap"><strong>multilevel</strong> — the chain</p>
+<p class="tcap"><strong>multilevel</strong> - the chain</p>
 <div class="tree">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
@@ -528,7 +528,7 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 
 <div class="duo">
 <div class="half">
-<p class="tcap"><strong>hierarchical</strong> — siblings share a parent</p>
+<p class="tcap"><strong>hierarchical</strong> - siblings share a parent</p>
 <div class="tree">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
@@ -541,7 +541,7 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 <p class="tcap">three classes <code>extends Person</code></p>
 </div>
 <div class="half">
-<p class="tcap"><strong>hybrid</strong> — a mix in one program</p>
+<p class="tcap"><strong>hybrid</strong> - a mix in one program</p>
 <div class="tree">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
@@ -558,11 +558,11 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 </div>
 </div>
 
-- Real systems are nearly always hybrid — the names matter less than reading each arrow correctly.
+- Real systems are nearly always hybrid - the names matter less than reading each arrow correctly.
 
 ---
 
-## Multiple — the forbidden shape
+## Multiple - the forbidden shape
 
 - Tempting: a paid PhD demonstrator *is a* `Student` **and** *is an* `Employee`…
 
@@ -582,13 +582,13 @@ class TeachingAssistant extends Student, Employee { }   // one child, two parent
 
 * Java **refuses**: a class extends **exactly one** class. Multiple inheritance of classes does not exist in Java.
 * Why: if both parents defined `getRole()`, which one would the child inherit? Java won't guess (the classic *diamond problem*).
-* The legal route is **interfaces** — multiple inheritance of *type*, without the ambiguity.
+* The legal route is **interfaces** - multiple inheritance of *type*, without the ambiguity.
 
 ---
 
-<!-- Speaker notes: ~0:33. Case-study movement — two familiar worlds, then the discriminator card that catches the classic design mistake. -->
+<!-- Speaker notes: ~0:33. Case-study movement - two familiar worlds, then the discriminator card that catches the classic design mistake. -->
 
-## Case study — vehicles
+## Case study - vehicles
 
 <div class="tree">
 <div class="tnode">Vehicle</div>
@@ -610,11 +610,11 @@ class Truck extends Vehicle { }
 class SportsCar extends Car { }
 ```
 
-- **General at the top, specific at the bottom** — each step down *adds* detail, never removes it. The whole diagram is four lines of Java.
+- **General at the top, specific at the bottom** - each step down *adds* detail, never removes it. The whole diagram is four lines of Java.
 
 ---
 
-## Case study — animals
+## Case study - animals
 
 <div class="tree">
 <div class="tnode">Animal</div>
@@ -632,15 +632,15 @@ class SportsCar extends Car { }
 </div>
 </div>
 
-- One tree — three shapes hiding in it. Find them:
+- One tree - three shapes hiding in it. Find them:
 
 * Single? `Bird extends Animal`.
-* Multilevel? `Dog` → `Mammal` → `Animal` — so a `Dog` inherits from **both**.
-* Hierarchical? `Dog` and `Cat` are siblings under `Mammal`. And every arrow passes the sentence test — the tree is sound.
+* Multilevel? `Dog` → `Mammal` → `Animal` - so a `Dog` inherits from **both**.
+* Hierarchical? `Dog` and `Cat` are siblings under `Mammal`. And every arrow passes the sentence test - the tree is sound.
 
 ---
 
-## is-a or has-a — the arrow you draw
+## is-a or has-a - the arrow you draw
 
 - The classic design bug: reaching for `extends` when the truth is *containment*. Run the **sentence test** first.
 
@@ -661,36 +661,36 @@ class SportsCar extends Car { }
 </div>
 </div>
 
-<p class="legend">a Car IS a Vehicle → extends · a Car HAS an Engine → field — different truth, different drawing</p>
+<p class="legend">a Car IS a Vehicle → extends · a Car HAS an Engine → field - different truth, different drawing</p>
 
 ---
 
-## Predict: extends — or field?
+## Predict: extends - or field?
 
 - Sentence test, out loud, quick fire:
 
 - `Car` and `Engine`?
 
-* **has-a** — "a Car is an Engine" is nonsense. `Engine` becomes a field.
+* **has-a** - "a Car is an Engine" is nonsense. `Engine` becomes a field.
 
 - `SportsCar` and `Car`?
 
-* **is-a** — `class SportsCar extends Car`.
+* **is-a** - `class SportsCar extends Car`.
 
 - `Library` and `Book`?
 
-* **has-a** — a library isn't a book; it *holds* thousands of them (an array of them, most likely).
-* When genuinely torn: prefer **has-a**. A field is easy to change later — `extends` is a public promise that X is a Y, forever.
+* **has-a** - a library isn't a book; it *holds* thousands of them (an array of them, most likely).
+* When genuinely torn: prefer **has-a**. A field is easy to change later - `extends` is a public promise that X is a Y, forever.
 
 ---
 
-<!-- Speaker notes: ~0:43. Constructor movement — slow right down. Ladder plus two predicts; this is MCQ-favourite territory. -->
+<!-- Speaker notes: ~0:43. Constructor movement - slow right down. Ladder plus two predicts; this is MCQ-favourite territory. -->
 
 ## Constructors are not inherited
 
 <!-- _class: code-sm -->
 
-- Fields and methods are **members** of a class — and members are what inheritance copies down.
+- Fields and methods are **members** of a class - and members are what inheritance copies down.
 - **Constructors are not members.** `Person`'s constructor never becomes `Student`'s constructor.
 
 ```java
@@ -706,22 +706,22 @@ class Student extends Person {
 }
 ```
 
-- Not inherited — but not unreachable either: a subclass constructor **calls** its parent's constructor. Every single time.
+- Not inherited - but not unreachable either: a subclass constructor **calls** its parent's constructor. Every single time.
 
 ---
 
 ## The ancestor ladder
 
-- One `new Student()` — **three** constructors run. The call climbs the ladder; the bodies run back down.
+- One `new Student()` - **three** constructors run. The call climbs the ladder; the bodies run back down.
 
 <div class="ladder">
-<div class="rail up"><div class="arrowline"></div><div class="rlabel">the climb —<br>every constructor's<br>first act: call the parent</div></div>
+<div class="rail up"><div class="arrowline"></div><div class="rlabel">the climb - <br>every constructor's<br>first act: call the parent</div></div>
 <div class="floors">
 <div class="floor"><span class="chip up">3</span><span class="fname">Object()</span><span class="chip dn">4</span></div>
 <div class="floor"><span class="chip up">2</span><span class="fname">Person()</span><span class="chip dn">5</span></div>
 <div class="floor hot"><span class="chip up">1</span><span class="fname">new Student()</span><span class="chip dn">6</span></div>
 </div>
-<div class="rail dn"><div class="arrowline"></div><div class="rlabel">the run —<br>bodies execute top-down:<br>oldest finishes first</div></div>
+<div class="rail dn"><div class="arrowline"></div><div class="rlabel">the run - <br>bodies execute top-down:<br>oldest finishes first</div></div>
 </div>
 
 <p class="legend">1 new Student() starts · 2 its hidden super() enters Person() · 3 Person's super() enters Object() · 4 Object's body runs · 5 Person's body runs · 6 Student's body runs last</p>
@@ -752,9 +752,9 @@ public class Main {
 }
 ```
 
-* `Person ready` — then `Student ready`. The parent **always** goes first.
+* `Person ready` - then `Student ready`. The parent **always** goes first.
 * But nobody called `Person()`… Java inserted an invisible **`super();`** as line one of `Student()`.
-* Strictly, **three** constructors ran — `Object`'s went first of all, silently.
+* Strictly, **three** constructors ran - `Object`'s went first of all, silently.
 
 ---
 
@@ -762,7 +762,7 @@ public class Main {
 
 <!-- _class: code-sm -->
 
-- One change: `Person` now **demands a name** — its only constructor.
+- One change: `Person` now **demands a name** - its only constructor.
 
 <!-- no-compile -->
 ```java
@@ -778,13 +778,13 @@ class Student extends Person {
 }
 ```
 
-* The `Student() { }` line — its invisible `super();` asks `Person` for a no-arg constructor, and there isn't one.
+* The `Student() { }` line - its invisible `super();` asks `Person` for a no-arg constructor, and there isn't one.
 * An old rule strikes again: declaring `Person(String)` **cost `Person` its free default constructor**.
-* The fix: call the parent **yourself**, with arguments — next slide.
+* The fix: call the parent **yourself**, with arguments - next slide.
 
 ---
 
-## super — speaking to your parent
+## super - speaking to your parent
 
 <!-- _class: code-sm -->
 
@@ -802,43 +802,43 @@ class Cat extends Mammal {
 }
 ```
 
-- `super(...)` invokes the superclass constructor — write it, or accept the invisible no-arg version. **First statement, always.**
-- `super.member` picks the parent's version when names collide — a preview of *overriding*.
-- There is no `super.super` — you may speak to your parent, never *past* them to an ancestor.
+- `super(...)` invokes the superclass constructor - write it, or accept the invisible no-arg version. **First statement, always.**
+- `super.member` picks the parent's version when names collide - a preview of *overriding*.
+- There is no `super.super` - you may speak to your parent, never *past* them to an ancestor.
 
 ---
 
-<!-- Speaker notes: ~0:53. Landing movement — pay off the hook explicitly; the facts table is revision fuel. -->
+<!-- Speaker notes: ~0:53. Landing movement - pay off the hook explicitly; the facts table is revision fuel. -->
 
 ## Why inheritance earns its keep
 
-- **Reuse** — the hook, paid off: name, age and the getters written **once**; `fullName` renamed **once**. Copy-paste debt: cancelled.
-- **Organisation** — common code has one home at the top of the tree; every class states only its *difference*.
-- **Flexibility** — code written for `Person` accepts `Student`, `Lecturer` and `Employee` without edits — any subclass, forever.
+- **Reuse** - the hook, paid off: name, age and the getters written **once**; `fullName` renamed **once**. Copy-paste debt: cancelled.
+- **Organisation** - common code has one home at the top of the tree; every class states only its *difference*.
+- **Flexibility** - code written for `Person` accepts `Student`, `Lecturer` and `Employee` without edits - any subclass, forever.
 
-* That last superpower has a name — **polymorphism** — and it deserves an hour of its own.
+* That last superpower has a name - **polymorphism** - and it deserves an hour of its own.
 
 ---
 
 <!-- _class: dense -->
 
-## Facts to keep — the fine print
+## Facts to keep - the fine print
 
 | Fact | Detail |
 |---|---|
 | Exactly one parent | Every class except `Object` has exactly **one** direct superclass; write no `extends` and that superclass is `Object`. |
-| Children unlimited | A superclass can have any number of subclasses — but it never knows about them, and never names them. |
+| Children unlimited | A superclass can have any number of subclasses - but it never knows about them, and never names them. |
 | Constructors | Not members → never inherited. Reachable via `super(...)`, which must be the **first statement** of a subclass constructor. |
-| `private` members | Inherited storage, no direct access — the subclass goes through the parent's `public`/`protected` gates. |
-| Every chain ends at `Object` | `toString`, `equals`, `hashCode` arrive from the top of every tree — that's why every object answers them. |
+| `private` members | Inherited storage, no direct access - the subclass goes through the parent's `public`/`protected` gates. |
+| Every chain ends at `Object` | `toString`, `equals`, `hashCode` arrive from the top of every tree - that's why every object answers them. |
 
 ---
 
 ## Summary
 
-- Inheritance moves shared code **up**: `class Child extends Parent` acquires the parent's fields and methods — written once, fixed once, copy-paste debt cancelled.
+- Inheritance moves shared code **up**: `class Child extends Parent` acquires the parent's fields and methods - written once, fixed once, copy-paste debt cancelled.
 - The relationship is **is-a**, checked with the sentence test; the drawn arrowhead always sits at the parent. is-a → `extends`; has-a → a **field**.
-- Superclass = base = parent; subclass = child = derived. Every class has exactly **one** direct superclass, and every chain ends at **`Object`** — source of `toString` and `equals`.
-- Legal tree shapes: single, multilevel, hierarchical, hybrid. **Multiple inheritance of classes is forbidden** — interfaces fill that gap.
-- Constructors are **not inherited**: every subclass constructor starts with `super(...)` — written or invisible — so construction climbs to `Object` and bodies run back down, **oldest first**.
-- If the parent has no no-arg constructor, the invisible `super()` breaks the build — call `super(args)` yourself, as the first statement.
+- Superclass = base = parent; subclass = child = derived. Every class has exactly **one** direct superclass, and every chain ends at **`Object`** - source of `toString` and `equals`.
+- Legal tree shapes: single, multilevel, hierarchical, hybrid. **Multiple inheritance of classes is forbidden** - interfaces fill that gap.
+- Constructors are **not inherited**: every subclass constructor starts with `super(...)` - written or invisible - so construction climbs to `Object` and bodies run back down, **oldest first**.
+- If the parent has no no-arg constructor, the invisible `super()` breaks the build - call `super(args)` yourself, as the first statement.

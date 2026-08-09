@@ -11,7 +11,7 @@ source: authored
 ---
 
 <style>
-/* Deck-local visual system: contract & class cards, drawn in CSS — no images.
+/* Deck-local visual system: contract & class cards, drawn in CSS - no images.
    Visual grammar: SOLID = machinery included · DASHED = signature only. */
 section .card-row {
   display: flex; gap: 30px; justify-content: center; align-items: flex-start;
@@ -114,7 +114,7 @@ Hide the machinery. Expose the contract.
 
 ## How did you get here this morning?
 
-- You (or your bus driver) operated a machine of roughly **30,000 parts** — at speed, in traffic, legally.
+- You (or your bus driver) operated a machine of roughly **30,000 parts** - at speed, in traffic, legally.
 - Combustion timing? Fuel-air ratios? The clutch's friction curve?
 
 * You used **pedals and a wheel**.
@@ -126,43 +126,43 @@ Hide the machinery. Expose the contract.
 
 ## The big idea
 
-- **Abstraction** — hide the implementation details; expose only what callers need.
+- **Abstraction** - hide the implementation details; expose only what callers need.
 
 <div class="card-row">
 <div class="ccard iface">
-<div class="hdr">the contract — you see this</div>
+<div class="hdr">the contract - you see this</div>
 <div class="m">accelerate();</div>
 <div class="m">brake();</div>
 <div class="m">steer(angle);</div>
 </div>
 <div class="ccard ghost">
-<div class="hdr">the machinery — you never do</div>
+<div class="hdr">the machinery - you never do</div>
 <div class="m">spark timing · fuel maps</div>
 <div class="m">torque curves · 30,000 parts</div>
 </div>
 </div>
 
-<p class="legend">you drive against the left card — engineers may replace the right card at will</p>
+<p class="legend">you drive against the left card - engineers may replace the right card at will</p>
 
-* Petrol became electric: the machinery was **replaced wholesale** — the pedals didn't move.
+* Petrol became electric: the machinery was **replaced wholesale** - the pedals didn't move.
 * This hour: how Java lets **your classes** make the same offer.
 
 ---
 
 ## Agenda
 
-- Where abstraction fits — the four pillars
-- Abstraction in code — and versus encapsulation
-- Tool 1: `abstract` classes and methods — half-built on purpose
-- Tool 2: interfaces — the pure contract
+- Where abstraction fits - the four pillars
+- Abstraction in code - and versus encapsulation
+- Tool 1: `abstract` classes and methods - half-built on purpose
+- Tool 2: interfaces - the pure contract
 - Choosing: concrete vs abstract vs interface
-- Benefits — and completing the set
+- Benefits - and completing the set
 
 ---
 
-<!-- Speaker notes: ~0:06. Arc moment — four pillars were promised; this is the last one. Milk the "set complete" beat, it pays off again on the summary slide. -->
+<!-- Speaker notes: ~0:06. Arc moment - four pillars were promised; this is the last one. Milk the "set complete" beat, it pays off again on the summary slide. -->
 
-## The four pillars — completing the set
+## The four pillars - completing the set
 
 - OOP makes a promise: it stands on **four pillars**. Three are already yours:
 
@@ -170,17 +170,17 @@ Hide the machinery. Expose the contract.
 <div class="pill">Encapsulation<small>✓ collected</small></div>
 <div class="pill">Inheritance<small>✓ collected</small></div>
 <div class="pill">Polymorphism<small>✓ collected</small></div>
-<div class="pill today">Abstraction<small>today — the last one</small></div>
+<div class="pill today">Abstraction<small>today - the last one</small></div>
 </div>
 
 * Today we take the final pillar. **After this hour, the set is complete.**
-* And you have used it all along — **every time you called a method without reading its source.**
+* And you have used it all along - **every time you called a method without reading its source.**
 
 ---
 
 ## Abstraction, in code
 
-- A full **method** carries its machinery — signature *and* body:
+- A full **method** carries its machinery - signature *and* body:
 
 ```java
 public int add(int a, int b) {
@@ -188,7 +188,7 @@ public int add(int a, int b) {
 }
 ```
 
-- Abstraction keeps only the **method signature** — what callers see, no body:
+- Abstraction keeps only the **method signature** - what callers see, no body:
 
 <!-- no-compile -->
 ```java
@@ -201,9 +201,9 @@ public int add(int a, int b);
 
 ## Abstraction vs encapsulation
 
-* Both pillars **hide** — they differ in *what* they hide.
+* Both pillars **hide** - they differ in *what* they hide.
 * **Encapsulation** hides **data**: `private` fields, reachable only through getters and setters.
-* **Abstraction** hides **implementation**: method bodies, reachable only through signatures — built with abstract classes and interfaces.
+* **Abstraction** hides **implementation**: method bodies, reachable only through signatures - built with abstract classes and interfaces.
 
 <div class="callout"><strong>Same instinct, different target.</strong> Encapsulation guards the <strong>state</strong>. Abstraction guards the <strong>how</strong>.</div>
 
@@ -211,16 +211,16 @@ public int add(int a, int b);
 
 ## You already trust abstraction
 
-* **Remote control** — you press volume-up; the infrared protocol is not your problem.
-* **Email** — you write and click send; the relays, queues and spam filters underneath stay invisible.
-* **Calculator** — you press `÷` and read the answer; the division algorithm never shows itself.
-* Each is a simple **interface** wrapped around **implementation you never see** — and you trust all three without a second thought.
+* **Remote control** - you press volume-up; the infrared protocol is not your problem.
+* **Email** - you write and click send; the relays, queues and spam filters underneath stay invisible.
+* **Calculator** - you press `÷` and read the answer; the division algorithm never shows itself.
+* Each is a simple **interface** wrapped around **implementation you never see** - and you trust all three without a second thought.
 
 ---
 
 ## Java's two tools
 
-- Java builds abstraction with two constructs — here is the rest of the hour in one picture:
+- Java builds abstraction with two constructs - here is the rest of the hour in one picture:
 
 <div class="card-row">
 <div class="ccard">
@@ -237,14 +237,14 @@ public int add(int a, int b);
 
 <p class="legend">solid = machinery included · dashed = signature only, machinery owed</p>
 
-* **Tool 1 — the `abstract` keyword**: classes deliberately left half-built; subclasses finish them.
-* **Tool 2 — interfaces**: contracts with no machinery at all; classes sign them and deliver.
+* **Tool 1 - the `abstract` keyword**: classes deliberately left half-built; subclasses finish them.
+* **Tool 2 - interfaces**: contracts with no machinery at all; classes sign them and deliver.
 
 ---
 
-<!-- Speaker notes: ~0:14. Tool 1 movement. The rules land across four slides — declaration, the mix, the punctuation, the chain. Keep naming the model: "half-built on purpose". -->
+<!-- Speaker notes: ~0:14. Tool 1 movement. The rules land across four slides - declaration, the mix, the punctuation, the chain. Keep naming the model: "half-built on purpose". -->
 
-## Tool 1 — the abstract class
+## Tool 1 - the abstract class
 
 - The `abstract` keyword sits **before `class`** in the declaration:
 
@@ -254,14 +254,14 @@ public abstract class Vehicle {
 }
 ```
 
-* Declaring a class `abstract` imposes **one rule**: it cannot be instantiated — to use it, another class must **inherit** it.
+* Declaring a class `abstract` imposes **one rule**: it cannot be instantiated - to use it, another class must **inherit** it.
 
 <!-- no-compile -->
 ```java
 Vehicle v = new Vehicle();   // compile error: Vehicle is abstract
 ```
 
-* An ordinary, instantiable class is a **concrete** class. `abstract` says: *don't build this one — build from it.*
+* An ordinary, instantiable class is a **concrete** class. `abstract` says: *don't build this one - build from it.*
 
 ---
 
@@ -281,16 +281,16 @@ Vehicle v = new Vehicle();   // compile error: Vehicle is abstract
 
 <p class="legend">solid = built once, shared by every subclass · dashed = a blank the subclass must fill</p>
 
-* It **may or may not** contain abstract methods — even with zero, it still cannot be instantiated.
-* The dashed lines are **homework for subclasses** — and the compiler collects the homework.
+* It **may or may not** contain abstract methods - even with zero, it still cannot be instantiated.
+* The dashed lines are **homework for subclasses** - and the compiler collects the homework.
 
 ---
 
-## Abstract methods — read the punctuation
+## Abstract methods - read the punctuation
 
 <!-- _class: code-sm -->
 
-- An **abstract method** is a signature ending in a **semicolon** — no braces, no body:
+- An **abstract method** is a signature ending in a **semicolon** - no braces, no body:
 
 ```java
 public abstract class Shape {
@@ -315,9 +315,9 @@ public class Square {
 
 ## The homework rule
 
-* Even **one** abstract method forces the whole class to be declared `abstract` — the compiler won't let a half-built class pose as finished.
+* Even **one** abstract method forces the whole class to be declared `abstract` - the compiler won't let a half-built class pose as finished.
 * A subclass inheriting abstract methods has exactly two options: **implement them all**, or stay `abstract` and pass the homework down.
-* The chain must end: **some descendant** eventually implements everything — or the family never produces a single object.
+* The chain must end: **some descendant** eventually implements everything - or the family never produces a single object.
 
 <!-- _class: code-sm -->
 
@@ -335,10 +335,10 @@ class C extends B {                    // the chain ends -- C is concrete
 
 ## Finding the abstraction
 
-* A `Car` and a `Truck` differ in colour, shape, engine and purpose — that is what makes them distinct.
+* A `Car` and a `Truck` differ in colour, shape, engine and purpose - that is what makes them distinct.
 * Yet both have tyres, an engine, steering and gears; both travel; both are operated the same way.
 * **What single concept keeps the shared part and drops the particulars?**
-* **`Vehicle`** — the general idea of a car or a truck: it retains the common attributes and behaviour, and eliminates everything specific to one kind.
+* **`Vehicle`** - the general idea of a car or a truck: it retains the common attributes and behaviour, and eliminates everything specific to one kind.
 
 ---
 
@@ -386,15 +386,15 @@ class Triangle extends Shape {
 }
 ```
 
-* **No.** `Triangle` inherited a blank and left it blank — *Triangle is not abstract and does not override abstract method area()*.
-* Fix 1: give `Triangle` an `area()` body — homework done, concrete class.
-* Fix 2: declare `Triangle` abstract too — and pass the homework to *its* subclasses.
+* **No.** `Triangle` inherited a blank and left it blank - *Triangle is not abstract and does not override abstract method area()*.
+* Fix 1: give `Triangle` an `area()` body - homework done, concrete class.
+* Fix 2: declare `Triangle` abstract too - and pass the homework to *its* subclasses.
 
 ---
 
-<!-- Speaker notes: ~0:29. Tool 2 movement — the deeper half. The contract diagram is the signature visual of the deck; spend a full minute on it. -->
+<!-- Speaker notes: ~0:29. Tool 2 movement - the deeper half. The contract diagram is the signature visual of the deck; spend a full minute on it. -->
 
-## Tool 2 — the interface
+## Tool 2 - the interface
 
 - Push abstraction to its limit: a type that is **all contract, no machinery**.
 
@@ -407,7 +407,7 @@ public interface RemoteControl {
 
 * An interface is a **completely abstract class**: it contains only **method signatures**.
 * You can never instantiate one. Classes **implement** it; other interfaces **extend** it.
-* It is a **contract**: any class that signs must deliver **every** method — which is also how interfaces power polymorphism.
+* It is a **contract**: any class that signs must deliver **every** method - which is also how interfaces power polymorphism.
 
 ---
 
@@ -429,8 +429,8 @@ public interface RemoteControl {
 
 <p class="legend">dashed = the contract · solid = machinery · a stem means "implements"</p>
 
-* The implementers are **unrelated** — no shared parent, nothing in common but the promise.
-* Hold a `Drawable`, call `draw()` — **which machinery answers is not your problem.**
+* The implementers are **unrelated** - no shared parent, nothing in common but the promise.
+* Hold a `Drawable`, call `draw()` - **which machinery answers is not your problem.**
 
 ---
 
@@ -445,9 +445,9 @@ public interface ExampleInterface {
 }
 ```
 
-* Declared with the `interface` keyword — and like a class, it may be `public`.
-* Constants are **implicitly `public static final`** — write one line, get all three for free.
-* Methods are **implicitly `public abstract`** — both spellings above mean exactly the same thing.
+* Declared with the `interface` keyword - and like a class, it may be `public`.
+* Constants are **implicitly `public static final`** - write one line, get all three for free.
+* Methods are **implicitly `public abstract`** - both spellings above mean exactly the same thing.
 
 ---
 
@@ -473,11 +473,11 @@ public class ExampleClass implements ExampleInterface {
 }
 ```
 
-* The class must implement **all** the interface's abstract methods — with the **exact same signatures** — before it can be instantiated.
+* The class must implement **all** the interface's abstract methods - with the **exact same signatures** - before it can be instantiated.
 
 ---
 
-## The payoff — contracts are types
+## The payoff - contracts are types
 
 <!-- _class: code-sm -->
 
@@ -499,13 +499,13 @@ class Demo {
 ```
 
 * The variable's type is the **contract**; the object behind it is the **machinery**.
-* Swap in any other implementer tomorrow — this code does not change. *(Petrol to electric, again.)*
+* Swap in any other implementer tomorrow - this code does not change. *(Petrol to electric, again.)*
 
 ---
 
 ## Why interfaces exist
 
-* A class `extends` **one** parent — but `implements` **as many interfaces as it likes**:
+* A class `extends` **one** parent - but `implements` **as many interfaces as it likes**:
 
 <!-- _class: code-sm -->
 
@@ -527,17 +527,17 @@ class Smartwatch implements Wearable, Chargeable {
 }
 ```
 
-* Each `implements` is a **promise** — a contract the compiler enforces in full.
+* Each `implements` is a **promise** - a contract the compiler enforces in full.
 * And because contracts are types, interfaces are Java's cleanest route to **polymorphism**.
 
 ---
 
 ## What fits inside an interface
 
-- Constants — implicitly `public static final`
-- Method signatures — implicitly `public abstract`
-- `default` methods — **with** a body *(Java 8+)*
-- `static` methods — **with** a body *(Java 8+)*
+- Constants - implicitly `public static final`
+- Method signatures - implicitly `public abstract`
+- `default` methods - **with** a body *(Java 8+)*
+- `static` methods - **with** a body *(Java 8+)*
 - Nested types
 
 <!-- _class: code-sm -->
@@ -559,7 +559,7 @@ interface MediaPlayer {
 
 ## Predict: spot the broken promise
 
-- `Speaker` demands a `speak()` — and `Dog` delivers one. Or does it?
+- `Speaker` demands a `speak()` - and `Dog` delivers one. Or does it?
 
 <!-- no-compile -->
 ```java
@@ -574,25 +574,25 @@ class Dog implements Speaker {
 }
 ```
 
-* **It does not compile.** Interface methods are implicitly **`public`** — `Dog`'s version has default access, and an override may never **weaken** access.
+* **It does not compile.** Interface methods are implicitly **`public`** - `Dog`'s version has default access, and an override may never **weaken** access.
 * The fix is one word: `public void speak()`.
 * Rule of thumb: implementing methods are always **`public`**.
 
 ---
 
-<!-- Speaker notes: ~0:43. Choosing movement — this is what assessments ask. The ledger fast, the decision card slow, the full map as a take-home reference. -->
+<!-- Speaker notes: ~0:43. Choosing movement - this is what assessments ask. The ledger fast, the decision card slow, the full map as a take-home reference. -->
 
 <!-- _class: dense -->
 
 <style scoped>table { font-size: 17px; } td, th { padding: 6px 12px 6px 4px; }</style>
 
-## class vs interface — the ledger
+## class vs interface - the ledger
 
 | Aspect | Class | Interface |
 |---|---|---|
 | Keyword | `class` | `interface` |
-| Instantiation | Yes — `new` creates objects | Never — implemented, not instantiated |
-| Multiple inheritance | No — `extends` one class only | Yes — a class can `implements` many |
+| Instantiation | Yes - `new` creates objects | Never - implemented, not instantiated |
+| Multiple inheritance | No - `extends` one class only | Yes - a class can `implements` many |
 | Inheriting | `extends` a class, `implements` interfaces | `extends` other interfaces; never a class |
 | Constructors | Yes | No |
 | Member access | Any modifier | Implicitly `public` |
@@ -601,18 +601,18 @@ class Dog implements Speaker {
 
 ---
 
-## Choosing — the decision card
+## Choosing - the decision card
 
 <div class="choose">
 <div class="opt"><span>A <strong>finished thing</strong>, ready to build and use?</span><span class="verdict v-conc">concrete class</span><span class="ex">Car · User</span></div>
-<div class="opt"><span><strong>Close relatives</strong> sharing state and code — but the base idea is too vague to exist alone?</span><span class="verdict v-abs">abstract class</span><span class="ex">Animal</span></div>
+<div class="opt"><span><strong>Close relatives</strong> sharing state and code - but the base idea is too vague to exist alone?</span><span class="verdict v-abs">abstract class</span><span class="ex">Animal</span></div>
 <div class="opt"><span>A <strong>capability</strong> that unrelated classes can adopt?</span><span class="verdict v-int">interface</span><span class="ex">Flyable</span></div>
 </div>
 
 <p class="legend">a generic "animal" can't exist, but every Dog reuses its machinery · Flyable fits Bird, Airplane, Superman</p>
 
-* Need behaviour from **multiple sources**? Only interfaces stack — `extends` one, `implements` many.
-* Want to ship **default behaviour and instance fields** with the type? Abstract class — its home turf.
+* Need behaviour from **multiple sources**? Only interfaces stack - `extends` one, `implements` many.
+* Want to ship **default behaviour and instance fields** with the type? Abstract class - its home turf.
 * Defining a **type for anyone**, anywhere in any hierarchy? That is the interface's whole job.
 
 ---
@@ -625,15 +625,15 @@ class Dog implements Speaker {
 
 | Feature | Concrete class | Abstract class | Interface |
 |---|---|---|---|
-| Definition | Standard class, fully built | Declared `abstract` — deliberately unfinished | A pure contract of behaviour |
-| Instantiation | Yes — `new Student()` | No — never directly | No — never directly |
+| Definition | Standard class, fully built | Declared `abstract` - deliberately unfinished | A pure contract of behaviour |
+| Instantiation | Yes - `new Student()` | No - never directly | No - never directly |
 | Methods | All have bodies | Mix of abstract and concrete | Implicitly abstract *(Java 8+: `default` / `static` bodies)* |
-| Inheritance limit | `extends` one class | `extends` one class | A class can `implements` many — multiple inheritance of type |
-| Variables (state) | Any kind | Instance fields allowed — can hold state | Implicitly `public static final` — constants only |
-| Constructors | Yes | Yes — run by subclasses via `super()` | No |
+| Inheritance limit | `extends` one class | `extends` one class | A class can `implements` many - multiple inheritance of type |
+| Variables (state) | Any kind | Instance fields allowed - can hold state | Implicitly `public static final` - constants only |
+| Constructors | Yes | Yes - run by subclasses via `super()` | No |
 | Access modifiers | Any | Any | Implicitly `public` *(Java 9+: `private` helpers)* |
 | Keyword | `class Name` | `abstract class Name` | `interface Name` |
-| Relationship | *is-a* | *is-a* (partially built) | *can-do* — a capability: `Runnable`, `Serializable` |
+| Relationship | *is-a* | *is-a* (partially built) | *can-do* - a capability: `Runnable`, `Serializable` |
 
 ---
 
@@ -649,20 +649,20 @@ Drawable d = new Circle();   // line 3
 d.draw();                    // line 4
 ```
 
-* Line 1 — **compile error**: `Vehicle` is abstract; a half-built thing cannot be built.
-* Line 2 — **fine**: `Car` is concrete, and a parent type can hold any of its children.
-* Lines 3 and 4 — **fine**: a contract type holding an implementer. Prints `Drawing a circle`.
+* Line 1 - **compile error**: `Vehicle` is abstract; a half-built thing cannot be built.
+* Line 2 - **fine**: `Car` is concrete, and a parent type can hold any of its children.
+* Lines 3 and 4 - **fine**: a contract type holding an implementer. Prints `Drawing a circle`.
 
 ---
 
-<!-- Speaker notes: ~0:54. Benefits at pace — the electric-car callback does the heavy lifting. Then land the summary: the four-pillar strip returns, fully lit. -->
+<!-- Speaker notes: ~0:54. Benefits at pace - the electric-car callback does the heavy lifting. Then land the summary: the four-pillar strip returns, fully lit. -->
 
 ## Why abstraction wins
 
-* **Less complexity, easier maintenance** — callers read three signatures, not three hundred lines; frequently changing machinery is separated from the stable contract.
-* **The Open/Closed principle** — *open* to extension: add new implementers any time; *closed* to modification: code depending only on the contract never needs editing. That is the petrol-to-electric swap.
-* **Class-level protection** — what `private` does for a field, `abstract` does for a whole class: it protects the class from wrong use.
-* **Safety** — the compiler enforces the story end to end: no instantiating half-built classes, no signing a contract without delivering every method.
+* **Less complexity, easier maintenance** - callers read three signatures, not three hundred lines; frequently changing machinery is separated from the stable contract.
+* **The Open/Closed principle** - *open* to extension: add new implementers any time; *closed* to modification: code depending only on the contract never needs editing. That is the petrol-to-electric swap.
+* **Class-level protection** - what `private` does for a field, `abstract` does for a whole class: it protects the class from wrong use.
+* **Safety** - the compiler enforces the story end to end: no instantiating half-built classes, no signing a contract without delivering every method.
 
 ---
 
@@ -675,8 +675,8 @@ d.draw();                    // line 4
 <div class="pill today">Abstraction<small>hide the machinery</small></div>
 </div>
 
-- **The set is complete** — encapsulation hides your data, inheritance shares what's common, polymorphism lets one call take many forms, and abstraction hides the machinery behind a contract.
-- An `abstract` class is **half-built on purpose**: concrete methods are shared, abstract ones (`;`, no braces) are homework — and nobody gets `new` until a descendant finishes all of it.
-- An **interface is all contract**: methods implicitly `public abstract`, constants implicitly `public static final` — and one class can sign many.
+- **The set is complete** - encapsulation hides your data, inheritance shares what's common, polymorphism lets one call take many forms, and abstraction hides the machinery behind a contract.
+- An `abstract` class is **half-built on purpose**: concrete methods are shared, abstract ones (`;`, no braces) are homework - and nobody gets `new` until a descendant finishes all of it.
+- An **interface is all contract**: methods implicitly `public abstract`, constants implicitly `public static final` - and one class can sign many.
 - **Choosing**: finished thing → concrete class · close relatives sharing state and defaults → abstract class · one capability for unrelated classes → interface.
-- Above all: **depend on the contract, not the machinery** — it is why petrol and electric drive exactly the same.
+- Above all: **depend on the contract, not the machinery** - it is why petrol and electric drive exactly the same.

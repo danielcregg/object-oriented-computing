@@ -6,7 +6,7 @@
 * How parameters carry values into a method and return values carry results back out
 * When to choose `void` and when to return a value
 * How `public`, `private`, and `static` change who can call a method and how
-* How Java tracks running methods on the call stack — including recursive calls
+* How Java tracks running methods on the call stack - including recursive calls
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.methods` — this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.methods` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
 
 ---
 
@@ -32,10 +32,10 @@ A **method** is a named block of code that performs one task and can be reused a
 
 Four terms you'll meet constantly:
 
-* **Declaration** — the access modifier, return type, name, and parameter list.
-* **Body** — the code between `{ }` that runs when the method is called.
-* **Call** — using the method's name (plus arguments) to run it.
-* **Signature** — the method's name plus its parameter list.
+* **Declaration** - the access modifier, return type, name, and parameter list.
+* **Body** - the code between `{ }` that runs when the method is called.
+* **Call** - using the method's name (plus arguments) to run it.
+* **Signature** - the method's name plus its parameter list.
 
 ---
 
@@ -50,10 +50,10 @@ accessModifier returnType methodName(parameters) {
 }
 ```
 
-* **Access modifier** — `public`, `private`, etc. (we'll use `public` for now)
-* **Return type** — the type of value sent back, or `void` for none
-* **Name** — descriptive, camelCase
-* **Parameters** — optional inputs the method needs
+* **Access modifier** - `public`, `private`, etc. (we'll use `public` for now)
+* **Return type** - the type of value sent back, or `void` for none
+* **Name** - descriptive, camelCase
+* **Parameters** - optional inputs the method needs
 
 Here's a simple `void` method and the call that runs it:
 
@@ -79,7 +79,7 @@ flowchart TD
     A["main() starts"] --> B["main() calls printWelcome()"]
     B --> C["Execution jumps into the method body"]
     C --> D["Both println lines run"]
-    D --> E["Method ends — control returns to main()"]
+    D --> E["Method ends - control returns to main()"]
     E --> F["main() continues with its next line"]
 ```
 
@@ -107,7 +107,7 @@ Choose an operation:
 
 ## 3. Methods with Parameters
 
-**Parameters** let a method accept input. You name them in the method definition; the **arguments** are the actual values you supply in the call. At the moment of the call, each argument's *value is copied* into the matching parameter — the method then works on its own copy, so reassigning a parameter never changes the caller's variable:
+**Parameters** let a method accept input. You name them in the method definition; the **arguments** are the actual values you supply in the call. At the moment of the call, each argument's *value is copied* into the matching parameter - the method then works on its own copy, so reassigning a parameter never changes the caller's variable:
 
 ```mermaid
 flowchart LR
@@ -153,13 +153,13 @@ You are 25 years old.
 ### DIY 2: Calculator print methods
 
 1. In `Calculator`, add four methods:
-   * `printAddition(int a, int b)` — prints `a + b = result`
-   * `printSubtraction(int a, int b)` — prints `a - b = result`
-   * `printMultiplication(int a, int b)` — prints `a × b = result`
-   * `printDivision(double a, double b)` — prints `a ÷ b = result` (use `double` for division)
+   * `printAddition(int a, int b)` - prints `a + b = result`
+   * `printSubtraction(int a, int b)` - prints `a - b = result`
+   * `printMultiplication(int a, int b)` - prints `a × b = result`
+   * `printDivision(double a, double b)` - prints `a ÷ b = result` (use `double` for division)
 2. In `main`, test each method with different values.
 
-These methods only print — they don't return anything. The next section fixes that.
+These methods only print - they don't return anything. The next section fixes that.
 
 **Expected output**
 
@@ -210,10 +210,10 @@ Average: 85.0
 ### DIY 3: Calculator with return values
 
 1. In `Calculator`, replace the print methods with value-returning versions:
-   * `int add(int a, int b)` — returns the sum
-   * `int subtract(int a, int b)` — returns the difference
-   * `int multiply(int a, int b)` — returns the product
-   * `double divide(double a, double b)` — returns the quotient
+   * `int add(int a, int b)` - returns the sum
+   * `int subtract(int a, int b)` - returns the difference
+   * `int multiply(int a, int b)` - returns the product
+   * `double divide(double a, double b)` - returns the quotient
 2. Add error handling to `divide()`: if `b` is 0, print an error message and return 0.
 3. In `main`, call each method, store each result in a variable, and print the results in a formatted way.
 
@@ -230,7 +230,7 @@ Division: 10.0 ÷ 0.0 = 0.0
 
 <details><summary>Hint</summary>
 
-Test `b == 0` at the top of `divide()` and return early — check *before* you divide, never after.
+Test `b == 0` at the top of `divide()` and return early - check *before* you divide, never after.
 
 </details>
 
@@ -243,12 +243,12 @@ The choice is simpler than it looks:
 ```mermaid
 flowchart TD
     Q{"Does the caller need a value back?"}
-    Q -->|"Yes — it computes or fetches something"| R["Return type<br>calculateTotal(), isValid()"]
-    Q -->|"No — it just performs an action"| V["void<br>printMenu(), saveToFile()"]
+    Q -->|"Yes - it computes or fetches something"| R["Return type<br>calculateTotal(), isValid()"]
+    Q -->|"No - it just performs an action"| V["void<br>printMenu(), saveToFile()"]
 ```
 
-* **`void`** — the method's purpose is a side effect: printing, saving, updating state.
-* **Return type** — the method produces a value the caller will use: a calculation, a lookup, a true/false check.
+* **`void`** - the method's purpose is a side effect: printing, saving, updating state.
+* **Return type** - the method produces a value the caller will use: a calculation, a lookup, a true/false check.
 
 ```java
 public class StudentGradeProcessor {
@@ -290,9 +290,9 @@ Passing: true
 1. Create a class named `TemperatureConverter` with these methods:
    * `double celsiusToFahrenheit(double celsius)`
    * `double fahrenheitToCelsius(double fahrenheit)`
-   * `void printConversionTable(int startCelsius, int endCelsius)` — prints a table in steps of 10 (void: it only displays)
-   * `boolean isFreezingCelsius(double celsius)` — true at or below 0°C
-   * `boolean isBoilingCelsius(double celsius)` — true at or above 100°C
+   * `void printConversionTable(int startCelsius, int endCelsius)` - prints a table in steps of 10 (void: it only displays)
+   * `boolean isFreezingCelsius(double celsius)` - true at or below 0°C
+   * `boolean isBoilingCelsius(double celsius)` - true at or above 100°C
 2. Formulas: Fahrenheit = (Celsius × 9/5) + 32 and Celsius = (Fahrenheit − 32) × 5/9.
 3. Test all five methods in `main`.
 
@@ -325,16 +325,16 @@ Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer divis
 
 **Access modifiers** control who may call a method:
 
-* **`public`** — callable from anywhere. Use it for the operations a class offers to the outside world.
-* **`private`** — callable only inside the same class. Use it for helper methods that support the public ones.
+* **`public`** - callable from anywhere. Use it for the operations a class offers to the outside world.
+* **`private`** - callable only inside the same class. Use it for helper methods that support the public ones.
 
-Keeping helpers `private` is **encapsulation**: implementation details stay hidden, so you can rewrite them later without breaking any other class — and no outside code can call them in the wrong order.
+Keeping helpers `private` is **encapsulation**: implementation details stay hidden, so you can rewrite them later without breaking any other class - and no outside code can call them in the wrong order.
 
 ```java
 public class BankAccount {
     private double balance;
 
-    // Public methods — the class's interface
+    // Public methods - the class's interface
     public void deposit(double amount) {
         if (isValidAmount(amount)) {          // calls a private helper
             balance += amount;
@@ -357,7 +357,7 @@ public class BankAccount {
         return balance;
     }
 
-    // Private helpers — invisible outside this class
+    // Private helpers - invisible outside this class
     private boolean isValidAmount(double amount) {
         return amount > 0;
     }
@@ -372,15 +372,15 @@ public class BankAccount {
 
 1. Create a class named `PasswordValidator`.
 2. Add two **public** methods:
-   * `boolean isValidPassword(String password)` — true only if all four checks below pass
-   * `void printValidationReport(String password)` — prints whether the password is valid and which checks pass/fail
+   * `boolean isValidPassword(String password)` - true only if all four checks below pass
+   * `void printValidationReport(String password)` - prints whether the password is valid and which checks pass/fail
 3. Add four **private** helper methods:
-   * `hasMinimumLength` — length ≥ 8
-   * `hasDigit` — at least one digit
-   * `hasUppercase` — at least one uppercase letter
-   * `hasLowercase` — at least one lowercase letter
+   * `hasMinimumLength` - length ≥ 8
+   * `hasDigit` - at least one digit
+   * `hasUppercase` - at least one uppercase letter
+   * `hasLowercase` - at least one lowercase letter
 4. `isValidPassword()` must call all four helpers.
-5. Test at least two passwords in `main` — one weak, one strong.
+5. Test at least two passwords in `main` - one weak, one strong.
 
 **Expected output**
 
@@ -410,10 +410,10 @@ Loop over the characters and use `password.length()`, `Character.isDigit(c)`, `C
 
 ## 7. Static Methods
 
-A **static** method belongs to the class itself, not to any object. Call it as `ClassName.methodName()` — no `new` required.
+A **static** method belongs to the class itself, not to any object. Call it as `ClassName.methodName()` - no `new` required.
 
 * `main` is static; so are utilities like `Math.sqrt()` and `Math.pow()`.
-* Static methods cannot directly access instance variables or use `this` — there is no object.
+* Static methods cannot directly access instance variables or use `this` - there is no object.
 * Use them for operations that depend only on their parameters.
 
 ```java
@@ -448,7 +448,7 @@ Area of circle: 28.274333882308138
 Maximum: 25
 ```
 
-The same distinction applies to fields — a `static` field is shared by every instance, while each object gets its own copy of an instance field:
+The same distinction applies to fields - a `static` field is shared by every instance, while each object gets its own copy of an instance field:
 
 ```java
 public class Counter {
@@ -485,15 +485,15 @@ public class Counter {
 ### DIY 6: String and array utilities
 
 1. Create a class `StringUtils` with these **static** methods:
-   * `int countVowels(String text)` — counts a, e, i, o, u (case-insensitive)
-   * `String reverse(String text)` — returns the reversed string
-   * `boolean isPalindrome(String text)` — reads the same both ways (ignore case and spaces)
-   * `int countWords(String text)` — words are separated by spaces
+   * `int countVowels(String text)` - counts a, e, i, o, u (case-insensitive)
+   * `String reverse(String text)` - returns the reversed string
+   * `boolean isPalindrome(String text)` - reads the same both ways (ignore case and spaces)
+   * `int countWords(String text)` - words are separated by spaces
 2. Create a class `ArrayUtils` with these **static** methods:
    * `int findMax(int[] numbers)`
    * `int findMin(int[] numbers)`
    * `double calculateAverage(int[] numbers)`
-   * `void printArray(int[] numbers)` — prints in the format `[1, 2, 3, 4]`
+   * `void printArray(int[] numbers)` - prints in the format `[1, 2, 3, 4]`
 3. Test every method in `main` **without** creating any objects.
 
 **Expected output**
@@ -523,11 +523,11 @@ Average: 5.0
 
 ## 8. Method Call Stack and Execution Flow
 
-When methods call other methods, Java tracks them on the **call stack** — Last-In-First-Out, like a stack of plates:
+When methods call other methods, Java tracks them on the **call stack** - Last-In-First-Out, like a stack of plates:
 
 1. Calling a method **pushes** it onto the top of the stack.
 2. When it finishes, it is **popped** off, and execution resumes in the method below it.
-3. Too many nested calls (usually runaway recursion) overflow the stack — the infamous `StackOverflowError`.
+3. Too many nested calls (usually runaway recursion) overflow the stack - the infamous `StackOverflowError`.
 
 ```java
 public class CallStackDemo {
@@ -576,13 +576,13 @@ sequenceDiagram
     participant A as methodA
     participant B as methodB
     participant C as methodC
-    M->>+A: call — push A
-    A->>+B: call — push B
-    B->>+C: call — push C
+    M->>+A: call - push A
+    A->>+B: call - push B
+    B->>+C: call - push C
     Note over C: stack is now main, A, B, C
-    C-->>-B: return — pop C
-    B-->>-A: return — pop B
-    A-->>-M: return — pop A
+    C-->>-B: return - pop C
+    B-->>-A: return - pop B
+    A-->>-M: return - pop A
     Note over M: stack is main only
 ```
 
@@ -590,8 +590,8 @@ sequenceDiagram
 
 ```java
 public static int factorial(int n) {
-    if (n <= 1) return 1;            // base case — stops the recursion
-    return n * factorial(n - 1);     // recursive step — pushes another frame
+    if (n <= 1) return 1;            // base case - stops the recursion
+    return n * factorial(n - 1);     // recursive step - pushes another frame
 }
 // factorial(5) -> 5 * 4 * 3 * 2 * 1 = 120
 ```
@@ -600,11 +600,11 @@ public static int factorial(int n) {
 
 1. Create a class named `ExecutionTracer`.
 2. Add three **static** methods:
-   * `methodA()` — prints `A start`, calls `methodB()`, prints `A end`
-   * `methodB()` — prints `B start`, calls `methodC()`, prints `B end`
-   * `methodC()` — prints `C start`, then `C end`
+   * `methodA()` - prints `A start`, calls `methodB()`, prints `A end`
+   * `methodB()` - prints `B start`, calls `methodC()`, prints `B end`
+   * `methodC()` - prints `C start`, then `C end`
 3. Call `methodA()` from `main`.
-4. Before running, predict the output on paper by drawing the stack at each step — then run and check yourself.
+4. Before running, predict the output on paper by drawing the stack at each step - then run and check yourself.
 
 **Expected output**
 
@@ -620,9 +620,9 @@ A end
 ### DIY 8: Simple recursion
 
 1. Create a class named `RecursiveMethods` with these **static** recursive methods:
-   * `int countdown(int n)` — prints n down to 1, then returns 0
-   * `int sumToN(int n)` — returns 1 + 2 + … + n, printing each call
-   * `int power(int base, int exponent)` — returns base^exponent, printing each call
+   * `int countdown(int n)` - prints n down to 1, then returns 0
+   * `int sumToN(int n)` - returns 1 + 2 + … + n, printing each call
+   * `int power(int base, int exponent)` - returns base^exponent, printing each call
 2. Test each with small values (n ≤ 5) so you can follow the stack in the output.
 
 **Expected output**
@@ -664,7 +664,7 @@ Every recursive method needs the same two pieces as `factorial`: a base case tha
 
 Six errors account for most method bugs. Each snippet shows the mistake and its fix:
 
-**1. Missing return statement** — every path through a non-void method must return:
+**1. Missing return statement** - every path through a non-void method must return:
 
 ```java
 public int getValue(int x) {
@@ -686,7 +686,7 @@ add(5, 3);     // correct
 
 ```java
 calculateTotal(10, 5);               // legal, but the result is lost
-int result = calculateTotal(10, 5);  // store it — then use it
+int result = calculateTotal(10, 5);  // store it - then use it
 ```
 
 **4. Calling an instance method from a static context:**
@@ -716,7 +716,7 @@ public void greet(String name) { ... }   // 'name' is the parameter
 greet("Alice");                          // "Alice" is the argument
 ```
 
-**Debugging tips:** print on entry (`"Entering divide with " + a + ", " + b`), print every return value before using it, and learn your IDE's debugger — stepping through line by line beats guessing.
+**Debugging tips:** print on entry (`"Entering divide with " + a + ", " + b`), print every return value before using it, and learn your IDE's debugger - stepping through line by line beats guessing.
 
 ### DIY 9: Fix the buggy calculator
 
@@ -752,7 +752,7 @@ public class BuggyCalculator {
         return value * multiplier;
     }
 
-    // Error 5: Instance method — watch how main calls it
+    // Error 5: Instance method - watch how main calls it
     public void displayMessage() {
         System.out.println("Hello!");
     }
@@ -795,11 +795,11 @@ Product: 20
 Result: 42
 ```
 
-(Representative run — your exact fixes and wording may differ, as long as the class compiles and every call works.)
+(Representative run - your exact fixes and wording may differ, as long as the class compiles and every call works.)
 
 <details><summary>Hint</summary>
 
-Errors 1–5 live in the method declarations; errors 6–10 live in how `main` calls them. Fix the declarations first and the calls follow naturally. For Error 4, make `multiplier` static — or pass it in as a parameter.
+Errors 1-5 live in the method declarations; errors 6-10 live in how `main` calls them. Fix the declarations first and the calls follow naturally. For Error 4, make `multiplier` static - or pass it in as a parameter.
 
 </details>
 
@@ -809,13 +809,13 @@ Errors 1–5 live in the method declarations; errors 6–10 live in how `main` c
 
 You can now:
 
-* **Define and call methods** — the building blocks of every Java program.
+* **Define and call methods** - the building blocks of every Java program.
 * **Pass parameters** (values are copied in) and **return results** (typed values come back out).
 * **Choose `void` for actions** and a **return type for computations**.
 * **Encapsulate** with `private` helpers behind `public` methods.
 * **Write static utilities** that belong to the class, not to objects.
-* **Read the call stack** — LIFO push and pop, the key to tracing recursion and debugging.
+* **Read the call stack** - LIFO push and pop, the key to tracing recursion and debugging.
 
 Habits worth keeping: give methods verb names that say what they do, keep each method focused on one task, prefer returning values over printing, and test edge cases (zero, negatives, empty strings).
 
-Want more practice? Build a student grade system (final grades, letter grades, GPA), a text analyzer (character/word/sentence counts, reading time), or a number guessing game (random number, guess checking, hints, score tracking) — methods everywhere.
+Want more practice? Build a student grade system (final grades, letter grades, GPA), a text analyzer (character/word/sentence counts, reading time), or a number guessing game (random number, guess checking, hints, score tracking) - methods everywhere.

@@ -12,7 +12,7 @@ source: authored
 
 <style>
 /* Deck-local visual system: labelled anatomy, stack frames, paste cards,
-   memory boxes — all drawn in CSS, no images. */
+   memory boxes - all drawn in CSS, no images. */
 section .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
@@ -107,7 +107,7 @@ section .pcard.missed { border-color: #C0392B; border-style: dashed; }
 section .pcard.missed .pstat { color: #C0392B; }
 section .pcard.missed .lhot { background: #F9E3E3; color: #C0392B; }
 
-/* owner cards: where does the box live — class vs objects */
+/* owner cards: where does the box live - class vs objects */
 section .ownrow { display: flex; gap: 24px; align-items: stretch; margin: 18px 0 6px 0; }
 section .ocard {
   border: 2px solid #33698C; border-radius: 10px; background: #FFFFFF;
@@ -127,7 +127,7 @@ section .ocard .obox.oshr { border-color: #E76F00; background: #FDEFD9; color: #
 section .ocard .onote { font-size: 14px; color: #8B8471; }
 
 /* tightcode: deck-local class for one tall closing example
-   (style scoped is unreliable in image export — this is the safe route) */
+   (style scoped is unreliable in image export - this is the safe route) */
 section.tightcode pre { padding: 13px 18px; margin: 8px 0; }
 section.tightcode pre code { font-size: 18px; line-height: 1.32; }
 
@@ -156,7 +156,7 @@ Write it once. Name it. Call it anywhere.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open on the pain — let them feel the paste before naming the cure. Ask who has already done this in the lab. -->
+<!-- Speaker notes: ~0:00. Cold open on the pain - let them feel the paste before naming the cure. Ask who has already done this in the lab. -->
 
 ## A true story
 
@@ -172,7 +172,7 @@ System.out.println("Total: " + grand1);
 System.out.println("Thank you!");
 ```
 
-* You need this three times — so: **copy, paste, paste**. Rename `total1` → `total2` → `total3`. It runs. Ship it.
+* You need this three times - so: **copy, paste, paste**. Rename `total1` → `total2` → `total3`. It runs. Ship it.
 * Three copies of the same six lines, each with one subtle difference. Remember that.
 
 ---
@@ -206,7 +206,7 @@ System.out.println("Thank you!");
 </div>
 
 * You fix line 61. You fix line 144. The demo works. You ship it.
-* Line 287 — the copy you forgot existed — still charges 23%. **Customers notice before you do.**
+* Line 287 - the copy you forgot existed - still charges 23%. **Customers notice before you do.**
 * Copy-paste didn't save you time. It **multiplied the places a bug can live**.
 
 ---
@@ -226,28 +226,28 @@ public static void printReceipt(double price, int qty) {
 
 <!-- no-compile -->
 ```java
-printReceipt(4.50, 2);     // any number of calls — still ONE copy of the code
+printReceipt(4.50, 2);     // any number of calls - still ONE copy of the code
 printReceipt(12.00, 1);
 printReceipt(2.75, 6);
 ```
 
-* This named block is a **method**. VAT changes again? **One edit** — every call is instantly right.
+* This named block is a **method**. VAT changes again? **One edit** - every call is instantly right.
 
 ---
 
 ## Agenda
 
-- Anatomy — the five parts of a method
-- Calling — the round trip
+- Anatomy - the five parts of a method
+- Calling - the round trip
 - Parameters in, `return` out
 - Scope and the photocopy rule
 - `public`, `private`, `static`
-- The call stack — push, pop, trace
+- The call stack - push, pop, trace
 - Mistakes, habits, and the till program done right
 
 ---
 
-<!-- Speaker notes: ~0:06. Anatomy movement — point at each box in turn; have the room chant the five parts back at you before advancing. -->
+<!-- Speaker notes: ~0:06. Anatomy movement - point at each box in turn; have the room chant the five parts back at you before advancing. -->
 
 ## Anatomy of a method
 
@@ -260,14 +260,14 @@ printReceipt(2.75, 6);
 </div>
 
 <div class="anat arow2">
-<div class="tok bod"><span class="albl">body — the work happens here</span>{ return amount * 0.135; }</div>
+<div class="tok bod"><span class="albl">body - the work happens here</span>{ return amount * 0.135; }</div>
 </div>
 
-<p class="legend">the first line is the method header — its name + parameter list are the method's signature</p>
+<p class="legend">the first line is the method header - its name + parameter list are the method's signature</p>
 
 * Read it aloud: *a `public`, `static` method named `vatOf`, taking one `double`, handing back a `double`.*
 * The **name + parameter list** is what the compiler matches every call against.
-* `static`? Park it — it gets its own moment later this hour.
+* `static`? Park it - it gets its own moment later this hour.
 
 ---
 
@@ -275,13 +275,13 @@ printReceipt(2.75, 6);
 
 ```java
 public static void main(String[] args) {
-    System.out.println("before");   // 1 — runs
-    greet();                        // 2 — pause main, jump into greet
-    System.out.println("after");    // 4 — resume at the exact spot
+    System.out.println("before");   // 1 - runs
+    greet();                        // 2 - pause main, jump into greet
+    System.out.println("after");    // 4 - resume at the exact spot
 }
 
 public static void greet() {
-    System.out.println("hello");    // 3 — the body runs, then jumps back
+    System.out.println("hello");    // 3 - the body runs, then jumps back
 }
 ```
 
@@ -290,9 +290,9 @@ public static void greet() {
 
 ---
 
-<!-- Speaker notes: ~0:12. Doorway-and-chute movement — the parameter vs argument distinction pays off in every error message they'll ever read. -->
+<!-- Speaker notes: ~0:12. Doorway-and-chute movement - the parameter vs argument distinction pays off in every error message they'll ever read. -->
 
-## Parameters — the doorway in
+## Parameters - the doorway in
 
 ```java
 public static void greetUser(String name) {   // name is the PARAMETER
@@ -305,12 +305,12 @@ public static void main(String[] args) {
 }
 ```
 
-* **Parameter** — the named slot declared in the signature. **Argument** — the value you post through it at the call.
+* **Parameter** - the named slot declared in the signature. **Argument** - the value you post through it at the call.
 * Each call fills the slots fresh. That is what lets one block serve a thousand jobs.
 
 ---
 
-## Return — the chute out
+## Return - the chute out
 
 ```java
 public static int add(int a, int b) {
@@ -319,11 +319,11 @@ public static int add(int a, int b) {
 
 public static void main(String[] args) {
     int sum = add(5, 3);                 // the call BECOMES the value 8
-    System.out.println(add(2, 2) + 1);   // prints 5 — a call fits anywhere a value fits
+    System.out.println(add(2, 2) + 1);   // prints 5 - a call fits anywhere a value fits
 }
 ```
 
-* `return` does **two jobs**: hands a value to the caller and **ends the method** on the spot — nothing below it runs.
+* `return` does **two jobs**: hands a value to the caller and **ends the method** on the spot - nothing below it runs.
 * Mental model: **the call collapses into its answer.** `add(5, 3)` *is* an `8` the moment it returns.
 
 ---
@@ -336,9 +336,9 @@ public static void main(String[] args) {
 | printing, saving, drawing the menu | computing, checking, converting |
 | `printReceipt(…)`, `showMenu()` | `vatOf(…)`, `area(…)`, `isValid(…)` |
 
-- Even `void` methods own a bare `return;` — no value, just "I'm done early."
+- Even `void` methods own a bare `return;` - no value, just "I'm done early."
 
-<div class="callout"><strong>Habit worth building:</strong> compute and <code>return</code>; let the caller decide whether to print. A returned value can be stored, compared, reused — a <code>println</code> is spent the moment it runs.</div>
+<div class="callout"><strong>Habit worth building:</strong> compute and <code>return</code>; let the caller decide whether to print. A returned value can be stored, compared, reused - a <code>println</code> is spent the moment it runs.</div>
 
 ---
 
@@ -354,9 +354,9 @@ public static void main(String[] args) {
 }
 ```
 
-* Arguments map to parameters **left to right, by position** — names don't travel with them.
+* Arguments map to parameters **left to right, by position** - names don't travel with them.
 * `finalPrice(25.0, 40.0)` compiles happily… and quietly computes the wrong price. **Order is on you.**
-* Every parameter declares its **own type**: `(double price, double discountPct)` — never `(double price, discountPct)`.
+* Every parameter declares its **own type**: `(double price, double discountPct)` - never `(double price, discountPct)`.
 
 ---
 
@@ -381,7 +381,7 @@ public static void main(String[] args) {
 
 ---
 
-<!-- Speaker notes: ~0:22. Scope-and-copies movement — the photocopy rule is the deepest idea of the hour; slow right down and connect it back to the object-variables-are-arrows rule. -->
+<!-- Speaker notes: ~0:22. Scope-and-copies movement - the photocopy rule is the deepest idea of the hour; slow right down and connect it back to the object-variables-are-arrows rule. -->
 
 ## What a method can see
 
@@ -394,7 +394,7 @@ public static double vatOf(double amount) {
 
 <!-- no-compile -->
 ```java
-System.out.println(rate);   // error: cannot find symbol — rate does not exist out here
+System.out.println(rate);   // error: cannot find symbol - rate does not exist out here
 ```
 
 * Parameters and locals are **per call**: born at the `(`, gone at the `}`. Next call, fresh ones.
@@ -407,17 +407,17 @@ System.out.println(rate);   // error: cannot find symbol — rate does not exist
 ```java
 public static void triple(int n) {
     n = n * 3;
-    System.out.println(n);     // 30 — the copy, tripled
+    System.out.println(n);     // 30 - the copy, tripled
 }
 
 public static void main(String[] args) {
     int x = 10;
     triple(x);                 // triple receives a COPY of the 10
-    System.out.println(x);     // 10 — x never left main
+    System.out.println(x);     // 10 - x never left main
 }
 ```
 
-<div class="callout"><strong>The photocopy rule.</strong> Java is <em>pass-by-value</em>: every argument travels as a <strong>copy</strong> of what's in the variable. Scribble on the photocopy all you like — the original stays home.</div>
+<div class="callout"><strong>The photocopy rule.</strong> Java is <em>pass-by-value</em>: every argument travels as a <strong>copy</strong> of what's in the variable. Scribble on the photocopy all you like - the original stays home.</div>
 
 ---
 
@@ -429,7 +429,7 @@ public static void curve(int[] s) {
 }
 public static void main(String[] args) {
     int[] scores = {60, 70, 85};
-    curve(scores);                   // the ARROW is photocopied — not the boxes
+    curve(scores);                   // the ARROW is photocopied - not the boxes
     System.out.println(scores[0]);   // 65
 }
 ```
@@ -442,9 +442,9 @@ public static void main(String[] args) {
 <div class="cell"><span class="idx">2</span>85</div>
 </div>
 
-<p class="legend">two names · two arrows · ONE set of boxes — scores lives in main, s lives in curve</p>
+<p class="legend">two names · two arrows · ONE set of boxes - scores lives in main, s lives in curve</p>
 
-* Remember: an object variable holds an **arrow**, and an `int[]` array is an object. Copy the arrow — both point at the **same boxes**.
+* Remember: an object variable holds an **arrow**, and an `int[]` array is an object. Copy the arrow - both point at the **same boxes**.
 
 ---
 
@@ -463,19 +463,19 @@ public static void main(String[] args) {
 }
 ```
 
-* `x` prints **7** — `wipe` scribbled on a photocopy of the *value*.
-* `nums[0]` prints **0** — the photocopied **arrow** still points at the one real array.
+* `x` prints **7** - `wipe` scribbled on a photocopy of the *value*.
+* `nums[0]` prints **0** - the photocopied **arrow** still points at the one real array.
 * One rule, both outcomes: Java **always passes a copy of what's in the variable**.
 
 ---
 
-<!-- Speaker notes: ~0:32. Visibility-and-static movement — keep it brisk; the payoff is decoding main() and it lands best with momentum. -->
+<!-- Speaker notes: ~0:32. Visibility-and-static movement - keep it brisk; the payoff is decoding main() and it lands best with momentum. -->
 
 ## public and private
 
-* `public` — anyone may call it. The method is part of what your class **offers** the world.
-* `private` — only code in the **same class** may call it. Scaffolding, not shopfront.
-* The modifier is a promise about **who depends on this code** — `private` methods stay free to change.
+* `public` - anyone may call it. The method is part of what your class **offers** the world.
+* `private` - only code in the **same class** may call it. Scaffolding, not shopfront.
+* The modifier is a promise about **who depends on this code** - `private` methods stay free to change.
 - This term's habit: `public` for what the task asks for, `private` for your internal steps.
 
 ---
@@ -497,11 +497,11 @@ public class BankAccount {
 ```
 
 * `deposit` is the shopfront; `isValidAmount` is the back room.
-* Helpers keep public methods **short and readable** — and nobody outside can call the half-step on its own.
+* Helpers keep public methods **short and readable** - and nobody outside can call the half-step on its own.
 
 ---
 
-## static — no object required
+## static - no object required
 
 ```java
 public class MathHelper {
@@ -509,18 +509,18 @@ public class MathHelper {
         return n * n;
     }
     public static void main(String[] args) {
-        System.out.println(MathHelper.square(5));   // 25 — no object anywhere
+        System.out.println(MathHelper.square(5));   // 25 - no object anywhere
     }
 }
 ```
 
-* `static` = the method lives **on the class itself** — call it as `ClassName.method(…)`.
+* `static` = the method lives **on the class itself** - call it as `ClassName.method(…)`.
 * You've used them all along: `Math.sqrt(2)`, `Math.max(a, b)`, `Integer.parseInt("42")`.
 * Perfect for **utilities**: pure input → output, no object state involved.
 
 ---
 
-## static vs instance — where the box lives
+## static vs instance - where the box lives
 
 ```java
 public class Counter {
@@ -533,21 +533,21 @@ public class Counter {
 <div class="ocard oclass">
 <div class="ocap">class Counter</div>
 <div class="obox oshr">created = 2</div>
-<div class="onote">one shared box — static</div>
+<div class="onote">one shared box - static</div>
 </div>
 <div class="ocard">
 <div class="ocap">object c1</div>
 <div class="obox">id = 1</div>
-<div class="onote">its own box — instance</div>
+<div class="onote">its own box - instance</div>
 </div>
 <div class="ocard">
 <div class="ocap">object c2</div>
 <div class="obox">id = 2</div>
-<div class="onote">its own box — instance</div>
+<div class="onote">its own box - instance</div>
 </div>
 </div>
 
-* `static` = shared: every object — and code with **no object at all** — sees the same box.
+* `static` = shared: every object - and code with **no object at all** - sees the same box.
 * That's why a `static` method can't touch instance members directly: **which** object's box would it read?
 
 ---
@@ -561,21 +561,21 @@ public static void main(String[] args) {
 }
 ```
 
-* `public` — the JVM calls it from outside your class, so it must be visible.
-* `static` — when the program starts, **no objects exist yet**; the JVM calls it on the class.
-* `void` — `main` answers to no caller; there's nothing to hand back.
-* `main` — the exact name the JVM is hard-wired to look for.
-* `(String[] args)` — an **array** of Strings… a topic worth an hour of its own.
+* `public` - the JVM calls it from outside your class, so it must be visible.
+* `static` - when the program starts, **no objects exist yet**; the JVM calls it on the class.
+* `void` - `main` answers to no caller; there's nothing to hand back.
+* `main` - the exact name the JVM is hard-wired to look for.
+* `(String[] args)` - an **array** of Strings… a topic worth an hour of its own.
 
 ---
 
-<!-- Speaker notes: ~0:41. Call-stack movement — walk the three snapshots left to right, twice: once for the frames, once for the photocopies living inside them. -->
+<!-- Speaker notes: ~0:41. Call-stack movement - walk the three snapshots left to right, twice: once for the frames, once for the photocopies living inside them. -->
 
 ## The call stack
 
-- Java tracks every call-in-progress on the **call stack** — a stack of plates.
+- Java tracks every call-in-progress on the **call stack** - a stack of plates.
 - **Call = push** a frame on top. **Return = pop** it off. The top frame is the method running *now*.
-- A **frame** holds that call's parameters, locals, and the caller's bookmark — your photocopies live (and die) here.
+- A **frame** holds that call's parameters, locals, and the caller's bookmark - your photocopies live (and die) here.
 
 <div class="stackwrap">
 <div class="stackshot">
@@ -590,7 +590,7 @@ public static void main(String[] args) {
 </div>
 <div class="snext">→</div>
 <div class="stackshot">
-<div class="frame gone">printReceipt()<span class="fl">popped — copies destroyed</span></div>
+<div class="frame gone">printReceipt()<span class="fl">popped - copies destroyed</span></div>
 <div class="frame live">main()<span class="fl">resumes at the bookmark</span></div>
 <div class="scap">3 · return → pop</div>
 </div>
@@ -615,7 +615,7 @@ public static void methodB() {
 }
 ```
 
-* Output: `A starts` · `B runs` · `A ends` · `back in main` — each caller **resumes at its bookmark**.
+* Output: `A starts` · `B runs` · `A ends` · `back in main` - each caller **resumes at its bookmark**.
 * The deepest call always finishes **first**: last pushed, first popped (**LIFO**).
 
 ---
@@ -637,8 +637,8 @@ public static void main(String[] args) {
 }
 ```
 
-* `a in` · `b!` · `a out` — `a` waits for `b`, then picks up at its bookmark.
-* …then `b!` once more. Same method, **brand-new frame** — frames are per *call*, not per method.
+* `a in` · `b!` · `a out` - `a` waits for `b`, then picks up at its bookmark.
+* …then `b!` once more. Same method, **brand-new frame** - frames are per *call*, not per method.
 
 ---
 
@@ -653,21 +653,21 @@ public static int grade(int score) {
 }
 ```
 
-* **No.** `javac` says: `error: missing return statement` — pointing at the final `}`.
-* What would `grade(39)` hand back? Nothing is not an option for an `int` method — **every path must return**.
+* **No.** `javac` says: `error: missing return statement` - pointing at the final `}`.
+* What would `grade(39)` hand back? Nothing is not an option for an `int` method - **every path must return**.
 * The fix: add `return 0;` after the `if` (or return from an `else`). Every road ends at a `return`.
 
 ---
 
-<!-- Speaker notes: ~0:51. Landing movement — the mistakes are recognition humour by now; end on the till program coming full circle. -->
+<!-- Speaker notes: ~0:51. Landing movement - the mistakes are recognition humour by now; end on the till program coming full circle. -->
 
 ## Common mistakes
 
 * **Ignoring the answer:** `vatOf(total);` on its own line computes the VAT… which instantly evaporates. Store it or use it.
-* **Re-declaring types at the call site:** `vatOf(double total)` — types belong in the signature, never in the call.
+* **Re-declaring types at the call site:** `vatOf(double total)` - types belong in the signature, never in the call.
 * **Wrong type or order:** `finalPrice("40", "25")` won't compile; `finalPrice(25.0, 40.0)` compiles and lies.
-* **Calling an instance method from `main`:** `main` is `static` — no object, no instance call. Make the method `static`, or make an object first.
-* **Missing a return path** — two slides ago; at least `javac` catches that one for free.
+* **Calling an instance method from `main`:** `main` is `static` - no object, no instance call. Make the method `static`, or make an object first.
+* **Missing a return path** - two slides ago; at least `javac` catches that one for free.
 
 ---
 
@@ -678,7 +678,7 @@ public static int grade(int score) {
 ```java
 public class Receipts {
     public static double vatOf(double amount) {
-        return amount * 0.135;               // change VAT here — nowhere else
+        return amount * 0.135;               // change VAT here - nowhere else
     }
     public static void printReceipt(double price, int qty) {
         double total = price * qty;
@@ -691,16 +691,16 @@ public class Receipts {
 }
 ```
 
-- The opening program, done right: the VAT rule lives in exactly **one place** — and `printReceipt` calls `vatOf`, a stack you can now trace in your head.
+- The opening program, done right: the VAT rule lives in exactly **one place** - and `printReceipt` calls `vatOf`, a stack you can now trace in your head.
 
 ---
 
 ## Habits of good methods
 
-* **Name with verbs**, in camelCase: `calculateTotal`, `isValid`, `printReceipt` — the name should say it all.
+* **Name with verbs**, in camelCase: `calculateTotal`, `isValid`, `printReceipt` - the name should say it all.
 * **One job per method.** If you need the word "and" to describe it, split it.
 * **Short.** A method that fits on a screen fits in a head.
-* **Prefer returning over printing** — answers are reusable; printouts aren't.
+* **Prefer returning over printing** - answers are reusable; printouts aren't.
 * **Parameters over hard-coding:** `vatOf(amount)` beats `vatOfTotal1()`.
 * **`static` for pure utilities**; instance methods when object state is involved.
 * **Every path returns** when a return type is promised.
@@ -711,8 +711,8 @@ public class Receipts {
 
 - A method is a **named block of code**: define it once, call it anywhere, fix it in one place.
 - Signature = modifiers + return type + name + parameter list; the body between `{ }` does the work.
-- Arguments fill parameters left to right; `return` hands back a value and exits — the call **becomes** its answer, and non-void methods must return on every path.
-- Scope is per call: parameters and locals are born and die with their frame — the doorway in and the chute out are the only connections.
-- Java passes **photocopies**: of the value for primitives, of the **arrow** for objects — so a method can't change your `int`, but can reach your array's boxes.
-- `public` invites callers, `private` hides helpers, `static` lives on the class — one shared box, called as `ClassName.method(…)`.
-- Calls run on the **stack**: push on call, pop on return, LIFO — the deepest call finishes first.
+- Arguments fill parameters left to right; `return` hands back a value and exits - the call **becomes** its answer, and non-void methods must return on every path.
+- Scope is per call: parameters and locals are born and die with their frame - the doorway in and the chute out are the only connections.
+- Java passes **photocopies**: of the value for primitives, of the **arrow** for objects - so a method can't change your `int`, but can reach your array's boxes.
+- `public` invites callers, `private` hides helpers, `static` lives on the class - one shared box, called as `ClassName.method(…)`.
+- Calls run on the **stack**: push on call, pop on return, LIFO - the deepest call finishes first.

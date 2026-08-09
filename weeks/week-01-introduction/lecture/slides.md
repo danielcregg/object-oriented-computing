@@ -145,15 +145,21 @@ Week 1 · Module Introduction — one semester, one language, and by December yo
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open — don't introduce yourself yet. Put the code up, let it look alien, then land the fragment. The point is distance travelled, not the code itself. -->
+<!-- Speaker notes: ~0:00. Cold open — don't introduce yourself yet. Put the code up and let it look alien. Land the fragment; the point is distance travelled, not the code itself. -->
 
 ## Fast-forward to December
+
+<!-- _class: code-sm -->
 
 ```java
 class Playlist {
     private int tracks;
-    void add(String song) { tracks++; }
-    int size() { return tracks; }
+    void add(String song) {
+        tracks++;
+    }
+    int size() {
+        return tracks;
+    }
 }
 
 public class December {

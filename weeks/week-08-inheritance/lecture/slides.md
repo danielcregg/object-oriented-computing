@@ -199,13 +199,17 @@ section pre code { font-size: 18px; }
 class Person {
     private String name;
     private int age;
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 }
 
 class Student {
-    private String name;                       // pasted
-    private int age;                           // pasted
-    public String getName() { return name; }   // pasted
+    private String name;            // pasted
+    private int age;                // pasted
+    public String getName() {       // pasted
+        return name;
+    }
 }
 
 // class Lecturer { ...the same three members, a third time... }
@@ -329,8 +333,12 @@ class Subclass extends Superclass {
 public class Person {
     private int age;
 
-    public int getAge() { return age; }
-    public void setAge(int a) { this.age = a; }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int a) {
+        this.age = a;
+    }
 }
 ```
 
@@ -341,17 +349,30 @@ public class Person {
 
 ## One word — extends
 
+<style scoped>
+section pre { padding: 12px 18px; margin: 8px 0; font-size: 17px; line-height: 1.3; }
+section pre code { font-size: 17px; }
+</style>
+
 ```java
 class Person {                      // previous slide, unchanged
     private int age;
-    public int getAge() { return age; }
-    public void setAge(int a) { this.age = a; }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int a) {
+        this.age = a;
+    }
 }
 
 public class Employee extends Person {
     private String role;
-    public String getRole() { return role; }
-    public void setRole(String r) { this.role = r; }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String r) {
+        this.role = r;
+    }
     // no age, no getAge, no setAge -- Employee has all three anyway
 }
 ```
@@ -363,21 +384,29 @@ public class Employee extends Person {
 ## Run it
 
 <style scoped>
-section pre { padding: 10px 16px; margin: 6px 0; font-size: 15px; line-height: 1.3; }
-section pre code { font-size: 15px; }
+section pre { padding: 8px 16px; margin: 4px 0; font-size: 13px; line-height: 1.25; }
+section pre code { font-size: 13px; }
 </style>
 
 ```java
 class Person {
     private int age;
-    public int getAge() { return age; }
-    public void setAge(int a) { this.age = a; }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int a) {
+        this.age = a;
+    }
 }
 
 class Employee extends Person {
     private String role;
-    public String getRole() { return role; }
-    public void setRole(String r) { this.role = r; }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String r) {
+        this.role = r;
+    }
 }
 
 public class Main {
@@ -396,11 +425,15 @@ public class Main {
 
 ## Predict: does this compile?
 
+<!-- _class: code-sm -->
+
 <!-- no-compile -->
 ```java
 class Person {
     private int age;
-    public int getAge() { return age; }
+    public int getAge() {
+        return age;
+    }
 }
 class Employee extends Person {
     public boolean canRetire() {
@@ -655,12 +688,16 @@ class SportsCar extends Car { }
 
 ## Constructors are not inherited
 
+<!-- _class: code-sm -->
+
 - Fields and methods are **members** of a class — and members are what inheritance copies down.
 - **Constructors are not members.** `Person`'s constructor never becomes `Student`'s constructor.
 
 ```java
 class Person {
-    Person() { System.out.println("Person built"); }
+    Person() {
+        System.out.println("Person built");
+    }
 }
 
 class Student extends Person {
@@ -695,12 +732,18 @@ class Student extends Person {
 
 ## Predict: what prints?
 
+<!-- _class: code-xs -->
+
 ```java
 class Person {
-    Person() { System.out.println("Person ready"); }
+    Person() {
+        System.out.println("Person ready");
+    }
 }
 class Student extends Person {
-    Student() { System.out.println("Student ready"); }
+    Student() {
+        System.out.println("Student ready");
+    }
 }
 public class Main {
     public static void main(String[] args) {
@@ -717,13 +760,17 @@ public class Main {
 
 ## Predict: which line breaks?
 
+<!-- _class: code-sm -->
+
 - One change: `Person` now **demands a name** — its only constructor.
 
 <!-- no-compile -->
 ```java
 class Person {
     private String name;
-    Person(String name) { this.name = name; }   // the ONLY constructor
+    Person(String name) {                       // the ONLY constructor
+        this.name = name;
+    }
 }
 
 class Student extends Person {
@@ -739,10 +786,14 @@ class Student extends Person {
 
 ## super — speaking to your parent
 
+<!-- _class: code-sm -->
+
 ```java
 class Mammal {
     int age;
-    Mammal(int age) { this.age = age; }
+    Mammal(int age) {
+        this.age = age;
+    }
 }
 class Cat extends Mammal {
     Cat(int age) {

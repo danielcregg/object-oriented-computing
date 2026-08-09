@@ -455,8 +455,13 @@ public class Counter {
     static int staticCount = 0;      // shared by all instances
     int instanceCount = 0;           // unique per object
 
-    public static void incrementStatic() { staticCount++; }
-    public void incrementInstance() { instanceCount++; }
+    public static void incrementStatic() {
+        staticCount++;
+    }
+
+    public void incrementInstance() {
+        instanceCount++;
+    }
 
     public void printCounts() {
         System.out.println("Static: " + staticCount + ", Instance: " + instanceCount);
@@ -695,8 +700,13 @@ obj.instanceMethod();           // correct
 **5. Returning a value from a `void` method:**
 
 ```java
-public void calculate(int x) { return x * 2; }   // error
-public int calculate(int x) { return x * 2; }    // correct
+public void calculate(int x) {   // error
+    return x * 2;
+}
+
+public int calculate(int x) {   // correct
+    return x * 2;
+}
 ```
 
 **6. Confusing parameters with arguments:**

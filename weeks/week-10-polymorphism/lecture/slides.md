@@ -207,8 +207,12 @@ a.speak();
 
 ## First, a precision tool: the method signature
 
+<!-- _class: code-sm -->
+
 ```java
-public int max(int x, int y) { return (x > y) ? x : y; }
+public int max(int x, int y) {
+    return (x > y) ? x : y;
+}
 ```
 
 - Anatomy: `public` modifier · `int` return type · `max` name · `(int x, int y)` parameter list · `{ }` body.
@@ -218,8 +222,12 @@ public int max(int x, int y) { return (x > y) ? x : y; }
 
 <!-- no-compile -->
 ```java
-int  max(int a, int b) { return Math.max(a, b); }
-long max(int x, int y) { return Math.max(x, y); }   // error: same signature!
+int max(int a, int b) {
+    return Math.max(a, b);
+}
+long max(int x, int y) {              // error: same signature!
+    return Math.max(x, y);
+}
 ```
 
 ---
@@ -230,11 +238,19 @@ long max(int x, int y) { return Math.max(x, y); }   // error: same signature!
 
 - **Method overloading** (compile-time polymorphism): one class, one method name, several **different signatures**.
 
+<!-- _class: code-sm -->
+
 ```java
 public class Greeter {
-    void greet()            { System.out.println("Hello!"); }
-    void greet(String name) { System.out.println("Hello, " + name); }
-    void greet(int year)    { System.out.println("Hello, class of " + year); }
+    void greet() {
+        System.out.println("Hello!");
+    }
+    void greet(String name) {
+        System.out.println("Hello, " + name);
+    }
+    void greet(int year) {
+        System.out.println("Hello, class of " + year);
+    }
 }
 ```
 
@@ -268,9 +284,15 @@ System.out.println(true);      // println(boolean)
 
 ## Predict: which one runs?
 
+<!-- _class: code-sm -->
+
 ```java
-static void fun(int a)    { System.out.println("int"); }
-static void fun(double a) { System.out.println("double"); }
+static void fun(int a) {
+    System.out.println("int");
+}
+static void fun(double a) {
+    System.out.println("double");
+}
 
 public static void main(String[] args) {
     fun(5);
@@ -308,16 +330,28 @@ a.speak();     // empty argument list -- nothing to choose between
 
 - **Method overriding** (run-time polymorphism): a subclass re-declares an inherited method — **same signature**, new body.
 
+<!-- _class: code-xs -->
+
 ```java
-class Animal { void speak() { System.out.println("Some animal sound"); } }
+class Animal {
+    void speak() {
+        System.out.println("Some animal sound");
+    }
+}
 class Dog extends Animal {
-    @Override void speak() { System.out.println("Woof"); }
+    @Override void speak() {
+        System.out.println("Woof");
+    }
 }
 class Cat extends Animal {
-    @Override void speak() { System.out.println("Meow"); }
+    @Override void speak() {
+        System.out.println("Meow");
+    }
 }
 class Tiger extends Animal {
-    @Override void speak() { System.out.println("Roar"); }
+    @Override void speak() {
+        System.out.println("Roar");
+    }
 }
 ```
 
@@ -333,7 +367,9 @@ class Tiger extends Animal {
 ```java
 class Dog extends Animal {
     @Override
-    void speek() { System.out.println("Woof"); }   // compile error!
+    void speek() {                                 // compile error!
+        System.out.println("Woof");
+    }
 }
 ```
 
@@ -406,11 +442,21 @@ a.speak();     // Woof or Meow -- unknowable until THIS instant, THIS run
 
 ## Predict: leash vs animal
 
+<!-- _class: code-xs -->
+
 ```java
-class Animal { void speak() { System.out.println("Some animal sound"); } }
+class Animal {
+    void speak() {
+        System.out.println("Some animal sound");
+    }
+}
 class Cat extends Animal {
-    @Override void speak() { System.out.println("Meow"); }
-    void purr()            { System.out.println("prrrr"); }   // Cat-only
+    @Override void speak() {
+        System.out.println("Meow");
+    }
+    void purr() {                        // Cat-only
+        System.out.println("prrrr");
+    }
 }
 ```
 
@@ -571,22 +617,42 @@ Cat second = (Cat) zoo[1];     // line 2 -- what happens?
 
 <!-- Speaker notes: ~0:50. The whole hour on one screen — walk it top to bottom, slowly. This is the lab's starting point. -->
 
-## The whole story in one program
+## The whole story — the family
 
-<style scoped>
-section pre { padding: 12px 20px; margin: 6px 0; font-size: 16px; line-height: 1.3; }
-section pre code { font-size: 16px; line-height: 1.3; }
-</style>
+<!-- _class: code-sm -->
+
+- One superclass, two subclasses, one overridden method — everything Act II built:
 
 ```java
-class Animal { void speak() { System.out.println("Some animal sound"); } }
-class Cat extends Animal {
-    @Override void speak() { System.out.println("Meow"); }
-    void purr()            { System.out.println("prrrr"); }
+class Animal {
+    void speak() {
+        System.out.println("Some animal sound");
+    }
 }
-class Tiger extends Animal { @Override void speak() { System.out.println("Roar"); } }
+class Cat extends Animal {
+    @Override void speak() {
+        System.out.println("Meow");
+    }
+    void purr() {
+        System.out.println("prrrr");
+    }
+}
+class Tiger extends Animal {
+    @Override void speak() {
+        System.out.println("Roar");
+    }
+}
+```
 
-public class Zoo {
+---
+
+## The whole story — the program
+
+<!-- _class: code-sm -->
+
+<!-- no-compile -->
+```java
+public class Zoo {                           // Animal, Cat and Tiger as opposite
     public static void main(String[] args) {
         Animal[] zoo = { new Cat(), new Tiger(), new Cat() };  // upcasting: automatic
         for (Animal x : zoo) {
@@ -601,15 +667,25 @@ public class Zoo {
 }
 ```
 
-<p class="legend">overriding + upcasting + dispatch + instanceof + downcasting — one screen</p>
+<p class="legend">overriding + upcasting + dispatch + instanceof + downcasting — one loop</p>
 
 ---
 
 ## Predict (stretch): the fake override
 
+<!-- _class: code-xs -->
+
 ```java
-class Base { static void whoAmI() { System.out.println("Base"); } }
-class Sub extends Base { static void whoAmI() { System.out.println("Sub"); } }
+class Base {
+    static void whoAmI() {
+        System.out.println("Base");
+    }
+}
+class Sub extends Base {
+    static void whoAmI() {
+        System.out.println("Sub");
+    }
+}
 
 public class Trap {
     public static void main(String[] args) {

@@ -394,13 +394,17 @@ System.out.println(s.getEmail());   // read  — through the gate
 
 ## Power 1 — the guard (validation)
 
+<!-- _class: code-sm -->
+
 - House rule: player usernames hold at most **10 characters**. Enforce it *where the data lives*:
 
 ```java
 public class Player {
     private String username;
 
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     public void setUsername(String username) {
         if (username.length() > 10) {
@@ -433,6 +437,8 @@ System.out.println(p.getUsername());
 
 ## Power 2 — one-way glass (read-only)
 
+<!-- _class: code-sm -->
+
 - A public field is all-or-nothing: whoever can read it can **write** it.
 - Methods split the two. Provide the getter. **Withhold the setter.**
 
@@ -440,7 +446,9 @@ System.out.println(p.getUsername());
 public class Odometer {
     private int km;
 
-    public int getKm() { return km; }          // the world may look…
+    public int getKm() {                       // the world may look…
+        return km;
+    }
 
     public void drive(int distance) {          // …but change arrives only
         if (distance > 0) { km += distance; }  //    through the rules
@@ -454,13 +462,17 @@ public class Odometer {
 
 ## Power 3 — the disguise (swap the internals)
 
+<!-- _class: code-sm -->
+
 - Version 1 stores middle names as one `String`:
 
 ```java
 public class Person {
     private String middleNames;                    // "Mary Alice"
 
-    public String getMiddleNames() { return middleNames; }
+    public String getMiddleNames() {
+        return middleNames;
+    }
 
     public void setMiddleNames(String middleNames) {
         this.middleNames = middleNames;
@@ -517,9 +529,12 @@ public class BankAccount {
         this.balance = openingBalance;
     }
 
-    public String getOwner()   { return owner;   }
-    public double getBalance() { return balance; }
-
+    public String getOwner() {
+        return owner;
+    }
+    public double getBalance() {
+        return balance;
+    }
     public void deposit(double amount) {
         if (amount > 0) { balance += amount; }                    // guard: no fake deposits
     }
@@ -577,10 +592,14 @@ System.out.println(acct.getBalance());
 
 ## Predict: it's private, so it's safe… right?
 
+<!-- _class: code-sm -->
+
 ```java
 class Gradebook {
     private int[] scores = {70, 80, 90};
-    public int[] getScores() { return scores; }
+    public int[] getScores() {
+        return scores;
+    }
 }
 
 class Main {

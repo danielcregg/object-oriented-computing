@@ -288,6 +288,8 @@ Vehicle v = new Vehicle();   // compile error: Vehicle is abstract
 
 ## Abstract methods — read the punctuation
 
+<!-- _class: code-sm -->
+
 - An **abstract method** is a signature ending in a **semicolon** — no braces, no body:
 
 ```java
@@ -301,7 +303,9 @@ public abstract class Shape {
 ```java
 public class Square {
     private double side;
-    public double area() { return side * side; }
+    public double area() {
+        return side * side;
+    }
 }
 ```
 
@@ -315,10 +319,16 @@ public class Square {
 * A subclass inheriting abstract methods has exactly two options: **implement them all**, or stay `abstract` and pass the homework down.
 * The chain must end: **some descendant** eventually implements everything — or the family never produces a single object.
 
+<!-- _class: code-sm -->
+
 ```java
-abstract class A { abstract void m(); }
+abstract class A {
+    abstract void m();
+}
 abstract class B extends A { }         // legal: B passes the homework on
-class C extends B { void m() { } }     // the chain ends -- C is concrete
+class C extends B {                    // the chain ends -- C is concrete
+    void m() { }
+}
 ```
 
 ---
@@ -336,15 +346,27 @@ class C extends B { void m() { } }     // the chain ends -- C is concrete
 
 - Shared machinery lives **once** in the parent; every child fills in the blank:
 
+<!-- _class: code-sm -->
+
 ```java
 abstract class Vehicle {
-    private int wheels = 4;                    // shared state, stored once
-    public void stop() { System.out.println("Braking..."); }  // shared code
-    public abstract String fuelType();         // the blank every child fills
+    private int wheels = 4;                // shared state, stored once
+    public void stop() {                   // shared code
+        System.out.println("Braking...");
+    }
+    public abstract String fuelType();     // the blank every child fills
 }
 
-class Car   extends Vehicle { public String fuelType() { return "petrol"; } }
-class Truck extends Vehicle { public String fuelType() { return "diesel"; } }
+class Car extends Vehicle {
+    public String fuelType() {
+        return "petrol";
+    }
+}
+class Truck extends Vehicle {
+    public String fuelType() {
+        return "diesel";
+    }
+}
 ```
 
 - `Car` and `Truck` are concrete: homework done, `new` allowed.
@@ -431,6 +453,8 @@ public interface ExampleInterface {
 
 ## Signing the contract
 
+<!-- _class: code-sm -->
+
 - `implements` puts a class under contract:
 
 ```java
@@ -440,8 +464,12 @@ interface ExampleInterface {
 }
 
 public class ExampleClass implements ExampleInterface {
-    @Override public void method1() { System.out.println("method 1"); }
-    @Override public void method2() { System.out.println("method 2"); }
+    @Override public void method1() {
+        System.out.println("method 1");
+    }
+    @Override public void method2() {
+        System.out.println("method 2");
+    }
 }
 ```
 
@@ -451,10 +479,16 @@ public class ExampleClass implements ExampleInterface {
 
 ## The payoff — contracts are types
 
+<!-- _class: code-sm -->
+
 ```java
-interface Drawable { void draw(); }
+interface Drawable {
+    void draw();
+}
 class Circle implements Drawable {
-    @Override public void draw() { System.out.println("Drawing a circle"); }
+    @Override public void draw() {
+        System.out.println("Drawing a circle");
+    }
 }
 class Demo {
     public static void main(String[] args) {
@@ -473,13 +507,23 @@ class Demo {
 
 * A class `extends` **one** parent — but `implements` **as many interfaces as it likes**:
 
+<!-- _class: code-sm -->
+
 ```java
-interface Wearable   { void wear(); }
-interface Chargeable { void charge(); }
+interface Wearable {
+    void wear();
+}
+interface Chargeable {
+    void charge();
+}
 
 class Smartwatch implements Wearable, Chargeable {
-    public void wear()   { System.out.println("On the wrist"); }
-    public void charge() { System.out.println("Charging..."); }
+    public void wear() {
+        System.out.println("On the wrist");
+    }
+    public void charge() {
+        System.out.println("Charging...");
+    }
 }
 ```
 
@@ -496,12 +540,18 @@ class Smartwatch implements Wearable, Chargeable {
 - `static` methods — **with** a body *(Java 8+)*
 - Nested types
 
+<!-- _class: code-sm -->
+
 ```java
 interface MediaPlayer {
-    int MAX_VOLUME = 11;                                    // constant
-    void play();                                            // signature
-    default void pause() { System.out.println("Paused"); }  // Java 8+
-    static String version() { return "2.0"; }               // Java 8+
+    int MAX_VOLUME = 11;               // constant
+    void play();                       // signature
+    default void pause() {             // Java 8+
+        System.out.println("Paused");
+    }
+    static String version() {          // Java 8+
+        return "2.0";
+    }
 }
 ```
 
@@ -513,10 +563,14 @@ interface MediaPlayer {
 
 <!-- no-compile -->
 ```java
-interface Speaker { void speak(); }
+interface Speaker {
+    void speak();
+}
 
 class Dog implements Speaker {
-    void speak() { System.out.println("Woof"); }
+    void speak() {
+        System.out.println("Woof");
+    }
 }
 ```
 

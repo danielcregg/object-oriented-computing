@@ -288,6 +288,8 @@ public class Main {
 
 ## The same blueprint, in Java
 
+<!-- _class: code-sm -->
+
 ```java
 class Car {
     // fields — what every Car knows
@@ -296,8 +298,12 @@ class Car {
     String manufacturer;
 
     // methods — what every Car can do
-    void drive()  { System.out.println("Driving..."); }
-    void refuel() { fuelLevel = 100.0; }
+    void drive() {
+        System.out.println("Driving...");
+    }
+    void refuel() {
+        fuelLevel = 100.0;
+    }
 }
 ```
 
@@ -354,8 +360,13 @@ class ClassName {
 
 ## Building one — the new keyword
 
+<!-- _class: code-sm -->
+
 ```java
-class Car { double fuelLevel; String manufacturer; }
+class Car {
+    double fuelLevel;
+    String manufacturer;
+}
 
 Car myCar = new Car();            // build one Car object
 myCar.manufacturer = "Toyota";    // the dot reaches inside
@@ -372,8 +383,12 @@ System.out.println(myCar.manufacturer);   // Toyota
 
 ## Predict: what prints?
 
+<!-- _class: code-sm -->
+
 ```java
-class Car { int topSpeed; }
+class Car {
+    int topSpeed;
+}
 
 Car a = new Car();
 Car b = new Car();
@@ -429,8 +444,12 @@ System.out.println(a.topSpeed);
 
 ## Copying a variable copies the arrow
 
+<!-- _class: code-sm -->
+
 ```java
-class Student { String name; }
+class Student {
+    String name;
+}
 
 Student s1 = new Student();
 Student s2 = s1;               // copies the ARROW — builds nothing
@@ -455,8 +474,12 @@ System.out.println(s1.name);   // Grace
 
 ## Object identity vs reference variables
 
+<!-- _class: code-sm -->
+
 ```java
-class Student { String name; }
+class Student {
+    String name;
+}
 
 Student s1 = new Student();   // a new house
 Student s2 = new Student();   // another new house
@@ -487,8 +510,12 @@ Student s3 = s1;              // no house — a copied Eircode
 
 ## Predict: what prints?
 
+<!-- _class: code-sm -->
+
 ```java
-class Box { int size; }
+class Box {
+    int size;
+}
 
 Box a = new Box();
 Box b = a;
@@ -511,10 +538,16 @@ System.out.println(a == c);
 
 ## The newborn-object problem
 
+<!-- _class: code-sm -->
+
 - Right now every object is born blank — all defaults — and we furnish it line by line:
 
 ```java
-class Student { String name; int age; double gpa; }
+class Student {
+    String name;
+    int age;
+    double gpa;
+}
 
 Student s = new Student();   // born: name null, age 0, gpa 0.0
 s.name = "Ada Lovelace";     // three separate steps...
@@ -570,11 +603,15 @@ class Puppy {
 
 ## Two constructors — and the gift rule
 
+<!-- _class: code-sm -->
+
 ```java
 class Puppy {
     String name;
 
-    Puppy() { name = "unnamed"; }     // no-arg constructor
+    Puppy() {                         // no-arg constructor
+        name = "unnamed";
+    }
 
     Puppy(String puppyName) {         // parameterised constructor
         name = puppyName;
@@ -660,9 +697,7 @@ class Cat {
 
 ## Putting it together — Student, for real
 
-<style scoped>
-section pre code { font-size: 19px; line-height: 1.35; }
-</style>
+<!-- _class: code-sm -->
 
 ```java
 public class Student {
@@ -676,8 +711,12 @@ public class Student {
         this.gpa = gpa;
     }
 
-    public String getName() { return name; }
-    public double getGpa()  { return gpa; }
+    public String getName() {
+        return name;
+    }
+    public double getGpa() {
+        return gpa;
+    }
 }
 ```
 

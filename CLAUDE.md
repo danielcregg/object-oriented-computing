@@ -63,8 +63,16 @@ read-only assets.
   `<!-- _class: ... -->`: `lead` (title/divider), `cols` (2-column bullets),
   `grid2` (side-by-side images), `logos` (borderless logo row), `dense`
   (smaller body), `centered-table`, `side` (bullets left, one image
-  right). Kicker lines use
+  right), `code-sm`/`code-xs` (shrink a slide's code to 17px/14px when a
+  full class listing outgrows the 21px default — prefer these over a
+  per-slide `<style scoped>` block, and note a size set only on `pre code`
+  leaves the 21px leading behind). Kicker lines use
   `<span class="kicker">// ...</span>` (requires the workflow's `--html`).
+- Java in decks AND lab READMEs uses the conventional brace layout:
+  signature/declaration + `{` on one line, body indented, closing `}` on
+  its own line. Never collapse a method or class onto one line
+  (`int size() { return tracks; }`). Exempt: one-line `if`/`for` bodies,
+  empty bodies `{ }`, and elision bodies `{ ... }`.
 - Bullet markers carry meaning: `* ` = fragmented (revealed one per keypress in
   the HTML presentation), `- ` = shown immediately. Every deck fragments its
   build-up slides; reference slides (agendas, summaries, resources, tables,

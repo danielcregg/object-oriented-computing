@@ -53,6 +53,17 @@ def fences(text):
 
 TYPE_DECL_RE = re.compile(r"\b(?:class|interface|enum|record)\s+(\w+)")
 
+# `public ` immediately preceding a type declaration, with any run of
+# modifiers or annotations in between. Matches only the word `public`
+# itself, so substituting "" leaves the rest of the declaration intact.
+# `@interface` is listed before `interface` because alternation is ordered:
+# at `@interface X`, the modifier run would otherwise swallow the token as
+# an annotation and then find no type keyword.
+PUBLIC_TYPE_RE = re.compile(
+    r"\bpublic\s+"
+    r"(?=(?:(?:final|abstract|sealed|non-sealed|static|strictfp|@\w+)\s+)*"
+    r"(?:@interface|class|interface|enum|record)\b)")
+
 
 def type_names(code):
     return set(TYPE_DECL_RE.findall(code))
@@ -75,9 +86,15 @@ def compiles(code, workdir, context=""):
     src = Path(workdir) / "__Snippet__.java"
     last_error = []
     for candidate in candidates(code, context):
-        # a public class needs its own filename; strip public for the probe
-        probe = re.sub(r"\bpublic\s+(class|interface|enum|abstract)\b",
-                       r"\1", candidate)
+        # A public type needs its own filename, so strip `public` for the
+        # probe. Matching `public` followed by any run of modifiers before
+        # the type keyword covers `public final class`, `public record` and
+        # `public sealed interface` -- an earlier version listed the keywords
+        # that may FOLLOW public, so those three declarations were left
+        # public and failed with "class X is public, should be declared in a
+        # file named X.java": a snippet reported as broken Java when the only
+        # broken thing was this probe.
+        probe = PUBLIC_TYPE_RE.sub("", candidate)
         src.write_text(probe, encoding="utf-8")
         result = subprocess.run(
             ["javac", "-d", workdir, str(src)],

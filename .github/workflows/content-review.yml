@@ -47,8 +47,14 @@ jobs:
 
       - name: Is a Bedrock credential configured?
         id: creds
+        # The secret arrives through `env`, never through ${{ }} inside the
+        # script. A ${{ }} expansion is pasted into the shell source before
+        # bash parses it, so any quote or metacharacter in the value would
+        # change what runs; via env it is only ever data.
+        env:
+          BEDROCK_API_KEY: ${{ secrets.BEDROCK_API_KEY }}
         run: |
-          if [ -n "${{ secrets.BEDROCK_API_KEY }}" ]; then
+          if [ -n "$BEDROCK_API_KEY" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"

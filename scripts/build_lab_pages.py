@@ -26,10 +26,21 @@ import markdown
 
 LABS = Path("labs/src/ie/atu")
 REPO_URL = "https://github.com/danielcregg/object-oriented-computing"
+
+# Both scripts are third-party code executed on the module's public site, so
+# each carries a Subresource Integrity hash: the browser refuses to run the
+# file unless it hashes to exactly this, which makes a pinned version
+# genuinely immutable rather than merely named. `crossorigin="anonymous"` is
+# required for SRI to be enforced on a cross-origin request -- without it the
+# response is opaque and the integrity attribute is silently ignored.
+# Regenerate a hash after any version bump:
+#   curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A
 MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"
+MERMAID_SRI = "sha384-zkWMJO4sgpPUzyuOgDx8HB/K55glbAwajEpk1Go2NWRuPkPA/wIhoEJTuSkmOYrV"
 # Same major.minor.patch as marp-core's bundled highlight.js — keeps lab
 # token classes identical to the rendered decks'.
 HLJS_JS = "https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"
+HLJS_SRI = "sha384-RH2xi4eIQ/gjtbs9fUXM68sLSi99C7ZWBRX1vDrVv6GQXRibxXLbwO2NGZB74MbU"
 
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
            "viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' "
@@ -143,12 +154,18 @@ def preprocess(md_text: str) -> str:
 
 def page(title: str, kicker_html: str, body_html: str, needs_mermaid: bool,
          banner_html: str = "", needs_hljs: bool = False) -> str:
-    mermaid = (f'<script src="{MERMAID_JS}"></script>'
+    mermaid = (f'<script src="{MERMAID_JS}" integrity="{MERMAID_SRI}"'
+               ' crossorigin="anonymous"></script>'
                '<script>mermaid.initialize({startOnLoad:true,theme:"neutral"});</script>'
                if needs_mermaid else "")
-    hljs = (f'<script src="{HLJS_JS}"></script>'
-            "<script>document.querySelectorAll('pre code.language-java')"
-            ".forEach(function(el){hljs.highlightElement(el);});</script>"
+    # `typeof hljs` guard: if SRI rejects the file the script never defines
+    # hljs, and an unguarded call would throw and abort the rest of the page.
+    # Uncoloured code is a fine degradation; a broken page is not.
+    hljs = (f'<script src="{HLJS_JS}" integrity="{HLJS_SRI}"'
+            ' crossorigin="anonymous"></script>'
+            "<script>if(typeof hljs!=='undefined'){"
+            "document.querySelectorAll('pre code.language-java')"
+            ".forEach(function(el){hljs.highlightElement(el);});}</script>"
             if needs_hljs else "")
     return (f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
@@ -166,7 +183,17 @@ def main() -> None:
     for readme in sorted(LABS.glob("*/README.md")):
         slug = readme.parent.name
         text = readme.read_text(encoding="utf-8")
-        title = re.match(r"#\s+(.+)", text).group(1).strip()
+        heading = re.match(r"#\s+(.+)", text)
+        if heading is None:
+            # Every lab README opens with `# Java <Topic> Lab` -- that line is
+            # the page title and the labs-index entry. Without the guard this
+            # was an AttributeError on None, which says nothing about which
+            # file is wrong or why.
+            raise SystemExit(
+                f"build_lab_pages: {readme} does not start with a `# ` "
+                f"heading, so it has no title. Every lab README must open "
+                f"with `# Java <Topic> Lab` on its first line.")
+        title = heading.group(1).strip()
         labs.append((slug, title))
 
         md = markdown.Markdown(

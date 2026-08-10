@@ -11,10 +11,12 @@ on:
 # Nothing lands in git, so the copies students make from this template
 # inherit only the source, and the deployment history lives in the
 # github-pages environment with rollback, instead of as commits nobody reads.
+# Least privilege by default: the build job only reads the repo. The Pages
+# write + OIDC token are granted to the deploy job alone, so the job that
+# runs marp, npm and the build scripts cannot publish to the site even if
+# something it executes tries to.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -28,24 +30,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Safety audit + snippet verification + diagram freshness + labs compile + bank check
-        run: |
-          set -euo pipefail
-          python3 scripts/safety_audit.py
-          python3 scripts/verify_snippets.py
-          python3 scripts/check_practice_bank.py
-          find labs/src -name '*.java' -print0 | xargs -0 javac -d "$RUNNER_TEMP/labs-classes"
-
-      - name: Set up Java (for snippet verification)
+      # Java MUST be set up before the gates below: they shell out to javac.
+      # This step used to sit AFTER them, so the pin never applied and the
+      # snippets were compiled by whatever JDK the runner image happened to
+      # ship -- silent drift if GitHub changes that default, and a hard
+      # failure if an image ever ships without a JDK at all.
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          # 21, to match .devcontainer/devcontainer.json
+          # (mcr.microsoft.com/devcontainers/java:1-21-bookworm). The gate's
+          # promise is "this material compiles for a student", so it has to
+          # compile on the JDK the student's Codespace actually runs. Change
+          # both together or the promise stops being true.
+          java-version: '21'
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Gates - safety audit, link check, snippet + lab compile, bank check
+        run: |
+          set -euo pipefail
+          javac -version
+          python3 scripts/safety_audit.py
+          python3 scripts/check_links.py
+          python3 scripts/verify_snippets.py
+          python3 scripts/check_practice_bank.py
+          find labs/src -name '*.java' -print0 \
+            | xargs -0 --no-run-if-empty javac -d "$RUNNER_TEMP/labs-classes"
 
       - name: Install Marp CLI
         run: npm install -g @marp-team/marp-cli@4.5.0
@@ -93,6 +108,10 @@ jobs:
     needs: build
     if: github.repository == 'danielcregg/object-oriented-computing'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write        # publish the artifact
+      id-token: write     # OIDC token deploy-pages exchanges for that right
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

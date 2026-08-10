@@ -58,6 +58,7 @@ LAST="$(cat "$MARKER" 2>/dev/null || true)"
 ROOT="$(git rev-list --max-parents=0 HEAD | tail -1)"
 
 skipped=0
+touched=()
 for p in "${PATHS[@]}"; do
   [ -n "$p" ] || continue
   base="$ROOT"
@@ -68,19 +69,38 @@ for p in "${PATHS[@]}"; do
     skipped=$((skipped + 1))
     continue
   fi
-  git checkout --quiet "upstream/$BRANCH" -- "$p" 2>/dev/null || true
+  git checkout --quiet "upstream/$BRANCH" -- "$p" 2>/dev/null && touched+=("$p")
 done
 
 # Local bookkeeping only -- gitignored, never committed, never pushed.
 git rev-parse "upstream/$BRANCH" > "$MARKER"
+# ...and pin that commit with a ref so it stays reachable. It is otherwise
+# named only by the marker FILE: the next --depth=1 fetch moves
+# upstream/main off it, leaving it unreachable, and once `git gc` prunes it
+# the baseline silently falls back to your very first commit. Every file a
+# previous run had already refreshed would then look edited-by-you, and
+# would stop updating for good -- reported as "kept your version" for files
+# you never opened.
+git update-ref refs/course-sync/baseline "$(git rev-parse "upstream/$BRANCH")"
 
-if git diff --cached --quiet; then
+# Commit ONLY the content paths this script rewrote. A bare `git commit`
+# would sweep in anything you happened to have staged -- and this runs
+# automatically when a Codespace attaches, so work you had run `git add` on
+# would land in a commit authored "course-update" and captioned as a
+# content sync.
+changed=()
+if [ ${#touched[@]} -gt 0 ]; then
+  mapfile -t changed < <(git diff --cached --name-only -- "${touched[@]}")
+fi
+
+if [ ${#changed[@]} -eq 0 ]; then
   say "Already up to date."
 else
   printf 'Updated:\n'
-  git diff --cached --name-only | sed 's/^/  /'
+  printf '  %s\n' "${changed[@]}"
   git -c user.name="course-update" -c user.email="course-update@local" \
-      commit --quiet -m "chore: update course content from the module repo"
+      commit --quiet -m "chore: update course content from the module repo" \
+      -- "${changed[@]}"
   printf 'Done - your own work was not touched.\n'
 fi
 [ "$skipped" -gt 0 ] && printf '(%s file(s) left alone because you had edited them.)\n' "$skipped"

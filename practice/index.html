@@ -190,7 +190,12 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const fmt=s=>{const t=esc(s);return t.replace(/`([^`]+)`/g,'<code>$1</code>');};
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d;}catch{return d;}};
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+/* Saving progress must never break the quiz. localStorage.setItem throws in
+   private-browsing modes and when the quota is full, and save() is called on
+   every answer -- unguarded, that exception propagates out of the click
+   handler and the quiz stops responding. Losing the saved session is a fair
+   trade; losing the quiz is not. load() has always been guarded this way. */
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{/* progress not saved */}};
 
 let BANK={}, TOPICS=[], sess=null, tick=null, wrongOnly=false;
 

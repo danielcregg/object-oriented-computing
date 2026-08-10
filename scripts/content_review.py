@@ -64,16 +64,32 @@ def read(p: Path, limit=90_000) -> str:
 
 
 def topics():
+    """Yield (week folder name, prompt text) per topic.
+
+    The lecture is ALWAYS included: every question in the brief is
+    comparative ("does the lab contradict the lecture?", "is this practice
+    question answerable from the material as taught?"), so a lab or a bank
+    sent on its own gives the model nothing to judge against. SCOPE selects
+    what is under review beside it, not whether the reference material is
+    present.
+    """
     for deck in sorted(Path("weeks").glob("*/slides.md")):
         topic = re.sub(r"^week-\d+-", "", deck.parent.name)
-        lab = Path("labs/src/ie/atu") / topic.replace("-", "") / "README.md"
-        parts = []
-        if SCOPE in ("everything", "lectures"):
-            parts.append(f"=== LECTURE ({deck}) ===\n{read(deck)}")
-        if lab.is_file() and SCOPE in ("everything", "labs"):
+        pkg = topic.replace("-", "")   # Java package form: no hyphens
+        lab = Path("labs/src/ie/atu") / pkg / "README.md"
+        bank = Path("practice/bank") / f"{pkg}.json"
+
+        parts = [f"=== LECTURE ({deck}) ===\n{read(deck)}"]
+        if SCOPE in ("everything", "labs") and lab.is_file():
             parts.append(f"=== LAB ({lab}) ===\n{read(lab)}")
-        if parts:
-            yield deck.parent.name, "\n\n".join(parts)
+        if SCOPE in ("everything", "practice") and bank.is_file():
+            parts.append(f"=== PRACTICE QUESTIONS ({bank}) ===\n{read(bank)}")
+
+        # Under a narrow scope, a topic with only its lecture and nothing to
+        # compare it against is not worth an API call.
+        if SCOPE in ("labs", "practice") and len(parts) == 1:
+            continue
+        yield deck.parent.name, "\n\n".join(parts)
 
 
 def main() -> None:
@@ -86,7 +102,7 @@ def main() -> None:
     client = boto3.client("bedrock-runtime",
                           region_name=os.environ.get("AWS_REGION", "eu-west-1"))
 
-    sections, errors, reviewed = [], [], 0
+    sections, errors, reviewed, truncated = [], [], 0, []
     for name, content in topics():
         body = {
             "anthropic_version": "bedrock-2023-05-31",
@@ -96,12 +112,23 @@ def main() -> None:
         }
         try:
             resp = client.invoke_model(modelId=MODEL, body=json.dumps(body))
-            text = json.loads(resp["body"].read())["content"][0]["text"].strip()
+            payload = json.loads(resp["body"].read())
+            text = payload["content"][0]["text"].strip()
+            if payload.get("stop_reason") == "max_tokens":
+                truncated.append(name)
         except Exception as exc:                      # noqa: BLE001
-            text = f"_Review failed for this topic: {exc}_"
-        if text and "no findings" not in text.lower():
+            # A failed CALL is not a finding. Reporting it as one is how an
+            # auth failure across every topic once read as a complete, clean
+            # review -- the report looked full and the run stayed green.
+            errors.append(f"**{name}** — `{type(exc).__name__}: {exc}`")
+            print(f"FAILED  {name}: {type(exc).__name__}: {exc}")
+            continue
+
+        reviewed += 1
+        clean = not text or "no findings" in text.lower()
+        if not clean:
             sections.append(f"## {name}\n\n{text}\n")
-        print(f"reviewed {name}: {'findings' if text and 'no findings' not in text.lower() else 'clean'}")
+        print(f"reviewed {name}: {'clean' if clean else 'findings'}")
 
     header = (
         "# Content review findings\n\n"
@@ -109,11 +136,31 @@ def main() -> None:
         "not corrections** — every item needs a human decision before it is "
         "acted on. Compilation and output are already verified by CI; this "
         "looks only for pedagogical drift._\n\n"
+        f"_Scope `{SCOPE}` · model `{MODEL}` · {reviewed} topic(s) reviewed, "
+        f"{len(errors)} failed._\n\n"
     )
-    OUT.write_text(header + ("\n".join(sections) if sections else
-                             "No findings across the reviewed material.\n"),
-                   encoding="utf-8", newline="\n")
-    print(f"wrote {OUT} ({len(sections)} topic(s) with findings)")
+    parts = [header]
+    if errors:
+        parts.append("## ⚠️ Could not review\n\n"
+                     "These topics were NOT reviewed — the call failed. Their "
+                     "absence below is not a clean bill of health.\n\n"
+                     + "\n".join(f"- {e}" for e in errors) + "\n\n")
+    if truncated:
+        parts.append("## ⚠️ Truncated\n\n"
+                     "The model hit its output limit here, so its report is "
+                     "cut short and may be incomplete: "
+                     + ", ".join(f"`{t}`" for t in truncated) + "\n\n")
+    parts.append("\n".join(sections) if sections
+                 else "No findings across the reviewed material.\n")
+    OUT.write_text("".join(parts), encoding="utf-8", newline="\n")
+    print(f"wrote {OUT} ({len(sections)} topic(s) with findings, "
+          f"{len(errors)} failure(s))")
+
+    # Nothing reviewed at all = the run did not do its job. Fail loudly rather
+    # than file an issue saying "No findings", which reads as an all-clear.
+    if reviewed == 0:
+        sys.exit(f"reviewed 0 topics (scope={SCOPE!r}, {len(errors)} failure(s)) "
+                 f"- treating as a failed run, not a clean one")
 
 
 if __name__ == "__main__":

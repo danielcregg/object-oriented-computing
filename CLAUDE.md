@@ -118,6 +118,12 @@ alone.
 - `scripts/check_practice_bank.py` — validates `practice/bank/*.json`
   (shape, option counts, minimum questions per topic, no schedule
   references). CI gate; run it after touching the bank.
+- `scripts/check_links.py` — every relative link and image target in the
+  tracked Markdown must resolve. External URLs are never fetched. CI gate;
+  it exists because the layout is DERIVED (week folder → deck, topic → lab
+  package), so any rename silently breaks prose that names the old path —
+  which is how README's whole schedule table once shipped nine 404s with
+  every other gate green.
 - `scripts/update_current_week.py` — rewrites README's current-week banner
   and moves the ➡️ marker onto the live row of the schedule table. Pure
   calendar maths, no config: reading week is the week of the last Monday
@@ -244,6 +250,7 @@ CI re-renders the published decks only on push.
 Before any push, the same gates CI runs (all must print nothing / exit 0):
 
     python scripts/safety_audit.py        # leaked data, bad paths, bad extensions
+    python scripts/check_links.py         # every relative link resolves
     python scripts/verify_snippets.py     # every ```java fence compiles
     python scripts/check_practice_bank.py # practice bank is well-formed
     find labs/src -name '*.java' | xargs javac -d /tmp/labs-classes   # labs compile

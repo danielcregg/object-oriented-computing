@@ -281,6 +281,20 @@ def build_main_rows() -> tuple[str, int, int]:
         elif deck.is_file():
             rows.append(lecture_row(name, week_no, deck_title(deck, slug)))
             lectures += 1
+        else:
+            # A week folder that is neither an MCQ week, nor reading week, nor
+            # a deck used to be skipped in silence -- the week simply vanished
+            # from the site and the build still went green. That is the same
+            # failure lab_slug refuses to allow at the other end of the
+            # mapping, so refuse it here too.
+            raise SystemExit(
+                f"build_index: {folder} has no slides.md and is not a "
+                f"recognised non-teaching week.\n"
+                f"  A teaching week needs weeks/{name}/slides.md; an "
+                f"assessment week's folder must end in mcq1/mcq2/mcq3; the "
+                f"reading week's name must contain 'reading-week'. Rename the "
+                f"folder or add the deck -- do not leave it half-created, or "
+                f"the week disappears from the site with CI still green.")
     return "".join(rows), lectures, markers
 
 

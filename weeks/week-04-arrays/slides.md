@@ -230,6 +230,8 @@ a[5] = 12;   // compiles fine…
 
 ---
 
+<!-- Speaker notes: ~0:18. Predict beat. Expect some of the room to guess an empty string for `s[0]`, on the theory that every type gets its own empty default the way `int` gets `0` - but only primitives get a type-specific zero, and every reference type defaults to `null`, no exceptions, `String` included. This is a deliberate forward reference: forgetting that a fresh box is `null` rather than an empty object is exactly what throws the `NullPointerException` on the Arrays of objects slide later in the hour, and MCQs ask for array default values directly. -->
+
 ## Predict: what prints?
 
 ```java
@@ -300,6 +302,8 @@ for (int score : scores) {
 
 ---
 
+<!-- Speaker notes: ~0:27. Predict beat. Expect the room to guess `0`: the instinct is that `x` is a live window onto the array slot, not a fresh copy of its value. For-each declares a new local variable each pass and copies the element in, so assigning to `x` rebinds only that copy, never the box - the concrete proof of the read-only row the table one slide back only asserted. It is also why Pattern 1, the very next accumulator pattern, is the only one of the three built on for-each: Patterns 2 and 3 need to read or return an index, so they fall back to the counting loop. -->
+
 ## Predict: does this zero the array?
 
 ```java
@@ -344,6 +348,8 @@ b[0] = 99;
 - Change it through either name - there is only one array to change.
 
 ---
+
+<!-- Speaker notes: ~0:33. Predict beat. The rename from `a`/`b` to `mine`/`yours` is deliberate - the possessive names quietly invite the instinct that each name owns a separate array, so expect some of the room to still guess `1` for `mine[0]` immediately after the previous slide proved otherwise. The genuinely new trap is the second line: expect `false` for `mine == yours` by analogy with content-comparing `==` in other languages, when Java's `==` on arrays always compares identity, never contents - the fix, `Arrays.equals`, is the next slide's entire point. -->
 
 ## Predict: what prints?
 

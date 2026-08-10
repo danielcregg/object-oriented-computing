@@ -259,6 +259,8 @@ System.out.println(true);      // println(boolean)
 
 ---
 
+<!-- Speaker notes: ~0:14. Predict beat that closes Act I - the very next slide pivots to why overloading cannot be the cold open's trick, so land a clean answer here first. The trap is `fun('A')`: expect the room to guess double, reaching for arithmetic's mixing rule (an int combined with a double always promotes to double) rather than overload resolution's actual rule - `char` widens to both `int` and `double`, and Java keeps whichever applicable overload is narrowest, so `int` wins. Exam-style muscle memory, not the deepest idea of the day. -->
+
 ## Predict: which one runs?
 
 <!-- _class: code-sm -->
@@ -417,6 +419,8 @@ a.speak();     // Woof or Meow -- unknowable until THIS instant, THIS run
 
 ---
 
+<!-- Speaker notes: ~0:34. First real test of the leash-and-animal model from ~0:27, not just a description of it. Expect line 2 to trip the room: having just accepted that the object decides line 1, most students assume `a.purr()` works too, since the object really is a Cat underneath - but callability is fixed by the reference type alone at compile time, while dispatch only ever chooses among members that type already exposes, which is exactly why line 2 is a genuine compile error and the fragment is marked `no-compile`. Direct setup for the upcasting and downcasting slides right after, where losing and regaining `purr()` becomes the explicit topic. -->
+
 ## Predict: leash vs animal
 
 <!-- _class: code-xs -->
@@ -570,6 +574,8 @@ for (Animal x : zoo) {
 
 ---
 
+<!-- Speaker notes: ~0:48. Direct test of the instanceof-gate warning from two slides back - the room either internalised it or is about to relearn it the hard way. Expect line 2 to split the room: many guess compile error, assuming the compiler can see `zoo[1]` holds a `Tiger` and refuse the cast - but the compiler only knows the array's declared type, `Animal`, so any `(Cat)` downcast from it is syntactically legal and compiles regardless, failing only when the JVM checks the real object at run time. The fragment is marked `no-compile` only because `Animal`, `Cat` and `Tiger` are not declared inside this fence, not because the cast is invalid - the bad-index callback in the last bullet is the lesson to lean on: some mistakes cannot be caught until the program actually runs. -->
+
 ## Predict: the cast that lies
 
 <!-- no-compile -->
@@ -647,6 +653,8 @@ public class Zoo {                           // Animal, Cat and Tiger as opposit
 <p class="legend">overriding + upcasting + dispatch + instanceof + downcasting - one loop</p>
 
 ---
+
+<!-- Speaker notes: ~0:53. Stretch slide - if the room is flagging or time is short, this is the one to cut; it tests a boundary case, not the hour's core mechanism. Expect a confident wrong answer of Sub: the whole hour has trained the room to expect the object on the end of the leash to decide, but a static method has no receiver to dispatch on, so the reference type resolves it at compile time, exactly like a plain name lookup. Ties back to the `@Override` seatbelt: annotating `Sub.whoAmI` would refuse to compile, because the compiler already knows there is no instance method underneath for it to override. -->
 
 ## Predict (stretch): the fake override
 

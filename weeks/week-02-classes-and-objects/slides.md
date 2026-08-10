@@ -375,6 +375,8 @@ System.out.println(myCar.manufacturer);   // Toyota
 
 ---
 
+<!-- Speaker notes: ~0:19. Predict beat. The wrong answer to expect is 200/200, and it comes from picturing the field as living on the CLASS rather than on each object - the exact misconception this slide exists to break. Read the default-value list out loud: `null` is a deliberate forward reference to the newborn-object problem ten minutes from now, and MCQs ask for the defaults directly. -->
+
 ## Predict: what prints?
 
 <!-- _class: code-sm -->
@@ -502,6 +504,8 @@ Student s3 = s1;              // no house - a copied Eircode
 
 ---
 
+<!-- Speaker notes: ~0:28. Predict beat, and the one they most often get wrong. Two traps in one snippet: `b = a` copies the ARROW, not the Box (expect the room to say `0` for the first print), and `==` on object types asks about identity, never contents (expect `true` for the last). This arrow-vs-contents model is the reference the rest of the module leans on - arrays, Strings and `equals()` all pay it back. -->
+
 ## Predict: what prints?
 
 <!-- _class: code-sm -->
@@ -618,6 +622,8 @@ class Puppy {
 - **The catch:** declare *any* constructor yourself, and *the gift is withdrawn*.
 
 ---
+
+<!-- Speaker notes: ~0:38. Predict beat. The faulty model is "a no-arg constructor is always there" - writing ANY constructor withdraws the compiler-supplied one. Say the exact compiler message aloud; they will hit it in the lab within the hour. Fenced `no-compile` on purpose: this snippet is meant to fail, so CI skips it. -->
 
 ## Predict: does this compile?
 

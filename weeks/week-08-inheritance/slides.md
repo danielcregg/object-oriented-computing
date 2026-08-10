@@ -418,6 +418,8 @@ public class Main {
 
 ---
 
+<!-- Speaker notes: ~0:18. Flagged `no-compile` - the compiler error is the whole point, so make the room commit to a prediction before revealing it. The wrong answer comes from conflating inherited with accessible: students expect `Employee` to read `age` directly simply because the field exists inside every `Employee` object, forgetting that inheritance does not grant private access. Contrast this with `emp.getAge()` on the previous slide, which reached the same field through the public gate - the access-versus-existence gap resurfaces as an MCQ trap and is the direct motivation for `protected`. -->
+
 ## Predict: does this compile?
 
 <!-- _class: code-sm -->
@@ -660,6 +662,8 @@ class SportsCar extends Car { }
 
 ---
 
+<!-- Speaker notes: ~0:40. Quick-fire across three pairs, and `SportsCar`/`Car` in the middle is the one to watch, not the two has-a examples either side of it: coming straight off the warning on the previous slide against reaching for `extends` when the truth is containment, expect some in the room to overcorrect and call this one has-a too, doubting a textbook is-a case simply because inheritance was just flagged as dangerous. Make the point that the sentence test cuts both ways - it confirms `extends` exactly as often as it rules it out. The lab always hands students a pre-decided hierarchy to build; this is the only point in the hour where they have to make the has-a/is-a call themselves, which is exactly the shape MCQ scenario questions take. -->
+
 ## Predict: extends - or field?
 
 - Sentence test, out loud, quick fire:
@@ -725,6 +729,8 @@ class Student extends Person {
 
 ---
 
+<!-- Speaker notes: ~0:47. This is the ladder diagram from the previous slide made concrete - expect two wrong predictions in the room: `Student ready` alone, from treating the constructor call like an ordinary method call that runs only the body you named, or the two lines in the wrong order, from assuming the class named in the `new` expression must finish building first. Point back to the ladder rather than re-explaining the mechanism from scratch; the diagram is the reason this prediction is answerable at all. Construction order is the most heavily tested fact in this section, and this exact two-class pair returns broken on the next slide once `Person` loses its no-arg constructor. -->
+
 ## Predict: what prints?
 
 <!-- _class: code-xs -->
@@ -752,6 +758,8 @@ public class Main {
 * Strictly, **three** constructors ran - `Object`'s went first of all, silently.
 
 ---
+
+<!-- Speaker notes: ~0:49. Flagged `no-compile` - get the room to name the exact failing line before revealing it, since the natural wrong guesses are that the fault sits inside the new `Person` constructor, or that an empty `Student() { }` body is a harmless no-op that cannot fail. Both guesses miss where Java quietly inserts work into that empty-looking body - let the reveal do the explaining rather than pre-empting it. This is a bug students will hit in their own labs the moment they add any constructor to a class that used to rely on a default one, and it is exactly the kind of gotcha MCQs target; the fix is one slide away. -->
 
 ## Predict: which line breaks?
 

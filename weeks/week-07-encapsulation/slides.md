@@ -289,6 +289,8 @@ account.balance = -1_000_000;   // some file. some line. some Tuesday.
 
 ---
 
+<!-- Speaker notes: ~0:17. Predict beat right after the visibility matrix. Expect some to say it compiles: the mental model is that `Account` and `Main` sharing one file makes them close enough to the same class, so the field should still be reachable. Unlike the other predict slides in this deck, the `no-compile` marker is literal here - this is the one snippet that genuinely fails to build, resolving the opening hook (`A quiet line of code`) into a concrete compiler error. `private` scopes to the class, never the file or the package - the matrix just drew that line, and this is its first real test. -->
+
 ## Predict: does this compile?
 
 <!-- no-compile -->
@@ -392,6 +394,8 @@ public class Player {
 - Garbage is stopped **at the door**. No code anywhere can put an 11-character name in that field.
 
 ---
+
+<!-- Speaker notes: ~0:30. Predict beat closing out Power 1. Expect some to say `theRedRhino` unchanged: they read `setUsername` as a plain assignment and never mentally run the `if` inside it, the exact skepticism `The fair objection` raised two slides ago about setters being pointless ceremony. The `no-compile` tag is only a fragment marker here, not a verdict - paste this under the `Player` class from the previous slide and it compiles and runs fine, printing `theRedRhin`. This is the guard paying off for real, and a direct MCQ target: trace the conditional, do not assume a setter is a no-op. -->
 
 ## Predict: what prints?
 
@@ -541,6 +545,8 @@ public class BankAccount {
 - Getters and setters are the common case, not the rule. The rule: **public methods = the operations you intend to allow** - nothing more.
 
 ---
+
+<!-- Speaker notes: ~0:43. Predict beat that exercises both guards in one trace. Expect `75.0` as the wrong answer: some will let `deposit(-50)` succeed - as if only `withdraw` needs bounds-checking, since an overdraft feels like the only real danger - landing on `50.0` before correctly blocking the `500` withdrawal and adding the `25`. The `no-compile` tag here just flags a fragment reusing `BankAccount` from two slides back, not broken code - it runs fine once appended to that class. This is the last confidence-builder before the next slide punctures it: the object stays valid through every guard here, the exact false security the escaping-reference twist exploits. -->
 
 ## Predict: what prints?
 

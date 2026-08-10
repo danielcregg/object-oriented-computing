@@ -160,6 +160,8 @@ String c = new String("hello");    // 'new', like any other object
 
 ---
 
+<!-- Speaker notes: ~0:11. Predict beat, and the direct test of the pool diagram you just drew. Expect a confident `true` on the second line: students reason the way `.equals()` does ('same text, so same') rather than trusting that `==` ignores content entirely; if the room hesitates on line one instead, that's the sign the pool itself hasn't landed. This is the exact split the next slide names outright (`== lies convincingly`), and it's the `==` vs `.equals()` question the MCQs return to most. -->
+
 ## Predict: what prints?
 
 ```java
@@ -258,6 +260,8 @@ String[] words   = trimmed.split(" ");      // {"Java", "Strings"}
 <div class="callout"><strong>Spot the echo:</strong> arrays carry <code>.length</code> - a field, no brackets. Strings answer <code>.length()</code> - a method call. Mixing them up is a rite of passage; today you've met both sides.</div>
 
 ---
+
+<!-- Speaker notes: ~0:24. Predict beat, and the payoff of the array aliasing trap from week 4. Expect `ha!` as the wrong answer for `b`: students who remember 'shared arrows see the same edit' assume `a = a + "!"` mutates the object `b` also points to, missing that `+` runs the factory and only `a`'s arrow gets redirected. This is the proof-by-example for the 'sharing is always safe' rule the next slide states outright, and it's the question that checks whether students can tell a reassignment from a mutation. -->
 
 ## Predict: what prints?
 
@@ -395,6 +399,8 @@ System.out.println(chain);                 // Total: 7 laps
 - It also **returns the builder**, so calls chain. For years `javac` compiled every `"a" + b + "c"` into exactly this - one expression was always fine; a *loop* of them never was.
 
 ---
+
+<!-- Speaker notes: ~0:43. Predict beat, and the slide's own third bullet names the stakes: explain the contrast and the hour is yours. Expect two mirrored wrong answers: some still say `HELLO` for `s`, replaying the opening mystery; others, primed by the 'catch the arrow' habit, wrongly predict `sb` prints unchanged, assuming `append`/`reverse` need catching too - they don't, because StringBuilder mutates in place. This is the hour compressed into six lines, and it's the item the MCQs use to check whether students can pick factory or workshop for an unlabelled snippet. -->
 
 ## Predict: what prints?
 

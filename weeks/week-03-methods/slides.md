@@ -350,6 +350,8 @@ public static void main(String[] args) {
 
 ---
 
+<!-- Speaker notes: ~0:20. Predict beat testing whether `return` really exits on the spot, now inside a branch rather than read straight through. The wrong answer to expect is 7: the room treats the method as if it falls through to the trailing `return x;` regardless of the `if`, so `mystery(5)` comes back as 5 instead of 10, and the doubling never happens. That immediate-exit rule for `return` was taught a few slides back; this is the first time it is tested rather than just stated, which is exactly the conditional-tracing skill the MCQs probe. -->
+
 ## Predict: what prints?
 
 ```java
@@ -437,6 +439,8 @@ public static void main(String[] args) {
 * Remember: an object variable holds an **arrow**, and an `int[]` array is an object. Copy the arrow - both point at the **same boxes**.
 
 ---
+
+<!-- Speaker notes: ~0:29. Predict beat that forces the photocopy rule and the arrow rule together in one call, right after seeing each in isolation. The wrong answer to expect is `0 0`: having just watched an array mutate through a method call, the room tends to overgeneralize and assume `n = 0` leaks back to `x` too, rather than recognizing `n` is a fresh copy of a plain `int` while `data` is a copied arrow into the one real array. This is the real test of whether pass-by-value landed as a general rule or was only pattern-matched off the array example, and mixed-parameter tracing like this is exactly what the MCQs probe. -->
 
 ## Predict: what prints?
 
@@ -610,6 +614,8 @@ public static void methodB() {
 
 ---
 
+<!-- Speaker notes: ~0:46. Predict beat that tests whether the call stack means calls, not methods. The wrong answer to expect is three lines, `a in`, `b!`, `a out`, with the room dropping the second `b!` because they treat `b()` as a single thing that already ran rather than a fresh frame pushed and popped independently each time it is called. This is the first real test of the frame model from two slides back: every call gets its own frame regardless of which method it points at, and MCQs that shuffle call order lean on exactly this. -->
+
 ## Predict: what order?
 
 ```java
@@ -631,6 +637,8 @@ public static void main(String[] args) {
 * …then `b!` once more. Same method, **brand-new frame** - frames are per *call*, not per method.
 
 ---
+
+<!-- Speaker notes: ~0:49. Predict beat, and the very next slide, Common mistakes, calls back to this one directly. This snippet is tagged no-compile because failing to compile IS the correct answer: the room typically guesses it compiles fine, reasoning from the one visible `return 1;` without tracing the implicit path where `score < 40` and control falls off the end with nothing to hand back. The faulty model is picturing the compiler as running one example value rather than proving every possible path returns - the same every-path-must-return rule that bites any time a non-void method grows an `if` with no `else`. -->
 
 ## Predict: does this compile?
 

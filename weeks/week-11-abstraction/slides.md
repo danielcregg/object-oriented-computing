@@ -363,6 +363,8 @@ class Truck extends Vehicle {
 
 ---
 
+<!-- Speaker notes: ~0:27. Predict beat, the first compile-error test of the hour. Expect a good share of the room to guess it compiles, reasoning that since nothing ever calls `area()` an empty body cannot hurt - that is a runtime mental model, and Java checks every concrete class finishes its inherited homework at compile time whether or not the method is ever invoked, which is exactly why the fence above it carries the `no-compile` marker. This is the direct payoff of the homework rule two slides back, and the same all-or-nothing rule resurfaces when interfaces demand every method be implemented too. -->
+
 ## Predict: does this compile?
 
 <!-- no-compile -->
@@ -547,6 +549,8 @@ interface MediaPlayer {
 
 ---
 
+<!-- Speaker notes: ~0:41. Predict beat, and the one most likely to slip past as correct. Expect the room to say it compiles, since `Dog` defines a `speak()` with the right name, parameters and return type and reads as a normal override - the trap is that nothing about missing an access modifier looks wrong, because default access is legal Java everywhere else; only against a `public` interface contract does it become a silent narrowing the compiler will not allow. The fence carries the `no-compile` marker for exactly that reason, and a dropped `public` on an implementing method is a recurring, easy-to-miss mistake well beyond this one slide. -->
+
 ## Predict: spot the broken promise
 
 - `Speaker` demands a `speak()` - and `Dog` delivers one. Or does it?
@@ -626,6 +630,8 @@ class Dog implements Speaker {
 | Relationship | *is-a* | *is-a* (partially built) | *can-do* - a capability: `Runnable`, `Serializable` |
 
 ---
+
+<!-- Speaker notes: ~0:51. Predict beat that ties the hour together: one snippet combines the Tool 1 instantiation rule with Tool 2 contract polymorphism. Expect line 1 to slip through anyway: it has almost the same surface shape as line 2 right below it (`Vehicle` on the left, `new` on the right), and the one fact that makes it illegal - that `Vehicle` was declared `abstract` - is stated only in the prose above the fence, nowhere in the code itself. Lines 3 and 4 directly replay the earlier contracts-are-types slide, and the whole fence carries the `no-compile` marker because line 1 alone is enough to fail compilation, even though lines 2 to 4 are individually fine. -->
 
 ## Predict: which lines compile?
 

@@ -174,7 +174,26 @@ alone.
 - Topic decks carry 3-4 fragmented predict-style beats ("Predict the
   Output", "Predict: Does This Compile?") spaced through the hour;
   answers are `* ` bullets so they reveal after the class commits.
-- Speaker notes live in `<!-- Speaker notes: ... -->` comments.
+- Speaker notes live in `<!-- Speaker notes: ... -->` comments, placed at the
+  TOP of the slide (straight after the `---`, before the `#`/`##` heading) —
+  Marp attaches a comment to the slide it sits in, so a note written after
+  the content still belongs to that slide, but the top is where every
+  existing note is and where they are easiest to scan.
+  A note serves two readers at once and must earn its place with both:
+  the lecturer presenting, and an AI reading the deck to help a student.
+  So it carries what the slide itself does NOT show:
+  1. `~M:SS.` elapsed time, then tempo/delivery for the room.
+  2. **The misconception** — the specific WRONG answer students give and the
+     faulty model behind it. This is the highest-value part for an AI: the
+     slide already states the right answer, never the wrong one students
+     actually reach for. Every `Predict:` slide should have this.
+  3. Weight — is this the deepest idea of the hour, a reference slide to
+     screenshot, or muscle memory to take at pace?
+  4. Links — which earlier idea it pays off, which later one it sets up, and
+     whether it maps onto an MCQ or the lab.
+  Never restate the slide's own bullets. Notes **ship inside the rendered
+  HTML** and are readable by anyone viewing source, so write them
+  publishable: no remarks about individual students or cohorts.
 - Diagrams in decks are drawn in deck-local CSS (a `<style>` block at the
   top of each `slides.md`: memory boxes, pillar strips, hierarchy trees,
   call-stack frames…) — no image files and no build pipeline. That block

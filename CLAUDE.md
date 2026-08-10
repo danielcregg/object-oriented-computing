@@ -48,11 +48,15 @@ read-only assets.
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`).
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
-  to HTML + PDF on push (gh-pages branch + build artifact). pptx export is
-  deliberately OFF: Marp wraps each slide as an image, so it adds ~6 MB per
-  deck over the PDF for no gain, and pptx cannot be delta-compressed, which
-  is what grew gh-pages to 2.5 GB. The deploy uses `single-commit: true` —
-  gh-pages is build output, so it keeps exactly one commit.
+  to HTML + PDF on push, then publishes the site with
+  `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
+  gh-pages branch** — build output never enters git, so the forks students
+  make carry only source, and deployments get history + rollback in the
+  `github-pages` environment. Do not reintroduce a branch-deploy action.
+  pptx export is deliberately OFF: Marp wraps each slide as an image, so it
+  adds ~6 MB per deck over the PDF for no gain, and pptx cannot be
+  delta-compressed — that combination had grown the old gh-pages branch to
+  2.5 GB before it was removed.
 
 ## Conventions (guaranteed repo-wide)
 

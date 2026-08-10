@@ -23,8 +23,13 @@ import re
 import sys
 from pathlib import Path
 
-MODEL = os.environ.get("BEDROCK_MODEL_ID",
-                       "eu.anthropic.claude-sonnet-4-5-20250929-v1:0")
+# This account's org SCP allows only some models. Confirmed invokable:
+# eu.anthropic.claude-opus-4-6-v1 (best), eu.anthropic.claude-opus-4-5-*,
+# and the Nova text models. Sonnet 4.5, Haiku 4.5 and Claude 3.x are DENIED
+# by the SCP, so picking one of those fails with AccessDeniedException even
+# though the key is valid. The regional inference-profile prefix (eu./us.)
+# is required -- bare model ids are rejected.
+MODEL = os.environ.get("BEDROCK_MODEL_ID", "eu.anthropic.claude-opus-4-6-v1")
 SCOPE = os.environ.get("REVIEW_SCOPE", "everything")
 OUT = Path("content-review-findings.md")
 

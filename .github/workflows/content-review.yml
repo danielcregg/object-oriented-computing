@@ -1,0 +1,81 @@
+name: content-review
+
+# An end-of-semester AI review of the teaching material, opened as a pull
+# request for a human to judge. It NEVER commits to main.
+#
+# Scope is deliberately narrow. Questions a compiler can answer are already
+# answered better by CI (verify_snippets compiles every deck and lab
+# snippet, and the labs-solutions repo runs the exercises and diffs their
+# output). What is left for a model is the part no tool can reach:
+#   - does a lecture's explanation still match its lab's exercise?
+#   - is terminology consistent across decks?
+#   - does a hint give the answer away?
+#   - is a practice question answerable from the material as taught?
+#
+# Requires an AWS Bedrock credential stored as repository secrets:
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION (e.g. eu-west-1)
+# Add them in Settings -> Secrets and variables -> Actions. Until they
+# exist the job skips cleanly, so this file is safe to merge today.
+
+on:
+  schedule:
+    - cron: '0 7 15 12 *'     # 15 December, after teaching ends
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'What to review'
+        type: choice
+        default: 'everything'
+        options: [everything, lectures, labs, practice]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  review:
+    if: github.repository == 'danielcregg/object-oriented-computing'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Is a Bedrock credential configured?
+        id: creds
+        run: |
+          if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No Bedrock credential set - skipping. Add AWS_ACCESS_KEY_ID," \
+                 "AWS_SECRET_ACCESS_KEY and AWS_REGION to run this." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Set up Python
+        if: steps.creds.outputs.ready == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install boto3
+        if: steps.creds.outputs.ready == 'true'
+        run: pip install --quiet boto3
+
+      - name: Review the content
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          REVIEW_SCOPE: ${{ inputs.scope || 'everything' }}
+        run: python3 scripts/content_review.py
+
+      - name: Open a pull request with the findings
+        if: steps.creds.outputs.ready == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: content-review
+          title: 'Content review findings'
+          body-path: content-review-findings.md
+          commit-message: 'docs: AI content review findings (review before merging)'
+          add-paths: content-review-findings.md
+          delete-branch: true

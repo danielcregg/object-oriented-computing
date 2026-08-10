@@ -95,4 +95,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue create             --title "Content review findings ($(date +%Y-%m-%d))"             --body-file content-review-findings.md             --label "content-review" ||           gh issue create             --title "Content review findings ($(date +%Y-%m-%d))"             --body-file content-review-findings.md
+          TITLE="Content review findings ($(date +%Y-%m-%d))"
+          # the label may not exist yet; fall back to filing without it
+          gh issue create --title "$TITLE" \
+                          --body-file content-review-findings.md \
+                          --label content-review \
+            || gh issue create --title "$TITLE" \
+                               --body-file content-review-findings.md

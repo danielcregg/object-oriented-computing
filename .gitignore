@@ -27,5 +27,9 @@ moodle-api-key.txt
 
 # personal working notes: course ids, private material locations, open
 # decisions. Loads alongside CLAUDE.md for local AI sessions; must never
-# reach a fork.
+# reach a copy of this repo.
 CLAUDE.local.md
+
+# presentation notes about this repo as a teaching model — working
+# material, not module content.
+MODEL-REPO.local.md

@@ -214,8 +214,14 @@ alone.
 
 ## Local preview (before committing)
 
-    npm install          # once per machine — pinned marp-cli, same version as CI
+    npm install          # once per machine — installs the marp-cli version
+                         # pinned exactly in package.json, the same one CI
+                         # installs. There is no committed lockfile: CI uses
+                         # `npm install -g <pinned>` and never reads one, so
+                         # it only added ~1900 lines to a repo students copy.
+                         # npm regenerates it locally; it is gitignored.
     npm run preview      # live server over weeks/ -> http://localhost:8080
+    npm run export:intro # one deck straight to build/…/slides.pdf
 
 Browse to any deck (e.g. `/week-01-introduction/lecture/slides.md`); edit the
 markdown, refresh the browser to see it. `npm run preview:intro` opens a

@@ -9,6 +9,11 @@ build/
 node_modules/
 __pycache__/
 
+# Local preview tooling only. marp-cli is pinned exactly in package.json and
+# CI installs it globally at that same version, so the lockfile pinned only
+# marp's own transitive deps -- 1900 lines of noise in a repo students copy.
+package-lock.json
+
 # SDD scratch workspace (plan execution artifacts, never repo content)
 .superpowers/
 

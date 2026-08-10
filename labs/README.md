@@ -32,8 +32,8 @@ beside it.
 | Polymorphism | [`src/ie/atu/polymorphism/`](src/ie/atu/polymorphism/) |
 | Abstraction | [`src/ie/atu/abstraction/`](src/ie/atu/abstraction/) |
 
-Worked solutions (after you've attempted a lab!):
-<https://github.com/danielcregg/REDACTED>
+Stuck? Every exercise has a **Hint** you can expand, and every expected
+output is printed in the README — compare yours against it before asking.
 
 ## Keeping your fork up to date
 

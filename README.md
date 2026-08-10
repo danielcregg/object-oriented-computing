@@ -63,13 +63,6 @@ purpose and is separate from any assessment material.
 - [Delivery plan 2026-27 (12 weeks, plus the open backlog)](module/delivery-plan-2026-27.md)
 - [Moodle course-page assets](module/moodle-assets/README.md)
 
-## Related repos
-
-| Repo | Purpose |
-|---|---|
-| [REDACTED](https://github.com/danielcregg/REDACTED) | Worked lab solutions by topic |
-| [marp-to-pages-template](https://github.com/danielcregg/marp-to-pages-template) | Origin of the Marp CI workflow |
-
 ## For AI tools
 
 Read [`CLAUDE.md`](CLAUDE.md) first — it defines the conventions this repo

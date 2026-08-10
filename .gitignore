@@ -14,3 +14,8 @@ __pycache__/
 
 # local Moodle web-service token — never commit
 moodle-api-key.txt
+
+# personal working notes: course ids, private material locations, open
+# decisions. Loads alongside CLAUDE.md for local AI sessions; must never
+# reach a fork.
+CLAUDE.local.md

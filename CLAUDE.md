@@ -7,8 +7,7 @@ read-only assets.
 ## Map
 
 - `weeks/week-NN-<topic>/lecture/slides.md` — Marp deck, THE canonical
-  lecture. `lecture/img/` holds its images. (The original pptx archives
-  were deleted 2026-08-08; they survive in git history only.)
+  lecture. `lecture/img/` holds its images.
 - `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
   instructions students follow) + `Main.java` starter per lab. Students
   fork the repo and work here (devcontainer provided); CI compiles every
@@ -31,12 +30,13 @@ read-only assets.
 - `module/` — `module-overview.md` (weekly topics + per-week summaries),
   `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint
   plus the open backlog), and `moodle-assets/` (course-page HTML).
-- Rendered decks are PUBLIC on GitHub Pages:
+- The site is PUBLIC:
   https://danielcregg.is-a.dev/object-oriented-computing/ (one folder per
-  week: index.html + slides.pdf). The repo stays private;
-  only rendered lecture decks are published — never labs' answer keys,
-  question banks, or module internals. Anything pushed to a deck goes
-  public within minutes.
+  week: index.html + slides.pdf, plus `/labs/` and `/practice/`). Treat
+  everything here as publishable: anything pushed is live within minutes,
+  and speaker-note comments in a deck ship inside the rendered HTML where
+  anyone can read them. Assessment material — real question banks, answer
+  keys, anything that would spoil an MCQ — never enters this repo at all.
 - `practice/` — the MCQ practice web app (`index.html`, self-contained
   vanilla JS) + its question bank (`bank/<topic>.json`, one per topic).
   Bank questions are PRACTICE questions authored from the decks and labs
@@ -145,20 +145,18 @@ CI re-renders the published decks only on push.
 
 - Student personal data of any kind (names, IDs, grades, submissions).
 - Exam papers or solutions.
-- Moodle web-service tokens (they live in the private `REDACTED` repo,
-  `REDACTED`; the Moodle URL https://vlegalwaymayo.atu.ie is fine).
+- Credentials of any kind — Moodle web-service tokens above all. They live
+  outside this repo and must never be pasted into it, quoted in a commit
+  message, or echoed into a terminal transcript. (The Moodle URL itself,
+  https://vlegalwaymayo.atu.ie, is public and fine.)
 - Bulk third-party materials (textbook dumps, book PDFs).
 
 Safety audit before any push (must print nothing):
 
     python scripts/safety_audit.py
 
-Checks tracked extensions, path placement, and tracked text content
-for leaked student data and Moodle tokens (pptx-internal checks remain
-in the script but are vacuous since the pptx archives were deleted). A known-safe mention (a
-whitelisted Classroom URL, or this pattern's own name — plain or backtick-quoted) only clears
-a match it fully covers — real content extending past one, even glued
-on with no separating space, still surfaces. Classroom `/classrooms/`
-URLs clear only by exact whitelist, not by shape — add a newly
-referenced one to `CLASSROOMS_WHITELIST` in the script, or it will
-surface for review instead of being silently trusted.
+It checks tracked file extensions, path placement, and the text of
+tracked files for leaked student data and credential-shaped strings. It
+is deliberately conservative: anything it cannot prove safe is printed
+for a human to judge rather than silently passed. If it flags something,
+fix the content — never widen the detector to make the warning go away.

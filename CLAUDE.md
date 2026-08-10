@@ -19,16 +19,18 @@ read-only assets.
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
   no week/module references (self-contained, like the decks).
-- `weeks/week-NN-<topic>/lab/lab.md` — thin pointer to the lab's canonical
-  home in `labs/`. Weeks without labs say so explicitly.
-- `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` — assessment weeks.
-  MCQ question content lives in Moodle only — never commit it here.
-- `module/` — module-overview (weekly topics + per-week summaries),
-  syllabus, future-improvements, Moodle course-page HTML assets,
-  `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint),
-  and `schedule-table/` (builder template for the Moodle schedule table).
-- `docs/superpowers/` — the design spec and the (amended) build and fix-wave plans this
-  repo was created from; execution history, not module content.
+- Week folders hold the lecture only. There are no per-week lab stubs —
+  the README schedule table links straight to `labs/src/ie/atu/<topic>/`.
+- `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` and
+  `weeks/week-06b-reading-week/` — non-teaching weeks. Their `README.md`
+  is the ONLY tracked file in each folder, so it is load-bearing: git does
+  not track empty directories, and `build_index.py` derives the site's MCQ
+  and reading-week rows from these folder names. Deleting the README
+  deletes the row. MCQ question content lives in Moodle only — never
+  commit it here.
+- `module/` — `module-overview.md` (weekly topics + per-week summaries),
+  `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint
+  plus the open backlog), and `moodle-assets/` (course-page HTML).
 - Rendered decks are PUBLIC on GitHub Pages:
   https://danielcregg.is-a.dev/object-oriented-computing/ (one folder per
   week: index.html + slides.pdf + slides.pptx). The repo stays private;
@@ -41,7 +43,6 @@ read-only assets.
   — never the real Moodle assessment bank, and always self-contained (no
   schedule references). `scripts/check_practice_bank.py` validates the
   bank in CI; CI copies `practice/` to the site at `/practice/`.
-- `scripts/pptx_to_marp.py` — one-shot converter used for the initial import.
 - `scripts/build_index.py` — generates the Pages landing page from the
   `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
@@ -52,11 +53,10 @@ read-only assets.
 ## Conventions (guaranteed repo-wide)
 
 - Folder/file names: kebab-case, no spaces.
-- Every `slides.md` and `lab.md` starts with YAML frontmatter:
-  `title`, `week` (int), `topic` (kebab slug), `type` (`lecture`|`lab`),
-  `source` (original filename, `authored`, or for lab snapshots
-  `"<starter-repo> README.md (synced YYYY-MM-DD)"`). Lecture decks also have
-  `marp: true`, `theme`, `paginate`.
+- Every `slides.md` starts with YAML frontmatter: `title`, `week` (int),
+  `topic` (kebab slug), `type` (`lecture`), `source` (`authored`),
+  `marp: true`, `theme`, `paginate`. Lab READMEs carry no frontmatter —
+  they are read as plain markdown on GitHub and on the site.
 - Slides are separated by `---` on its own line; slide 1 uses `#`, the rest `##`.
 - All decks use the repo theme `themes/ooc.css` (`theme: ooc` in frontmatter) —
   edit the theme file to restyle every deck at once. Per-slide classes via
@@ -105,13 +105,14 @@ read-only assets.
 ## Editing rules
 
 - To change a lecture: edit its `slides.md` and push — CI re-renders decks.
-- To add week N: create `weeks/week-NN-<topic>/lecture/slides.md` (+ `lab/lab.md`),
-  then add a row to README's schedule table.
+- To add week N: create `weeks/week-NN-<topic>/lecture/slides.md`, add its
+  lab under `labs/src/ie/atu/<topic>/`, then add a row to README's
+  schedule table.
 - Week folders follow the 2026-27 plan: 12 numbered weeks plus the
   deliberately unnumbered `weeks/week-06b-reading-week/` (October
   bank-holiday week, no teaching — it sits between teaching weeks 6 and 7).
   Renumbering weeks also touches README's schedule table,
-  `module/schedule-table/module-schedule.json`, and this file.
+  `module/module-overview.md`, and this file.
 
 ## Local preview (before committing)
 

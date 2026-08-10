@@ -49,11 +49,27 @@ After re-mapping the categories in Moodle, re-export the bank to the private que
 
 ### Lab assignment naming
 
-Classroom assignment names carry stale `wN` prefixes after the week shift
-(e.g. `w3-lab-classes-and-objects` runs in week 2; `w10-lab-inheritance` runs in week 8).
-Rename these when creating 2026-27 assignments in Classroom. The week-2
-Structure lab (`w2-lab-structure`) becomes supplementary, used alongside
-`wX-lab-control-flow` for the week-1 intro.
+GitHub Classroom is retired — the labs live in `labs/src/ie/atu/<topic>/`
+and students fork this repo, so there are no assignment names to keep in
+step with the week numbers any more.
 
-The schedule-table template (`module/schedule-table/`) should be rebuilt to
-this layout when filling in real dates and links.
+If a Moodle schedule table is wanted for 2026-27, build it in the
+[module-schedule-table-builder](https://github.com/danielcregg/module-schedule-table-builder)
+app against the 12-week layout above and paste the result into the course
+page.
+
+## Backlog
+
+Still open for a future delivery:
+
+- **AI-generated lecture audio** (NotebookLM) as a revision aid per topic.
+- **Possible move to Python** — teach OO in Python first, then Java OO in
+  semester 2. A whole-module decision, not a tweak.
+
+Done and kept here so the same ground isn't re-covered: the 12-week move
+(2026-08-07), the cross-deck de-duplication and the shortened polymorphism
+lab (2026-08-08), Expected-output blocks on every lab DIY, and the
+devcontainer speed question — a Codespaces prebuild does **not** help,
+because a student's fork is a separate repository and gets no prebuild
+from this one; the stock Java image with no devcontainer features is
+already the fast path.

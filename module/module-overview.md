@@ -31,7 +31,7 @@ common syntax errors beginners hit.
 ## Week 2 — Classes and Objects
 
 [Slides](../weeks/week-02-classes-and-objects/lecture/slides.md) ·
-[Lab](../weeks/week-02-classes-and-objects/lab/lab.md)
+[Lab](../labs/src/ie/atu/classesandobjects/)
 
 The conceptual core of the module. What a class is (blueprint), attributes
 / members, class declaration syntax, and the benefits of classes; what an
@@ -45,7 +45,7 @@ class-design habit.
 ## Week 3 — Methods
 
 [Slides](../weeks/week-03-methods/lecture/slides.md) ·
-[Lab](../weeks/week-03-methods/lab/lab.md)
+[Lab](../labs/src/ie/atu/methods/)
 
 What a method is, method syntax and anatomy (modifiers, return type, name,
 parameter list, body). Parameters and arguments, return values, `void` vs
@@ -58,7 +58,7 @@ practices.
 ## Week 4 — Arrays
 
 [Slides](../weeks/week-04-arrays/lecture/slides.md) ·
-[Lab](../weeks/week-04-arrays/lab/lab.md)
+[Lab](../labs/src/ie/atu/arrays/)
 
 What an array is and its characteristics: fixed length, homogeneous
 element type, zero-based indices. Declaring, constructing, and assigning
@@ -75,7 +75,7 @@ methods, and arrays.
 ## Week 6 — Strings
 
 [Slides](../weeks/week-06-strings/lecture/slides.md) ·
-[Lab](../weeks/week-06-strings/lab/lab.md)
+[Lab](../labs/src/ie/atu/strings/)
 
 Strings as objects: creating them (literals vs `new`) and how the String
 pool and memory work. String immutability — what it means, why it's good
@@ -93,7 +93,7 @@ the Irish October bank holiday (the last Monday of October).
 ## Week 7 — Encapsulation
 
 [Slides](../weeks/week-07-encapsulation/lecture/slides.md) ·
-[Lab](../weeks/week-07-encapsulation/lab/lab.md)
+[Lab](../labs/src/ie/atu/encapsulation/)
 
 Opens the four-pillars block; this deck is the canonical home of the
 "four major principles of OOP" overview (later pillar decks open with a
@@ -107,7 +107,7 @@ visualised, a coding example, and the benefits.
 ## Week 8 — Inheritance
 
 [Slides](../weeks/week-08-inheritance/lecture/slides.md) ·
-[Lab](../weeks/week-08-inheritance/lab/lab.md)
+[Lab](../labs/src/ie/atu/inheritance/)
 
 Definition and terminology (superclass/subclass, is-a), implementing
 inheritance with `extends`, and a worked coding example. The `Object`
@@ -126,7 +126,7 @@ slot. Examines weeks 6–8: strings, encapsulation, and inheritance.
 ## Week 10 — Polymorphism
 
 [Slides](../weeks/week-10-polymorphism/lecture/slides.md) ·
-[Lab](../weeks/week-10-polymorphism/lab/lab.md)
+[Lab](../labs/src/ie/atu/polymorphism/)
 
 The two kinds of polymorphism. Compile-time: method signatures and
 overloading, with worked examples. Runtime: method overriding, why it must
@@ -139,7 +139,7 @@ benefits and a recap.
 ## Week 11 — Abstraction
 
 [Slides](../weeks/week-11-abstraction/lecture/slides.md) ·
-[Lab](../weeks/week-11-abstraction/lab/lab.md)
+[Lab](../labs/src/ie/atu/abstraction/)
 
 What abstraction is and how it differs from encapsulation, with real-life
 examples. Java's two mechanisms: abstract classes (abstract vs concrete

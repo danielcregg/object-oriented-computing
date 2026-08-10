@@ -623,7 +623,7 @@ class Puppy {
 
 ---
 
-<!-- Speaker notes: ~0:38. Predict beat. The faulty model is "a no-arg constructor is always there" - writing ANY constructor withdraws the compiler-supplied one. Say the exact compiler message aloud; they will hit it in the lab within the hour. Fenced `no-compile` on purpose: this snippet is meant to fail, so CI skips it. -->
+<!-- Speaker notes: ~0:38. Predict beat. The faulty model is "a no-arg constructor is always there" - writing ANY constructor withdraws the compiler-supplied one. Say the exact compiler message aloud, and dwell on it: this slide is the ONLY place they meet this error. The lab's DIY 3 has them write the no-arg constructor first, so the trap never fires there. Fenced `no-compile` on purpose: this snippet is meant to fail, so CI skips it. -->
 
 ## Predict: does this compile?
 

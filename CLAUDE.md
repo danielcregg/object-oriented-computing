@@ -82,6 +82,22 @@ alone.
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
   no week/module references (self-contained, like the decks).
+  **Every DIY has a hint** — six were missing and were written on
+  2026-08-10; do not add an exercise without one.
+- **Size a lab to a two-hour slot, and judge it by COMPOSITION, not
+  length.** The number that matters is the fraction of a DIY's numbered
+  steps that ask the student to write their own code, rather than handing
+  them a fence to copy. Across the eight labs that ratio runs 64–92%,
+  except abstraction at 38% — which is why that lab feels full (163
+  supplied lines to type) while teaching the least. Supplying a class is
+  fine as *starting material* an exercise then builds on; it is not fine
+  as the exercise. When a lab runs long, cut transcription before you cut
+  exercises.
+- Lab sections are NOT uniform below that top-level formula, and that is
+  tolerated rather than intended: section counts run 4–9, sub-heading
+  vocabulary differs per lab (`Code Example` / `Real-World Example` /
+  `Explanation` / `Key Concepts`…), and two labs use no sub-headings at
+  all. Match the lab you are editing; don't import another lab's style.
 - Week folders hold the lecture only. There are no per-week lab stubs —
   the README schedule table links straight to `labs/src/ie/atu/<topic>/`.
 - `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` and
@@ -119,7 +135,10 @@ alone.
   (shape, option counts, minimum questions per topic, no schedule
   references). CI gate; run it after touching the bank.
 - `scripts/check_links.py` — every relative link and image target in the
-  tracked Markdown must resolve. External URLs are never fetched. CI gate;
+  tracked Markdown must resolve, and every in-page `#anchor` must name a
+  heading that exists (its `slugify` mirrors `gh_slugify` in
+  `build_lab_pages.py`, so renaming a lab section without updating its
+  Table of Contents fails the build). External URLs are never fetched. CI gate;
   it exists because the layout is DERIVED (week folder → deck, topic → lab
   package), so any rename silently breaks prose that names the old path —
   which is how README's whole schedule table once shipped nine 404s with

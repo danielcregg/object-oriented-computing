@@ -19,6 +19,7 @@
 7. [Common Array Operations](#7-common-array-operations)
 8. [2D Arrays](#8-2d-arrays)
 9. [Passing Arrays to Methods](#9-passing-arrays-to-methods)
+10. [The Champion and Search Patterns](#10-the-champion-and-search-patterns)
 
 ## Getting started
 
@@ -804,6 +805,116 @@ Doubled array: [2, 4, 6]
 <summary>Hint</summary>
 
 Iterate over the input array, double each element, and store it in a new array.
+
+</details>
+
+## 10. The Champion and Search Patterns
+
+Two more loop shapes come up everywhere: finding the best value in an array, and checking whether a value is in there at all.
+
+### The Champion Pattern
+
+Track the best value seen "so far" as you sweep the array: start by naming the first element champion, then challenge it with every element that follows.
+
+```java
+public class HighestTemperature {
+    public static void main(String[] args) {
+        int[] temperatures = {68, 74, 59, 81, 77};
+
+        int highest = temperatures[0];
+        for (int i = 1; i < temperatures.length; i++) {
+            if (temperatures[i] > highest) {
+                highest = temperatures[i];
+            }
+        }
+
+        System.out.println("Highest temperature: " + highest);
+    }
+}
+```
+
+<details>
+<summary>Output</summary>
+
+```
+Highest temperature: 81
+```
+
+</details>
+
+### DIY 12: Highest and lowest score
+
+1. Create the array `int[] scores = {83, 91, 78, 65, 95};`.
+2. Using the champion pattern - start `highest` at `scores[0]`, then compare every later element against it - find the highest score.
+3. Using the same pattern with the comparison flipped, find the lowest score.
+4. Print both results in the form shown below.
+
+**Expected output**
+
+```text
+Highest score: 95
+Lowest score: 65
+```
+
+<details>
+<summary>Hint</summary>
+
+Do not start `highest` (or `lowest`) at `0` - start it at `scores[0]`, then loop from index `1`, comparing each remaining element and updating your champion when you find something bigger (or smaller).
+
+</details>
+
+### The Search Pattern
+
+Walk the array and return the moment you find what you are looking for - an early exit, not a scan that keeps going after the answer is known. If the loop finishes with no match, return `-1`: an index that can never be real.
+
+```java
+public class FindName {
+    public static void main(String[] args) {
+        String[] names = {"Ada", "Linus", "Grace"};
+
+        System.out.println("Index of Grace: " + find(names, "Grace"));
+        System.out.println("Index of Alan: " + find(names, "Alan"));
+    }
+
+    public static int find(String[] names, String target) {
+        for (int i = 0; i < names.length; i++) {
+            if (names[i].equals(target)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+<details>
+<summary>Output</summary>
+
+```
+Index of Grace: 2
+Index of Alan: -1
+```
+
+</details>
+
+### DIY 13: Search for a number
+
+1. Write a method `indexOf(int[] numbers, int target)` that searches `numbers` for `target`, `return`-ing its index the moment it finds a match.
+2. If the loop finishes without a match, `return -1` after it.
+3. In `main`, create the array `int[] numbers = {12, 27, 33, 48, 9};`.
+4. Call your method twice - once for `48` (a value that is present) and once for `100` (a value that is absent) - and print both results in the form shown below.
+
+**Expected output**
+
+```text
+Index of 48: 3
+Index of 100: -1
+```
+
+<details>
+<summary>Hint</summary>
+
+Compare with `==`, not `.equals()` - these are `int` values, not objects. Loop with the counting pattern; the instant `numbers[i] == target`, `return i`. Only reach `return -1` if the loop finishes with no match.
 
 </details>
 

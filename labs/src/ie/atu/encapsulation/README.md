@@ -15,6 +15,7 @@
 2. [Data Hiding](#2-data-hiding)
 3. [Getters and Setters](#3-getters-and-setters)
 4. [Data Validation](#4-data-validation)
+5. [Defensive Copies](#5-defensive-copies)
 
 ## Getting started
 
@@ -435,6 +436,113 @@ System.out.println("Student: " + grade3.getStudentName());
 System.out.println("Grade: " + grade3.getNumericGrade());
 System.out.println("Course: " + grade3.getCourseCode());
 ```
+
+</details>
+
+## 5. Defensive Copies
+
+Sections 1-4 hid every field behind `private` and routed every read and write through a method. That closes the front door - but there is a side door hiding in plain sight. If a private field is an array (or any other mutable object) and a getter returns that field directly, the caller does not receive a snapshot of the data - they receive the exact array the object uses internally. Every access still goes through the getter, and no code anywhere ever assigns to the field directly - yet mutating that array from the outside changes the private field too.
+
+### Example: An Array Field That Leaks
+```java
+public class Gradebook {
+    private int[] scores = {70, 80, 90};
+
+    public int[] getScores() {
+        return scores;
+    }
+}
+```
+
+### What Can Go Wrong?
+The getter looks safe - `scores` is `private`, and `getScores()` is the only way to reach it. But an array variable does not hold values, it holds an **arrow** pointing at them. `getScores()` hands the caller that exact arrow, not a copy of what it points to:
+
+```java
+class Main {
+    public static void main(String[] args) {
+        Gradebook gradebook = new Gradebook();
+        int[] view = gradebook.getScores();
+
+        view[0] = 0;                            // scribble on what the getter gave us
+
+        System.out.println(gradebook.getScores()[0]);
+    }
+}
+```
+
+No line here ever writes `gradebook.scores`. No compiler error, no exception - `gradebook.getScores()[0]` now prints `0`, not `70`. The private field changed anyway.
+
+### The Solution: Return a Copy
+```java
+import java.util.Arrays;
+
+public class Gradebook {
+    private int[] scores = {70, 80, 90};
+
+    public int[] getScores() {
+        return Arrays.copyOf(scores, scores.length);   // new array - the original stays sealed
+    }
+}
+```
+
+`Arrays.copyOf` builds a brand-new array holding the same values and hands out an arrow to *that* instead. The caller can still scribble on the array it received - but that array is no longer the one `Gradebook` keeps for itself. Returning a copy of mutable state like this is called a **defensive copy**.
+
+### Visual Representation
+```mermaid
+graph TD
+    A["getScores() returns scores directly"] -->|"view is the SAME array"| B["view[0] = 0"]
+    B -->|"mutates the shared array"| C["private scores field changes too - LEAK"]
+    D["getScores() returns Arrays.copyOf(scores, ...)"] -->|"view is a NEW array"| E["view[0] = 0"]
+    E -->|"mutates only the copy"| F["private scores field is unaffected - SEALED"]
+```
+
+### DIY 5: Report card leak
+
+**Part 1: Build the leak**
+
+1. Create a `ReportCard` class with a private field `int[] grades` initialized to `{88, 91, 76}`.
+2. Add a getter `getGrades()` that returns the `grades` field directly.
+3. In your `Main` class, create a `ReportCard` object.
+4. Print `reportCard.getGrades()[0]` - this is the value before anything touches it.
+5. Call `getGrades()`, store the result in a local `int[] view`, then set `view[0] = 0;`.
+6. Print `reportCard.getGrades()[0]` again. Even though no code anywhere wrote `reportCard.grades = ...`, the private field changed.
+
+**Part 2: Patch it with a defensive copy**
+
+7. Add `import java.util.Arrays;` to the top of your `ReportCard` file.
+8. Change `getGrades()` so it returns `Arrays.copyOf(grades, grades.length)` instead of `grades` directly.
+9. Run the exact same lines from Part 1 (steps 3-6) again, unchanged.
+10. Compare the two runs: the second `getGrades()[0]` no longer changes, because `view` now points at a copy, not the original array.
+
+**Expected output**
+
+```text
+=== Before the fix ===
+Before: 88
+After:  0
+
+=== After the fix ===
+Before: 88
+After:  88
+```
+
+<details>
+<summary>Hint</summary>
+
+Example test code for your `main` method - run it once against the leaky `ReportCard`, then again, unchanged, against the patched one:
+
+<!-- no-compile -->
+```java
+ReportCard reportCard = new ReportCard();
+System.out.println("Before: " + reportCard.getGrades()[0]);
+
+int[] view = reportCard.getGrades();
+view[0] = 0;
+
+System.out.println("After:  " + reportCard.getGrades()[0]);
+```
+
+The only thing that changes between Part 1 and Part 2 is the body of `getGrades()` inside `ReportCard` - this test code stays identical both times.
 
 </details>
 

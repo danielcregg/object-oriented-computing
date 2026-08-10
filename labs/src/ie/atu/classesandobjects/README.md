@@ -356,6 +356,13 @@ Age: 22
 Registered: true
 ```
 
+<details>
+<summary>Hint</summary>
+
+`this.field = field` is what lets a parameter share its field's name: the bare name always means the nearest one, which is the parameter, so `this.` is how you reach past it to the field. For step 2, `this(...)` must be the **first** statement in the constructor - the compiler rejects it anywhere else, because the other constructor has to finish before your body starts adding to its work.
+
+</details>
+
 ---
 
 ## 6. Reference Variables vs Object Identity
@@ -416,6 +423,13 @@ true
 false
 true
 ```
+
+<details>
+<summary>Hint</summary>
+
+`==` on objects only ever asks "the same object?", never "the same contents?" - which is why the third line prints `false` until you override `equals()`. When you write it, compare the `studentID` values with `.equals()` rather than `==`, or you repeat the identical mistake one level down. Return a value derived from that same field in `hashCode()`, so two students your `equals()` calls equal never disagree about their hash.
+
+</details>
 
 ---
 

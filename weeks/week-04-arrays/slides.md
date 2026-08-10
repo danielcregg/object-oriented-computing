@@ -465,7 +465,7 @@ System.out.println(crew[2].length());   // NullPointerException!
 
 ---
 
-<!-- Speaker notes: ~0:46. Grids - connect to the lab immediately; the chessboard is their lab exercise. -->
+<!-- Speaker notes: ~0:46. Grids - connect to the lab immediately. The chessboard here is a lecture illustration, NOT their exercise: the lab's 2D work is DIY 10, summing a 3x3 int grid with nested loops. Say "sum the grid", not "build a chessboard", or they will go looking for something that is not there. -->
 
 ## Two dimensions - the grid
 
@@ -479,7 +479,7 @@ board[7][4] = 'K';     // row 7, column 4
 
 - Read `board[row][col]` - **row first, always**.
 - Spreadsheets, pixel grids, game boards, seating plans - every grid in computing is this.
-- **Lab exercise:** model a chessboard with `char[8][8]`.
+- **Lab exercise:** sweep a 2D grid with nested loops and total it.
 
 ---
 

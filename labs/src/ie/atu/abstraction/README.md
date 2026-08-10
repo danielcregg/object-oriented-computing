@@ -13,6 +13,7 @@
 2. [Interfaces](#2-interfaces)
 3. [Abstract Classes vs. Interfaces](#3-abstract-classes-vs-interfaces)
 4. [Practical Applications](#4-practical-applications)
+5. [Choosing the Right Tool](#diy-5-choosing-the-right-tool)
 
 ## Getting started
 
@@ -227,7 +228,7 @@ classDiagram
     note for Square "🟦 Area = side × side"
 ```
 
-1. Create an abstract class named `Shape` - copy this code into a new file called `Shape.java`:
+1. Create an abstract class named `Shape`. This is the first abstract class you will write in this lab, so - unlike every abstract class and interface from here on - it is given to you complete: copy it into a new file called `Shape.java` and read through it before moving on. The point of copying it is to see exactly where the `abstract` keyword goes on both the class and the method; every abstract class and interface after this one, you write yourself from a specification:
 ```java
 public abstract class Shape {
     protected String color;
@@ -405,14 +406,10 @@ public class Guitar implements MusicalInstrument {
 ### DIY 2: Simple Game Characters
 Create a simple game character system:
 
-1. Create an interface called `GameCharacter`:
-```java
-public interface GameCharacter {
-    void move();
-    void speak();
-    void useItem();
-}
-```
+1. Create an interface named `GameCharacter` with three method signatures that every character must provide - no bodies, just the signatures, exactly like `MusicalInstrument` above:
+   - `void move()` - no parameters, returns nothing
+   - `void speak()` - no parameters, returns nothing
+   - `void useItem()` - no parameters, returns nothing
 
 2. Create two types of characters that implement this interface:
    - `Hero` - implements methods with heroic behavior (e.g., "Hero charges forward!", "For justice!", "Hero uses health potion!")
@@ -448,7 +445,7 @@ Villain uses poison!
 
 <details><summary>Hint</summary>
 
-Follow the `Piano` and `Guitar` pattern above: declare `public class Hero implements GameCharacter { ... }`, then give each of `move()`, `speak()`, and `useItem()` an `@Override` implementation that prints the character's line.
+Write `GameCharacter` the same way `MusicalInstrument` is written above: `public interface GameCharacter { void move(); void speak(); void useItem(); }` - each line is a signature ending in a semicolon, no body. Then follow the `Piano` and `Guitar` pattern for the classes: declare `public class Hero implements GameCharacter { ... }`, and give each of `move()`, `speak()`, and `useItem()` an `@Override` implementation that prints the character's line.
 
 </details>
 
@@ -619,28 +616,15 @@ public class Dog extends Pet implements Playable {
 ### DIY 3: School System
 Create a simple school system:
 
-1. Create an interface `Teachable`:
-```java
-public interface Teachable {
-    void study();
-    void doHomework();
-}
-```
+1. Create an interface named `Teachable` with two method signatures:
+   - `void study()` - no parameters, returns nothing
+   - `void doHomework()` - no parameters, returns nothing
 
-2. Create an abstract class `Person`:
-```java
-public abstract class Person {
-    protected String name;
-    protected int age;
-    
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-    
-    public abstract void introduce();
-}
-```
+2. Create an abstract class named `Person`:
+   - Add a `name` instance variable (type `String`, `protected`)
+   - Add an `age` instance variable (type `int`, `protected`)
+   - Add a constructor that takes `name` and `age` as parameters and assigns them to the two fields
+   - Declare an abstract method `introduce()` that returns nothing - give it no body, just the signature ending in a semicolon; each subclass must supply its own version
 
 3. Create a `Student` class that extends `Person` and implements `Teachable`:
    - Add a constructor that takes `name` and `age` parameters
@@ -671,7 +655,7 @@ Alice is doing homework...
 
 <details><summary>Hint</summary>
 
-`Student` uses both keywords in one declaration: `public class Student extends Person implements Teachable`. Its constructor should call `super(name, age)` to pass the values up to `Person`.
+Write `Teachable` the same way `Playable` is written above - just method signatures ending in semicolons, no bodies. Write `Person` the same shape as `Pet` above: `protected` fields, a constructor that assigns them, then `public abstract void introduce();` with a semicolon instead of a body. `Student` then uses both keywords in one declaration: `public class Student extends Person implements Teachable`. Its constructor should call `super(name, age)` to pass the values up to `Person`.
 
 </details>
 
@@ -786,13 +770,9 @@ classDiagram
     note for SMSService "📱 SMS Implementation"
 ```
 
-1. Create the `MessageService` interface:
-```java
-public interface MessageService {
-    void sendMessage(String message);
-    String receiveMessage();
-}
-```
+1. Create an interface named `MessageService` with two method signatures:
+   - `void sendMessage(String message)` - takes a `String` parameter, returns nothing
+   - `String receiveMessage()` - no parameters, returns a `String`
 
 2. Create a `WhatsAppService` class that implements `MessageService`:
    - Implement `sendMessage()` to print: "WhatsApp: Sending message - [message]"
@@ -802,19 +782,11 @@ public interface MessageService {
    - Implement `sendMessage()` to print: "SMS: Sending text - [message]"
    - Implement `receiveMessage()` to return: "SMS: New text received!"
 
-4. Create a `NotificationManager` class with a method that takes the interface as a parameter:
-<!-- no-compile -->
-```java
-public class NotificationManager {
-    
-    // This method accepts ANY MessageService implementation!
-    public void sendNotification(MessageService service, String message) {
-        System.out.println("Preparing to send notification...");
-        service.sendMessage(message);
-        System.out.println("Notification sent successfully!");
-    }
-}
-```
+4. Create a `NotificationManager` class with one method:
+   - `sendNotification(MessageService service, String message)` - takes a `MessageService` and a `String`, returns nothing. The parameter type is the interface, not any particular class - that is the whole point of this exercise, since it means this one method will work with `WhatsAppService`, `SMSService`, or any future class that implements `MessageService`. Its body, in order:
+     1. Print `Preparing to send notification...`
+     2. Call `service.sendMessage(message)`
+     3. Print `Notification sent successfully!`
 
 5. Test everything in the `Main` class:
 <!-- no-compile -->
@@ -863,11 +835,84 @@ SMS: New text received!
 
 <details><summary>Hint</summary>
 
-Watch the difference between the two methods: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `Main` does the printing.
+Write `MessageService` the same way `Playable` is written above - just the two signatures, no bodies. Watch the difference between them: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `Main` does the printing. For `NotificationManager`, the parameter list `sendNotification(MessageService service, String message)` is the one line that matters: type the parameter as the interface `MessageService`, not as `WhatsAppService` or `SMSService`.
 
 </details>
 
 > **Key Takeaway:** The `NotificationManager.sendNotification()` method doesn't care whether it receives a `WhatsAppService` or `SMSService` - it just knows how to work with any `MessageService`. This is the power of programming to an interface!
+
+### DIY 5: Choosing the Right Tool
+
+In DIY 1 to DIY 4, every exercise told you upfront whether to write an abstract class or an interface. In real design work nobody tells you - that decision is yours to make, using the same reasoning as the class vs. interface comparison earlier in this lab. Below are three scenarios. For each one, decide whether the shared type (or types) should be an abstract class or an interface, write your decision as a one-line comment directly above its declaration in the form `// Decision: abstract class - <your one-sentence reason>` or `// Decision: interface - <your one-sentence reason>`, and then implement it.
+
+1. **Scenario: payment methods.** An online shop's checkout accepts `CreditCard` and `PayPalPayment`. The two share no data and no code at all - the only thing they have in common is that the checkout can ask either one to authorize a payment and produce a receipt label. Decide what the shared type `PaymentMethod` should be, then build it:
+   - `PaymentMethod` declares two behaviours: `authorize(double amount)` (returns nothing) and `receiptLabel()` (returns a `String`)
+   - `CreditCard` provides its own version of both: `authorize(amount)` prints `Authorizing card payment of $` immediately followed by the amount; `receiptLabel()` returns `Credit Card`
+   - `PayPalPayment` provides its own version too: `authorize(amount)` prints `Redirecting to PayPal for $` immediately followed by the amount; `receiptLabel()` returns `PayPal`
+
+2. **Scenario: payroll.** A company's payroll system tracks `Manager` and `Developer` records. Every employee, of either kind, has a `name` and an `annualSalary`, and every employee clocks in exactly the same way - but each role calculates its year-end bonus differently. There is no such thing as a bare, generic employee on this payroll; every real record is specifically a `Manager` or a `Developer`, yet the two are close enough relatives that duplicating `name`, `annualSalary` and clock-in behaviour in both of them would be wasteful. Decide what the shared type `Employee` should be, then build it:
+   - `Employee` has a `protected String name` and a `protected double annualSalary`, a constructor that takes both and assigns them, a `clockIn()` method that prints the name followed by ` clocked in`, and a `bonus()` method (returns `double`) with no body of its own - each subclass must supply it
+   - `Manager` reuses `Employee`'s fields and constructor; its own `bonus()` returns `annualSalary` multiplied by `0.20`
+   - `Developer` reuses the same fields and constructor; its own `bonus()` returns `annualSalary` multiplied by `0.10`
+
+3. **Scenario: smart devices.** A gadget shop stocks devices with independent capabilities: some devices can be worn, some can be charged on a dock, and a few, like a `FitnessTracker`, can do both. A device that can be worn has nothing structurally in common with one that can be charged - they are completely unrelated capabilities that happen to combine in some products. Decide what `Wearable` and `Chargeable` should each be, then build all three types:
+   - `Wearable` declares one behaviour: `wear()` (returns nothing)
+   - `Chargeable` declares one behaviour: `charge()` (returns nothing)
+   - `FitnessTracker` needs both behaviours at once: `wear()` prints `FitnessTracker strapped to your wrist`; `charge()` prints `FitnessTracker charging on the dock`. Check the class vs. interface comparison earlier in this lab for how many classes you may `extends`, versus how many you may `implements`.
+
+4. Test everything in the `Main` class:
+<!-- no-compile -->
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Payment methods
+        PaymentMethod card = new CreditCard();
+        PaymentMethod paypal = new PayPalPayment();
+
+        // Test card below: call authorize(120.0), then print "Receipt: " + its receiptLabel()
+
+
+        // Test paypal below: call authorize(45.5), then print "Receipt: " + its receiptLabel()
+
+
+        // Payroll
+        Employee manager = new Manager("Priya", 60000.0);
+        Employee developer = new Developer("Sam", 50000.0);
+
+        // Test manager below: call clockIn(), then print "Bonus: " + its bonus()
+
+
+        // Test developer below: call clockIn(), then print "Bonus: " + its bonus()
+
+
+        // Smart devices
+        FitnessTracker tracker = new FitnessTracker();
+
+        // Test tracker below: call wear(), then call charge()
+
+    }
+}
+```
+
+**Expected output**
+```text
+Authorizing card payment of $120.0
+Receipt: Credit Card
+Redirecting to PayPal for $45.5
+Receipt: PayPal
+Priya clocked in
+Bonus: 12000.0
+Sam clocked in
+Bonus: 5000.0
+FitnessTracker strapped to your wrist
+FitnessTracker charging on the dock
+```
+
+<details><summary>Hint</summary>
+
+For each shared type, ask: does it need to hold state and share a constructor with close relatives (`protected` fields, `super(...)`) - or does it only need to guarantee that otherwise-unrelated classes can do the same thing? The first is an abstract class; the second is an interface. A class can `extends` only one class, but it can `implements` several, separated by commas: `class FitnessTracker implements Wearable, Chargeable { ... }`. Whichever you choose, every method the concrete class supplies still needs `@Override`.
+
+</details>
 
 ## Summary
 Through these examples and exercises, we've learned that:

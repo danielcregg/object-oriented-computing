@@ -28,9 +28,28 @@ from urllib.parse import unquote
 # [text](target) and ![alt](target), with an optional "title" after the target.
 LINK_RE = re.compile(r'!?\[[^\]]*\]\(\s*([^)\s]+?)\s*(?:"[^"]*")?\)')
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
-# Schemes and in-page anchors that are not filesystem paths.
+HEADING_RE = re.compile(r"(?m)^#{1,6}\s+(.+?)\s*#*$")
+# Schemes that are not filesystem paths. `#` is NOT here: in-page anchors are
+# checked against the target file's own headings (see anchors_of).
 NON_PATH_PREFIXES = ("http://", "https://", "mailto:", "tel:", "sip:",
-                     "data:", "ftp://", "#", "//")
+                     "data:", "ftp://", "//")
+
+
+def slugify(heading: str) -> str:
+    """GitHub's heading-to-anchor rule, as far as this repo needs it.
+
+    Must stay in step with gh_slugify in scripts/build_lab_pages.py, which
+    generates the same anchors for the published lab pages. Deliberately
+    duplicated rather than imported: build_lab_pages imports `markdown`, and
+    this gate runs before CI installs it.
+    """
+    text = re.sub(r"[`*_]", "", heading).strip().lower()
+    text = re.sub(r"[^\w\- ]", "", text, flags=re.UNICODE)
+    return text.replace(" ", "-")
+
+
+def anchors_of(path: Path) -> set[str]:
+    return {slugify(h) for h in HEADING_RE.findall(path.read_text(encoding="utf-8"))}
 
 
 def tracked_markdown() -> list[str]:
@@ -58,6 +77,7 @@ def links_outside_code(text: str):
 
 def broken_links() -> list[str]:
     findings = []
+    cache: dict[Path, set[str]] = {}
     for rel_path in tracked_markdown():
         path = Path(rel_path)
         if not path.is_file():
@@ -65,11 +85,24 @@ def broken_links() -> list[str]:
         for lineno, target in links_outside_code(path.read_text(encoding="utf-8")):
             if target.startswith(NON_PATH_PREFIXES):
                 continue
-            dest = unquote(target.split("#", 1)[0])
-            if not dest:
-                continue  # a bare "#anchor" -- same file
-            if not (path.parent / dest).exists():
+            file_part, _, fragment = target.partition("#")
+            dest = unquote(file_part)
+
+            target_file = path if not dest else (path.parent / dest)
+            if dest and not target_file.exists():
                 findings.append(f"{rel_path}:{lineno}: broken link -> {target}")
+                continue
+
+            # In-page anchor: the heading it names must actually exist. A
+            # renamed heading breaks every table of contents pointing at it,
+            # and nothing else in CI would notice.
+            if fragment and target_file.suffix.lower() == ".md":
+                if target_file not in cache:
+                    cache[target_file] = anchors_of(target_file)
+                if unquote(fragment).lower() not in cache[target_file]:
+                    findings.append(
+                        f"{rel_path}:{lineno}: link points at a heading that "
+                        f"does not exist -> {target}")
     return findings
 
 

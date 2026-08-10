@@ -64,6 +64,12 @@ Strings
 
 *A representative run - your three strings can hold any values you like.*
 
+<details><summary>Hint</summary>
+
+This one is a setup check rather than a puzzle: if it compiles and prints three lines, your package and run button are working and the rest of the lab will behave. Declare each variable with a literal in double quotes (`String a = "Hello";`) rather than `new String(...)` - the difference between those two forms is the whole subject of section 5, so it is worth being in the habit before you get there.
+
+</details>
+
 ---
 
 ## 2. Creating and Inspecting Strings
@@ -309,7 +315,7 @@ Same builder object? true
 
 <details><summary>Hint</summary>
 
-`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. Remember to reassign the result of concatenation - `original = original + " World";` - or nothing appears to change.
+`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. `intern()` asks the pool for the shared copy of that text and hands it back, so `constructed.intern() == literal` is `true` even though `constructed == literal` is `false` - note it *returns* the pooled object rather than changing `constructed`, so the result has to be used or assigned. Remember to reassign the result of concatenation too - `original = original + " World";` - or nothing appears to change.
 
 </details>
 

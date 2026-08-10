@@ -673,6 +673,34 @@ System.out.println(line);
 
 </details>
 
+### DIY 5: The Adoption Board
+The shelter wants a one-line advert for each animal, for a scrolling board on its adoption website. Build it with one array typed `Animal`, one loop, and let every element answer in its own voice - then add a brand new kind of animal and watch that same loop pick it up without changing a single line.
+
+1. Add a `tagline()` method to `Animal` that prints a generic line, `<name> is up for adoption.`. Override it in `Dog`, `Cat`, `Bird` and `Horse` (the classes from DIY 4) so each prints its own one-line advert instead:
+   * `Dog` - `<name> the <breed> is looking for a forever home.`
+   * `Cat` - `<name> is a purr-fect companion.`
+   * `Bird` - `<name> will brighten up your home with song.`
+   * `Horse` - `<name> the <breed> needs plenty of space to run.`
+2. In `main`, declare your own array, `Animal[] board`, separate from `shelter`, holding four new objects: a `Dog` called "Milo" (age 2, breed "Beagle"), a `Cat` called "Luna" (age 4, indoor), a `Bird` called "Kiwi" (age 1, wingspan 18.0) and a `Horse` called "Ash" (age 3, breed "Shire").
+3. Write a loop over `board` that calls `tagline()` on every element, then run the program: four different adverts print, one per animal, in array order.
+4. Add a fifth kind of animal: a `Rabbit` class that extends `Animal`, with a `furColor` field (plus the usual name and age), overriding `tagline()` to print `<name> is a gentle <furColor> rabbit.`. Add a `Rabbit` called "Thumper" (age 1, fur color "brown") as the last element of `board`, and run the program again - the same loop prints Thumper's advert too, with no change to the loop itself.
+
+**Expected output**
+
+```text
+Milo the Beagle is looking for a forever home.
+Luna is a purr-fect companion.
+Kiwi will brighten up your home with song.
+Ash the Shire needs plenty of space to run.
+Thumper is a gentle brown rabbit.
+```
+
+<details><summary>Hint</summary>
+
+`tagline()` follows the same shape as `makeSound()`: a `void` method, `@Override` in every subclass, one `System.out.println` inside. Extending `board` is just adding one more element to the array literal you already wrote for `Milo`, `Luna`, `Kiwi` and `Ash`. The loop itself only needs to know it is holding `Animal` references: it calls `tagline()` once per element and never mentions `Dog`, `Cat`, `Bird`, `Horse` or `Rabbit` by name - which is exactly why adding `Rabbit` is all it takes; the loop you already wrote picks it up untouched.
+
+</details>
+
 ## Summary
 Through these examples and exercises, we've seen how polymorphism:
 - Enables more flexible and reusable code

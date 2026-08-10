@@ -15,7 +15,7 @@
 - [3. Methods with Parameters](#3-methods-with-parameters)
 - [4. Methods with Return Values](#4-methods-with-return-values)
 - [5. void vs Return Types](#5-void-vs-return-types)
-- [6. Method Scope and Visibility](#6-method-scope-and-visibility)
+- [6. Method Visibility: public and private](#6-method-visibility-public-and-private)
 - [7. Static Methods](#7-static-methods)
 - [8. Method Call Stack and Execution Flow](#8-method-call-stack-and-execution-flow)
 - [9. Common Mistakes and Debugging](#9-common-mistakes-and-debugging)
@@ -103,6 +103,12 @@ Choose an operation:
 4. Division
 ```
 
+<details><summary>Hint</summary>
+
+Both methods are `void`: they print and hand nothing back, so neither needs a `return`. Neither takes parameters either - everything they print is fixed text. Count the `=` characters in the expected output and match them exactly, or the two rules will not line up.
+
+</details>
+
 ---
 
 ## 3. Methods with Parameters
@@ -169,6 +175,12 @@ These methods only print - they don't return anything. The next section fixes th
 6 × 7 = 42
 15.0 ÷ 3.0 = 5.0
 ```
+
+<details><summary>Hint</summary>
+
+Four `void` methods again, but this time each one declares its two values as parameters. Two details decide whether your output matches: the last method takes `double`, not `int`, because `15 / 3` on ints prints `5` rather than `5.0`; and the symbols in the expected output are `×` and `÷`, not `*` and `/` - copy them from the block above rather than typing them.
+
+</details>
 
 ---
 
@@ -321,7 +333,7 @@ Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer divis
 
 ---
 
-## 6. Method Scope and Visibility
+## 6. Method Visibility: public and private
 
 **Access modifiers** control who may call a method:
 
@@ -616,6 +628,12 @@ C end
 B end
 A end
 ```
+
+<details><summary>Hint</summary>
+
+All three methods are `static`, so `main` calls them by name with no object involved. The order is not three tidy pairs: `methodA` cannot reach its `A end` line until `methodB` has completely finished, and `methodB` cannot finish until `methodC` has. Draw the stack growing downward as each call is pushed, then unwinding from the bottom as each returns - the printed order is the shape of that drawing.
+
+</details>
 
 ### DIY 8: Simple recursion
 

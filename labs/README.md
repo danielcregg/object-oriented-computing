@@ -37,9 +37,25 @@ beside it.
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.
 
-## If a lab changes during the semester
+## Getting the latest lectures and lab instructions
 
-Your copy is independent, so it won't update itself. It doesn't need to:
-the **[lab pages on the module site](https://danielcregg.is-a.dev/object-oriented-computing/labs/)**
-always show the current instructions, so read them there. If a whole new
-lab appears, copy its folder across from this repository into yours.
+Your copy doesn't update itself, so it can drift behind if a lab or a
+lecture is corrected mid-semester. Three ways to catch up, easiest first:
+
+1. **Do nothing.** In a Codespace it refreshes automatically every time you
+   open the workspace.
+2. **Press the button.** *Terminal → Run Task → Update course content.*
+3. **Run one line:**
+
+   ```bash
+   bash scripts/update-course-content.sh
+   ```
+
+It only ever refreshes the lectures, the lab instructions and the README.
+**Your own code is never touched**, and if you have edited one of those
+files yourself it keeps your version and tells you so.
+
+And the
+**[module site](https://danielcregg.is-a.dev/object-oriented-computing/)**
+is always current, whatever state your copy is in — so when in doubt,
+read it there.

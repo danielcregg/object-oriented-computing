@@ -12,5 +12,10 @@
       }
     }
   },
-  "postCreateCommand": "java -version"
+  "postCreateCommand": "java -version",
+  // Refresh the lectures and lab instructions from the module repo each time
+  // the workspace is opened. Content only -- it never touches your own code,
+  // and it exits quietly (never non-zero) so it can't stop the Codespace
+  // starting if you are offline. In the module's own repo it does nothing.
+  "postAttachCommand": "bash scripts/update-course-content.sh --quiet || true"
 }

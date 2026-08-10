@@ -9,6 +9,11 @@ build/
 node_modules/
 __pycache__/
 
+# Bookkeeping for scripts/update-course-content.sh in a student's copy:
+# which upstream commit their content last came from. Local state, not repo
+# content — committing it would put a merge-ish marker in everyone's history.
+.course-sync
+
 # Local preview tooling only. marp-cli is pinned exactly in package.json and
 # CI installs it globally at that same version, so the lockfile pinned only
 # marp's own transitive deps -- 1900 lines of noise in a repo students copy.

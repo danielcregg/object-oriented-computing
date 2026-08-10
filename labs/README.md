@@ -6,11 +6,13 @@ You write your code in the lab's folder, beside its README.
 
 ## Getting started (once)
 
-1. **Fork this repository** (top-right on GitHub) so you have your own copy
-   to save work into.
-2. On your fork: **Code → Codespaces → Create codespace** — a full Java
+1. **Use this template → Create a new repository** (green button, top-right
+   on GitHub). That gives you your own copy to save work into. Call it
+   anything you like — and you can set it to **Private**, since it's your
+   work, not something anyone else needs to see.
+2. On **your** repo: **Code → Codespaces → Create codespace** — a full Java
    IDE opens in your browser, nothing to install. *(Local instead? Clone
-   your fork and open it in VS Code with a JDK 17+ and the "Extension Pack
+   your repo and open it in VS Code with a JDK 17+ and the "Extension Pack
    for Java" installed — same experience.)*
 3. Commit and push as you work, like any repo.
 
@@ -35,7 +37,9 @@ beside it.
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.
 
-## Keeping your fork up to date
+## If a lab changes during the semester
 
-When labs are fixed or added during the semester, pull the changes into
-your fork: on GitHub your fork shows a **Sync fork** button — one click.
+Your copy is independent, so it won't update itself. It doesn't need to:
+the **[lab pages on the module site](https://danielcregg.is-a.dev/object-oriented-computing/labs/)**
+always show the current instructions, so read them there. If a whole new
+lab appears, copy its folder across from this repository into yours.

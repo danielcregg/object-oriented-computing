@@ -16,10 +16,10 @@ opposite things. Work out which you are before doing anything.
   conventions, the editing rules. `CLAUDE.local.md` carries his private
   operational context — read it.
 - **It does not exist → you are almost certainly helping a STUDENT on
-  their fork.** Read the next section and follow it instead. Do not
+  their own copy.** Read the next section and follow it instead. Do not
   restyle decks, "fix" conventions, run the build scripts, or edit course
-  content: their fork exists to hold their lab work, and changes to
-  content only make it harder for them to pull in updates.
+  content: their copy exists to hold their lab work, and the current
+  instructions always live on the module site.
 
 ## If you are helping a student
 
@@ -66,8 +66,14 @@ alone.
   lecture. `lecture/img/` holds its images.
 - `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
   instructions students follow) + `Main.java` starter per lab. Students
-  fork the repo and work here (devcontainer provided); CI compiles every
-  lab source file. GitHub Classroom is retired.
+  copy the repo from the template and work here (devcontainer provided);
+  CI compiles every lab source file. GitHub Classroom is retired.
+  The repo is a TEMPLATE, not a fork source: a fork of a public repo
+  cannot be made private, which would publish every student's lab work
+  and list the class on the fork network. Both workflows are guarded with
+  `if: github.repository == '<this repo>'` because a template copy has
+  Actions ENABLED (a fork does not) and would otherwise run this CI, and
+  in current-week.yml's case commit to the student's own README.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block) → numbered sections → exercises as `### DIY k: <name>` with
@@ -120,8 +126,8 @@ alone.
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML + PDF on push, then publishes the site with
   `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
-  gh-pages branch** — build output never enters git, so the forks students
-  make carry only source, and deployments get history + rollback in the
+  gh-pages branch** — build output never enters git, so the copies
+  students make carry only source, and deployments get history + rollback in the
   `github-pages` environment. Do not reintroduce a branch-deploy action.
   pptx export is deliberately OFF: Marp wraps each slide as an image, so it
   adds ~6 MB per deck over the PDF for no gain, and pptx cannot be

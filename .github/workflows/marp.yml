@@ -8,9 +8,9 @@ on:
 
 # Pages is deployed straight from this workflow (no gh-pages branch): the
 # built site is uploaded as an artifact and published by actions/deploy-pages.
-# Nothing lands in git, so forks -- every student has one -- inherit only the
-# source, and the deployment history lives in the github-pages environment
-# with rollback, instead of as commits nobody reads.
+# Nothing lands in git, so the copies students make from this template
+# inherit only the source, and the deployment history lives in the
+# github-pages environment with rollback, instead of as commits nobody reads.
 permissions:
   contents: read
   pages: write
@@ -18,6 +18,11 @@ permissions:
 
 jobs:
   build:
+    # Only ever run in the module's own repo. Students copy this repo from
+    # the template, and a template copy has Actions ENABLED (unlike a fork),
+    # so without this guard their first push would run this workflow, fail
+    # at the Pages deploy they have not configured, and mail them a red X.
+    if: github.repository == 'danielcregg/object-oriented-computing'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -86,6 +91,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.repository == 'danielcregg/object-oriented-computing'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -4,8 +4,8 @@
 For every labs/src/ie/atu/<slug>/README.md this emits
 OUTPUT_DIR/labs/<slug>/index.html in the site's visual identity, plus a
 labs index page at OUTPUT_DIR/labs/index.html. Pages are READ-ONLY
-previews — each carries a banner telling students to fork the repo and
-work in a Codespace.
+previews — each carries a banner telling students to make their own
+copy of the repo from the template and work in a Codespace.
 
 Mermaid fences render client-side (pinned mermaid, same version as the
 repo's Moodle assets), and ```java fences get client-side highlight.js
@@ -62,12 +62,12 @@ STYLE = """<style>
   h2 { font-size: 25px; margin: 40px 0 12px; border-top: 1px solid var(--rule); padding-top: 26px; }
   h3 { font-size: 20px; margin: 28px 0 10px; color: var(--slate); }
   a { color: var(--blue); text-decoration-color: var(--orange); }
-  .fork-banner {
+  .copy-banner {
     border-left: 4px solid var(--orange); background: #FDEFD9;
     padding: 12px 18px; margin: 20px 0 8px; font-size: 15.5px; color: #7A4A12;
     border-radius: 0 8px 8px 0;
   }
-  .fork-banner a { color: #B94E00; font-weight: 600; }
+  .copy-banner a { color: #B94E00; font-weight: 600; }
   code {
     font-family: var(--mono); background: #EFECE3; color: #B94E00;
     padding: 0.08em 0.35em; border-radius: 5px; font-size: 0.9em;
@@ -174,10 +174,10 @@ def main() -> None:
             extension_configs={"toc": {"slugify": lambda v, s: gh_slugify(v)}})
         body = md.convert(preprocess(text))
 
-        banner = (f'<div class="fork-banner">Read-only preview. To <strong>do</strong> '
-                  f'this lab: <a href="{REPO_URL}/fork">fork the repo</a>, open a '
-                  f'Codespace on your fork, and work in '
-                  f'<code>labs/src/ie/atu/{slug}/</code>.</div>')
+        banner = (f'<div class="copy-banner">Read-only preview. To <strong>do</strong> '
+                  f'this lab: <a href="{REPO_URL}/generate">make your own copy of the '
+                  f'repo</a> ("Use this template"), open a Codespace on it, and work '
+                  f'in <code>labs/src/ie/atu/{slug}/</code>.</div>')
         kicker = '<a href="./..">labs</a> · object-oriented computing'
         dest = out_root / slug
         dest.mkdir(parents=True, exist_ok=True)
@@ -193,9 +193,10 @@ def main() -> None:
         for slug, title in labs)
     index_body = (f"<h1>Labs</h1>\n"
                   f"<p>The module's lab exercises, one page per lab — read-only "
-                  f"previews of the instructions. To complete a lab you work in "
-                  f'the repository itself: <a href="{REPO_URL}">fork it</a> and '
-                  f"open a Codespace.</p>\n<ul class=\"row-list\">\n{rows}</ul>\n"
+                  f"previews of the instructions, always the current version. To "
+                  f"complete a lab you work in your own copy of the repo: "
+                  f'<a href="{REPO_URL}/generate">Use this template</a>, then open '
+                  f"a Codespace on it.</p>\n<ul class=\"row-list\">\n{rows}</ul>\n"
                   f'<p class="kicker"><a href="../">back to the lecture decks</a></p>')
     (out_root / "index.html").write_text(
         page("OOC Labs", "object-oriented computing", index_body, False),

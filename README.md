@@ -9,10 +9,12 @@ practice-exam app.
 That's the whole module in one page — every lecture, every lab, and the
 MCQ practice, all readable in the browser with nothing to install.
 
-**Doing the labs?** You need your own copy: **fork this repo**
-(top-right), then on your fork choose **Code → Codespaces → Create
-codespace**. A full Java setup opens in your browser; pick a lab folder
-under `labs/src/ie/atu/` and follow its README. Details in
+**Doing the labs?** You need your own copy: click **Use this template →
+Create a new repository** (green button, top-right). Name it whatever you
+like and **you may set it to Private** — it's your work. Then on *your*
+repo choose **Code → Codespaces → Create codespace**: a full Java setup
+opens in your browser, nothing to install. Pick a lab folder under
+`labs/src/ie/atu/` and follow its README. Details in
 **[labs/README.md](labs/README.md)**.
 
 **Practising for the MCQs?** Use the
@@ -63,11 +65,13 @@ no projects.
 
 All labs live in this repository — **[labs/](labs/README.md)** — one
 folder per lab with the instructions (README) and a runnable `Main.java`
-starter. Students: **fork this repo, open a Codespace on your fork**
-(the devcontainer gives you a ready Java IDE), pick a lab folder, and
-follow its README. Read-only lab pages are also published on the
-[live site](https://danielcregg.is-a.dev/object-oriented-computing/labs/).
-GitHub Classroom is retired.
+starter. Students: **Use this template** to make your own copy, open a
+Codespace on it (the devcontainer gives you a ready Java IDE), pick a lab
+folder, and follow its README. Read-only lab pages are also published on
+the
+[live site](https://danielcregg.is-a.dev/object-oriented-computing/labs/),
+which always shows the current instructions — so if a lab is corrected
+mid-semester, read it there. GitHub Classroom is retired.
 
 ## MCQ practice
 

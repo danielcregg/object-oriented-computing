@@ -212,6 +212,7 @@ System.out.println("First number: " + firstNumber);
 
 #### Using a Traditional `for` Loop
 
+<!-- no-compile -->
 ```java
 for (int i = 0; i < numbers.length; i++) {
     System.out.println("Element at index " + i + ": " + numbers[i]);
@@ -222,6 +223,7 @@ for (int i = 0; i < numbers.length; i++) {
 
 The enhanced `for` loop (also called a for-each loop) provides a simpler way to iterate over arrays. It automatically handles the indexing for you.
 
+<!-- no-compile -->
 ```java
 for (int num : numbers) {
     System.out.println(num);

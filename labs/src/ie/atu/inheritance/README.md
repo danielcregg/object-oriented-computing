@@ -32,6 +32,7 @@ An **"Is-A"** relationship is established between the subclass and superclass. F
 
 ### Example
 
+<!-- no-compile -->
 ```java
 public class Person {
     private String name;

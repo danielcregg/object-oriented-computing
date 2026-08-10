@@ -102,12 +102,14 @@ A class is just a blueprint; to actually use it, you need to create an *object* 
 
 **Syntax:**
 
+<!-- no-compile -->
 ```java
 ClassName objectName = new ClassName(); // Using the default constructor
 ```
 
 or
 
+<!-- no-compile -->
 ```java
 ClassName objectName = new ClassName(parameters); // Using a parameterized constructor (explained later)
 ```
@@ -116,6 +118,7 @@ This creates a new object of type `ClassName` and assigns its reference (memory 
 
 **Example:** using the `Person` class defined earlier, let's create an object.
 
+<!-- no-compile -->
 ```java
 public class Main {
   public static void main(String[] args) {
@@ -214,6 +217,7 @@ classDiagram
 
 **Example:** using the `Person` class with constructors.
 
+<!-- no-compile -->
 ```java
 public class Main {
   public static void main(String[] args) {
@@ -432,6 +436,7 @@ true
 
 **Example:**
 
+<!-- no-compile -->
 ```java
 class Student {
   String studentID;

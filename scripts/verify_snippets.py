@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Verify that every ```java fence in the lecture decks compiles.
+"""Verify that every ```java fence in the lecture decks AND the lab
+READMEs compiles.
 
 Snippets are compiled with javac in a temp dir. A fence that is not a
 complete compilation unit is retried inside two wrappers: a class body
@@ -8,8 +9,8 @@ A fence deliberately showing broken code is skipped by placing
 `<!-- no-compile -->` on the line directly above it.
 
 Usage:
-    python scripts/verify_snippets.py [weeks/week-NN-*/slides.md ...]
-    (no args = all decks)
+    python scripts/verify_snippets.py [FILE ...]
+    (no args = all decks + all lab READMEs)
 
 Prints one line per failing snippet; silent + exit 0 when all pass.
 """
@@ -24,6 +25,13 @@ WRAPPERS = [
     "class __Snippet__ {{\n{code}\n}}",
     "class __Snippet__ {{ void __m__() throws Exception {{\n{code}\n}}\n}}",
 ]
+
+# A lab README builds one program across many fences: a later snippet may use
+# a class an earlier snippet defined, or a variable it declared. So a fence
+# that fails on its own is retried with the file's earlier (compilable)
+# fences prepended as context. Deck fences get no such help -- decks are
+# required to be self-contained, since a deck may be reused elsewhere.
+CONTEXT_GLOB = "README.md"
 
 
 def fences(text):
@@ -43,10 +51,30 @@ def fences(text):
             i += 1
 
 
-def compiles(code, workdir):
+TYPE_DECL_RE = re.compile(r"\b(?:class|interface|enum|record)\s+(\w+)")
+
+
+def type_names(code):
+    return set(TYPE_DECL_RE.findall(code))
+
+
+def candidates(code, context=""):
+    """Every plausible compilation unit for this snippet, cheapest first."""
+    for w in WRAPPERS:
+        yield w.format(code=code)
+    if context:
+        for w in WRAPPERS:
+            yield context + "\n" + w.format(code=code)
+        # context declares types at top level; the snippet is statements that
+        # use them. Without this the types become LOCAL classes inside the
+        # wrapper method and cannot be instantiated.
+        yield context + "\nclass __Snippet__ { void __m__() throws Exception {\n" + code + "\n} }"
+
+
+def compiles(code, workdir, context=""):
     src = Path(workdir) / "__Snippet__.java"
-    for wrapper in WRAPPERS:
-        candidate = wrapper.format(code=code)
+    last_error = []
+    for candidate in candidates(code, context):
         # a public class needs its own filename; strip public for the probe
         probe = re.sub(r"\bpublic\s+(class|interface|enum|abstract)\b",
                        r"\1", candidate)
@@ -61,16 +89,33 @@ def compiles(code, workdir):
 
 
 def main():
-    targets = [Path(a) for a in sys.argv[1:]] or sorted(
-        Path("weeks").glob("*/slides*.md"))
+    targets = [Path(a) for a in sys.argv[1:]] or (
+        sorted(Path("weeks").glob("*/slides*.md"))
+        + sorted(Path("labs/src/ie/atu").glob("*/README.md")))
     failures = 0
     with tempfile.TemporaryDirectory() as workdir:
         for path in targets:
+            allow_context = path.name == CONTEXT_GLOB
+            earlier = []          # compilable fences seen so far in this file
             for line, code, skip in fences(path.read_text(encoding="utf-8")):
                 if skip or not code.strip():
                     continue
-                ok, err = compiles(code, workdir)
-                if not ok:
+                # A lab often shows an evolving version of the same class, so
+                # drop any earlier snippet declaring a type THIS one declares.
+                own = type_names(code)
+                ctx = "\n".join(c for c in earlier if not (type_names(c) & own)) \
+                    if allow_context else ""
+                ok, err = compiles(code, workdir, ctx)
+                if ok:
+                    # Only TYPE declarations make useful context. Carrying loose
+                    # statements forward would redeclare variables the next
+                    # snippet declares itself.
+                    if allow_context and own:
+                        # keep only the LATEST version of each class the lab
+                        # has shown, so the context is never self-contradictory
+                        earlier = [c for c in earlier if not (type_names(c) & own)]
+                        earlier.append(code)
+                else:
                     failures += 1
                     print(f"{path}:{line}: snippet does not compile: {err}")
     sys.exit(1 if failures else 0)

@@ -677,6 +677,7 @@ public int getValue(int x) {
 
 **2. Wrong argument type:**
 
+<!-- no-compile -->
 ```java
 add(5, "3");   // error: can't pass a String where an int is expected
 add(5, 3);     // correct
@@ -684,6 +685,7 @@ add(5, 3);     // correct
 
 **3. Discarding the return value:**
 
+<!-- no-compile -->
 ```java
 calculateTotal(10, 5);               // legal, but the result is lost
 int result = calculateTotal(10, 5);  // store it - then use it
@@ -691,6 +693,7 @@ int result = calculateTotal(10, 5);  // store it - then use it
 
 **4. Calling an instance method from a static context:**
 
+<!-- no-compile -->
 ```java
 instanceMethod();               // error: main is static, there is no object
 MyClass obj = new MyClass();
@@ -699,6 +702,7 @@ obj.instanceMethod();           // correct
 
 **5. Returning a value from a `void` method:**
 
+<!-- no-compile -->
 ```java
 public void calculate(int x) {   // error
     return x * 2;
@@ -711,6 +715,7 @@ public int calculate(int x) {   // correct
 
 **6. Confusing parameters with arguments:**
 
+<!-- no-compile -->
 ```java
 public void greet(String name) { ... }   // 'name' is the parameter
 greet("Alice");                          // "Alice" is the argument
@@ -722,6 +727,7 @@ greet("Alice");                          // "Alice" is the argument
 
 The class below contains **10 labelled errors**:
 
+<!-- no-compile -->
 ```java
 public class BuggyCalculator {
 

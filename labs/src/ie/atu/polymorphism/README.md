@@ -387,6 +387,7 @@ Not a Circle - casting prevented!
 
 Upcasting needs no cast at all: `Shape s = new Circle("green", 5.0);`. Downcasting needs both the check and the cast:
 
+<!-- no-compile -->
 ```java
 if (s instanceof Circle) {
     Circle c = (Circle) s;
@@ -544,6 +545,7 @@ public class Bird extends Animal {
 }
 ```
 
+<!-- no-compile -->
 ```java
 public class AnimalShelter {
     private List<Animal> animals;
@@ -584,6 +586,7 @@ public class AnimalShelter {
 }
 ```
 
+<!-- no-compile -->
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -657,6 +660,7 @@ Star (6 years old) - Connemara
 
 Step 2 is the whole point of heterogeneous collections: `addAnimal(Animal animal)` already accepts any `Animal` subclass, so the shelter needs no changes. Notice that `exerciseAnimals()` still moves the horse but gives it no type-specific exercise - its `instanceof` chain doesn't know about `Horse`. For the roster, build each line with `instanceof` and a cast:
 
+<!-- no-compile -->
 ```java
 String line = animal.getInfo();
 if (animal instanceof Dog) {

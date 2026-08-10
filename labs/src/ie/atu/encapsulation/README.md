@@ -97,6 +97,7 @@ graph LR
 3. In your `Main` class, create a `Student` object, type `student.` and observe the autocomplete list in VS Code - you see `name`, `studentId`, `gpa`, and more: all fields appear in the list.
 4. Set invalid values directly:
 
+   <!-- no-compile -->
    ```java
    student.studentId = -1;  // Invalid ID
    student.gpa = 5.5;        // GPA above 4.0
@@ -243,6 +244,7 @@ Temperature: 25.0°C
 
 Example test code for your `main` method:
 
+<!-- no-compile -->
 ```java
 Temperature temp = new Temperature();
 temp.setCelsius(25.0);
@@ -268,18 +270,20 @@ public class Student {
     public Student(int age) {
         if (age < 16 || age > 100) {
             System.out.println("Invalid age input: must be between 16 and 100 inclusive. Age set to 16.");
-            return 16; // If invalid input is received we must return a valid age to keep the object state valid.
+            this.age = 16;   // fall back to a valid age so the object is never left invalid
+        } else {
+            this.age = age;
         }
-        return age;
     }
 
     // Setter with validation logic
     public void setAge(int age) {
         if (age < 16 || age > 100) {
             System.out.println("Invalid age input: must be between 16 and 100 inclusive. Age set to 16.");
-            return 16; // If invalid input is received we must return a valid age to keep the object state valid.
+            this.age = 16;
+        } else {
+            this.age = age;
         }
-        return age;
     }
     
     public int getAge() {
@@ -405,6 +409,7 @@ Course: UNKNOWN
 
 Example test code for your `main` method:
 
+<!-- no-compile -->
 ```java
 // Valid grade
 Grade grade1 = new Grade("John Doe", 85, "CS101");

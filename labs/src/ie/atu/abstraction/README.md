@@ -257,6 +257,7 @@ public abstract class Shape {
    - Implement the `getArea()` method using the formula: `sideLength × sideLength`
 
 4. Update the `Main` class to test your shapes:
+<!-- no-compile -->
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -418,6 +419,7 @@ public interface GameCharacter {
    - `Villain` - implements methods with villainous behavior (e.g., "Villain sneaks in shadows!", "You'll never stop me!", "Villain uses poison!")
 
 3. Test your characters in the `Main` class:
+<!-- no-compile -->
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -647,6 +649,7 @@ public abstract class Person {
    - Implement the `doHomework()` method (e.g., "[name] is doing homework...")
 
 4. Test your `Student` class in the `Main` class:
+<!-- no-compile -->
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -800,6 +803,7 @@ public interface MessageService {
    - Implement `receiveMessage()` to return: "SMS: New text received!"
 
 4. Create a `NotificationManager` class with a method that takes the interface as a parameter:
+<!-- no-compile -->
 ```java
 public class NotificationManager {
     
@@ -813,6 +817,7 @@ public class NotificationManager {
 ```
 
 5. Test everything in the `Main` class:
+<!-- no-compile -->
 ```java
 public class Main {
     public static void main(String[] args) {

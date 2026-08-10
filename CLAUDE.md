@@ -33,7 +33,7 @@ read-only assets.
   plus the open backlog), and `moodle-assets/` (course-page HTML).
 - Rendered decks are PUBLIC on GitHub Pages:
   https://danielcregg.is-a.dev/object-oriented-computing/ (one folder per
-  week: index.html + slides.pdf + slides.pptx). The repo stays private;
+  week: index.html + slides.pdf). The repo stays private;
   only rendered lecture decks are published — never labs' answer keys,
   question banks, or module internals. Anything pushed to a deck goes
   public within minutes.
@@ -48,7 +48,11 @@ read-only assets.
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`).
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
-  to HTML/PDF/PPTX on push (gh-pages branch + build artifact).
+  to HTML + PDF on push (gh-pages branch + build artifact). pptx export is
+  deliberately OFF: Marp wraps each slide as an image, so it adds ~6 MB per
+  deck over the PDF for no gain, and pptx cannot be delta-compressed, which
+  is what grew gh-pages to 2.5 GB. The deploy uses `single-commit: true` —
+  gh-pages is build output, so it keeps exactly one commit.
 
 ## Conventions (guaranteed repo-wide)
 
@@ -78,7 +82,7 @@ read-only assets.
   build-up slides; reference slides (agendas, summaries, resources, tables,
   code captions) stay immediate. A converter re-run emits `- ` everywhere,
   so re-apply fragments after any deck regeneration. Decks also set
-  `transition: fade` (HTML-only slide transition; ignored in PDF/PPTX).
+  `transition: fade` (HTML-only slide transition; ignored in the PDF).
 - Topic decks carry 3-4 fragmented predict-style beats ("Predict the
   Output", "Predict: Does This Compile?") spaced through the hour;
   answers are `* ` bullets so they reveal after the class commits.
@@ -108,6 +112,14 @@ read-only assets.
 - To add week N: create `weeks/week-NN-<topic>/lecture/slides.md`, add its
   lab under `labs/src/ie/atu/<topic>/`, then add a row to README's
   schedule table.
+- Lecture and lab folders are linked by a DERIVED name: the week's topic
+  with hyphens removed (`week-02-classes-and-objects` →
+  `classesandobjects`), because Java package segments cannot contain
+  hyphens. Labs stay topic-addressed on purpose — week numbers move
+  between years, packages and student instructions shouldn't. If a
+  teaching week has no matching lab, `build_index.py` FAILS the build
+  rather than quietly dropping the lab button; a week that genuinely has
+  no lab goes in that script's `NO_LAB_WEEKS`.
 - Week folders follow the 2026-27 plan: 12 numbered weeks plus the
   deliberately unnumbered `weeks/week-06b-reading-week/` (October
   bank-holiday week, no teaching — it sits between teaching weeks 6 and 7).

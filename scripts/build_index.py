@@ -25,6 +25,10 @@ import sys
 from pathlib import Path
 
 WEEKS = Path("weeks")
+LABS = Path("labs/src/ie/atu")
+# Teaching weeks that deliberately ship no lab. Anything else missing a lab
+# fails the build (see lab_slug).
+NO_LAB_WEEKS = {"week-01-introduction"}
 
 TITLE_RE = re.compile(r'^title:\s*"?([^"\n]+?)"?\s*$', re.MULTILINE)
 WEEK_NO_RE = re.compile(r"week-(\d+)")
@@ -145,7 +149,7 @@ MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
   <p class="standfirst">One lecture deck per teaching week — slides and lab
-  open right in your browser. PDF and PowerPoint versions of every deck live
+  open right in your browser. A PDF of every deck lives
   <a href="https://github.com/danielcregg/object-oriented-computing/tree/gh-pages">in
   the repository</a> if you want a download. Also here:
   <a href="labs/">all the labs</a> &middot;
@@ -205,8 +209,24 @@ MAIN_FOOT = """</ol>
 """
 
 def lab_slug(folder: str) -> str | None:
+    """Week folder -> its lab package, e.g. week-02-classes-and-objects ->
+    classesandobjects (Java package segments cannot contain hyphens).
+
+    A teaching week whose lab is missing is a BUILD ERROR, not a silently
+    dropped button: this mapping is derived, so a rename on either side
+    would otherwise publish a lab-less site with CI still green. Weeks that
+    legitimately have no lab must be named in NO_LAB_WEEKS.
+    """
     slug = re.sub(r"^week-\d+-", "", folder).replace("-", "")
-    return slug if (Path("labs/src/ie/atu") / slug).is_dir() else None
+    if (LABS / slug).is_dir():
+        return slug
+    if folder in NO_LAB_WEEKS:
+        return None
+    raise SystemExit(
+        f"build_index: {folder} has a lecture but no lab at {LABS / slug}.\n"
+        f"  Either the lab folder is misnamed (it must be the week's topic "
+        f"with hyphens removed), or the week has no lab and belongs in "
+        f"NO_LAB_WEEKS in this script.")
 
 
 def lecture_row(folder: str, week_no: str, title: str) -> str:

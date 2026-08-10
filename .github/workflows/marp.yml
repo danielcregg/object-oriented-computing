@@ -57,9 +57,13 @@ jobs:
             mkdir -p "$out"
             if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
+            # PDF only. Marp's pptx export wraps each slide as an image, so it
+            # offers nothing the PDF doesn't, while adding ~6 MB per deck to
+            # every deploy -- and pptx are zip archives, so git cannot delta
+            # them and the gh-pages history grew by that much on every push.
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pdf"
-            marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pptx"
           done
+          touch build/.nojekyll   # serve the output as-is; no Jekyll pass
 
       - name: Upload rendered decks as artifact
         uses: actions/upload-artifact@v4
@@ -73,3 +77,8 @@ jobs:
         with:
           branch: gh-pages
           folder: ./build/
+          # Keep exactly one commit on gh-pages. The branch is build output,
+          # never source, so its history has no value -- and letting it stack
+          # put 2.5 GB of superseded renders in front of everyone who clones
+          # or forks this repo (students included).
+          single-commit: true

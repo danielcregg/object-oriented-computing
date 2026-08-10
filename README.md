@@ -7,7 +7,7 @@ humans and AI tools can read, parse, and update every piece of module content.
 **Live slides:** https://danielcregg.is-a.dev/object-oriented-computing/
 
 Lectures are **Marp markdown** (`weeks/*/lecture/slides.md`) — edit the
-markdown, push, and CI re-renders HTML/PDF/PPTX. Labs are plain Java under
+markdown, push, and CI re-renders the HTML slides and a PDF. Labs are plain Java under
 `labs/src/ie/atu/<topic>/`, each with its instructions in a README.
 
 ## Module schedule

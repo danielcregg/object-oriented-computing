@@ -25,7 +25,7 @@ opposite things. Work out which you are before doing anything.
 
 Your job is to help them **learn Java**, using this module's own material.
 
-**Where the content is.** Lectures: `weeks/week-NN-<topic>/lecture/slides.md`
+**Where the content is.** Lectures: `weeks/week-NN-<topic>/slides.md`
 — Marp markdown, so expect YAML frontmatter, a `<style>` block, and HTML
 `<div>`s that draw diagrams. Skip that machinery; the teaching is in the
 prose, the ```java fences, and the `<!-- Speaker notes: ... -->` comments.
@@ -62,8 +62,10 @@ alone.
 
 ## Map
 
-- `weeks/week-NN-<topic>/lecture/slides.md` — Marp deck, THE canonical
-  lecture. `lecture/img/` holds its images.
+- `weeks/week-NN-<topic>/slides.md` — Marp deck, THE canonical lecture;
+  `<topic>/img/` beside it holds its images. The deck sits directly in the
+  week folder: there is no `lecture/` level (there is nothing to sit
+  beside it, since labs live under `labs/`).
 - `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
   instructions students follow) + `Main.java` starter per lab. Students
   copy the repo from the template and work here (devcontainer provided);
@@ -123,7 +125,7 @@ alone.
   Monday; `--date YYYY-MM-DD` overrides today for testing. The Pages index
   mirrors the SAME rule in inline JS (`build_index.py`) so the highlight
   moves without a rebuild — change the formula in both or they diverge.
-- `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
+- `.github/workflows/marp.yml` — renders every `weeks/*/slides.md`
   to HTML + PDF on push, then publishes the site with
   `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
   gh-pages branch** — build output never enters git, so the copies
@@ -195,7 +197,7 @@ alone.
 ## Editing rules
 
 - To change a lecture: edit its `slides.md` and push — CI re-renders decks.
-- To add week N: create `weeks/week-NN-<topic>/lecture/slides.md`, add its
+- To add week N: create `weeks/week-NN-<topic>/slides.md`, add its
   lab under `labs/src/ie/atu/<topic>/`, then add a row to README's
   schedule table.
 - Lecture and lab folders are linked by a DERIVED name: the week's topic
@@ -223,7 +225,7 @@ alone.
     npm run preview      # live server over weeks/ -> http://localhost:8080
     npm run export:intro # one deck straight to build/…/slides.pdf
 
-Browse to any deck (e.g. `/week-01-introduction/lecture/slides.md`); edit the
+Browse to any deck (e.g. `/week-01-introduction/slides.md`); edit the
 markdown, refresh the browser to see it. `npm run preview:intro` opens a
 self-refreshing preview window instead, and the Marp for VS Code extension
 gives instant side-panel previews while editing. Preview locally first —

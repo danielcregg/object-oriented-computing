@@ -72,7 +72,7 @@ def topics_from_tree() -> dict[int, str]:
         if mcq:
             topics[number] = f"MCQ {mcq.group(1)}"
             continue
-        deck = folder / "lecture" / "slides.md"
+        deck = folder / "slides.md"
         if deck.is_file():
             t = TITLE_RE.search(deck.read_text(encoding="utf-8"))
             if t:

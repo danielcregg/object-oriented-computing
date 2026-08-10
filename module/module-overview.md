@@ -18,7 +18,7 @@ topic weeks teach the four OOP pillars in dependency order
 
 ## Week 1 — Module Introduction
 
-[Slides](../weeks/week-01-introduction/lecture/slides.md) · no lab in week 1
+[Slides](../weeks/week-01-introduction/slides.md) · no lab in week 1
 
 Two halves. First, module logistics: learning outcomes, delivery format and
 timetable, the assessment matrix (three MCQs), the lab coding environment,
@@ -30,7 +30,7 @@ common syntax errors beginners hit.
 
 ## Week 2 — Classes and Objects
 
-[Slides](../weeks/week-02-classes-and-objects/lecture/slides.md) ·
+[Slides](../weeks/week-02-classes-and-objects/slides.md) ·
 [Lab](../labs/src/ie/atu/classesandobjects/)
 
 The conceptual core of the module. What a class is (blueprint), attributes
@@ -44,7 +44,7 @@ class-design habit.
 
 ## Week 3 — Methods
 
-[Slides](../weeks/week-03-methods/lecture/slides.md) ·
+[Slides](../weeks/week-03-methods/slides.md) ·
 [Lab](../labs/src/ie/atu/methods/)
 
 What a method is, method syntax and anatomy (modifiers, return type, name,
@@ -57,7 +57,7 @@ practices.
 
 ## Week 4 — Arrays
 
-[Slides](../weeks/week-04-arrays/lecture/slides.md) ·
+[Slides](../weeks/week-04-arrays/slides.md) ·
 [Lab](../labs/src/ie/atu/arrays/)
 
 What an array is and its characteristics: fixed length, homogeneous
@@ -74,7 +74,7 @@ methods, and arrays.
 
 ## Week 6 — Strings
 
-[Slides](../weeks/week-06-strings/lecture/slides.md) ·
+[Slides](../weeks/week-06-strings/slides.md) ·
 [Lab](../labs/src/ie/atu/strings/)
 
 Strings as objects: creating them (literals vs `new`) and how the String
@@ -92,7 +92,7 @@ the Irish October bank holiday (the last Monday of October).
 
 ## Week 7 — Encapsulation
 
-[Slides](../weeks/week-07-encapsulation/lecture/slides.md) ·
+[Slides](../weeks/week-07-encapsulation/slides.md) ·
 [Lab](../labs/src/ie/atu/encapsulation/)
 
 Opens the four-pillars block; this deck is the canonical home of the
@@ -106,7 +106,7 @@ visualised, a coding example, and the benefits.
 
 ## Week 8 — Inheritance
 
-[Slides](../weeks/week-08-inheritance/lecture/slides.md) ·
+[Slides](../weeks/week-08-inheritance/slides.md) ·
 [Lab](../labs/src/ie/atu/inheritance/)
 
 Definition and terminology (superclass/subclass, is-a), implementing
@@ -125,7 +125,7 @@ slot. Examines weeks 6–8: strings, encapsulation, and inheritance.
 
 ## Week 10 — Polymorphism
 
-[Slides](../weeks/week-10-polymorphism/lecture/slides.md) ·
+[Slides](../weeks/week-10-polymorphism/slides.md) ·
 [Lab](../labs/src/ie/atu/polymorphism/)
 
 The two kinds of polymorphism. Compile-time: method signatures and
@@ -138,7 +138,7 @@ benefits and a recap.
 
 ## Week 11 — Abstraction
 
-[Slides](../weeks/week-11-abstraction/lecture/slides.md) ·
+[Slides](../weeks/week-11-abstraction/slides.md) ·
 [Lab](../labs/src/ie/atu/abstraction/)
 
 What abstraction is and how it differs from encapsulation, with real-life

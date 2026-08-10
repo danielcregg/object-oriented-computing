@@ -62,13 +62,13 @@ jobs:
           # mapfile, NOT find|while: a piped while-loop hands the pipe to the
           # loop body's stdin, and marp-cli treats piped stdin as an extra
           # markdown input ("Converting 2 markdowns" + output-path error).
-          mapfile -t decks < <(find weeks -type f -path '*/lecture/slides.md' | sort)
+          mapfile -t decks < <(find weeks -type f -name 'slides.md' | sort)
           for f in "${decks[@]}"; do
-            lecture_dir=$(dirname "$f")
-            week_dir=$(basename "$(dirname "$lecture_dir")")
+            week_dir_path=$(dirname "$f")
+            week_dir=$(basename "$week_dir_path")
             out="build/$week_dir"
             mkdir -p "$out"
-            if [ -d "$lecture_dir/img" ]; then cp -R "$lecture_dir/img" "$out/img"; fi
+            if [ -d "$week_dir_path/img" ]; then cp -R "$week_dir_path/img" "$out/img"; fi
             marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
             # PDF only. Marp's pptx export wraps each slide as an image, so it
             # offers nothing the PDF doesn't, while adding ~6 MB per deck to

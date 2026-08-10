@@ -8,7 +8,7 @@ A fence deliberately showing broken code is skipped by placing
 `<!-- no-compile -->` on the line directly above it.
 
 Usage:
-    python scripts/verify_snippets.py [weeks/week-NN-*/lecture/slides.md ...]
+    python scripts/verify_snippets.py [weeks/week-NN-*/slides.md ...]
     (no args = all decks)
 
 Prints one line per failing snippet; silent + exit 0 when all pass.
@@ -62,7 +62,7 @@ def compiles(code, workdir):
 
 def main():
     targets = [Path(a) for a in sys.argv[1:]] or sorted(
-        Path("weeks").glob("*/lecture/slides*.md"))
+        Path("weeks").glob("*/slides*.md"))
     failures = 0
     with tempfile.TemporaryDirectory() as workdir:
         for path in targets:

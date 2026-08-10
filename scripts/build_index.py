@@ -271,7 +271,7 @@ def build_main_rows() -> tuple[str, int, int]:
         week_match = WEEK_NO_RE.match(name)
         week_no = week_match.group(1).lstrip("0") if week_match else ""
         slug = name.split("-", 2)[-1]
-        deck = folder / "lecture" / "slides.md"
+        deck = folder / "slides.md"
         if slug in MCQ_LABELS:
             rows.append(marker_row(week_no, MCQ_LABELS[slug]))
             markers += 1

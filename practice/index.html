@@ -196,7 +196,22 @@ let BANK={}, TOPICS=[], sess=null, tick=null, wrongOnly=false;
 
 /* ── boot ─────────────────────────────────────────────── */
 (async function(){
-  const man=await (await fetch('bank/manifest.json')).json();
+  let man;
+  try{ man=await (await fetch('bank/manifest.json')).json(); }
+  catch(e){
+    /* Opened as a file:// page (a clone or download) rather than served
+       over HTTP, so fetch is blocked and no question ever loads. Say so
+       instead of showing an empty picker that looks broken. */
+    document.body.innerHTML='<main style="max-width:34rem;margin:12vh auto;'
+      +'padding:0 1.25rem;font:16px/1.6 system-ui,sans-serif">'
+      +'<h1 style="font-size:1.4rem">This page needs a web server</h1>'
+      +'<p>It loads its questions from <code>bank/</code>, which a browser '
+      +'blocks when the page is opened straight from disk.</p>'
+      +'<p><strong><a href="https://danielcregg.is-a.dev/object-oriented-computing/practice/">'
+      +'Open the practice app on the module site</a></strong> — same app, '
+      +'nothing to install.</p></main>';
+    return;
+  }
   TOPICS=man.topics;
   await Promise.all(TOPICS.map(async t=>{
     try{ BANK[t.slug]=(await (await fetch('bank/'+t.slug+'.json')).json()).questions; }

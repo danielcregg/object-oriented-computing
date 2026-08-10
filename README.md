@@ -1,14 +1,35 @@
 # Object-Oriented Computing
 
-Private source-of-truth repo for the **Object-Oriented Computing** module
-(Java, semester 1) at Atlantic Technological University — organised so both
-humans and AI tools can read, parse, and update every piece of module content.
+Everything for the **Object-Oriented Computing** module (Java, semester 1)
+at Atlantic Technological University: the lectures, the labs, and a
+practice-exam app.
 
-**Live slides:** https://danielcregg.is-a.dev/object-oriented-computing/
+### Start here → **[danielcregg.is-a.dev/object-oriented-computing](https://danielcregg.is-a.dev/object-oriented-computing/)**
+
+That's the whole module in one page — every lecture, every lab, and the
+MCQ practice, all readable in the browser with nothing to install.
+
+**Doing the labs?** You need your own copy: **fork this repo**
+(top-right), then on your fork choose **Code → Codespaces → Create
+codespace**. A full Java setup opens in your browser; pick a lab folder
+under `labs/src/ie/atu/` and follow its README. Details in
+**[labs/README.md](labs/README.md)**.
+
+**Practising for the MCQs?** Use the
+[practice app](https://danielcregg.is-a.dev/object-oriented-computing/practice/)
+on the live site. The copy in `practice/` is its source and needs a web
+server to run — opening the file directly won't load any questions.
+
+<details>
+<summary>How the repo is put together (for maintainers)</summary>
 
 Lectures are **Marp markdown** (`weeks/*/lecture/slides.md`) — edit the
-markdown, push, and CI re-renders the HTML slides and a PDF. Labs are plain Java under
+markdown, push, and CI re-renders the HTML slides and a PDF, then
+publishes the site straight from the workflow. Labs are plain Java under
 `labs/src/ie/atu/<topic>/`, each with its instructions in a README.
+Conventions and editing rules live in [`CLAUDE.md`](CLAUDE.md).
+
+</details>
 
 ## Module schedule
 

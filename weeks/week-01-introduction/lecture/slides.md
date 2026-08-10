@@ -17,11 +17,6 @@ section .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
 }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
 section .legend { font-size: 17px; color: #8B8471; margin-top: 4px; }
 
 /* semester strip - 13 calendar weeks in one row */

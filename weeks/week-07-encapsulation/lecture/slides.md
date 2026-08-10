@@ -18,33 +18,6 @@ section .mem {
   display: flex; margin: 34px 0 10px 0;
   font-family: 'Cascadia Code', Consolas, monospace;
 }
-section .mem .cell {
-  min-width: 92px; padding: 15px 10px 13px; text-align: center;
-  background: #FFFFFF; border: 2px solid #33698C;
-  border-left-width: 1px; border-right-width: 1px;
-  font-size: 25px; color: #1E2833; position: relative;
-}
-section .mem .cell:first-child { border-left-width: 2px; border-radius: 9px 0 0 9px; }
-section .mem .cell:last-child { border-right-width: 2px; border-radius: 0 9px 9px 0; }
-section .mem .cell .idx {
-  position: absolute; top: -30px; left: 0; right: 0;
-  font-size: 16px; color: #AFA893;
-}
-section .mem .cell.hot { background: #FDEFD9; border-color: #E76F00; color: #B94E00; font-weight: 600; }
-section .mem .name {
-  align-self: center; margin-right: 22px; font-size: 23px; color: #33698C; font-weight: 600;
-}
-section .mem .name::after { content: ' →'; color: #E76F00; }
-section .legend { font-size: 17px; color: #8B8471; margin-top: 2px; }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
-section .kicker {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
-}
 
 /* title-slide capsule pill */
 section .pill {

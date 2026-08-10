@@ -23,28 +23,6 @@ section .mem .cell {
   border-left-width: 1px; border-right-width: 1px;
   font-size: 25px; color: #1E2833; position: relative;
 }
-section .mem .cell:first-child { border-left-width: 2px; border-radius: 9px 0 0 9px; }
-section .mem .cell:last-child { border-right-width: 2px; border-radius: 0 9px 9px 0; }
-section .mem .cell .idx {
-  position: absolute; top: -30px; left: 0; right: 0;
-  font-size: 16px; color: #AFA893;
-}
-section .mem .cell.hot { background: #FDEFD9; border-color: #E76F00; color: #B94E00; font-weight: 600; }
-section .mem .cell.boom { background: #F9E3E3; border: 2px dashed #C0392B; color: #C0392B; }
-section .mem .name {
-  align-self: center; margin-right: 22px; font-size: 23px; color: #33698C; font-weight: 600;
-}
-section .mem .name::after { content: ' →'; color: #E76F00; }
-section .legend { font-size: 17px; color: #8B8471; margin-top: 2px; }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
-section .kicker {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
-}
 /* deck-wide colour code: blue = settled at compile time, orange = settled at run time */
 section .ct { color: #33698C; font-weight: 600; }
 section .rt { color: #B94E00; font-weight: 600; }
@@ -117,7 +95,6 @@ section .vs .col.late .row b { color: #B94E00; }
 section.lead .mem .cell {
   background: rgba(255,255,255,0.07); border-color: #7FB4D8; color: #F4F1E8;
 }
-section.lead .mem .cell .idx { color: #6E8497; }
 section.lead .mem .name { color: #7FB4D8; }
 </style>
 

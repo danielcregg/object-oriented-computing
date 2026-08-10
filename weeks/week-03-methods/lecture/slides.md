@@ -17,12 +17,6 @@ section .kicker {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
 }
-section .legend { font-size: 17px; color: #8B8471; margin-top: 2px; }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
 
 /* memory boxes (house style, borrowed from the arrays deck) */
 section .mem {
@@ -35,17 +29,13 @@ section .mem .cell {
   border-left-width: 1px; border-right-width: 1px;
   font-size: 24px; color: #1E2833; position: relative;
 }
-section .mem .cell:first-child { border-left-width: 2px; border-radius: 9px 0 0 9px; }
-section .mem .cell:last-child { border-right-width: 2px; border-radius: 0 9px 9px 0; }
 section .mem .cell .idx {
   position: absolute; top: -28px; left: 0; right: 0;
   font-size: 16px; color: #AFA893;
 }
-section .mem .cell.hot { background: #FDEFD9; border-color: #E76F00; color: #B94E00; font-weight: 600; }
 section .mem .name {
   align-self: center; margin-right: 22px; font-size: 22px; color: #33698C; font-weight: 600;
 }
-section .mem .name::after { content: ' →'; color: #E76F00; }
 
 /* anatomy: one declaration cut into labelled tokens */
 section .anat {

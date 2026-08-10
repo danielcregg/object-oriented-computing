@@ -76,16 +76,6 @@ section .choose .opt .ex {
   font-family: 'Cascadia Code', Consolas, monospace;
   font-size: 18px; color: #8B8471; text-align: right;
 }
-section .legend { font-size: 17px; color: #8B8471; margin-top: 2px; }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
-section .kicker {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
-}
 section.lead .ccard { background: rgba(255,255,255,0.07); border-color: #E7975A; color: #F4F1E8; }
 section.lead .ccard .hdr { background: rgba(231,111,0,0.18); border-bottom-color: #E7975A; color: #F0B26B; }
 </style>

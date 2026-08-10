@@ -43,16 +43,6 @@ section .pool::before {
   font-size: 15px; color: #33698C; letter-spacing: 0.07em;
 }
 section .op { font-size: 19px; color: #B94E00; white-space: nowrap; }
-section .legend { font-size: 17px; color: #8B8471; margin-top: 2px; }
-section .callout {
-  border-left: 4px solid #E76F00; background: #F4F0E6;
-  padding: 12px 20px; margin: 16px 0; color: #46536B; font-size: 0.92em;
-}
-section .callout strong { color: #B94E00; }
-section .kicker {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
-}
 section.lead .obj { background: rgba(255,255,255,0.07); border-color: #7FB4D8; color: #F4F1E8; }
 section.lead .obj.dead { background: transparent; border-color: #55707F; color: #8FA0AF; }
 section.lead .vname { color: #7FB4D8; }

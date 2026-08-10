@@ -103,6 +103,20 @@ alone.
   `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`).
+- `scripts/verify_snippets.py` — compiles every ```java fence in every deck
+  with javac, wrapping bare declarations or statements as needed. A fence
+  that is meant to be broken is skipped with `<!-- no-compile -->` on the
+  line directly above it. CI gate; run it after editing any deck code.
+- `scripts/check_practice_bank.py` — validates `practice/bank/*.json`
+  (shape, option counts, minimum questions per topic, no schedule
+  references). CI gate; run it after touching the bank.
+- `scripts/update_current_week.py` — rewrites README's current-week banner
+  and moves the ➡️ marker onto the live row of the schedule table. Pure
+  calendar maths, no config: reading week is the week of the last Monday
+  of October, week 1 is six weeks earlier. A GitHub Action runs it every
+  Monday; `--date YYYY-MM-DD` overrides today for testing. The Pages index
+  mirrors the SAME rule in inline JS (`build_index.py`) so the highlight
+  moves without a rebuild — change the formula in both or they diverge.
 - `.github/workflows/marp.yml` — renders every `weeks/*/lecture/slides.md`
   to HTML + PDF on push, then publishes the site with
   `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
@@ -213,9 +227,16 @@ CI re-renders the published decks only on push.
   https://vlegalwaymayo.atu.ie, is public and fine.)
 - Bulk third-party materials (textbook dumps, book PDFs).
 
-Safety audit before any push (must print nothing):
+Before any push, the same gates CI runs (all must print nothing / exit 0):
 
-    python scripts/safety_audit.py
+    python scripts/safety_audit.py        # leaked data, bad paths, bad extensions
+    python scripts/verify_snippets.py     # every ```java fence compiles
+    python scripts/check_practice_bank.py # practice bank is well-formed
+    find labs/src -name '*.java' | xargs javac -d /tmp/labs-classes   # labs compile
+
+Local preview of a deck while editing: `npm run preview` (see above).
+After editing a deck's layout, re-render and check nothing overflows the
+720px slide — content that spills is silently cropped in the PDF.
 
 It checks tracked file extensions, path placement, and the text of
 tracked files for leaked student data and credential-shaped strings. It

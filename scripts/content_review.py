@@ -81,7 +81,7 @@ def main() -> None:
     client = boto3.client("bedrock-runtime",
                           region_name=os.environ.get("AWS_REGION", "eu-west-1"))
 
-    sections = []
+    sections, errors, reviewed = [], [], 0
     for name, content in topics():
         body = {
             "anthropic_version": "bedrock-2023-05-31",

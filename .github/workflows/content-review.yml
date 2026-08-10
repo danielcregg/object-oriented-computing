@@ -35,8 +35,8 @@ on:
         options: [everything, lectures, labs, practice]
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
+  issues: write
 
 jobs:
   review:
@@ -76,13 +76,23 @@ jobs:
           REVIEW_SCOPE: ${{ inputs.scope || 'everything' }}
         run: python3 scripts/content_review.py
 
-      - name: Open a pull request with the findings
-        if: steps.creds.outputs.ready == 'true'
-        uses: peter-evans/create-pull-request@v6
+      # Keep the findings whatever else happens.
+      - name: Upload the findings
+        if: always() && steps.creds.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
         with:
-          branch: content-review
-          title: 'Content review findings'
-          body-path: content-review-findings.md
-          commit-message: 'docs: AI content review findings (review before merging)'
-          add-paths: content-review-findings.md
-          delete-branch: true
+          name: content-review-findings
+          path: content-review-findings.md
+          if-no-files-found: warn
+
+      # An ISSUE, not a pull request. Creating a PR needs the repo-wide
+      # "Allow GitHub Actions to create and approve pull requests" setting,
+      # which also lets any workflow APPROVE pull requests -- not worth
+      # granting to publish a markdown report. Issues need only the
+      # issues: write permission already scoped to this workflow.
+      - name: Open an issue with the findings
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create             --title "Content review findings ($(date +%Y-%m-%d))"             --body-file content-review-findings.md             --label "content-review" ||           gh issue create             --title "Content review findings ($(date +%Y-%m-%d))"             --body-file content-review-findings.md

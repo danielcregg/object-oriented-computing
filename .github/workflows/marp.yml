@@ -6,11 +6,19 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Pages is deployed straight from this workflow (no gh-pages branch): the
+# built site is uploaded as an artifact and published by actions/deploy-pages.
+# Nothing lands in git, so forks -- every student has one -- inherit only the
+# source, and the deployment history lives in the github-pages environment
+# with rollback, instead of as commits nobody reads.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,20 +73,24 @@ jobs:
           done
           touch build/.nojekyll   # serve the output as-is; no Jekyll pass
 
-      - name: Upload rendered decks as artifact
+      - name: Upload rendered decks as a downloadable artifact
         uses: actions/upload-artifact@v4
         with:
           name: rendered-decks
           path: build/
 
-      - name: Deploy to gh-pages
-        continue-on-error: true   # Pages serving may be unavailable on a private repo
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Package the site for Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: ./build/
-          # Keep exactly one commit on gh-pages. The branch is build output,
-          # never source, so its history has no value -- and letting it stack
-          # put 2.5 GB of superseded renders in front of everyone who clones
-          # or forks this repo (students included).
-          single-commit: true
+          path: ./build/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

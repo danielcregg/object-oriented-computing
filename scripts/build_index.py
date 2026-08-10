@@ -104,6 +104,10 @@ STYLE = """<style>
     transition: background-color 120ms ease, color 120ms ease;
   }
   .actions .open:hover { background: var(--blue); color: var(--paper); }
+  /* pdf: deliberately quiet -- the deck and lab are the actions that matter,
+     but this is now the only route to a downloadable copy. */
+  .actions .dl { color: var(--muted); text-decoration: none; font-size: 13.5px; }
+  .actions .dl:hover { color: var(--blue); text-decoration: underline; }
   .marker { color: var(--muted); font-family: var(--mono); font-size: 15.5px; }
   .marker .comment::before { content: '// '; color: var(--orange); }
   .row.current { background: var(--tint); box-shadow: inset 3px 0 0 var(--orange); }
@@ -149,10 +153,8 @@ MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
   <p class="standfirst">One lecture deck per teaching week — slides and lab
-  open right in your browser. A PDF of every deck lives
-  <a href="https://github.com/danielcregg/object-oriented-computing/tree/gh-pages">in
-  the repository</a> if you want a download. Also here:
-  <a href="labs/">all the labs</a> &middot;
+  open right in your browser, and every deck has a PDF beside it if you want
+  to take it with you. Also here: <a href="labs/">all the labs</a> &middot;
   <a href="practice/">MCQ practice</a>.</p>
 </header>
 <main>
@@ -241,6 +243,8 @@ def lecture_row(folder: str, week_no: str, title: str) -> str:
             f'      <a class="open" href="{folder}/index.html"'
             f' aria-label="Week {week_no}: {t} — open slides">slides</a>\n'
             f'{lab}'
+            f'      <a class="dl" href="{folder}/slides.pdf"'
+            f' aria-label="Week {week_no}: {t} — download the PDF">pdf</a>\n'
             f'    </span>\n'
             f'  </li>\n')
 

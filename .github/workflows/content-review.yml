@@ -12,10 +12,16 @@ name: content-review
 #   - does a hint give the answer away?
 #   - is a practice question answerable from the material as taught?
 #
-# Requires an AWS Bedrock credential stored as repository secrets:
-#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION (e.g. eu-west-1)
-# Add them in Settings -> Secrets and variables -> Actions. Until they
-# exist the job skips cleanly, so this file is safe to merge today.
+# Auth is a single Amazon Bedrock API key (the bearer-token style AWS added
+# in 2025) -- no access-key/secret pair. Store it as ONE repository secret:
+#   BEDROCK_API_KEY
+# in Settings -> Secrets and variables -> Actions. Region is ordinary
+# config, not a secret, so it lives in `env` below. Until the secret exists
+# the job skips cleanly, so this file is safe to merge today.
+#
+# Prefer a SHORT-TERM key (<=12h, inherits your IAM permissions) or a
+# long-term key scoped to bedrock:InvokeModel only. Actions secrets are
+# readable by any workflow in the repo, and this repo is going public.
 
 on:
   schedule:
@@ -42,12 +48,12 @@ jobs:
       - name: Is a Bedrock credential configured?
         id: creds
         run: |
-          if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+          if [ -n "${{ secrets.BEDROCK_API_KEY }}" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "No Bedrock credential set - skipping. Add AWS_ACCESS_KEY_ID," \
-                 "AWS_SECRET_ACCESS_KEY and AWS_REGION to run this." >> "$GITHUB_STEP_SUMMARY"
+            echo "No BEDROCK_API_KEY secret set - skipping the review." \
+                 "Add it in Settings -> Secrets and variables -> Actions." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Set up Python
@@ -63,9 +69,10 @@ jobs:
       - name: Review the content
         if: steps.creds.outputs.ready == 'true'
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          # boto3 reads this env var directly; the key cannot be passed as a
+          # client argument, so the env var IS the supported mechanism.
+          AWS_BEARER_TOKEN_BEDROCK: ${{ secrets.BEDROCK_API_KEY }}
+          AWS_REGION: ${{ vars.BEDROCK_REGION || 'eu-west-1' }}
           REVIEW_SCOPE: ${{ inputs.scope || 'everything' }}
         run: python3 scripts/content_review.py
 

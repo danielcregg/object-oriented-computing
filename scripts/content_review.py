@@ -11,8 +11,11 @@ practice question that needs something never taught.
 Writes content-review-findings.md. Never edits the teaching material --
 the workflow opens a pull request for a human to judge.
 
-Env: AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY / AWS_REGION, optional
-     BEDROCK_MODEL_ID and REVIEW_SCOPE (everything|lectures|labs|practice).
+Auth: a single Amazon Bedrock API key in AWS_BEARER_TOKEN_BEDROCK. boto3
+reads that environment variable itself -- the key cannot be passed as a
+client argument -- so this script never handles the value.
+Also: AWS_REGION, optional BEDROCK_MODEL_ID and REVIEW_SCOPE
+(everything|lectures|labs|practice).
 """
 import json
 import os
@@ -73,6 +76,8 @@ def main() -> None:
         import boto3
     except ImportError:
         sys.exit("boto3 not installed")
+    if not os.environ.get("AWS_BEARER_TOKEN_BEDROCK"):
+        sys.exit("AWS_BEARER_TOKEN_BEDROCK is not set - nothing to authenticate with")
     client = boto3.client("bedrock-runtime",
                           region_name=os.environ.get("AWS_REGION", "eu-west-1"))
 

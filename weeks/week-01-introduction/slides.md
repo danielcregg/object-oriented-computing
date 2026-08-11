@@ -282,7 +282,7 @@ public class December {
 * **1 - false.** Labs start **week 2**. This week you set up; next week you build.
 * **2 - false.** All three MCQs are completed **in person, in a lab**.
 * **3 - false.** Questions draw on **lecture and lab** materials alike.
-* A clean sweep of falses - worth catching now. This slide pays 33%, three times.
+* A clean sweep of falses.
 
 ---
 

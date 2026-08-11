@@ -1,7 +1,7 @@
 name: content-review
 
-# An end-of-semester AI review of the teaching material, opened as a pull
-# request for a human to judge. It NEVER commits to main.
+# An end-of-semester AI review of the teaching material, filed as an issue
+# for a human to judge. It NEVER commits to main.
 #
 # Scope is deliberately narrow. Questions a compiler can answer are already
 # answered better by CI (verify_snippets compiles every deck and lab
@@ -12,16 +12,25 @@ name: content-review
 #   - does a hint give the answer away?
 #   - is a practice question answerable from the material as taught?
 #
-# Auth is a single Amazon Bedrock API key (the bearer-token style AWS added
-# in 2025) -- no access-key/secret pair. Store it as ONE repository secret:
-#   BEDROCK_API_KEY
-# in Settings -> Secrets and variables -> Actions. Region is ordinary
-# config, not a secret, so it lives in `env` below. Until the secret exists
-# the job skips cleanly, so this file is safe to merge today.
+# TWO PROVIDERS, chosen with the `provider` input:
 #
-# Prefer a SHORT-TERM key (<=12h, inherits your IAM permissions) or a
-# long-term key scoped to bedrock:InvokeModel only. Actions secrets are
-# readable by any workflow in the repo, and this repo is going public.
+#   copilot (default)  GitHub Copilot CLI, authenticated by the workflow's
+#                      own GITHUB_TOKEN via `copilot-requests: write`. No
+#                      stored secret, and nothing that expires. A Pro seat
+#                      entitles claude-sonnet-5 (the default here),
+#                      claude-sonnet-4.6 and gpt-5.4 -- NOT the Opus family.
+#                      Metered as AI credits against the plan; a full
+#                      nine-topic run costs a few hundred of the monthly
+#                      allowance, so once a year is comfortable.
+#
+#   bedrock            Amazon Bedrock, via the BEDROCK_API_KEY secret. Gets
+#                      a higher tier of model (Opus 4.6) than Copilot Pro
+#                      allows, but the key expires and must be rotated by
+#                      hand. Kept so the two can be diffed over the same
+#                      decks, and as a fallback.
+#
+# `copilot-requests: write` lets the token spend Copilot credits. It does
+# NOT grant write access to repository contents.
 
 on:
   schedule:
@@ -33,19 +42,30 @@ on:
         type: choice
         default: 'everything'
         options: [everything, lectures, labs, practice]
+      provider:
+        description: 'Which backend to review with'
+        type: choice
+        default: 'copilot'
+        options: [copilot, bedrock]
 
 permissions:
   contents: read
   issues: write
+  copilot-requests: write
 
 jobs:
   review:
     if: github.repository == 'danielcregg/object-oriented-computing'
     runs-on: ubuntu-latest
+    env:
+      # Scheduled runs supply no inputs, so both fall back to their default.
+      # The scheduled default is copilot precisely because it cannot expire.
+      REVIEW_PROVIDER: ${{ inputs.provider || 'copilot' }}
+      REVIEW_SCOPE: ${{ inputs.scope || 'everything' }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Is a Bedrock credential configured?
+      - name: Is a credential configured?
         id: creds
         # The secret arrives through `env`, never through ${{ }} inside the
         # script. A ${{ }} expansion is pasted into the shell source before
@@ -54,12 +74,17 @@ jobs:
         env:
           BEDROCK_API_KEY: ${{ secrets.BEDROCK_API_KEY }}
         run: |
-          if [ -n "$BEDROCK_API_KEY" ]; then
+          if [ "$REVIEW_PROVIDER" = "copilot" ]; then
+            # GITHUB_TOKEN is always present, so there is nothing to check.
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          elif [ -n "$BEDROCK_API_KEY" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "No BEDROCK_API_KEY secret set - skipping the review." \
-                 "Add it in Settings -> Secrets and variables -> Actions." >> "$GITHUB_STEP_SUMMARY"
+            echo "Provider is 'bedrock' but no BEDROCK_API_KEY secret is set -" \
+                 "skipping the review. Add it in Settings -> Secrets and" \
+                 "variables -> Actions, or re-run with provider 'copilot'," \
+                 "which needs no secret." >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Set up Python
@@ -69,18 +94,31 @@ jobs:
           python-version: '3.12'
 
       - name: Install boto3
-        if: steps.creds.outputs.ready == 'true'
+        if: steps.creds.outputs.ready == 'true' && env.REVIEW_PROVIDER == 'bedrock'
         run: pip install --quiet boto3
+
+      - name: Set up Node.js
+        if: steps.creds.outputs.ready == 'true' && env.REVIEW_PROVIDER == 'copilot'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Copilot CLI
+        if: steps.creds.outputs.ready == 'true' && env.REVIEW_PROVIDER == 'copilot'
+        # Not pre-installed on GitHub-hosted runners. GITHUB_TOKEN auth needs
+        # a recent CLI, so this deliberately tracks latest rather than pinning.
+        run: npm install -g @github/copilot
 
       - name: Review the content
         if: steps.creds.outputs.ready == 'true'
         env:
-          # boto3 reads this env var directly; the key cannot be passed as a
-          # client argument, so the env var IS the supported mechanism.
+          # bedrock: boto3 reads this env var directly; the key cannot be
+          # passed as a client argument, so the env var IS the mechanism.
           AWS_BEARER_TOKEN_BEDROCK: ${{ secrets.BEDROCK_API_KEY }}
           AWS_REGION: ${{ vars.BEDROCK_REGION || 'eu-west-1' }}
-          REVIEW_SCOPE: ${{ inputs.scope || 'everything' }}
-        run: python3 scripts/content_review.py
+          # copilot: the workflow's own token, scoped by copilot-requests.
+          COPILOT_GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/content_review.py --provider "$REVIEW_PROVIDER"
 
       # Keep the findings whatever else happens.
       - name: Upload the findings
@@ -94,14 +132,14 @@ jobs:
       # An ISSUE, not a pull request. Creating a PR needs the repo-wide
       # "Allow GitHub Actions to create and approve pull requests" setting,
       # which also lets any workflow APPROVE pull requests -- not worth
-      # granting to publish a markdown report. Issues need only the
+      # granting to publish a markdown file. Issues need only the
       # issues: write permission already scoped to this workflow.
       - name: Open an issue with the findings
         if: steps.creds.outputs.ready == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TITLE="Content review findings ($(date +%Y-%m-%d))"
+          TITLE="Content review findings ($(date +%Y-%m-%d), $REVIEW_PROVIDER)"
           # the label may not exist yet; fall back to filing without it
           gh issue create --title "$TITLE" \
                           --body-file content-review-findings.md \

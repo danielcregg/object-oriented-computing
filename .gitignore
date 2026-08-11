@@ -31,6 +31,11 @@ package-lock.json
 # SDD scratch workspace (plan execution artifacts, never repo content)
 .superpowers/
 
+# Output of scripts/content_review.py. CI uploads it as an artifact and files
+# it as an issue; it is a generated report, never repo content. Untracked so a
+# local `--topic` test run cannot leave it staged.
+content-review-findings.md
+
 # local Moodle web-service token — never commit
 moodle-api-key.txt
 

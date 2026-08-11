@@ -309,7 +309,8 @@ sequenceDiagram
   Person->>Person: this.age = age
 ```
 
-**Example in `Student`:**
+**Where `Student` stands after DIY 3** - two constructors that repeat each
+other, and no `this` anywhere. DIY 4 is the refactor that fixes both:
 
 ```java
 class Student {
@@ -317,22 +318,25 @@ class Student {
   int age;
   boolean isRegistered;
 
-  // Default constructor using this() to call parameterized constructor
+  // Default constructor - sets the defaults directly, for now
   Student() {
-    this("N/A", 0, false);
+    studentID = "N/A";
+    age = 0;
+    isRegistered = false;
   }
 
-  // Parameterized constructor using 'this'
-  Student(String studentID, int age, boolean isRegistered) {
-    this.studentID = studentID;
-    this.age = age;
-    this.isRegistered = isRegistered;
+  // Parameterized constructor - the parameter names differ from the field
+  // names, which is the only reason this works without 'this'
+  Student(String id, int studentAge, boolean registered) {
+    studentID = id;
+    age = studentAge;
+    isRegistered = registered;
   }
 
   void displayInfo() {
-    System.out.println("Student ID: " + this.studentID);
-    System.out.println("Age: " + this.age);
-    System.out.println("Registered: " + this.isRegistered);
+    System.out.println("Student ID: " + studentID);
+    System.out.println("Age: " + age);
+    System.out.println("Registered: " + isRegistered);
   }
 }
 ```
@@ -385,13 +389,15 @@ System.out.println(s1 == s3);   // false (different objects)
 System.out.println(s1.equals(s3)); // false unless equals() is overridden
 ```
 
-**Overriding `equals()` and `hashCode()`:**
+**Overriding `equals()` and `hashCode()`:** the same pattern works for any
+class - here it is on a `Book`, keyed on its ISBN. Pick the one field that
+decides identity, compare that, and derive the hash from the same field.
 
 ```java
-class Student {
-  String studentID;
-  int age;
-  boolean isRegistered;
+class Book {
+  String isbn;
+  String title;
+  int year;
 
   // constructors omitted for brevity
 
@@ -399,13 +405,13 @@ class Student {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Student other = (Student) o;
-    return studentID != null && studentID.equals(other.studentID);
+    Book other = (Book) o;
+    return isbn != null && isbn.equals(other.isbn);
   }
 
   @Override
   public int hashCode() {
-    return studentID == null ? 0 : studentID.hashCode();
+    return isbn == null ? 0 : isbn.hashCode();
   }
 }
 ```
@@ -459,12 +465,14 @@ class Student {
 
   @Override
   public String toString() {
-    return "Student{id='" + studentID + "', age=" + age + ", registered=" + isRegistered + "}";
+    // Build the line and RETURN it - nothing is printed in here.
+    // The exact format to produce is in the expected output below.
+    ...
   }
 }
 
 // elsewhere
-System.out.println(s1.toString()); // or just System.out.println(s1);
+System.out.println(s1); // println calls toString() for you
 ```
 
 ### DIY 6: Refactor to `toString()`
@@ -472,7 +480,7 @@ System.out.println(s1.toString()); // or just System.out.println(s1);
 1. Refactor `displayInfo()` into a `toString()` method in `Student` that *returns* the formatted string instead of printing it.
 2. In `Main`, print your students with `System.out.println(...)` instead of calling `displayInfo()`.
 
-**Expected output** (representative - format as in the example above; your values may differ):
+**Expected output** (match this format exactly; your values may differ):
 
 ```text
 Student{id='S00234', age=22, registered=true}

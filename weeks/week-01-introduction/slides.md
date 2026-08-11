@@ -477,7 +477,7 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 ## The JDK - your toolkit
 
 - To develop Java programs you install the **JDK** - the *Java Development Kit*.
-- On Windows it lands in `C:\Program Files\Java\jdk1.8.x`.
+- On Windows it lands in `C:\Program Files\Java\jdk-21`.
 - Inside are the programs this act has been talking about, including:
   - `javac.exe` - the **Java compiler**: your source in, bytecode out
   - `javadoc.exe` - the **Javadoc generator**: documentation straight from your code

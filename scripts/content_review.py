@@ -21,8 +21,9 @@ Two providers, selected with --provider (or REVIEW_PROVIDER):
            Actions can be the workflow's own GITHUB_TOKEN -- no stored
            secret and nothing to expire. Requires `npm i -g @github/copilot`.
 
-Also: BEDROCK_MODEL_ID / COPILOT_MODEL_ID (or --model), and REVIEW_SCOPE
-(everything|lectures|labs|practice).
+Also: BEDROCK_MODEL_ID / COPILOT_MODEL_ID (or --model), REVIEW_SCOPE
+(everything|lectures|labs|practice), and COPILOT_MAX_CREDITS (or
+--max-credits), the per-topic AI-credit ceiling.
 """
 import argparse
 import os
@@ -56,6 +57,26 @@ OUT = Path("content-review-findings.md")
 # Windows caps a command line at 32,767 characters and the prompt travels as
 # an argv entry. POSIX runners allow ~2MB, so this only bites local testing.
 WINDOWS_ARG_LIMIT = 30_000
+
+# Per-topic ceiling on Copilot spend. Each topic is its own CLI session, so
+# this bounds one review rather than the whole run. Measured: the smallest
+# deck (week 1, ~5k tokens) costs ~6 credits, and a full nine-topic run
+# lands near 130 -- so 40 leaves room for the largest deck while still
+# stopping a runaway on an unattended annual job.
+# The CLI REJECTS anything under 30 ("Use at least 30 AI credits"), and a
+# rejected value fails every topic, so do not lower this below 30.
+COPILOT_MAX_CREDITS = os.environ.get("COPILOT_MAX_CREDITS", "40")
+
+# The CLI writes its stats block to STDERR and the answer to STDOUT, so the
+# two never need separating -- read the cost from stderr and take stdout as
+# the response verbatim.
+CREDITS_LINE = re.compile(r"AI Credits\s+([\d.]+)")
+
+
+def parse_credits(stderr: str):
+    """Pull the AI-credit cost out of the CLI's stats block, or None."""
+    m = CREDITS_LINE.search(stderr or "")
+    return float(m.group(1)) if m else None
 
 BRIEF = """You are reviewing a university module's teaching material: a Java
 course for first-year students. You are given one topic at a time: the lecture
@@ -126,7 +147,11 @@ def topics():
 
 
 def call_bedrock(client, model: str, content: str):
-    """Return (text, truncated). Raises on failure -- the caller records it."""
+    """Return (text, truncated, credits). Raises on failure.
+
+    credits is always None: Bedrock bills in tokens against an AWS account,
+    so there is no per-call credit figure of the kind Copilot reports.
+    """
     body = {
         "anthropic_version": "bedrock-2023-05-31",
         "max_tokens": 2000,
@@ -136,11 +161,12 @@ def call_bedrock(client, model: str, content: str):
     resp = client.invoke_model(modelId=model, body=json.dumps(body))
     payload = json.loads(resp["body"].read())
     return (payload["content"][0]["text"].strip(),
-            payload.get("stop_reason") == "max_tokens")
+            payload.get("stop_reason") == "max_tokens",
+            None)
 
 
-def call_copilot(workdir: str, model: str, content: str):
-    """Return (text, truncated). Raises on failure -- the caller records it.
+def call_copilot(workdir: str, model: str, content: str, max_credits: str):
+    """Return (text, truncated, credits). Raises on failure.
 
     The CLI is an agent that can read and modify a repository, which this
     job must never do. Three things keep it to text in, text out:
@@ -155,6 +181,10 @@ def call_copilot(workdir: str, model: str, content: str):
 
     truncated is always False: the CLI reports no stop reason, so unlike
     Bedrock there is no signal to detect a cut-off answer.
+
+    --max-ai-credits bounds what one topic can spend. Hitting it fails the
+    call, which lands in the report's "Could not review" list rather than
+    quietly returning half a review.
     """
     # The prompt rides in argv, so the system prompt is prepended to the
     # user turn -- the CLI has no separate system-prompt channel.
@@ -166,7 +196,10 @@ def call_copilot(workdir: str, model: str, content: str):
             f"ubuntu-latest) or under WSL.")
     proc = subprocess.run(
         ["copilot", "-p", prompt, "--model", model,
-         "-s",                        # response only, no stats footer
+         # NOT -s: that suppresses the stats block, which is the only place
+         # the CLI reports what the call cost. It goes to stderr, so leaving
+         # it on does not contaminate the response on stdout.
+         "--max-ai-credits", max_credits,
          "--no-ask-user",             # never block waiting for a human
          "--no-custom-instructions",
          "--disable-builtin-mcps",
@@ -177,7 +210,7 @@ def call_copilot(workdir: str, model: str, content: str):
     if proc.returncode != 0:
         raise RuntimeError(
             (proc.stderr or proc.stdout or "no output").strip()[:400])
-    return proc.stdout.strip(), False
+    return proc.stdout.strip(), False, parse_credits(proc.stderr)
 
 
 def main() -> None:
@@ -191,6 +224,10 @@ def main() -> None:
                     help="review only this week folder, e.g. week-04-arrays. "
                          "For comparing providers on one deck without paying "
                          "for all nine.")
+    ap.add_argument("--max-credits", default=COPILOT_MAX_CREDITS,
+                    help="copilot only: AI-credit ceiling per topic "
+                         f"(default: {COPILOT_MAX_CREDITS}; the CLI rejects "
+                         "anything under 30)")
     args = ap.parse_args()
 
     provider = args.provider
@@ -221,6 +258,7 @@ def main() -> None:
         workdir = tmp.name
 
     sections, errors, reviewed, truncated = [], [], 0, []
+    spent = []            # per-topic AI credits, copilot only
     selected = [t for t in topics() if args.topic in (None, t[0])]
     if args.topic and not selected:
         sys.exit(f"no such topic: {args.topic!r} (scope={SCOPE!r})")
@@ -228,11 +266,14 @@ def main() -> None:
         for name, content in selected:
             try:
                 if provider == "bedrock":
-                    text, cut = call_bedrock(client, model, content)
+                    text, cut, credits = call_bedrock(client, model, content)
                 else:
-                    text, cut = call_copilot(workdir, model, content)
+                    text, cut, credits = call_copilot(
+                        workdir, model, content, args.max_credits)
                 if cut:
                     truncated.append(name)
+                if credits is not None:
+                    spent.append(credits)
             except Exception as exc:                      # noqa: BLE001
                 # A failed CALL is not a finding. Reporting it as one is how an
                 # auth failure across every topic once read as a complete, clean
@@ -245,7 +286,8 @@ def main() -> None:
             clean = not text or "no findings" in text.lower()
             if not clean:
                 sections.append(f"## {name}\n\n{text}\n")
-            print(f"reviewed {name}: {'clean' if clean else 'findings'}")
+            cost = f" ({credits:g} credits)" if credits is not None else ""
+            print(f"reviewed {name}: {'clean' if clean else 'findings'}{cost}")
     finally:
         if tmp:
             tmp.cleanup()
@@ -258,7 +300,10 @@ def main() -> None:
         "looks only for pedagogical drift. Findings are deliberately "
         "unfiltered by confidence, so expect some to be dismissed._\n\n"
         f"_Scope `{SCOPE}` · provider `{provider}` · model `{model}` · "
-        f"{reviewed} topic(s) reviewed, {len(errors)} failed._\n\n"
+        f"{reviewed} topic(s) reviewed, {len(errors)} failed"
+        + (f" · **{sum(spent):.1f} AI credits** "
+           f"(~${sum(spent) / 100:.2f}), capped at {args.max_credits}/topic._\n\n"
+           if spent else "._\n\n")
     )
     parts = [header]
     if errors:
@@ -279,7 +324,8 @@ def main() -> None:
                  else "No findings across the reviewed material.\n")
     OUT.write_text("".join(parts), encoding="utf-8", newline="\n")
     print(f"wrote {OUT} ({len(sections)} topic(s) with findings, "
-          f"{len(errors)} failure(s))")
+          f"{len(errors)} failure(s)"
+          + (f", {sum(spent):.1f} AI credits" if spent else "") + ")")
 
     # Nothing reviewed at all = the run did not do its job. Fail loudly rather
     # than file an issue saying "No findings", which reads as an all-clear.

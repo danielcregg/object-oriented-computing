@@ -73,6 +73,14 @@ the
 which always shows the current instructions — so if a lab is corrected
 mid-semester, read it there. GitHub Classroom is retired.
 
+## MCQ brief
+
+**[MCQ brief](https://danielcregg.is-a.dev/object-oriented-computing/mcq/)** —
+the rules and the format (30 multiple-choice + 3 coding questions in
+60 minutes, sequential, one attempt) that students read before each MCQ.
+Source: [`mcq/README.md`](mcq/README.md), rendered to `/mcq/` by
+`scripts/build_lab_pages.py`; the Moodle course links to the live page.
+
 ## MCQ practice
 
 Self-test quizzes generated from the module's own content:

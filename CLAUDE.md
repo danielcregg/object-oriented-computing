@@ -117,6 +117,10 @@ alone.
   and speaker-note comments in a deck ship inside the rendered HTML where
   anyone can read them. Assessment material — real question banks, answer
   keys, anything that would spoil an MCQ — never enters this repo at all.
+- `mcq/README.md` — the MCQ brief students read before each MCQ: the
+  rules (ATU wording kept verbatim under "Rules and regulations") and the
+  format. One page for all three MCQs; rendered to `/mcq/` and linked from
+  the site index, the three MCQ week READMEs and the Moodle course.
 - `practice/` — the MCQ practice web app (`index.html`, self-contained
   vanilla JS) + its question bank (`bank/<topic>.json`, one per topic).
   Bank questions are PRACTICE questions authored from the decks and labs
@@ -126,7 +130,7 @@ alone.
 - `scripts/build_index.py` — generates the Pages landing page from the
   `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
-  styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`).
+  styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and FAILS if it is missing.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every deck
   with javac, wrapping bare declarations or statements as needed. A fence
   that is meant to be broken is skipped with `<!-- no-compile -->` on the

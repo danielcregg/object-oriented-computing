@@ -34,9 +34,9 @@ TITLE_RE = re.compile(r'^title:\s*"?([^"\n]+?)"?\s*$', re.MULTILINE)
 WEEK_NO_RE = re.compile(r"week-(\d+)")
 
 MCQ_LABELS = {
-    "mcq1": "MCQ 1 &middot; held during the lab slot &middot; 33% of the module",
-    "mcq2": "MCQ 2 &middot; held during the lab slot &middot; 33% of the module",
-    "mcq3": "MCQ 3 &middot; held during the lab slot &middot; 33% of the module",
+    "mcq1": "MCQ 1 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
+    "mcq2": "MCQ 2 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
+    "mcq3": "MCQ 3 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
 }
 READING_LABEL = "reading week &middot; October bank-holiday week &middot; no lecture or lab"
 
@@ -155,7 +155,8 @@ MAIN_HEADER = """<header>
   <p class="standfirst">One lecture deck per teaching week — slides and lab
   open right in your browser, and every deck has a PDF beside it if you want
   to take it with you. Also here: <a href="labs/">all the labs</a> &middot;
-  <a href="practice/">MCQ practice</a>.</p>
+  <a href="practice/">MCQ practice</a> &middot;
+  <a href="mcq/">the MCQ brief</a>.</p>
 </header>
 <main>
 <ol class="timeline">

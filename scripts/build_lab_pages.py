@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the lab READMEs as styled pages for GitHub Pages.
+"""Render the lab READMEs and the MCQ brief as styled pages for GitHub Pages.
 
 For every labs/src/ie/atu/<slug>/README.md this emits
 OUTPUT_DIR/labs/<slug>/index.html in the site's visual identity, plus a
@@ -12,6 +12,9 @@ repo's Moodle assets), and ```java fences get client-side highlight.js
 colouring — pinned to the same highlight.js version marp-core bundles,
 with the token palette copied from themes/ooc.css, so lab code looks
 exactly like deck code. ```text fences (Expected output) stay flat.
+mcq/README.md (the MCQ brief students read before each MCQ) is rendered
+the same way to OUTPUT_DIR/mcq/index.html, minus the copy banner: it is
+a page to read, not a lab to do.
 Requires the `markdown` package (pip install markdown).
 
 Usage:
@@ -25,6 +28,7 @@ from pathlib import Path
 import markdown
 
 LABS = Path("labs/src/ie/atu")
+BRIEF = Path("mcq/README.md")
 REPO_URL = "https://github.com/danielcregg/object-oriented-computing"
 
 # Both scripts are third-party code executed on the module's public site, so
@@ -175,6 +179,35 @@ def page(title: str, kicker_html: str, body_html: str, needs_mermaid: bool,
             f"</div>\n{hljs}{mermaid}</body>\n</html>\n")
 
 
+def render_brief(out_dir: Path) -> None:
+    """Render mcq/README.md as OUTPUT_DIR/mcq/index.html.
+
+    The brief is linked from the site index, every MCQ week page and the
+    Moodle course, so a site without it would ship dead links: fail loudly.
+    """
+    if not BRIEF.is_file():
+        raise SystemExit(
+            f"build_lab_pages: {BRIEF} is missing. The MCQ brief is linked from "
+            f"the site index, the MCQ week pages and Moodle; the site must not "
+            f"build without it.")
+    text = BRIEF.read_text(encoding="utf-8")
+    heading = re.match(r"#\s+(.+)", text)
+    if heading is None:
+        raise SystemExit(f"build_lab_pages: {BRIEF} must open with a `# ` heading.")
+    md = markdown.Markdown(
+        extensions=["fenced_code", "tables", "md_in_html", "toc"],
+        extension_configs={"toc": {"slugify": lambda v, s: gh_slugify(v)}})
+    body = md.convert(preprocess(text))
+    kicker = '<a href="../">object-oriented computing</a> · assessment'
+    dest = out_dir / "mcq"
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / "index.html").write_text(
+        page(html.escape(heading.group(1).strip()) + " — Object-Oriented Computing",
+             kicker, body, False),
+        encoding="utf-8", newline="\n")
+    print(f"wrote {dest / 'index.html'}")
+
+
 def main() -> None:
     out_root = Path(sys.argv[1] if len(sys.argv) > 1 else "build") / "labs"
     out_root.mkdir(parents=True, exist_ok=True)
@@ -229,6 +262,7 @@ def main() -> None:
         page("OOC Labs", "object-oriented computing", index_body, False),
         encoding="utf-8", newline="\n")
     print(f"wrote {len(labs)} lab pages + labs index under {out_root}")
+    render_brief(out_root.parent)
 
 
 if __name__ == "__main__":

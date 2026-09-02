@@ -12,7 +12,7 @@ You write your code in the lab's folder, beside its README.
    work, not something anyone else needs to see.
 2. On **your** repo: **Code → Codespaces → Create codespace** — a full Java
    IDE opens in your browser, nothing to install. *(Local instead? Clone
-   your repo and open it in VS Code with a JDK 17+ and the "Extension Pack
+   your repo and open it in VS Code with JDK 21 (the same version as the Codespace) and the "Extension Pack
    for Java" installed — same experience.)*
 3. Commit and push as you work, like any repo.
 

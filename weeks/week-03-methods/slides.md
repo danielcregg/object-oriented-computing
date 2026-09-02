@@ -708,7 +708,7 @@ public class Receipts {
 ## Summary
 
 - A method is a **named block of code**: define it once, call it anywhere, fix it in one place.
-- Signature = modifiers + return type + name + parameter list; the body between `{ }` does the work.
+- Header = modifiers + return type + name + parameter list; the body between `{ }` does the work. (Java's *signature* is narrower: just the name and parameter types.)
 - Arguments fill parameters left to right; `return` hands back a value and exits - the call **becomes** its answer, and non-void methods must return on every path.
 - Scope is per call: parameters and locals are born and die with their frame - the doorway in and the chute out are the only connections.
 - Java passes **photocopies**: of the value for primitives, of the **arrow** for objects - so a method can't change your `int`, but can reach your array's boxes.

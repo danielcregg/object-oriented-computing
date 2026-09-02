@@ -351,7 +351,7 @@ Create a `Grade` class that:
 2. Implements these validation helper methods:
    - `validateStudentName(String name)` - Returns the name if not empty, otherwise returns "Unknown" and prints an error
    - `validateGrade(int grade)` - Returns the grade if within range (0-100), otherwise returns 0 and prints an error
-   - `validateCourseCode(String code)` - Returns the code if it matches a pattern like "CS101" (2-3 letters followed by 3 digits), otherwise returns "UNKNOWN" and prints an error
+   - `validateCourseCode(String code)` - Returns the code if it matches a pattern like "CS101" (2-4 letters followed by 3 digits), otherwise returns "UNKNOWN" and prints an error
 3. Uses the helpers in both:
    - the constructor (which should accept all three parameters)
    - the setter methods

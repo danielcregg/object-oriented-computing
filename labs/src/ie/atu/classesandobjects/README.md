@@ -171,7 +171,7 @@ Reach the object's fields and methods through the reference with the dot operato
 
 ## 4. Constructors
 
-Constructors are special methods within a class that are automatically called when you create a new object using the `new` keyword. They are used to initialize the object's fields to initial values. They have the same name as the class and do *not* have a return type (not even `void`).
+Constructors are special members of a class - not methods, since they have no return type - that run automatically when you create a new object using the `new` keyword. They are used to initialize the object's fields to initial values. They have the same name as the class and do *not* have a return type (not even `void`).
 
 * **Default Constructor**: If you don't explicitly define any constructors, Java provides a default constructor that does nothing (sets fields to default values like 0 for numbers, `null` for strings, `false` for booleans).
 

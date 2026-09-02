@@ -451,10 +451,8 @@ CA FE BA BE 00 00 00 41 00 1D 0A 00 02 00 03 07
 ## Your first program
 
 ```java
-public class HelloPrinter
-{
-    public static void main(String[] args)
-    {
+public class HelloPrinter {
+    public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
 }

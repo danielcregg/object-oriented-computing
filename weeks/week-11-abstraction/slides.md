@@ -340,7 +340,7 @@ class C extends B {                    // the chain ends -- C is concrete
 
 ```java
 abstract class Vehicle {
-    private int wheels = 4;                // shared state, stored once
+    private int wheels = 4;                // every subclass object has one
     public void stop() {                   // shared code
         System.out.println("Braking...");
     }

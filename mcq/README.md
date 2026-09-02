@@ -44,7 +44,7 @@ an MCQ you accept the rules on this page.
 
 - The topics each MCQ covers are in the schedule at the top of the module's
   Moodle page.
-- The [practice site](../practice/index.html) has an exam mode: 30 questions
+- The [practice site](https://danielcregg.is-a.dev/object-oriented-computing/practice/) has an exam mode: 30 questions
   from the same topics in 60 minutes. The real MCQ adds three coding
   questions and does not let you go back, so practise committing to an
   answer before you move on.

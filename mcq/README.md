@@ -6,15 +6,21 @@ MCQ 3. By opening an MCQ you accept everything on this page.
 ## The short version
 
 - **Individual and closed-book.** Your own work, no notes, no collaboration.
+
 - **One attempt.** There is no second go.
+
 - **60 minutes, in the lab, under supervision.** The MCQ submits itself when
   the 60 minutes are up.
+
 - **Be on time.** Nobody is admitted more than 30 minutes after the start,
   and you must have *started* the MCQ before that 30-minute mark.
+
 - **You cannot go back.** Questions come one at a time. Once you move on
   from a question, your answer is final. Answer each question as you go.
+
 - **No discussion with anyone** about the assessment during the
   assessment period, by any medium. Nothing may be copied or captured.
+
 - **No negative marking.** A wrong answer scores zero, never below.
 
 ## Format

@@ -1,44 +1,55 @@
 #!/usr/bin/env python3
-"""Generate the GitHub Pages landing page(s) for the lecture decks.
+"""Generate the GitHub Pages landing page from module/schedule.json.
 
-Main page (OUTPUT_DIR/index.html): scans weeks/ in folder order and emits
-one timeline row per week — lecture weeks get title + slides/lab buttons
-(downloads live in the repo, linked once from the intro), MCQ weeks and
-reading week render as "// comment" marker rows.
+One timeline row per row of the schedule, in schedule order: lecture weeks get
+the topic + slides/lab/pdf buttons, MCQ weeks and the reading week render as
+"// comment" marker rows. Week numbers, topics, deck folders and lab links all
+come from the schedule (scripts/schedule.py); nothing here is derived from
+folder names, and nothing here states a week number of its own.
 
 The page carries the visual identity of themes/ooc.css ("the lecture as
 source code"): paper background, editor-gutter rail, "week N" labels set
 like line numbers, mono headings ending in an orange semicolon.
 
-A few lines of inline JS highlight the current teaching week like an
-editor's current line — same derived calendar as
-scripts/update_current_week.py (reading week = the week of the last
-Monday of October, week 1 six weeks earlier), computed in the browser so
-it stays correct without a rebuild. `?date=YYYY-MM-DD` previews any date.
+A few lines of inline JS highlight the current row like an editor's current
+line. The schedule's startDate is baked into the page and the row index is
+whole weeks since it, so the highlight moves without a rebuild.
+`?date=YYYY-MM-DD` previews any date.
+
+The deck folders carried week numbers until 2026-09; each old name gets a
+one-line redirect page so links made before the rename still resolve.
 
 Usage:
     python scripts/build_index.py [OUTPUT_DIR]     # default: build
 """
+from __future__ import annotations
+
 import html
-import re
 import sys
 from pathlib import Path
 
-WEEKS = Path("weeks")
-LABS = Path("labs/src/ie/atu")
-# Teaching weeks that deliberately ship no lab. Anything else missing a lab
-# fails the build (see lab_slug).
-NO_LAB_WEEKS = {"week-01-introduction"}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from schedule import Row, Schedule, load  # noqa: E402
 
-TITLE_RE = re.compile(r'^title:\s*"?([^"\n]+?)"?\s*$', re.MULTILINE)
-WEEK_NO_RE = re.compile(r"week-(\d+)")
-
-MCQ_LABELS = {
-    "mcq1": "MCQ 1 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
-    "mcq2": "MCQ 2 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
-    "mcq3": "MCQ 3 &middot; held during the lab slot &middot; 33% of the module &middot; <a href=\"mcq/\">read the brief</a>",
-}
 READING_LABEL = "reading week &middot; October bank-holiday week &middot; no lecture or lab"
+
+# Folder names before the schedule became the single source of truth. Delete
+# this table once nothing links to the old names any more.
+OLD_FOLDERS = {
+    "week-01-introduction": "introduction",
+    "week-02-classes-and-objects": "classes-and-objects",
+    "week-03-methods": "methods",
+    "week-04-arrays": "arrays",
+    "week-05-mcq1": "mcq1",
+    "week-06-strings": "strings",
+    "week-06b-reading-week": "reading-week",
+    "week-07-encapsulation": "encapsulation",
+    "week-08-inheritance": "inheritance",
+    "week-09-mcq2": "mcq2",
+    "week-10-polymorphism": "polymorphism",
+    "week-11-abstraction": "abstraction",
+    "week-12-mcq3": "mcq3",
+}
 
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
            "viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' "
@@ -149,6 +160,7 @@ def page_head(title: str) -> str:
             f'<title>{title}</title>\n'
             f'<link rel="icon" href="{FAVICON}">\n{STYLE}\n</head>\n<body>\n')
 
+
 MAIN_HEADER = """<header>
   <p class="kicker">Atlantic Technological University &middot; Semester 1 &middot; Java</p>
   <h1>Object-Oriented Computing</h1>
@@ -165,36 +177,27 @@ MAIN_HEADER = """<header>
 MAIN_FOOT = """</ol>
 </main>
 <footer>
-  <p class="comment">rebuilt automatically from the module's markdown sources</p>
+  <p class="comment">rebuilt automatically from the module's markdown sources and module/schedule.json</p>
   <p class="comment">Atlantic Technological University</p>
 </footer>
 <script>
-// Highlight the current teaching week — same derived calendar as the README
-// banner (scripts/update_current_week.py): reading week is the week of the
-// Irish October bank holiday (last Monday of October); week 1 begins six
-// weeks earlier; 6 teaching weeks each side. ?date=YYYY-MM-DD to preview.
+// Highlight the current row like an editor's current line. The schedule's
+// start date is baked in below; the row index is whole weeks since it, and
+// the rows carry data-index in schedule order (reading week included).
+// ?date=YYYY-MM-DD previews any date.
 (function () {
+  var START = '__START__', ROWS = __ROWS__;
   var q = new URLSearchParams(location.search).get('date');
   var now = q ? new Date(q + 'T12:00:00') : new Date();
   if (isNaN(now)) now = new Date();
   var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var monday = new Date(today);
   monday.setDate(today.getDate() - (today.getDay() + 6) % 7);
-  var oct31 = new Date(today.getFullYear(), 9, 31);
-  var reading = new Date(oct31);
-  reading.setDate(31 - (oct31.getDay() + 6) % 7);
-  var week1 = new Date(reading);
-  week1.setDate(reading.getDate() - 42);
-  var index = Math.round((monday - week1) / 6048e5); // whole weeks; rounding absorbs DST
-  if (index < 0 || index > 12) return;
-  var row;
-  if (index === 6) {
-    row = document.querySelector('.row[data-reading]');
-  } else {
-    var n = index < 6 ? index + 1 : index;
-    var num = document.querySelector('.num[data-week="' + n + '"]');
-    row = num && num.closest('.row');
-  }
+  var p = START.split('-');
+  var start = new Date(+p[0], +p[1] - 1, +p[2]);
+  var index = Math.round((monday - start) / 6048e5); // whole weeks; rounding absorbs DST
+  if (index < 0 || index >= ROWS) return;
+  var row = document.querySelector('.row[data-index="' + index + '"]');
   if (!row) return;
   row.classList.add('current');
   row.setAttribute('aria-current', 'true');
@@ -211,103 +214,81 @@ MAIN_FOOT = """</ol>
 </html>
 """
 
-def lab_slug(folder: str) -> str | None:
-    """Week folder -> its lab package, e.g. week-02-classes-and-objects ->
-    classesandobjects (Java package segments cannot contain hyphens).
 
-    A teaching week whose lab is missing is a BUILD ERROR, not a silently
-    dropped button: this mapping is derived, so a rename on either side
-    would otherwise publish a lab-less site with CI still green. Weeks that
-    legitimately have no lab must be named in NO_LAB_WEEKS.
-    """
-    slug = re.sub(r"^week-\d+-", "", folder).replace("-", "")
-    if (LABS / slug).is_dir():
-        return slug
-    if folder in NO_LAB_WEEKS:
-        return None
-    raise SystemExit(
-        f"build_index: {folder} has a lecture but no lab at {LABS / slug}.\n"
-        f"  Either the lab folder is misnamed (it must be the week's topic "
-        f"with hyphens removed), or the week has no lab and belongs in "
-        f"NO_LAB_WEEKS in this script.")
-
-
-def lecture_row(folder: str, week_no: str, title: str) -> str:
-    t = html.escape(title)
-    slug = lab_slug(folder)
-    lab = (f'      <a class="open" href="labs/{slug}/"'
-           f' aria-label="Week {week_no}: {t} — lab">lab</a>\n') if slug else ""
-    return (f'  <li class="row lecture">\n'
-            f'    <span class="num" data-week="{week_no}" aria-hidden="true">{week_no}</span>\n'
-            f'    <span class="topic"><a href="{folder}/index.html">{t}</a></span>\n'
+def lecture_row(row: Row) -> str:
+    t = html.escape(row.topic)
+    lab = (f'      <a class="open" href="labs/{row.lab}/"'
+           f' aria-label="Week {row.week}: {t} — lab">lab</a>\n') if row.lab else ""
+    return (f'  <li class="row lecture" data-index="{row.index}">\n'
+            f'    <span class="num" data-week="{row.week}" aria-hidden="true">{row.week}</span>\n'
+            f'    <span class="topic"><a href="{row.deck}/index.html">{t}</a></span>\n'
             f'    <span class="actions">\n'
-            f'      <a class="open" href="{folder}/index.html"'
-            f' aria-label="Week {week_no}: {t} — open slides">slides</a>\n'
+            f'      <a class="open" href="{row.deck}/index.html"'
+            f' aria-label="Week {row.week}: {t} — open slides">slides</a>\n'
             f'{lab}'
-            f'      <a class="dl" href="{folder}/slides.pdf"'
-            f' aria-label="Week {week_no}: {t} — download the PDF">pdf</a>\n'
+            f'      <a class="dl" href="{row.deck}/slides.pdf"'
+            f' aria-label="Week {row.week}: {t} — download the PDF">pdf</a>\n'
             f'    </span>\n'
             f'  </li>\n')
 
 
-def marker_row(week_no: str, label: str) -> str:
-    num_attr = f' data-week="{week_no}"' if week_no else ''
-    row_attr = '' if week_no else ' data-reading'  # the only unnumbered row is reading week
-    return (f'  <li class="row marker"{row_attr}>\n'
+def marker_row(row: Row) -> str:
+    if row.is_break:
+        week_no, label, extra = "", READING_LABEL, " data-reading"
+    else:
+        when = html.escape(row.notes.lower()) if row.notes else "held during the lab slot"
+        label = (f"{html.escape(row.assessment)} &middot; {when} &middot; one third of the module "
+                 f"&middot; <a href=\"mcq/\">read the brief</a>")
+        week_no, extra = row.week, ""
+    num_attr = f' data-week="{week_no}"' if week_no else ""
+    return (f'  <li class="row marker"{extra} data-index="{row.index}">\n'
             f'    <span class="num"{num_attr} aria-hidden="true">{week_no}</span>\n'
             f'    <span class="comment">{label}</span>\n'
             f'    <span></span>\n'
             f'  </li>\n')
 
 
-def deck_title(deck: Path, slug: str) -> str:
-    m = TITLE_RE.search(deck.read_text(encoding="utf-8"))
-    return m.group(1) if m else slug.replace("-", " ").title()
-
-
-def build_main_rows() -> tuple[str, int, int]:
+def build_rows(sched: Schedule) -> tuple[str, int, int]:
     rows, lectures, markers = [], 0, 0
-    for folder in sorted(p for p in WEEKS.iterdir() if p.is_dir()):
-        name = folder.name
-        week_match = WEEK_NO_RE.match(name)
-        week_no = week_match.group(1).lstrip("0") if week_match else ""
-        slug = name.split("-", 2)[-1]
-        deck = folder / "slides.md"
-        if slug in MCQ_LABELS:
-            rows.append(marker_row(week_no, MCQ_LABELS[slug]))
-            markers += 1
-        elif "reading-week" in name:
-            rows.append(marker_row("", READING_LABEL))
-            markers += 1
-        elif deck.is_file():
-            rows.append(lecture_row(name, week_no, deck_title(deck, slug)))
+    for row in sched.rows:
+        if row.deck:
+            rows.append(lecture_row(row))
             lectures += 1
+        elif row.mcq or row.is_break:
+            rows.append(marker_row(row))
+            markers += 1
         else:
-            # A week folder that is neither an MCQ week, nor reading week, nor
-            # a deck used to be skipped in silence -- the week simply vanished
-            # from the site and the build still went green. That is the same
-            # failure lab_slug refuses to allow at the other end of the
-            # mapping, so refuse it here too.
             raise SystemExit(
-                f"build_index: {folder} has no slides.md and is not a "
-                f"recognised non-teaching week.\n"
-                f"  A teaching week needs weeks/{name}/slides.md; an "
-                f"assessment week's folder must end in mcq1/mcq2/mcq3; the "
-                f"reading week's name must contain 'reading-week'. Rename the "
-                f"folder or add the deck -- do not leave it half-created, or "
-                f"the week disappears from the site with CI still green.")
+                f"build_index: schedule week {row.week!r} has no lecture, is not an "
+                f"MCQ and is not the reading week; it cannot be shown. Fix "
+                f"module/schedule.json.")
     return "".join(rows), lectures, markers
+
+
+def redirect_page(new: str) -> str:
+    return (f'<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n'
+            f'<meta http-equiv="refresh" content="0; url=../{new}/">\n'
+            f'<link rel="canonical" href="../{new}/">\n<title>Moved</title></head>\n'
+            f'<body><p>This deck moved to <a href="../{new}/">../{new}/</a>.</p></body></html>\n')
 
 
 def main() -> None:
     out_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "build")
     out_dir.mkdir(parents=True, exist_ok=True)
+    sched = load()
 
-    rows, lectures, markers = build_main_rows()
-    page = (page_head("Object-Oriented Computing &mdash; Lecture Decks")
-            + MAIN_HEADER + rows + MAIN_FOOT)
+    rows, lectures, markers = build_rows(sched)
+    foot = MAIN_FOOT.replace("__START__", sched.start.isoformat()).replace("__ROWS__", str(len(sched.rows)))
+    page = page_head("Object-Oriented Computing &mdash; Lecture Decks") + MAIN_HEADER + rows + foot
     (out_dir / "index.html").write_text(page, encoding="utf-8", newline="\n")
-    print(f"wrote {out_dir / 'index.html'} ({lectures} lectures, {markers} marker rows)")
+
+    for old, new in OLD_FOLDERS.items():
+        stub = out_dir / old
+        stub.mkdir(parents=True, exist_ok=True)
+        (stub / "index.html").write_text(redirect_page(new), encoding="utf-8", newline="\n")
+
+    print(f"wrote {out_dir / 'index.html'} ({lectures} lectures, {markers} marker rows, "
+          f"start {sched.start}) + {len(OLD_FOLDERS)} redirect stubs")
 
 
 if __name__ == "__main__":

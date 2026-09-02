@@ -7,7 +7,7 @@
   },
   "scripts": {
     "preview": "marp -s --html . --theme-set themes/ooc.css",
-    "preview:intro": "marp --preview --html --allow-local-files weeks/week-01-introduction/slides.md --theme-set themes/ooc.css",
-    "export:intro": "marp --html --allow-local-files weeks/week-01-introduction/slides.md -o build/week-01-introduction/slides.pdf --theme-set themes/ooc.css"
+    "preview:intro": "marp --preview --html --allow-local-files weeks/introduction/slides.md --theme-set themes/ooc.css",
+    "export:intro": "marp --html --allow-local-files weeks/introduction/slides.md -o build/introduction/slides.pdf --theme-set themes/ooc.css"
   }
 }

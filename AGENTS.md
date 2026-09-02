@@ -27,7 +27,7 @@ opposite things. Work out which you are before doing anything.
 
 Your job is to help them **learn Java**, using this module's own material.
 
-**Where the content is.** Lectures: `weeks/week-NN-<topic>/slides.md`
+**Where the content is.** Lectures: `weeks/<topic>/slides.md`
 — Marp markdown, so expect YAML frontmatter, a `<style>` block, and HTML
 `<div>`s that draw diagrams. Skip that machinery; the teaching is in the
 prose, the ```java fences, and the `<!-- Speaker notes: ... -->` comments.
@@ -64,10 +64,20 @@ alone.
 
 ## Map
 
-- `weeks/week-NN-<topic>/slides.md` — Marp deck, THE canonical lecture;
-  `<topic>/img/` beside it holds its images. The deck sits directly in the
-  week folder: there is no `lecture/` level (there is nothing to sit
-  beside it, since labs live under `labs/`).
+- `module/schedule.json` — THE schedule, and the only place a week number
+  or a semester date may appear. It is an export of the lecturer's
+  module-schedule-table-builder app, edited there and re-exported here.
+  `scripts/schedule.py` loads it; the site index, README's banner and
+  schedule table, the labs index order and the Moodle course-page block
+  are all generated from it, and `scripts/check_schedule.py` fails CI if
+  any folder, deck, page or the README disagrees with it. To reorder the
+  semester: change the JSON, run `scripts/update_current_week.py`, push;
+  then paste the regenerated block (`/moodle-schedule-table.html` on the
+  site) into Moodle.
+- `weeks/<topic>/slides.md` — Marp deck, THE canonical lecture;
+  `<topic>/img/` beside it holds its images. Folder names carry NO week
+  number: a week's position is the schedule's business, so a reorder
+  changes one JSON file and no URLs.
 - `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
   instructions students follow) + `Main.java` starter per lab. Students
   copy the repo from the template and work here (devcontainer provided);
@@ -102,13 +112,10 @@ alone.
   all. Match the lab you are editing; don't import another lab's style.
 - Week folders hold the lecture only. There are no per-week lab stubs —
   the README schedule table links straight to `labs/src/ie/atu/<topic>/`.
-- `weeks/week-05-mcq1|week-09-mcq2|week-12-mcq3/` and
-  `weeks/week-06b-reading-week/` — non-teaching weeks. Their `README.md`
-  is the ONLY tracked file in each folder, so it is load-bearing: git does
-  not track empty directories, and `build_index.py` derives the site's MCQ
-  and reading-week rows from these folder names. Deleting the README
-  deletes the row. MCQ question content lives in Moodle only — never
-  commit it here.
+- `weeks/mcq1|mcq2|mcq3/` and `weeks/reading-week/` — non-teaching
+  weeks; each holds only a `README.md`, which git needs to track the
+  folder at all. The schedule places them; their titles state no week.
+  MCQ question content lives in Moodle only — never commit it here.
 - `module/module-overview.md` — weekly topics + per-week summaries, the
   map an assistant should read before helping with any topic. Lecturer
   planning and Moodle page assets live OUTSIDE this repo (it is a public
@@ -131,7 +138,16 @@ alone.
   schedule references). `scripts/check_practice_bank.py` validates the
   bank in CI; CI copies `practice/` to the site at `/practice/`.
 - `scripts/build_index.py` — generates the Pages landing page from the
-  `weeks/` tree + deck frontmatter (CI runs it; styled to match the theme).
+  schedule (CI runs it; styled to match the theme), plus a redirect stub
+  for each pre-2026-09 `week-NN-` folder name.
+- `scripts/build_moodle_schedule.py` — generates the Moodle course-page
+  schedule block from the schedule, with DOM-built rows because Moodle
+  strips closing tags out of inline scripts (CI publishes it at
+  `/moodle-schedule-table.html`).
+- `scripts/check_schedule.py` — CI gate: the schedule is well-formed, every
+  row's folder/lab/page exists, no orphan week folder, no week number in
+  frontmatter/kickers/MCQ titles, README's table is current, the module
+  overview has every section in order.
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and FAILS if it is missing.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every deck
@@ -150,13 +166,11 @@ alone.
   package), so any rename silently breaks prose that names the old path —
   which is how README's whole schedule table once shipped nine 404s with
   every other gate green.
-- `scripts/update_current_week.py` — rewrites README's current-week banner
-  and moves the ➡️ marker onto the live row of the schedule table. Pure
-  calendar maths, no config: reading week is the week of the last Monday
-  of October, week 1 is six weeks earlier. A GitHub Action runs it every
-  Monday; `--date YYYY-MM-DD` overrides today for testing. The Pages index
-  mirrors the SAME rule in inline JS (`build_index.py`) so the highlight
-  moves without a rebuild — change the formula in both or they diverge.
+- `scripts/update_current_week.py` — regenerates README's current-week
+  banner AND its schedule table from the schedule, with the ➡️ marker on
+  the live row. A GitHub Action runs it every Monday; `--date YYYY-MM-DD`
+  overrides today for testing. The Pages index highlights the same row in
+  inline JS from the schedule's start date baked into the page.
 - `.github/workflows/marp.yml` — renders every `weeks/*/slides.md`
   to HTML + PDF on push, then publishes the site with
   `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
@@ -171,8 +185,9 @@ alone.
 ## Conventions (guaranteed repo-wide)
 
 - Folder/file names: kebab-case, no spaces.
-- Every `slides.md` starts with YAML frontmatter: `title`, `week` (int),
-  `topic` (kebab slug), `type` (`lecture`), `source` (`authored`),
+- Every `slides.md` starts with YAML frontmatter: `title`, `topic` (kebab
+  slug), `type` (`lecture`), `source` (`authored`) — no `week`: the
+  schedule owns that,
   `marp: true`, `theme`, `paginate`. Lab READMEs carry no frontmatter —
   they are read as plain markdown on GitHub and on the site.
 - Slides are separated by `---` on its own line; slide 1 uses `#`, the rest `##`.
@@ -243,28 +258,26 @@ alone.
 - Decks are SELF-CONTAINED, reusable in other courses: never reference
   other weeks/decks or the module schedule ("recall from week 7", "next
   week", pillar week-tags). Concept back-references without schedule
-  coupling ("Recall: …", "as you've seen") are fine. Exempt: title-slide
-  kickers, frontmatter `week:`, and week-01's module-logistics act.
+  coupling ("Recall: …", "as you've seen") are fine. Title kickers name
+  the topic only (`// arrays · object-oriented computing`). Exempt: the
+  intro deck's module-logistics act, which points at the Moodle schedule
+  rather than stating dates.
 
 ## Editing rules
 
 - To change a lecture: edit its `slides.md` and push — CI re-renders decks.
-- To add week N: create `weeks/week-NN-<topic>/slides.md`, add its
-  lab under `labs/src/ie/atu/<topic>/`, then add a row to README's
-  schedule table.
-- Lecture and lab folders are linked by a DERIVED name: the week's topic
-  with hyphens removed (`week-02-classes-and-objects` →
-  `classesandobjects`), because Java package segments cannot contain
-  hyphens. Labs stay topic-addressed on purpose — week numbers move
-  between years, packages and student instructions shouldn't. If a
-  teaching week has no matching lab, `build_index.py` FAILS the build
-  rather than quietly dropping the lab button; a week that genuinely has
-  no lab goes in that script's `NO_LAB_WEEKS`.
-- Week folders follow the 2026-27 plan: 12 numbered weeks plus the
-  deliberately unnumbered `weeks/week-06b-reading-week/` (October
-  bank-holiday week, no teaching — it sits between teaching weeks 6 and 7).
-  Renumbering weeks also touches README's schedule table,
-  `module/module-overview.md`, and this file.
+- To add a topic: create `weeks/<topic>/slides.md`, add its lab under
+  `labs/src/ie/atu/<topic>/`, add the row to `module/schedule.json` (or
+  export it from the builder), run `scripts/update_current_week.py`.
+- A lecture and its lab are linked by the schedule row (`lectureUrl` and
+  `labUrl`), not by a naming rule; by convention the lab package is the
+  topic with hyphens removed (`classes-and-objects` → `classesandobjects`)
+  because Java package segments cannot contain hyphens. A row with a
+  lecture and no lab is allowed (week 1); `check_schedule.py` fails the
+  build if a row names a deck, lab or page that does not exist, or if a
+  folder under `weeks/` is not in the schedule.
+- `module/module-overview.md` has one `## <Topic>` section per schedule
+  row, in schedule order, with no week numbers; the gate checks the order.
 
 ## Local preview (before committing)
 
@@ -277,7 +290,7 @@ alone.
     npm run preview      # live server over weeks/ -> http://localhost:8080
     npm run export:intro # one deck straight to build/…/slides.pdf
 
-Browse to any deck (e.g. `/week-01-introduction/slides.md`); edit the
+Browse to any deck (e.g. `/introduction/slides.md`); edit the
 markdown, refresh the browser to see it. `npm run preview:intro` opens a
 self-refreshing preview window instead, and the Marp for VS Code extension
 gives instant side-panel previews while editing. Preview locally first —

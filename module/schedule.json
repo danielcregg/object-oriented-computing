@@ -1,0 +1,182 @@
+{
+  "scheduleType": "sem1",
+  "startDate": "2026-09-14",
+  "weeks": [
+    {
+      "week": "1",
+      "topic": "Introduction",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/introduction/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "",
+      "notes": "No lab in week 1"
+    },
+    {
+      "week": "2",
+      "topic": "Classes and Objects",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/classes-and-objects/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/classesandobjects/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "3",
+      "topic": "Methods",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/methods/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/methods/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "4",
+      "topic": "",
+      "lectureUrl": "",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "MCQ 1",
+      "notes": "Held during lab slot"
+    },
+    {
+      "week": "5",
+      "topic": "Arrays",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/arrays/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/arrays/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "6",
+      "topic": "Strings",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/strings/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/strings/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "X",
+      "topic": "",
+      "lectureUrl": "",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "",
+      "notes": "Reading week"
+    },
+    {
+      "week": "7",
+      "topic": "Encapsulation",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/encapsulation/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/encapsulation/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "8",
+      "topic": "",
+      "lectureUrl": "",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "MCQ 2",
+      "notes": "Held during lab slot"
+    },
+    {
+      "week": "9",
+      "topic": "Inheritance",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/inheritance/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/inheritance/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "10",
+      "topic": "Polymorphism",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/polymorphism/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/polymorphism/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "11",
+      "topic": "Abstraction",
+      "lectureUrl": "https://danielcregg.is-a.dev/object-oriented-computing/abstraction/",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "https://danielcregg.is-a.dev/object-oriented-computing/labs/abstraction/",
+      "assessment": "",
+      "notes": ""
+    },
+    {
+      "week": "12",
+      "topic": "",
+      "lectureUrl": "",
+      "videoUrl": "",
+      "notebookLmUrl": "",
+      "labUrl": "",
+      "assessment": "MCQ 3",
+      "notes": "Held during lab slot"
+    }
+  ],
+  "theme": "slate",
+  "zebra": true,
+  "columnLabels": {
+    "assessment": "Assessments"
+  },
+  "columnWidths": {
+    "week": 58,
+    "dates": 139,
+    "topic": 143,
+    "lecture": 81,
+    "lab": 58,
+    "assessment": 114,
+    "notes": 534
+  },
+  "columnSettings": {
+    "lecture": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "video": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "ai": {
+      "mode": "icon",
+      "iconChoice": 0,
+      "customSrc": ""
+    },
+    "lab": {
+      "mode": "icon",
+      "iconChoice": 1,
+      "customSrc": ""
+    }
+  },
+  "columnOrder": [
+    "week",
+    "dates",
+    "topic",
+    "lecture",
+    "lab",
+    "assessment",
+    "notes"
+  ],
+  "customColumns": []
+}

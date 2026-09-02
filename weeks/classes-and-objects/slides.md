@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Classes and Objects"
-week: 2
 topic: classes-and-objects
 type: lecture
 source: authored
@@ -160,7 +159,7 @@ section .tokrow .teq { padding-top: 6px; color: #1E2833; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 02 · classes and objects · object-oriented computing</span>
+<span class="kicker">// classes and objects · object-oriented computing</span>
 
 # Classes and Objects
 

@@ -2,8 +2,8 @@
 
 **Object-Oriented Computing** — Java, semester 1, Atlantic Technological
 University. 12 teaching weeks: a module introduction (week 1, no lab), eight
-topic weeks, and three Moodle MCQs (weeks 4, 8, 12 — held during the lab
-slot, 33% each, no projects). Reading week is always the week of the Irish
+topic weeks, and three Moodle MCQs (each held during the lab slot of its week,
+33% each, no projects). Reading week is always the week of the Irish
 October bank holiday, with 6 teaching weeks before it and 6 after.
 
 Live slide decks: <https://danielcregg.is-a.dev/object-oriented-computing/>
@@ -16,9 +16,9 @@ topic weeks teach the four OOP pillars in dependency order
 
 ---
 
-## Week 1 — Module Introduction
+## Introduction
 
-[Slides](../weeks/week-01-introduction/slides.md) · no lab in week 1
+[Slides](../weeks/introduction/slides.md) · no lab in week 1
 
 Two halves. First, module logistics: learning outcomes, delivery format and
 timetable, the assessment matrix (three MCQs), the lab coding environment,
@@ -28,9 +28,9 @@ advantages of the JVM, the JDK, writing and running a first program in a
 text editor vs an IDE (VS Code), the anatomy of a Java program, and the
 common syntax errors beginners hit.
 
-## Week 2 — Classes and Objects
+## Classes and Objects
 
-[Slides](../weeks/week-02-classes-and-objects/slides.md) ·
+[Slides](../weeks/classes-and-objects/slides.md) ·
 [Lab](../labs/src/ie/atu/classesandobjects/)
 
 The conceptual core of the module. What a class is (blueprint), attributes
@@ -42,9 +42,9 @@ them unique, the types (default, no-arg, parameterised) — and the `this`
 reference. Closes with the Single Responsibility Principle as a
 class-design habit.
 
-## Week 3 — Methods
+## Methods
 
-[Slides](../weeks/week-03-methods/slides.md) ·
+[Slides](../weeks/methods/slides.md) ·
 [Lab](../labs/src/ie/atu/methods/)
 
 What a method is, method syntax and anatomy (modifiers, return type, name,
@@ -55,15 +55,15 @@ members. The method call stack and how to trace it, common mistakes
 (e.g. missing return statements) and how to fix them, and method best
 practices.
 
-## Week 4 — MCQ 1 *(33%)*
+## MCQ 1 *(33%)*
 
-[Details](../weeks/week-05-mcq1/README.md) — runs in Moodle during the lab
-slot. Examines weeks 1–3: the introduction material, classes and objects,
-and methods.
+[Details](../weeks/mcq1/README.md) — runs in Moodle during the lab
+slot. Examines everything taught before it: the introduction material,
+classes and objects, and methods.
 
-## Week 5 — Arrays
+## Arrays
 
-[Slides](../weeks/week-04-arrays/slides.md) ·
+[Slides](../weeks/arrays/slides.md) ·
 [Lab](../labs/src/ie/atu/arrays/)
 
 What an array is and its characteristics: fixed length, homogeneous
@@ -72,9 +72,9 @@ arrays (both syntaxes), reading and writing elements by index, the `length`
 variable. Looping over arrays with `for` and for-each, then
 multidimensional arrays. Includes an in-class quiz.
 
-## Week 6 — Strings
+## Strings
 
-[Slides](../weeks/week-06-strings/slides.md) ·
+[Slides](../weeks/strings/slides.md) ·
 [Lab](../labs/src/ie/atu/strings/)
 
 Strings as objects: creating them (literals vs `new`) and how the String
@@ -87,12 +87,12 @@ is the on-ramp to encapsulation next teaching week.
 
 ## Reading week — no lecture or lab
 
-[Details](../weeks/week-06b-reading-week/README.md) — always the week of
+[Details](../weeks/reading-week/README.md) — always the week of
 the Irish October bank holiday (the last Monday of October).
 
-## Week 7 — Encapsulation
+## Encapsulation
 
-[Slides](../weeks/week-07-encapsulation/slides.md) ·
+[Slides](../weeks/encapsulation/slides.md) ·
 [Lab](../labs/src/ie/atu/encapsulation/)
 
 Opens the four-pillars block; this deck is the canonical home of the
@@ -104,14 +104,14 @@ sequence on *why* getters/setters earn their keep — validation, read-only
 properties, freedom to change internal representation — then encapsulation
 visualised, a coding example, and the benefits.
 
-## Week 8 — MCQ 2 *(33%)*
+## MCQ 2 *(33%)*
 
-[Details](../weeks/week-09-mcq2/README.md) — runs in Moodle during the lab
-slot. Examines weeks 5–7: arrays, strings, and encapsulation.
+[Details](../weeks/mcq2/README.md) — runs in Moodle during the lab
+slot. Examines the weeks since MCQ 1: arrays, strings, and encapsulation.
 
-## Week 9 — Inheritance
+## Inheritance
 
-[Slides](../weeks/week-08-inheritance/slides.md) ·
+[Slides](../weeks/inheritance/slides.md) ·
 [Lab](../labs/src/ie/atu/inheritance/)
 
 Definition and terminology (superclass/subclass, is-a), implementing
@@ -123,9 +123,9 @@ identify a genuine inheritance situation. Constructors under inheritance
 and the `super` keyword, invoking superclass constructors, benefits, and
 key Java facts.
 
-## Week 10 — Polymorphism
+## Polymorphism
 
-[Slides](../weeks/week-10-polymorphism/slides.md) ·
+[Slides](../weeks/polymorphism/slides.md) ·
 [Lab](../labs/src/ie/atu/polymorphism/)
 
 The two kinds of polymorphism. Compile-time: method signatures and
@@ -136,9 +136,9 @@ Then the payoff: upcasting and downcasting, why upcasting is useful
 and a full program that demonstrates everything together. Ends with
 benefits and a recap.
 
-## Week 11 — Abstraction
+## Abstraction
 
-[Slides](../weeks/week-11-abstraction/slides.md) ·
+[Slides](../weeks/abstraction/slides.md) ·
 [Lab](../labs/src/ie/atu/abstraction/)
 
 What abstraction is and how it differs from encapsulation, with real-life
@@ -149,7 +149,7 @@ real-world examples). The comparison ladder — class vs interface, interface
 vs abstract class, concrete vs abstract vs interface — plus why interfaces
 exist and the benefits of abstraction.
 
-## Week 12 — MCQ 3 *(33%)*
+## MCQ 3 *(33%)*
 
-[Details](../weeks/week-12-mcq3/README.md) — runs in Moodle during the lab
-slot. Examines weeks 9–11: inheritance, polymorphism, and abstraction.
+[Details](../weeks/mcq3/README.md) — runs in Moodle during the lab
+slot. Examines the weeks since MCQ 2: inheritance, polymorphism, and abstraction.

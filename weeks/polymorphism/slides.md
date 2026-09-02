@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Polymorphism"
-week: 10
 topic: polymorphism
 type: lecture
 source: authored
@@ -101,7 +100,7 @@ section.lead .mem .name { color: #7FB4D8; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 10 · polymorphism · object-oriented computing</span>
+<span class="kicker">// polymorphism · object-oriented computing</span>
 
 # Polymorphism
 

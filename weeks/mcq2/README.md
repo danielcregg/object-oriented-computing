@@ -1,4 +1,4 @@
-# MCQ 2 (Week 9)
+# MCQ 2
 
 Assessment week — no new lecture or lab.
 

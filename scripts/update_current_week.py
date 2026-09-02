@@ -1,163 +1,102 @@
 #!/usr/bin/env python3
-"""Update README's current-teaching-week banner.
+"""Rewrite README's current-week banner and its schedule table from module/schedule.json.
 
-The semester calendar is DERIVED, not configured — no schedule file needed:
+Both are generated, so neither can drift from the schedule:
 
-  - Reading week is always the week of the Irish October bank holiday
-    (the last Monday of October).
-  - There are exactly 6 teaching weeks before it (weeks 1-6) and 6 after
-    (weeks 7-12), so week 1 begins 6 weeks before bank-holiday Monday.
-  - Week topics come from the weeks/ folder names and each deck's
-    frontmatter title, so renaming/renumbering a week updates the banner
-    automatically.
+    <!-- current-week:start --> ... <!-- current-week:end -->    the banner
+    <!-- schedule-table:start --> ... <!-- schedule-table:end -->  the table
 
-Rewrites the README between the markers:
-
-    <!-- current-week:start --> ... <!-- current-week:end -->
-
-and moves a **➡️ N** highlight onto the current row of the schedule
-table (the — row during reading week; no row outside the semester).
-Weeks run Mon-Sun, Europe/Dublin.
+The table gets a **➡️** marker on the current row (none outside term). Weeks
+run Mon-Sun, Europe/Dublin. A GitHub Action runs this every Monday; the CI gate
+scripts/check_schedule.py fails if the committed table is stale, so run it after
+any change to module/schedule.json.
 
 Usage:
     python scripts/update_current_week.py [--date YYYY-MM-DD]
 
 --date overrides "today" for testing. Exit 0 always; the caller decides
 whether the README changed (git diff).
-
-The Pages landing page mirrors this calendar client-side (inline JS in
-scripts/build_index.py) — change the formula in BOTH places or the README
-and the site will disagree.
 """
+from __future__ import annotations
+
 import argparse
 import datetime
 import re
+import sys
 from pathlib import Path
-from zoneinfo import ZoneInfo
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from schedule import Row, Schedule, load  # noqa: E402
 
 README = Path("README.md")
-WEEKS = Path("weeks")
-MARKER_RE = re.compile(
-    r"<!-- current-week:start -->.*?<!-- current-week:end -->", re.DOTALL)
-TITLE_RE = re.compile(r'^title:\s*"?([^"\n]+?)"?\s*$', re.MULTILINE)
-
-TEACHING_WEEKS = 12
-BEFORE_BREAK = 6  # teaching weeks before reading week (and after it)
+BANNER_RE = re.compile(r"<!-- current-week:start -->.*?<!-- current-week:end -->", re.DOTALL)
+TABLE_RE = re.compile(r"<!-- schedule-table:start -->.*?<!-- schedule-table:end -->", re.DOTALL)
 
 
-def monday_of(day: datetime.date) -> datetime.date:
-    return day - datetime.timedelta(days=day.weekday())
-
-
-def bank_holiday_monday(year: int) -> datetime.date:
-    """The Irish October bank holiday: the last Monday of October."""
-    return monday_of(datetime.date(year, 10, 31))
-
-
-def week1_monday(year: int) -> datetime.date:
-    return bank_holiday_monday(year) - datetime.timedelta(weeks=BEFORE_BREAK)
-
-
-def topics_from_tree() -> dict[int, str]:
-    """Map week number -> topic label, derived from weeks/ folders."""
-    topics: dict[int, str] = {}
-    if not WEEKS.is_dir():
-        return topics
-    for folder in sorted(p for p in WEEKS.iterdir() if p.is_dir()):
-        m = re.match(r"week-(\d+)-(.+)$", folder.name)
-        if not m:
-            continue  # week-06b-reading-week etc. — position is computed, not read
-        number, slug = int(m.group(1)), m.group(2)
-        mcq = re.fullmatch(r"mcq(\d)", slug)
-        if mcq:
-            topics[number] = f"MCQ {mcq.group(1)}"
-            continue
-        deck = folder / "slides.md"
-        if deck.is_file():
-            t = TITLE_RE.search(deck.read_text(encoding="utf-8"))
-            if t:
-                topics[number] = t.group(1)
-                continue
-        topics[number] = slug.replace("-", " ").title()
-    return topics
-
-
-def banner_and_highlight(today: datetime.date) -> tuple[str, str | None]:
-    """Return (banner line, schedule-table row key to highlight or None).
-
-    The row key is the Week-column cell text: "1".."12", or the em-dash
-    "—" for the reading-week row.
-    """
-    reading = bank_holiday_monday(today.year)
-    start = week1_monday(today.year)
-    this_monday = monday_of(today)
-    index = (this_monday - start).days // 7  # 0-12; reading week is index 6
-
-    if index < 0:
-        return (f"> 🗓️ **Semester has not started yet** — teaching begins the "
-                f"week of {start:%d %b %Y}."), None
-    if index > TEACHING_WEEKS:  # rows 0..12 cover the semester
-        nxt = week1_monday(today.year + 1)
-        return (f"> 🗓️ **Semester finished** — teaching returns the week of "
-                f"{nxt:%d %b %Y}."), None
-    if this_monday == reading:
+def banner(sched: Schedule, today: datetime.date) -> tuple[str, Row | None]:
+    """Return (banner line, the current row or None)."""
+    row = sched.row_for(today)
+    if row is None:
+        if today < sched.start:
+            return (f"> 🗓️ **Semester has not started yet** — teaching begins the "
+                    f"week of {sched.start:%d %b %Y}."), None
+        return "> 🗓️ **Semester finished** — no more lectures or labs this semester.", None
+    monday = sched.monday(row)
+    if row.is_break:
         return (f"> 🗓️ **Reading week** (no lectures or labs) — week beginning "
-                f"{reading:%d %b %Y}."), "—"
-
-    week_no = index + 1 if this_monday < reading else index
-    topic = topics_from_tree().get(week_no, "")
-    label = f" — {topic}" if topic else ""
-    return (f"> 🗓️ **Current teaching week: {week_no}{label}** "
-            f"(week beginning {this_monday:%d %b %Y})."), str(week_no)
-
-
-TABLE_ROW_RE = re.compile(r"^\|\s*([^|]*?)\s*\|(.*)$")
-HIGHLIGHT_RE = re.compile(r"^\*\*➡️\s*(.*?)\*\*$")
+                f"{monday:%d %b %Y}."), row
+    if row.mcq:
+        when = row.notes.lower() if row.notes else "held during the lab slot"
+        return (f"> 🗓️ **This week: {row.assessment}** — {when} (week beginning "
+                f"{monday:%d %b %Y}). Read the [MCQ brief](mcq/README.md) first."), row
+    return (f"> 🗓️ **Current teaching week: {row.week} — {row.topic}** "
+            f"(week beginning {monday:%d %b %Y})."), row
 
 
-def apply_table_highlight(text: str, key: str | None) -> str:
-    """Move the **➡️** marker to the schedule row whose Week cell == key.
+def table_row(row: Row, current: Row | None) -> str:
+    week = "—" if row.is_break else row.week
+    if current is not None and row.index == current.index:
+        week = f"**➡️ {week}**"
+    if row.deck:
+        lecture = f"[slides](weeks/{row.deck}/slides.md)"
+        if row.lab:
+            lab = f"[lab](labs/src/ie/atu/{row.lab}/)"
+        else:
+            lab = f"_{row.notes}_" if row.notes else "—"
+        return f"| {week} | {row.topic} | {lecture} | {lab} |"
+    if row.mcq:
+        note = f" · {row.notes.lower()}" if row.notes else ""
+        return (f"| {week} | **{row.assessment}**{note} | "
+                f"[details](weeks/{row.folder}/README.md) · [brief](mcq/README.md) | — |")
+    return f"| {week} | {row.notes or 'Reading week'} | [details](weeks/{row.folder}/README.md) | — |"
 
-    Every run first strips any existing marker (idempotent), so the
-    highlight follows the semester week by week and disappears outside
-    term. Non-schedule tables are safe: only a cell exactly equal to the
-    key is ever marked.
-    """
-    out = []
-    for line in text.split("\n"):
-        m = TABLE_ROW_RE.match(line) if line.startswith("|") else None
-        if m:
-            original = m.group(1)
-            cell = original
-            prev = HIGHLIGHT_RE.match(cell)
-            if prev:
-                cell = prev.group(1).strip()
-            if key is not None and cell == key:
-                cell = f"**➡️ {cell}**"
-            if cell != original:
-                line = f"| {cell} |{m.group(2)}"
-        out.append(line)
-    return "\n".join(out)
+
+def render_table(sched: Schedule, current: Row | None) -> str:
+    lines = ["| Week | Topic | Lecture | Lab |", "|---|---|---|---|"]
+    lines += [table_row(r, current) for r in sched.rows]
+    return "\n".join(lines) + "\n"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date")
     args = ap.parse_args()
-    today = (datetime.date.fromisoformat(args.date) if args.date
-             else datetime.datetime.now(ZoneInfo("Europe/Dublin")).date())
+    if args.date:
+        today = datetime.date.fromisoformat(args.date)
+    else:
+        from zoneinfo import ZoneInfo
+        today = datetime.datetime.now(ZoneInfo("Europe/Dublin")).date()
 
-    banner_line, highlight_key = banner_and_highlight(today)
-    banner = ("<!-- current-week:start -->\n"
-              f"{banner_line}\n"
-              "<!-- current-week:end -->")
+    sched = load()
+    line, current = banner(sched, today)
     text = README.read_text(encoding="utf-8")
-    if not MARKER_RE.search(text):
-        raise SystemExit("README is missing the current-week markers")
-    text = MARKER_RE.sub(banner, text)
-    text = apply_table_highlight(text, highlight_key)
+    for name, rx in (("current-week", BANNER_RE), ("schedule-table", TABLE_RE)):
+        if not rx.search(text):
+            raise SystemExit(f"README is missing the {name} markers")
+    text = BANNER_RE.sub(f"<!-- current-week:start -->\n{line}\n<!-- current-week:end -->", text)
+    text = TABLE_RE.sub("<!-- schedule-table:start -->\n" + render_table(sched, current)
+                        + "<!-- schedule-table:end -->", text)
     README.write_text(text, encoding="utf-8")
-    line = banner.splitlines()[1]
     print(line.encode("ascii", errors="ignore").decode().strip())
 
 

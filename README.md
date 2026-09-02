@@ -29,7 +29,7 @@ Lectures are **Marp markdown** (`weeks/*/slides.md`) — edit the
 markdown, push, and CI re-renders the HTML slides and a PDF, then
 publishes the site straight from the workflow. Labs are plain Java under
 `labs/src/ie/atu/<topic>/`, each with its instructions in a README.
-Conventions and editing rules live in [`CLAUDE.md`](CLAUDE.md).
+Conventions and editing rules live in [`AGENTS.md`](AGENTS.md).
 
 </details>
 
@@ -39,21 +39,27 @@ Conventions and editing rules live in [`CLAUDE.md`](CLAUDE.md).
 > 🗓️ **Semester has not started yet** — teaching begins the week of 14 Sep 2026.
 <!-- current-week:end -->
 
+The schedule is defined once, in [`module/schedule.json`](module/schedule.json);
+this table, the banner above, the site and the Moodle course page are all
+generated from it.
+
+<!-- schedule-table:start -->
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|
-| 1 | Introduction | [slides](weeks/week-01-introduction/slides.md) | _no lab in week 1_ |
-| 2 | Classes and Objects | [slides](weeks/week-02-classes-and-objects/slides.md) | [lab](labs/src/ie/atu/classesandobjects/) |
-| 3 | Methods | [slides](weeks/week-03-methods/slides.md) | [lab](labs/src/ie/atu/methods/) |
-| 4 | **MCQ 1** (33%) | [details](weeks/week-05-mcq1/README.md) · [brief](mcq/README.md) | — |
-| 5 | Arrays | [slides](weeks/week-04-arrays/slides.md) | [lab](labs/src/ie/atu/arrays/) |
-| 6 | Strings | [slides](weeks/week-06-strings/slides.md) | [lab](labs/src/ie/atu/strings/) |
-| — | Reading week | [details](weeks/week-06b-reading-week/README.md) | — |
-| 7 | Encapsulation | [slides](weeks/week-07-encapsulation/slides.md) | [lab](labs/src/ie/atu/encapsulation/) |
-| 8 | **MCQ 2** (33%) | [details](weeks/week-09-mcq2/README.md) · [brief](mcq/README.md) | — |
-| 9 | Inheritance | [slides](weeks/week-08-inheritance/slides.md) | [lab](labs/src/ie/atu/inheritance/) |
-| 10 | Polymorphism | [slides](weeks/week-10-polymorphism/slides.md) | [lab](labs/src/ie/atu/polymorphism/) |
-| 11 | Abstraction | [slides](weeks/week-11-abstraction/slides.md) | [lab](labs/src/ie/atu/abstraction/) |
-| 12 | **MCQ 3** (33%) | [details](weeks/week-12-mcq3/README.md) · [brief](mcq/README.md) | — |
+| 1 | Introduction | [slides](weeks/introduction/slides.md) | _No lab in week 1_ |
+| 2 | Classes and Objects | [slides](weeks/classes-and-objects/slides.md) | [lab](labs/src/ie/atu/classesandobjects/) |
+| 3 | Methods | [slides](weeks/methods/slides.md) | [lab](labs/src/ie/atu/methods/) |
+| 4 | **MCQ 1** · held during lab slot | [details](weeks/mcq1/README.md) · [brief](mcq/README.md) | — |
+| 5 | Arrays | [slides](weeks/arrays/slides.md) | [lab](labs/src/ie/atu/arrays/) |
+| 6 | Strings | [slides](weeks/strings/slides.md) | [lab](labs/src/ie/atu/strings/) |
+| — | Reading week | [details](weeks/reading-week/README.md) | — |
+| 7 | Encapsulation | [slides](weeks/encapsulation/slides.md) | [lab](labs/src/ie/atu/encapsulation/) |
+| 8 | **MCQ 2** · held during lab slot | [details](weeks/mcq2/README.md) · [brief](mcq/README.md) | — |
+| 9 | Inheritance | [slides](weeks/inheritance/slides.md) | [lab](labs/src/ie/atu/inheritance/) |
+| 10 | Polymorphism | [slides](weeks/polymorphism/slides.md) | [lab](labs/src/ie/atu/polymorphism/) |
+| 11 | Abstraction | [slides](weeks/abstraction/slides.md) | [lab](labs/src/ie/atu/abstraction/) |
+| 12 | **MCQ 3** · held during lab slot | [details](weeks/mcq3/README.md) · [brief](mcq/README.md) | — |
+<!-- schedule-table:end -->
 
 ## Labs
 

@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Encapsulation"
-week: 7
 topic: encapsulation
 type: lecture
 source: authored
@@ -140,7 +139,7 @@ section table.vmatrix .mchip.soon { background: #E7F0F7; color: #33698C; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 07 · encapsulation · object-oriented computing</span>
+<span class="kicker">// encapsulation · object-oriented computing</span>
 
 # Encapsulation
 

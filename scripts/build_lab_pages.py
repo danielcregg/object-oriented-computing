@@ -27,6 +27,9 @@ from pathlib import Path
 
 import markdown
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from schedule import load  # noqa: E402
+
 LABS = Path("labs/src/ie/atu")
 BRIEF = Path("mcq/README.md")
 REPO_URL = "https://github.com/danielcregg/object-oriented-computing"
@@ -212,9 +215,16 @@ def main() -> None:
     out_root = Path(sys.argv[1] if len(sys.argv) > 1 else "build") / "labs"
     out_root.mkdir(parents=True, exist_ok=True)
 
+    # Teaching order from the schedule, then any lab the schedule does not
+    # name (alphabetically) -- never silently dropped.
+    sched = load()
+    ordered = [r.lab for r in sched.rows if r.lab]
+    extras = sorted(p.parent.name for p in LABS.glob("*/README.md") if p.parent.name not in ordered)
     labs = []
-    for readme in sorted(LABS.glob("*/README.md")):
-        slug = readme.parent.name
+    for slug in ordered + extras:
+        readme = LABS / slug / "README.md"
+        if not readme.is_file():
+            raise SystemExit(f"build_lab_pages: the schedule names lab {slug!r} but {readme} does not exist")
         text = readme.read_text(encoding="utf-8")
         heading = re.match(r"#\s+(.+)", text)
         if heading is None:
@@ -238,7 +248,9 @@ def main() -> None:
                   f'this lab: <a href="{REPO_URL}/generate">make your own copy of the '
                   f'repo</a> ("Use this template"), open a Codespace on it, and work '
                   f'in <code>labs/src/ie/atu/{slug}/</code>.</div>')
-        kicker = '<a href="./..">labs</a> · object-oriented computing'
+        deck = sched.deck_for_lab(slug)
+        lecture = f' · <a href="../../{deck}/index.html">lecture</a>' if deck else ''
+        kicker = f'<a href="./..">labs</a>{lecture} · object-oriented computing'
         dest = out_root / slug
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(
@@ -252,7 +264,7 @@ def main() -> None:
         f'<a class="open" href="{slug}/">open</a></li>\n'
         for slug, title in labs)
     index_body = (f"<h1>Labs</h1>\n"
-                  f"<p>The module's lab exercises, one page per lab — read-only "
+                  f"<p>The module's lab exercises, in teaching order, one page per lab — read-only "
                   f"previews of the instructions, always the current version. To "
                   f"complete a lab you work in your own copy of the repo: "
                   f'<a href="{REPO_URL}/generate">Use this template</a>, then open '

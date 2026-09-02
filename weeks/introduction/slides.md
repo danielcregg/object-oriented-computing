@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Module Introduction"
-week: 1
 topic: introduction
 type: lecture
 source: authored
@@ -102,7 +101,7 @@ section.lead .pipe .parrow .plab { color: #F0B26B; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 01 · introduction · object-oriented computing</span>
+<span class="kicker">// introduction · object-oriented computing</span>
 
 # Object-Oriented Computing
 

@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Java Strings"
-week: 6
 topic: strings
 type: lecture
 source: authored
@@ -52,7 +51,7 @@ section.lead .op { color: #F0B26B; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 06 · strings · object-oriented computing</span>
+<span class="kicker">// strings · object-oriented computing</span>
 
 # Java Strings
 

@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Java Arrays"
-week: 4
 topic: arrays
 type: lecture
 source: authored
@@ -24,7 +23,7 @@ section.lead .mem .cell {
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 04 · arrays · object-oriented computing</span>
+<span class="kicker">// arrays · object-oriented computing</span>
 
 # Java Arrays
 

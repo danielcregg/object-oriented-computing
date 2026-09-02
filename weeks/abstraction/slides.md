@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Abstraction"
-week: 11
 topic: abstraction
 type: lecture
 source: authored
@@ -83,7 +82,7 @@ section.lead .ccard .hdr { background: rgba(231,111,0,0.18); border-bottom-color
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 11 · abstraction · object-oriented computing</span>
+<span class="kicker">// abstraction · object-oriented computing</span>
 
 # Abstraction
 

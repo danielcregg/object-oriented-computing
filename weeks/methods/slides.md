@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Java Methods"
-week: 3
 topic: methods
 type: lecture
 source: authored
@@ -130,7 +129,7 @@ section.lead .frame.live { background: rgba(231,111,0,0.18); border-color: #E76F
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 03 · methods · object-oriented computing</span>
+<span class="kicker">// methods · object-oriented computing</span>
 
 # Java Methods
 

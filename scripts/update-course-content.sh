@@ -46,7 +46,7 @@ fi
 # one deck never blocks the rest from updating.
 mapfile -t PATHS < <(
   git ls-tree -r --name-only "upstream/$BRANCH" | grep -E \
-    '^(README\.md|labs/README\.md|mcq/README\.md|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$' || true
+    '^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$' || true
 )
 
 # Baseline = the content as you last received it: the commit recorded by the
@@ -71,6 +71,23 @@ for p in "${PATHS[@]}"; do
   fi
   git checkout --quiet "upstream/$BRANCH" -- "$p" 2>/dev/null && touched+=("$p")
 done
+
+# Course-owned paths that upstream has since removed or renamed (a week folder
+# under its new name, a retired page): drop our copy too, or the old and the
+# new sit side by side. Same rule as above -- a file you edited is yours and
+# stays. Only the course-owned areas are considered; your lab work is never
+# touched.
+while IFS= read -r p; do
+  [ -n "$p" ] || continue
+  case " ${PATHS[*]} " in *" $p "*) continue;; esac
+  base="$ROOT"
+  if [ -n "$LAST" ] && git cat-file -e "$LAST:$p" 2>/dev/null; then base="$LAST"; fi
+  if git cat-file -e "$base:$p" 2>/dev/null && ! git diff --quiet "$base" -- "$p" 2>/dev/null; then
+    say "  kept your version (retired upstream): $p"
+    continue
+  fi
+  git rm -q -- "$p" 2>/dev/null && touched+=("$p") && say "  removed (retired upstream): $p"
+done < <(git ls-files -- 'weeks/*' 'mcq/README.md' 'module/schedule.json')
 
 # Local bookkeeping only -- gitignored, never committed, never pushed.
 git rev-parse "upstream/$BRANCH" > "$MARKER"

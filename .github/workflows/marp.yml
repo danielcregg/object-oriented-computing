@@ -57,6 +57,7 @@ jobs:
           javac -version
           python3 scripts/safety_audit.py
           python3 scripts/check_links.py
+          python3 scripts/check_schedule.py
           python3 scripts/verify_snippets.py
           python3 scripts/check_practice_bank.py
           find labs/src -name '*.java' -print0 \
@@ -72,6 +73,8 @@ jobs:
           python3 -m pip install --quiet markdown
           python3 scripts/build_index.py build
           python3 scripts/build_lab_pages.py build
+          python3 scripts/build_moodle_schedule.py build
+          cp module/schedule.json build/schedule.json
           mkdir -p build/practice
           cp -R practice/. build/practice/
           # mapfile, NOT find|while: a piped while-loop hands the pipe to the

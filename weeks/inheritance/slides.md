@@ -4,7 +4,6 @@ theme: ooc
 paginate: true
 transition: fade
 title: "Inheritance"
-week: 8
 topic: inheritance
 type: lecture
 source: authored
@@ -162,7 +161,7 @@ section.lead .tkid::before, section.lead .tkid::after { background: #7FB4D8; }
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-<span class="kicker">// week 08 · inheritance · object-oriented computing</span>
+<span class="kicker">// inheritance · object-oriented computing</span>
 
 # Java Inheritance
 

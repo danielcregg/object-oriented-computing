@@ -261,7 +261,7 @@ String[] words   = trimmed.split(" ");      // {"Java", "Strings"}
 
 ---
 
-<!-- Speaker notes: ~0:24. Predict beat, and the payoff of the array aliasing trap from week 4. Expect `ha!` as the wrong answer for `b`: students who remember 'shared arrows see the same edit' assume `a = a + "!"` mutates the object `b` also points to, missing that `+` runs the factory and only `a`'s arrow gets redirected. This is the proof-by-example for the 'sharing is always safe' rule the next slide states outright, and it's the question that checks whether students can tell a reassignment from a mutation. -->
+<!-- Speaker notes: ~0:24. Predict beat, and the payoff of the array aliasing trap from the arrays deck. Expect `ha!` as the wrong answer for `b`: students who remember 'shared arrows see the same edit' assume `a = a + "!"` mutates the object `b` also points to, missing that `+` runs the factory and only `a`'s arrow gets redirected. This is the proof-by-example for the 'sharing is always safe' rule the next slide states outright, and it's the question that checks whether students can tell a reassignment from a mutation. -->
 
 ## Predict: what prints?
 

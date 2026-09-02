@@ -2,15 +2,15 @@
 
 **Object-Oriented Computing** — Java, semester 1, Atlantic Technological
 University. 12 teaching weeks: a module introduction (week 1, no lab), eight
-topic weeks, and three Moodle MCQs (weeks 5, 9, 12 — held during the lab
+topic weeks, and three Moodle MCQs (weeks 4, 8, 12 — held during the lab
 slot, 33% each, no projects). Reading week is always the week of the Irish
 October bank holiday, with 6 teaching weeks before it and 6 after.
 
 Live slide decks: <https://danielcregg.is-a.dev/object-oriented-computing/>
 
 **Topics at a glance:** Module Introduction → Classes and Objects → Methods
-→ Arrays → *MCQ 1* → Strings → *(reading week)* → Encapsulation →
-Inheritance → *MCQ 2* → Polymorphism → Abstraction → *MCQ 3*. The last four
+→ *MCQ 1* → Arrays → Strings → *(reading week)* → Encapsulation → *MCQ 2*
+→ Inheritance → Polymorphism → Abstraction → *MCQ 3*. The last four
 topic weeks teach the four OOP pillars in dependency order
 (encapsulation → inheritance → polymorphism → abstraction).
 
@@ -55,7 +55,13 @@ members. The method call stack and how to trace it, common mistakes
 (e.g. missing return statements) and how to fix them, and method best
 practices.
 
-## Week 4 — Arrays
+## Week 4 — MCQ 1 *(33%)*
+
+[Details](../weeks/week-05-mcq1/README.md) — runs in Moodle during the lab
+slot. Examines weeks 1–3: the introduction material, classes and objects,
+and methods.
+
+## Week 5 — Arrays
 
 [Slides](../weeks/week-04-arrays/slides.md) ·
 [Lab](../labs/src/ie/atu/arrays/)
@@ -65,12 +71,6 @@ element type, zero-based indices. Declaring, constructing, and assigning
 arrays (both syntaxes), reading and writing elements by index, the `length`
 variable. Looping over arrays with `for` and for-each, then
 multidimensional arrays. Includes an in-class quiz.
-
-## Week 5 — MCQ 1 *(33%)*
-
-[Details](../weeks/week-05-mcq1/README.md) — runs in Moodle during the lab
-slot. Examines weeks 1–4: the introduction material, classes and objects,
-methods, and arrays.
 
 ## Week 6 — Strings
 
@@ -104,7 +104,12 @@ sequence on *why* getters/setters earn their keep — validation, read-only
 properties, freedom to change internal representation — then encapsulation
 visualised, a coding example, and the benefits.
 
-## Week 8 — Inheritance
+## Week 8 — MCQ 2 *(33%)*
+
+[Details](../weeks/week-09-mcq2/README.md) — runs in Moodle during the lab
+slot. Examines weeks 5–7: arrays, strings, and encapsulation.
+
+## Week 9 — Inheritance
 
 [Slides](../weeks/week-08-inheritance/slides.md) ·
 [Lab](../labs/src/ie/atu/inheritance/)
@@ -117,11 +122,6 @@ interfaces), class-hierarchy case studies (vehicles, animals), and how to
 identify a genuine inheritance situation. Constructors under inheritance
 and the `super` keyword, invoking superclass constructors, benefits, and
 key Java facts.
-
-## Week 9 — MCQ 2 *(33%)*
-
-[Details](../weeks/week-09-mcq2/README.md) — runs in Moodle during the lab
-slot. Examines weeks 6–8: strings, encapsulation, and inheritance.
 
 ## Week 10 — Polymorphism
 
@@ -152,4 +152,4 @@ exist and the benefits of abstraction.
 ## Week 12 — MCQ 3 *(33%)*
 
 [Details](../weeks/week-12-mcq3/README.md) — runs in Moodle during the lab
-slot. Examines weeks 10–11: polymorphism and abstraction.
+slot. Examines weeks 9–11: inheritance, polymorphism, and abstraction.

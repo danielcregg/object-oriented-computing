@@ -46,7 +46,7 @@ fi
 # one deck never blocks the rest from updating.
 mapfile -t PATHS < <(
   git ls-tree -r --name-only "upstream/$BRANCH" | grep -E \
-    '^(README\.md|labs/README\.md|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$' || true
+    '^(README\.md|labs/README\.md|mcq/README\.md|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$' || true
 )
 
 # Baseline = the content as you last received it: the commit recorded by the

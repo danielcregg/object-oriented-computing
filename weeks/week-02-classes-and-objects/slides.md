@@ -801,7 +801,7 @@ System.out.println(c.count);
 
 ## Where this goes
 
-- **Methods, the deep dive:** parameters, return values, and overloading for real (you met it today in those twin `Puppy` constructors).
+- **Methods, the deep dive:** parameters, return values, and the call stack (overloading, which you met today in those twin `Puppy` constructors, gets its own treatment later).
 - **Arrays,** with a twist you're now equipped for: *arrays are objects*. `int[] b = a;` copies… an arrow. You'll draw today's diagram again.
 - **Strings:** objects too - including why `==` on Strings betrays you. You already know the answer.
 - **The OOP pillars:** encapsulation, inheritance, polymorphism, abstraction. Every one is a story about classes and objects; today was the foundation stone.

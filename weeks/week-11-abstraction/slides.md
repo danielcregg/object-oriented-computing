@@ -397,7 +397,7 @@ public interface RemoteControl {
 }
 ```
 
-* An interface is a **completely abstract class**: it contains only **method signatures**.
+* An interface is a **completely abstract class**: it contains **method signatures** (and, since Java 8, optional `default` methods with bodies - later).
 * You can never instantiate one. Classes **implement** it; other interfaces **extend** it.
 * It is a **contract**: any class that signs must deliver **every** method - which is also how interfaces power polymorphism.
 

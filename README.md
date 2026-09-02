@@ -44,22 +44,16 @@ Conventions and editing rules live in [`CLAUDE.md`](CLAUDE.md).
 | 1 | Introduction | [slides](weeks/week-01-introduction/slides.md) | _no lab in week 1_ |
 | 2 | Classes and Objects | [slides](weeks/week-02-classes-and-objects/slides.md) | [lab](labs/src/ie/atu/classesandobjects/) |
 | 3 | Methods | [slides](weeks/week-03-methods/slides.md) | [lab](labs/src/ie/atu/methods/) |
-| 4 | Arrays | [slides](weeks/week-04-arrays/slides.md) | [lab](labs/src/ie/atu/arrays/) |
-| 5 | **MCQ 1** (33%) | [details](weeks/week-05-mcq1/README.md) | — |
+| 4 | **MCQ 1** (33%) | [details](weeks/week-05-mcq1/README.md) · [brief](mcq/README.md) | — |
+| 5 | Arrays | [slides](weeks/week-04-arrays/slides.md) | [lab](labs/src/ie/atu/arrays/) |
 | 6 | Strings | [slides](weeks/week-06-strings/slides.md) | [lab](labs/src/ie/atu/strings/) |
 | — | Reading week | [details](weeks/week-06b-reading-week/README.md) | — |
 | 7 | Encapsulation | [slides](weeks/week-07-encapsulation/slides.md) | [lab](labs/src/ie/atu/encapsulation/) |
-| 8 | Inheritance | [slides](weeks/week-08-inheritance/slides.md) | [lab](labs/src/ie/atu/inheritance/) |
-| 9 | **MCQ 2** (33%) | [details](weeks/week-09-mcq2/README.md) | — |
+| 8 | **MCQ 2** (33%) | [details](weeks/week-09-mcq2/README.md) · [brief](mcq/README.md) | — |
+| 9 | Inheritance | [slides](weeks/week-08-inheritance/slides.md) | [lab](labs/src/ie/atu/inheritance/) |
 | 10 | Polymorphism | [slides](weeks/week-10-polymorphism/slides.md) | [lab](labs/src/ie/atu/polymorphism/) |
 | 11 | Abstraction | [slides](weeks/week-11-abstraction/slides.md) | [lab](labs/src/ie/atu/abstraction/) |
-| 12 | **MCQ 3** (33%) | [details](weeks/week-12-mcq3/README.md) | — |
-
-**Scheduling rule:** reading week always falls on the week of the Irish
-October bank holiday, with 6 teaching weeks before it and 6 after.
-
-**Assessment:** three MCQs (weeks 5, 9, 12), held during lab slots —
-no projects.
+| 12 | **MCQ 3** (33%) | [details](weeks/week-12-mcq3/README.md) · [brief](mcq/README.md) | — |
 
 ## Labs
 
@@ -98,5 +92,7 @@ purpose and is separate from any assessment material.
 
 ## For AI tools
 
-Read [`CLAUDE.md`](CLAUDE.md) first — it defines the conventions this repo
+Read [`AGENTS.md`](AGENTS.md) first — it defines the conventions this repo
 guarantees (frontmatter schema, naming, what must never be committed).
+`CLAUDE.md` is a one-line import of it, so Claude Code and every other
+assistant read the same file.

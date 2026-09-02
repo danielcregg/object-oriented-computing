@@ -1,6 +1,8 @@
-# CLAUDE.md — how to work in this repo
+# AGENTS.md — how to work in this repo
 
 Source-of-truth repo for the Object-Oriented Computing module (Java, ATU).
+This is the one instructions file for every AI assistant (Codex, Cursor,
+Gemini, Copilot, Claude Code, ...). `AGENTS.md` only imports it.
 Editable sources are Markdown, Java (labs), JSON, and HTML; images are
 read-only assets.
 

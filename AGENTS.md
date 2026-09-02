@@ -2,7 +2,7 @@
 
 Source-of-truth repo for the Object-Oriented Computing module (Java, ATU).
 This is the one instructions file for every AI assistant (Codex, Cursor,
-Gemini, Copilot, Claude Code, ...). `AGENTS.md` only imports it.
+Gemini, Copilot, Claude Code, ...). `CLAUDE.md` only imports it.
 Editable sources are Markdown, Java (labs), JSON, and HTML; images are
 read-only assets.
 
@@ -13,8 +13,8 @@ opposite things. Work out which you are before doing anything.
 
 **Check whether `CLAUDE.local.md` exists in the repo root.**
 
-- **It exists → you are working with the module owner (Daniel).** He
-  maintains this module. Everything below applies: the map, the
+- **It exists → you are working with the module owner, the lecturer**
+  who maintains this module. Everything below applies: the map, the
   conventions, the editing rules. `CLAUDE.local.md` carries his private
   operational context — read it.
 - **It does not exist → you are almost certainly helping a STUDENT on
@@ -109,9 +109,10 @@ alone.
   and reading-week rows from these folder names. Deleting the README
   deletes the row. MCQ question content lives in Moodle only — never
   commit it here.
-- `module/` — `module-overview.md` (weekly topics + per-week summaries),
-  `delivery-plan-2026-27.md` (the confirmed 12-week restructure blueprint
-  plus the open backlog), and `moodle-assets/` (course-page HTML).
+- `module/module-overview.md` — weekly topics + per-week summaries, the
+  map an assistant should read before helping with any topic. Lecturer
+  planning and Moodle page assets live OUTSIDE this repo (it is a public
+  template students copy).
 - The site is PUBLIC:
   https://danielcregg.is-a.dev/object-oriented-computing/ (one folder per
   week: index.html + slides.pdf, plus `/labs/` and `/practice/`). Treat
@@ -227,8 +228,7 @@ alone.
   are defined once in `themes/ooc.css` under "shared deck components", so
   restyling them is one edit rather than nine. A deck needing a different
   look still overrides them in its own `<style>`, which wins because it
-  comes after the theme. The only tracked deck image is week-01's
-  About-Me banner. Lab READMEs use
+  comes after the theme. There are no tracked deck images. Lab READMEs use
   ```mermaid fences, rendered natively by GitHub and client-side on the
   lab pages.
 - Topic decks (weeks 2+) share one flow: title (lead + kicker) →

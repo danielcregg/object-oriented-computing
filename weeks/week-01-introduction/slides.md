@@ -172,13 +172,6 @@ public class December {
   - compiler vs interpreter · bytecode · the JVM · the JDK
   - your first program - and the errors everyone makes
 
----
-
-## About Me
-
-![Lecturer contact banner](img/slide03-1.png)
-
----
 
 <!-- Speaker notes: ~0:08. One assumption in, four abilities out. Keep the official wording visible; students will meet it again on Moodle. -->
 

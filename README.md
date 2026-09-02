@@ -87,8 +87,6 @@ purpose and is separate from any assessment material.
 ## Module info
 
 - [Module overview — weekly topics and what each week covers](module/module-overview.md)
-- [Delivery plan 2026-27 (12 weeks, plus the open backlog)](module/delivery-plan-2026-27.md)
-- [Moodle course-page assets](module/moodle-assets/README.md)
 
 ## For AI tools
 

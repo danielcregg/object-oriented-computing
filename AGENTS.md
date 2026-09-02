@@ -228,7 +228,9 @@ alone.
   are defined once in `themes/ooc.css` under "shared deck components", so
   restyling them is one edit rather than nine. A deck needing a different
   look still overrides them in its own `<style>`, which wins because it
-  comes after the theme. There are no tracked deck images. Lab READMEs use
+  comes after the theme. The only tracked deck image is week-01's
+  About-Me banner: the lecturer's ATU work contact details, kept on
+  purpose so students can reach him. Lab READMEs use
   ```mermaid fences, rendered natively by GitHub and client-side on the
   lab pages.
 - Topic decks (weeks 2+) share one flow: title (lead + kicker) →

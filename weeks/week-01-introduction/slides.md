@@ -19,28 +19,6 @@ section .kicker {
 }
 section .legend { font-size: 17px; color: #8B8471; margin-top: 4px; }
 
-/* semester strip - 13 calendar weeks in one row */
-section .tl {
-  display: flex; margin: 46px 0 12px 0;
-  font-family: 'Cascadia Code', Consolas, monospace;
-}
-section .tl .twk {
-  flex: 1; min-width: 0; padding: 15px 0 12px; text-align: center;
-  background: #FFFFFF; border: 2px solid #33698C;
-  border-left-width: 1px; border-right-width: 1px;
-  font-size: 21px; color: #1E2833; position: relative;
-}
-section .tl .twk:first-child { border-left-width: 2px; border-radius: 9px 0 0 9px; }
-section .tl .twk:last-child { border-right-width: 2px; border-radius: 0 9px 9px 0; }
-section .tl .twk .ttag {
-  position: absolute; top: -30px; left: -30px; right: -30px;
-  font-size: 15px; color: #33698C; white-space: nowrap;
-}
-section .tl .twk.mcq { background: #FDEFD9; border-color: #E76F00; color: #B94E00; font-weight: 600; }
-section .tl .twk.mcq .ttag { color: #E76F00; font-weight: 600; }
-section .tl .twk.rest { background: #F4F0E6; border-style: dashed; color: #8B8471; }
-section .tl .twk.rest .ttag { color: #8B8471; }
-
 /* assessment cards */
 section .cards { display: flex; gap: 30px; margin: 30px 0 16px 0; }
 section .cards .card {
@@ -216,31 +194,14 @@ public class December {
 
 ---
 
-<!-- Speaker notes: ~0:11. Walk the strip left to right. Point at the dashed cell: reading week is the October bank-holiday week - say it twice, someone will still turn up. -->
+<!-- Speaker notes: ~0:11. Deliberately no timeline on this slide: the schedule is defined in ONE place, the table at the top of the Moodle page, which highlights the current week by itself. Open Moodle live and show it. The one thing they need today: this week is lecture plus setup, labs start next week. -->
 
 ## The shape of the semester
 
-<div class="tl">
-<div class="twk">1</div>
-<div class="twk"><span class="ttag">labs begin</span>2</div>
-<div class="twk">3</div>
-<div class="twk">4</div>
-<div class="twk mcq"><span class="ttag">MCQ 1</span>5</div>
-<div class="twk">6</div>
-<div class="twk rest"><span class="ttag">break</span>RW</div>
-<div class="twk">7</div>
-<div class="twk">8</div>
-<div class="twk mcq"><span class="ttag">MCQ 2</span>9</div>
-<div class="twk">10</div>
-<div class="twk">11</div>
-<div class="twk mcq"><span class="ttag">MCQ 3</span>12</div>
-</div>
+> **Please refer to the top of the module Moodle page.**
 
-<p class="legend">numbers = teaching weeks · RW = reading week - the Irish October bank-holiday week</p>
-
-- **12 teaching weeks over 13 calendar weeks** - the gap is a 1-week break for reading week.
-- **Labs start week 2.** This week: lecture only, plus your setup tasks.
-- The full timetable sits at the **top of the Moodle page**.
+- The week-by-week schedule - topics, lecture and lab links, MCQ weeks, reading week - lives there and nowhere else.
+- **This week: lecture only**, plus your setup tasks. Labs start next week.
 
 ---
 

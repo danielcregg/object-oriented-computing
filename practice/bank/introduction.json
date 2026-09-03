@@ -1,0 +1,396 @@
+{
+  "topic": "introduction",
+  "title": "Introduction",
+  "questions": [
+    {
+      "id": "introduction-001",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What does the Java compiler javac produce from a .java source file?",
+      "code": null,
+      "options": [
+        "A .class file holding bytecode",
+        "An .exe file holding machine code for this computer",
+        "A running program, started as soon as compiling finishes",
+        "A tidied .java file with comments and spacing removed"
+      ],
+      "answer": 0,
+      "explanation": "javac translates your source into bytecode and writes it to a .class file. It stops there: bytecode is not machine code for any particular processor, and nothing runs until you start a JVM."
+    },
+    {
+      "id": "introduction-002",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Which piece of software takes a compiled .class file and actually runs it?",
+      "code": null,
+      "options": [
+        "javac, the Java compiler",
+        "The JVM, the Java Virtual Machine",
+        "javadoc, the documentation generator",
+        "The operating system, which runs bytecode directly"
+      ],
+      "answer": 1,
+      "explanation": "The JVM loads the .class file and executes its bytecode. The compiler's job ended when the .class file was written, and an operating system cannot execute bytecode on its own: it needs a JVM built for that platform."
+    },
+    {
+      "id": "introduction-003",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is the JDK?",
+      "code": null,
+      "options": [
+        "The Java Development Kit: the toolkit for writing and compiling Java",
+        "The program that executes bytecode, with a separate build per platform",
+        "An editor, debugger and file browser bundled into a single application",
+        "The collection of .class files produced when a program is compiled"
+      ],
+      "answer": 0,
+      "explanation": "The JDK is what you install to develop Java: it carries the compiler javac, tools such as javadoc, and a runtime to execute what you build. The program that executes bytecode is the JVM, which is one part of the kit rather than the whole of it."
+    },
+    {
+      "id": "introduction-004",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Java is described as write once, run anywhere. What does that mean in practice?",
+      "code": null,
+      "options": [
+        "The same source file has to be recompiled on every platform it runs on",
+        "A Java program can be written in any programming language you like",
+        "The same bytecode file runs on any platform that has a JVM",
+        "A Java program runs without any software being installed first"
+      ],
+      "answer": 2,
+      "explanation": "You compile once, to bytecode, and every platform's own JVM runs that identical file. Recompiling per platform is exactly what write once, run anywhere avoids, and the target machine still needs a JVM installed."
+    },
+    {
+      "id": "introduction-005",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public class HelloPrinter {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
+      "options": [
+        "Hello, World!",
+        "\"Hello, World!\", including the double quotes",
+        "HelloPrinter",
+        "Nothing, because nothing in the file calls main"
+      ],
+      "answer": 0,
+      "explanation": "println writes the text between the quotes and then moves to a new line; the quotes themselves only mark where the text starts and ends, so they are not printed. main does not need calling by your code: the JVM starts the program by calling it for you."
+    },
+    {
+      "id": "introduction-006",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Roughly how many reserved keywords does the Java language have?",
+      "code": null,
+      "options": [
+        "About 15",
+        "50",
+        "About 120",
+        "Over 500"
+      ],
+      "answer": 1,
+      "explanation": "Java reserves 50 keywords, a small enough set to fit on one page, and two of them (const and goto) are reserved without being used at all. Familiar words such as String and main are not keywords: they are ordinary names from the standard library and from your own code."
+    },
+    {
+      "id": "introduction-007",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "Why does this program fail to compile?",
+      "code": "public class Demo {\n    public static void main(String[] args) {\n        system.out.println(\"A\");\n    }\n}",
+      "options": [
+        "The statement is missing the semicolon that ends it",
+        "print should be used instead of println for text",
+        "The message must be in single quotes rather than double quotes",
+        "system is not System, and Java treats those as different names"
+      ],
+      "answer": 3,
+      "explanation": "Java is case-sensitive, so the lowercase system does not name the System class; the compiler instead goes looking for a package called system and reports that no such package exists. The semicolon is present and the quotes are correct: only the capital S is missing."
+    },
+    {
+      "id": "introduction-008",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "What is an IDE?",
+      "code": null,
+      "options": [
+        "A cloud service that runs finished programs on behalf of their users",
+        "A single application bundling the tools for writing and running code",
+        "The part of the JDK that turns your source code into bytecode",
+        "A file format that stores a program's source and its output together"
+      ],
+      "answer": 1,
+      "explanation": "An Integrated Development Environment gathers an editor, a compiler, a way to run the program and a debugger into one place: Eclipse, NetBeans, IntelliJ and VS Code are common examples. It automates the compile-and-run steps you could otherwise type by hand, but the compiler itself still comes from the JDK."
+    },
+    {
+      "id": "introduction-009",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "One of these lines stops the program compiling. Which one, and why?",
+      "code": "System.out.println(\"Ready\");    // 1\nSystem.out.println(\"Steady\")    // 2\nSystem.out.println(\"Go\");       // 3",
+      "options": [
+        "Line 1, because the first statement of a program cannot print",
+        "Line 2, because it is missing the semicolon that ends a statement",
+        "Line 3, because the last statement of a block needs no semicolon",
+        "None of them: the end of a line also ends a statement in Java"
+      ],
+      "answer": 1,
+      "explanation": "Every Java statement ends in a semicolon, and line 2 has none, so the compiler never sees where that statement stops. A line break means nothing to the compiler: only the semicolon marks the boundary between one statement and the next."
+    },
+    {
+      "id": "introduction-010",
+      "difficulty": "easy",
+      "type": "concept",
+      "question": "Working in a console, which command asks the compiler to turn HelloPrinter.java into HelloPrinter.class?",
+      "code": null,
+      "options": [
+        "javac HelloPrinter.java",
+        "javadoc HelloPrinter.java",
+        "java HelloPrinter",
+        "compile HelloPrinter.java"
+      ],
+      "answer": 0,
+      "explanation": "javac is the compiler, and you hand it the source file complete with its .java ending. The separate command java HelloPrinter is the next step: it starts a JVM and gives it the bytecode to run."
+    },
+    {
+      "id": "introduction-011",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "What does an interpreter do?",
+      "code": null,
+      "options": [
+        "It translates the whole program into machine code before any of it runs",
+        "It rewrites a program from one programming language into another",
+        "It executes the instructions directly, with no separate compiled program",
+        "It checks a program for spelling and layout mistakes before compiling"
+      ],
+      "answer": 2,
+      "explanation": "An interpreter reads instructions and carries them out as it goes, so no compiled program is produced along the way. Translating everything into machine code up front is the compiler's job, and mixing those two definitions up is the usual trap here."
+    },
+    {
+      "id": "introduction-012",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Java is often described as both compiled and interpreted. Why?",
+      "code": null,
+      "options": [
+        "The source is interpreted line by line, then the results are saved as a .class file",
+        "Some statements are compiled and the rest interpreted, depending on the keyword used",
+        "The compiler produces machine code, which the JVM then reads back as text",
+        "The source is compiled to bytecode ahead of time, and the JVM then runs it"
+      ],
+      "answer": 3,
+      "explanation": "Java stops halfway: javac compiles ahead of time, but only as far as bytecode, and the JVM takes over from there to execute it. Nothing about your source depends on which keywords you used, and the compiler never produces machine code for a particular processor."
+    },
+    {
+      "id": "introduction-013",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program is compiled?",
+      "code": "public class Report {\n    public static void main(String[] args) {\n        System.ou.println(\"Report ready\");\n    }\n}",
+      "options": [
+        "It compiles and prints Report ready, since ou is close enough to out",
+        "Compile error: the compiler cannot find any symbol named ou in System",
+        "It compiles, but nothing at all appears when the program is run",
+        "Compile error: println must always be called on System, never on out"
+      ],
+      "answer": 1,
+      "explanation": "The compiler matches names exactly, so ou simply does not exist and it reports cannot find symbol. A compiler never guesses at what you meant or corrects a misspelling for you, which is why one dropped letter stops the build."
+    },
+    {
+      "id": "introduction-014",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "You compiled HelloPrinter.java on a Windows machine. A friend using macOS wants to run your program. What should you send, and what do they need?",
+      "code": null,
+      "options": [
+        "Send HelloPrinter.java; they must recompile it with a macOS compiler first",
+        "Send both files, because macOS can only start a Java program from its source",
+        "Send HelloPrinter.class; they need a JVM built for macOS",
+        "Send HelloPrinter.class; it will not run, as it holds Windows machine code"
+      ],
+      "answer": 2,
+      "explanation": "Bytecode belongs to no platform, so the .class file you built on Windows is exactly the file a Mac needs, and no recompiling is involved. The JVM is the platform-specific part, which is precisely what lets your program avoid being platform-specific."
+    },
+    {
+      "id": "introduction-015",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "This code is saved in a file named Greeting.java. What happens when that file is compiled?",
+      "code": "public class HelloPrinter {\n    public static void main(String[] args) {\n        System.out.println(\"Hi\");\n    }\n}",
+      "options": [
+        "It compiles, and the bytecode is written to Greeting.class",
+        "Compile error: a public class must sit in a file of the same name",
+        "It compiles, and the source file is renamed HelloPrinter.java for you",
+        "It compiles, but the JVM cannot find main when the program is started"
+      ],
+      "answer": 1,
+      "explanation": "A public class named HelloPrinter has to live in HelloPrinter.java, so the compiler rejects the file outright rather than compiling it under either name. Renaming the file, or renaming the class, fixes it; the compiler will not choose for you."
+    },
+    {
+      "id": "introduction-016",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program is compiled?",
+      "code": "public class Launcher {\n    public static main(String[] args) {\n        System.out.println(\"Started\");\n    }\n}",
+      "options": [
+        "It compiles and prints Started, since main hands back no value anyway",
+        "Compile error: a method declaration with no return type is not valid",
+        "It compiles, but nothing is printed when the program is started",
+        "Compile error: a method named main may not take any parameters"
+      ],
+      "answer": 1,
+      "explanation": "Every Java method states a return type, and main's is void, so leaving that one word out of public static void main(String[] args) makes the declaration invalid and the compiler asks for a return type. It is tempting to think void can be dropped because main returns nothing, but void is precisely how you say that."
+    },
+    {
+      "id": "introduction-017",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What happens when this program is compiled?",
+      "code": "public class Demo {\n    public static void main(String[] args) {\n        String Name = \"Ada\";\n        System.out.println(name);\n    }\n}",
+      "options": [
+        "It prints Ada, because Java ignores capitalisation inside a name",
+        "Compile error: cannot find symbol, as name and Name are different names",
+        "It prints nothing, because name has not been given a value yet",
+        "Compile error: a variable name is not allowed to start with a capital letter"
+      ],
+      "answer": 1,
+      "explanation": "Case carries meaning everywhere in Java, so Name and name identify two entirely different variables and only one of them was ever declared. A capital first letter is unconventional for a variable but perfectly legal: the error is the mismatch, not the capital."
+    },
+    {
+      "id": "introduction-018",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "A platform is a hardware device plus the operating system running on it. Why can one .class file run on Windows, macOS and Linux without being changed?",
+      "code": null,
+      "options": [
+        "The .class file carries a separate copy of the machine code for each platform",
+        "Every modern operating system can execute bytecode without any extra software",
+        "The .class file is plain text, which each platform compiles as the program runs",
+        "Bytecode belongs to no platform, and each platform has its own JVM to run it"
+      ],
+      "answer": 3,
+      "explanation": "Machine code is married to one platform, but bytecode is married to none, so the single .class file suits them all. The variation is pushed into the JVM instead: there is a different JVM per platform, each running that same unchanged bytecode."
+    },
+    {
+      "id": "introduction-019",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "What does the compiler report for this file?",
+      "code": "public class Counter {\n    public static void main(String[] args) {\n        int total = 0;\n        System.out.println(total);\n}",
+      "options": [
+        "reached end of file while parsing: a closing brace is missing",
+        "cannot find symbol, because total is never declared anywhere",
+        "missing return statement, because main must return a value",
+        "Nothing at all: the compiler supplies any brace you leave out"
+      ],
+      "answer": 0,
+      "explanation": "Two braces are opened, for the class and for main, and only one is closed, so the compiler runs out of file while still waiting for the class to end. Unmatched braces are the classic case where the error is reported at the last line even though the mistake is further up."
+    },
+    {
+      "id": "introduction-020",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Three of these words are Java keywords. Which one is not?",
+      "code": null,
+      "options": [
+        "class",
+        "static",
+        "main",
+        "void"
+      ],
+      "answer": 2,
+      "explanation": "main is just a name, chosen because the JVM looks for a method called that when it starts a program; you are free to name other methods main too. class, static and void are reserved keywords, so they can never be used as a name of your own."
+    },
+    {
+      "id": "introduction-021",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "Under what name, and at which company, was Java originally developed?",
+      "code": null,
+      "options": [
+        "Oak, at Sun Microsystems",
+        "Oak, at Oracle Corporation",
+        "Coffee, at Sun Microsystems",
+        "J++, at Microsoft"
+      ],
+      "answer": 0,
+      "explanation": "James Gosling designed the language at Sun Microsystems in 1991 and called it Oak, after the tree outside his window, before it was renamed Java. Oracle is easy to name here because it stewards Java today, but it only acquired Sun in 2010, long after the language existed."
+    },
+    {
+      "id": "introduction-022",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "What does the JVM do with the bytecode in a .class file?",
+      "code": null,
+      "options": [
+        "It reads your .java source line by line and carries out each line as it goes",
+        "It turns the bytecode back into Java source, which it then compiles and runs",
+        "It executes the bytecode, interpreting it and compiling the hot parts",
+        "It hands the bytecode to the operating system, which then executes it directly"
+      ],
+      "answer": 2,
+      "explanation": "The JVM is the thing that runs your program: it interprets bytecode instruction by instruction and also compiles the parts that run often into machine code, so a long-running program speeds up. It never sees your source, which javac already consumed, and an operating system cannot execute bytecode itself."
+    },
+    {
+      "id": "introduction-023",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "The compiler rejects this code, saying a semicolon was expected. What has it done with the two lines?",
+      "code": "System.out.println(\"Hello\")\nSystem.out.println(\"World!\");",
+      "options": [
+        "It ignored the first line, because a statement with no semicolon is skipped",
+        "It joined them into one run-on statement, since only a semicolon ends one",
+        "It read two statements and rejected the second one as unreachable code",
+        "It read two statements but needs a blank line separating them"
+      ],
+      "answer": 1,
+      "explanation": "The compiler uses the semicolon, never the line break, to find where a statement ends, so it reads straight past the end of the first line and meets a second call where it expected a semicolon. Nothing is ever quietly skipped: a statement the compiler cannot make sense of stops the build."
+    },
+    {
+      "id": "introduction-024",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Which statement correctly describes how the JDK, the JRE and the JVM relate to each other?",
+      "code": null,
+      "options": [
+        "The JVM contains the JDK, so installing a JVM also installs the compiler",
+        "The JRE contains the JDK, which supplies the compiler and the runtime",
+        "The JDK and the JRE are two names for exactly the same download",
+        "The JDK holds the development tools plus a runtime containing the JVM"
+      ],
+      "answer": 3,
+      "explanation": "The JDK is the outermost box: it holds the tools you develop with and a runtime environment whose centre is the JVM. A runtime on its own can only run programs, so a machine carrying just the JRE can execute a .class file but cannot compile one."
+    },
+    {
+      "id": "introduction-025",
+      "difficulty": "hard",
+      "type": "code",
+      "question": "You run javac Broken.java on this file and the compiler reports an error. Which files are in the folder afterwards?",
+      "code": "public class Broken {\n    public static void main(String[] args) {\n        System.out.println(\"Nearly there\")\n    }\n}",
+      "options": [
+        "Broken.java only, as no class file is written when compiling fails",
+        "Broken.java and Broken.class, with the faulty line left out of the bytecode",
+        "Broken.java and Broken.class, because javac always writes its output file",
+        "Broken.class only, because javac replaces the source with its output"
+      ],
+      "answer": 0,
+      "explanation": "A failed compile produces no bytecode, so there is nothing for the JVM to run and java Broken would report that the class cannot be found. The source file is never consumed or altered by compiling: add the missing semicolon and run javac again."
+    },
+    {
+      "id": "introduction-026",
+      "difficulty": "hard",
+      "type": "concept",
+      "question": "Java reserves the words goto and const but gives them no meaning in the language. What happens if you try to name a variable goto?",
+      "code": null,
+      "options": [
+        "It works, because a word with no meaning in Java is free to use as a name",
+        "It works, but the compiler prints a warning about the chosen name",
+        "It works only when the variable is declared inside a method",
+        "Compile error, because a reserved word can never be used as a name"
+      ],
+      "answer": 3,
+      "explanation": "Reserved means reserved whether or not the word does anything: goto and const are held back so that no program can ever claim them, and the compiler rejects both as names. Where you declare the variable makes no difference, and no compiler will accept the name with a warning."
+    }
+  ]
+}

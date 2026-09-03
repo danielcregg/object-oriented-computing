@@ -74,6 +74,7 @@
   .timer.warn { color:var(--orange); border-color:var(--orange); }
   .timer.crit { color:var(--bad); border-color:var(--bad); animation:pulse 1s infinite; }
   @keyframes pulse { 50% { opacity:0.55; } }
+  @media (prefers-reduced-motion: reduce) { .timer.crit { animation:none; } }
   .progress { height:4px; background:var(--rule); border-radius:2px; margin:10px 0 18px; }
   .progress i { display:block; height:100%; background:var(--orange); border-radius:2px; transition:width .2s; }
   .topic-tag { font-family:var(--mono); font-size:13px; color:var(--muted); }
@@ -131,13 +132,15 @@
 
     <h2>Topics</h2>
     <div class="topics" id="topics"></div>
-    <div class="modes">
+    <div class="modes" id="presets">
       <button class="btn ghost small" id="select-all">select all</button>
     </div>
+    <p class="nudge">The three coding questions in each MCQ have their own page:
+    <a href="coding/"><strong>coding practice →</strong></a></p>
 
     <h2>Mode</h2>
     <div class="modes" id="modes">
-      <button class="mode-btn on" data-mode="exam">Exam — 30 questions · 60:00 · results at the end</button>
+      <button class="mode-btn on" data-mode="exam">Exam drill — 30 multiple-choice · 60:00 · results at the end</button>
       <button class="mode-btn" data-mode="practice">Practice — untimed · instant feedback</button>
       <button class="mode-btn hidden lenbtn" data-len="10">10 Qs</button>
       <button class="mode-btn hidden lenbtn on" data-len="20">20 Qs</button>
@@ -160,7 +163,7 @@
       <span class="timer hidden" id="timer"></span>
     </div>
     <div class="progress"><i id="pbar"></i></div>
-    <div id="qbox"></div>
+    <div id="qbox" aria-live="polite"></div>
     <div class="qnav">
       <button class="btn" id="next">next →</button>
     </div>
@@ -197,7 +200,7 @@ const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d;}catch{retu
    trade; losing the quiz is not. load() has always been guarded this way. */
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{/* progress not saved */}};
 
-let BANK={}, TOPICS=[], sess=null, tick=null, wrongOnly=false;
+let BANK={}, TOPICS=[], PRESETS=[], sess=null, tick=null, wrongOnly=false;
 
 /* ── boot ─────────────────────────────────────────────── */
 (async function(){
@@ -223,6 +226,21 @@ let BANK={}, TOPICS=[], sess=null, tick=null, wrongOnly=false;
     catch{ BANK[t.slug]=[]; }
   }));
   TOPICS=TOPICS.filter(t=>BANK[t.slug].length);
+  /* MCQ presets follow the schedule (../schedule.json on the site): each MCQ
+     covers the teaching rows since the previous one. Bank slugs are the deck
+     folder without hyphens. No schedule, no presets -- nothing else changes. */
+  try{
+    const sched=await (await fetch('../schedule.json')).json();
+    let group=[];
+    (sched.weeks||[]).forEach(w=>{
+      if(w.lectureUrl) group.push(w.lectureUrl.replace(/\/$/,'').split('/').pop().replace(/-/g,''));
+      if(/^MCQ \d$/.test(w.assessment||'')){
+        const slugs=group.filter(s=>TOPICS.some(t=>t.slug===s));
+        if(slugs.length) PRESETS.push({name:w.assessment, slugs});
+        group=[];
+      }
+    });
+  }catch{ /* no presets */ }
   renderPicker();
   const old=load(S_SESS,null);
   if(old && old.qs && old.qs.length){
@@ -252,6 +270,19 @@ function renderPicker(){
       lab.classList.toggle('on',e.target.checked); updateStart();
     });
     box.appendChild(lab);
+  });
+  document.querySelectorAll('#presets .preset').forEach(b=>b.remove());
+  PRESETS.forEach(p=>{
+    const b=document.createElement('button'); b.className='btn ghost small preset';
+    b.textContent=p.name+' set'; b.title=p.slugs.map(titleOf).join(', ');
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.topic-card').forEach(c=>{
+        const on=p.slugs.includes(c.dataset.slug);
+        c.querySelector('input').checked=on; c.classList.toggle('on',on);
+      });
+      updateStart();
+    });
+    $('presets').insertBefore(b,$('select-all'));
   });
   const worst=TOPICS.map(t=>({t,m:mastery(t.slug)})).filter(x=>x.m!=null).sort((a,b)=>a.m-b.m)[0];
   $('nudge').innerHTML = worst && worst.m<75 ? 'Suggestion: your weakest topic is <b>'+esc(worst.t.title)+' ('+worst.m+'%)</b> — worth a practice round.' : '';
@@ -332,7 +363,7 @@ function titleOf(slug){ const t=TOPICS.find(t=>t.slug===slug); return t?t.title:
 function renderQ(){
   const q=sess.qs[sess.idx];
   $('qcount').textContent='Question '+(sess.idx+1)+' of '+sess.qs.length;
-  $('pbar').style.width=(100*(sess.idx)/sess.qs.length)+'%';
+  $('pbar').style.width=(100*(sess.idx+1)/sess.qs.length)+'%';
   let h='<p class="topic-tag">'+esc(titleOf(q.topic))+' · '+esc(q.difficulty)+'</p>';
   h+='<p class="qtext">'+fmt(q.question)+'</p>';
   if(q.code) h+='<pre class="code">'+esc(q.code)+'</pre>';

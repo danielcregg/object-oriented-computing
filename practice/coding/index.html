@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coding Practice — Object-Oriented Computing</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23FBFAF7'/%3E%3Ctext x='16' y='25' font-family='Consolas,monospace' font-size='26' font-weight='700' fill='%23E76F00' text-anchor='middle'%3E%7B%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --paper:#FBFAF7; --ink:#1E2833; --blue:#33698C; --orange:#E76F00;
+    --slate:#46536B; --rule:#DED8C9; --muted:#8B8471; --tint:#F3EFE5;
+    --good:#1E7A34; --goodbg:#EAF6EC; --bad:#C0392B; --badbg:#FBEDEB;
+    --codebg:#16222E;
+    --mono:'Cascadia Code','SF Mono',Menlo,Consolas,'Courier New',monospace;
+    --sans:'Segoe UI','Helvetica Neue',Arial,sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:var(--sans); color:var(--ink); background:var(--paper); line-height:1.5; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 34px 20px 80px; }
+  .kicker { font-family:var(--mono); font-size:14px; color:var(--muted); }
+  .kicker::before { content:'// '; color:var(--orange); }
+  .kicker a { color:var(--muted); }
+  h1 { font-family:var(--mono); font-size:clamp(28px,5vw,40px); margin:8px 0 6px; letter-spacing:-0.01em; }
+  h1::after { content:';'; color:var(--orange); }
+  h2 { font-family:var(--mono); font-size:21px; margin:28px 0 12px; }
+  h3 { font-family:var(--mono); font-size:17px; margin:22px 0 8px; }
+  .standfirst { color:var(--slate); font-size:16px; max-width:60ch; margin:0 0 8px; }
+  button { font-family:var(--mono); cursor:pointer; }
+  .btn { background:var(--blue); color:#fff; border:none; border-radius:9px; padding:12px 26px; font-size:16.5px; font-weight:600; }
+  .btn:hover { background:#27526E; }
+  .btn[disabled] { background:#B9C4CC; cursor:not-allowed; }
+  .btn.ghost { background:transparent; color:var(--blue); border:1.5px solid var(--blue); font-weight:400; }
+  .btn.ghost:hover { background:var(--tint); }
+  .btn.small { padding:7px 16px; font-size:14px; }
+  .hidden { display:none !important; }
+  .topics { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 4px; }
+  .chip { border:1.5px solid var(--rule); background:#fff; border-radius:999px; padding:7px 16px; font-size:14px; color:var(--slate); }
+  .chip.on { border-color:var(--orange); background:#FFF8EE; color:var(--ink); font-weight:600; }
+  .presets { display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 18px; align-items:center; }
+  .qlist { list-style:none; padding:0; margin:0; border-top:1px solid var(--rule); }
+  .qlist li { display:grid; grid-template-columns:1fr auto auto; gap:14px; align-items:center;
+              border-bottom:1px solid var(--rule); padding:12px 4px; }
+  .qlist .t { font-family:var(--mono); font-weight:600; font-size:15.5px; }
+  .qlist .t a { color:var(--ink); text-decoration:none; } .qlist .t a:hover { color:var(--blue); }
+  .qlist .meta { font-size:12.5px; color:var(--muted); font-family:var(--mono); }
+  .done { color:var(--good); font-family:var(--mono); font-size:13px; }
+  .qtag { font-family:var(--mono); font-size:13px; color:var(--muted); }
+  .qtext { font-size:17px; margin:6px 0 14px; max-width:70ch; }
+  .qtext code, .tests code, .expl code { font-family:var(--mono); background:#EFECE3; color:#B94E00; padding:0.05em 0.3em; border-radius:4px; font-size:0.92em; }
+  table.tests { border-collapse:collapse; width:100%; font-size:14px; margin:6px 0 16px; }
+  .tests th { text-align:left; font-family:var(--mono); font-weight:400; color:var(--muted); border-bottom:1px solid var(--rule); padding:6px 10px 6px 0; }
+  .tests td { border-bottom:1px solid var(--rule); padding:8px 10px 8px 0; vertical-align:top; }
+  .tests pre { margin:0; font-family:var(--mono); font-size:13.5px; white-space:pre-wrap; }
+  .tests tr.pass td { background:var(--goodbg); }
+  .tests tr.fail td { background:var(--badbg); }
+  .tests td.res { font-family:var(--mono); font-weight:700; white-space:nowrap; }
+  .tests tr.pass .res { color:var(--good); } .tests tr.fail .res { color:var(--bad); }
+  textarea.editor { width:100%; min-height:260px; font-family:var(--mono); font-size:14.5px; line-height:1.5;
+                    color:#E8ECF1; background:var(--codebg); border:1.5px solid #2B3A4A; border-radius:10px;
+                    padding:14px 18px; tab-size:4; resize:vertical; }
+  textarea.editor:focus { outline:2px solid var(--orange); outline-offset:2px; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
+  .status { font-family:var(--mono); font-size:14px; color:var(--muted); }
+  .banner { border-left:4px solid var(--orange); background:var(--tint); padding:10px 16px; margin:14px 0; font-size:15px; }
+  .banner.pass { border-color:var(--good); background:var(--goodbg); color:var(--good); font-weight:600; }
+  .banner.fail { border-color:var(--bad); background:var(--badbg); color:var(--bad); font-weight:600; }
+  pre.err { background:var(--badbg); border:1px solid #E5B8B2; border-radius:10px; padding:12px 16px; font-family:var(--mono); font-size:13.5px; white-space:pre-wrap; color:#7A2119; }
+  .timer { font-family:var(--mono); font-size:19px; font-weight:700; color:var(--blue); padding:4px 14px; border:1.5px solid var(--blue); border-radius:999px; margin-left:auto; }
+  .timer.warn { color:var(--orange); border-color:var(--orange); }
+  .timer.crit { color:var(--bad); border-color:var(--bad); animation:pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity:0.55; } }
+  @media (prefers-reduced-motion: reduce) { .timer.crit { animation:none; } }
+  .bar { display:flex; align-items:center; gap:14px; position:sticky; top:0; background:var(--paper); z-index:5; padding:10px 0; border-bottom:1px solid var(--rule); }
+  .small-note { font-size:12.5px; color:var(--muted); }
+  kbd { font-family:var(--mono); border:1px solid var(--rule); border-radius:4px; padding:0 5px; background:#fff; }
+  @media (max-width:640px) { .qlist li { grid-template-columns:1fr; gap:4px; } .btn { width:100%; } .toolbar .btn { width:auto; flex:1; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker"><a href="../../">object-oriented computing</a> · <a href="../">mcq practice</a> · coding practice</p>
+
+  <!-- ═══════════ LIST ═══════════ -->
+  <section id="view-list">
+    <h1>Coding Practice</h1>
+    <p class="standfirst">Write the Java, press <strong>Check</strong>, and see each test pass or fail —
+    the same shape as the coding questions in the MCQs. Your code is compiled and run on a
+    remote Java sandbox; nothing to install.</p>
+
+    <h2>Topics</h2>
+    <div class="topics" id="topics"></div>
+    <div class="presets" id="presets"></div>
+
+    <h2>Questions</h2>
+    <ul class="qlist" id="qlist"></ul>
+
+    <h2>Timed set</h2>
+    <p class="standfirst">Three random questions from the topics above, one after another, 20 minutes on the clock — the pressure of the real thing.</p>
+    <p><button class="btn" id="start-set" disabled>Start a 3-question set</button></p>
+    <p class="small-note" id="jobe-note"></p>
+  </section>
+
+  <!-- ═══════════ QUESTION ═══════════ -->
+  <section id="view-q" class="hidden">
+    <div class="bar">
+      <button class="btn ghost small" id="back">← all questions</button>
+      <span class="status" id="setpos"></span>
+      <span class="timer hidden" id="timer" aria-live="off"></span>
+    </div>
+    <p class="qtag" id="qtag"></p>
+    <h2 id="qtitle" style="margin-top:6px"></h2>
+    <div class="qtext" id="qtext"></div>
+    <h3>Tests</h3>
+    <div id="tests"></div>
+    <h3>Your answer</h3>
+    <textarea class="editor" id="editor" spellcheck="false" aria-label="Your Java code"></textarea>
+    <div class="toolbar">
+      <button class="btn" id="check">Check</button>
+      <button class="btn ghost small" id="reset">reset code</button>
+      <button class="btn ghost small hidden" id="next">next question →</button>
+      <span class="status" id="status"></span>
+    </div>
+    <p class="small-note"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> checks · <kbd>Tab</kbd> indents</p>
+    <div id="result" aria-live="polite"></div>
+  </section>
+
+  <!-- ═══════════ SET RESULTS ═══════════ -->
+  <section id="view-set" class="hidden">
+    <h1>Set finished</h1>
+    <p class="standfirst" id="setsum"></p>
+    <p><button class="btn" id="again">Back to the questions</button></p>
+  </section>
+</div>
+
+<script>
+"use strict";
+/* ── the sandbox ──────────────────────────────────────────
+   A Jobe server (the engine behind Moodle CodeRunner). The default is the
+   public evaluation server run by the University of Canterbury, with its
+   published evaluation key. It is a courtesy service: this page only ever
+   runs code when a student presses Check, never in the background. To point
+   the page at your own Jobe (e.g. the jobeinabox container), store
+   {"url": "...", "key": "..."} as JSON under localStorage key "ooccode.jobe". */
+const JOBE_DEFAULT = { url: 'https://jobe2.cosc.canterbury.ac.nz/jobe/index.php/restapi/runs/',
+                       key: '2AAA7A5415B4A9B394B54BF1D2E9D' };
+const SEP = '#|#TEST#|#';
+const S_DONE = 'ooccode.v1.done', S_CODE = 'ooccode.v1.code';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\n\n/g, '<br><br>');
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* not saved */ } };
+const norm = s => String(s).replace(/\r/g, '').split('\n').map(l => l.replace(/\s+$/, '')).join('\n').replace(/\n+$/, '');
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+let QS = [], TOPICS = [], TITLES = {}, PRESETS = [], current = null, set = null, tick = null;
+
+function jobe() { const o = load('ooccode.jobe', null); return (o && o.url) ? o : JOBE_DEFAULT; }
+
+/* Mirror of wrap() in scripts/check_coding_bank.py -- keep them identical. */
+function wrap(q, code, tests) {
+  if (q.kind === 'program') return code;
+  const body = tests.map(t => '        ' + t.code.split('\n').join('\n        ') + '\n        System.out.println("' + SEP + '");').join('\n');
+  const main = '    public static void main(String[] args) {\n' + body + '\n    }\n';
+  if (q.kind === 'method') return 'public class Main {\n' + code + '\n' + main + '}\n';
+  return code + '\n\npublic class Main {\n' + main + '}\n';
+}
+
+/* ── boot ─────────────────────────────────────────────── */
+(async function () {
+  let bank, manifest;
+  try {
+    [bank, manifest] = await Promise.all([fetch('../bank/coding.json').then(r => r.json()),
+                                          fetch('../bank/manifest.json').then(r => r.json())]);
+  } catch (e) {
+    document.body.innerHTML = '<main style="max-width:34rem;margin:12vh auto;padding:0 1.25rem;font:16px/1.6 system-ui,sans-serif">'
+      + '<h1 style="font-size:1.4rem">This page needs a web server</h1><p>It loads its questions from <code>bank/</code>, which a browser blocks when the page is opened straight from disk.</p>'
+      + '<p><strong><a href="https://danielcregg.is-a.dev/object-oriented-computing/practice/coding/">Open the coding practice on the module site</a></strong>.</p></main>';
+    return;
+  }
+  QS = bank.questions;
+  manifest.topics.forEach(t => { TITLES[t.slug] = t.title; });
+  TOPICS = manifest.topics.map(t => t.slug).filter(s => QS.some(q => q.topic === s));
+  try { PRESETS = presetsFrom(await fetch('../../schedule.json').then(r => r.json())); } catch { PRESETS = []; }
+  renderList();
+  const j = jobe();
+  $('jobe-note').textContent = 'Sandbox: ' + new URL(j.url).host + (j === JOBE_DEFAULT ? ' (a shared evaluation server — press Check when your code is ready, not on every keystroke)' : '');
+})();
+
+/* The MCQ presets follow the schedule: each MCQ covers the teaching rows since
+   the previous one. Bank slugs are the deck folder without hyphens. */
+function presetsFrom(sched) {
+  const out = []; let group = [];
+  (sched.weeks || []).forEach(w => {
+    if (w.lectureUrl) group.push(w.lectureUrl.replace(/\/$/, '').split('/').pop().replace(/-/g, ''));
+    if (/^MCQ \d$/.test(w.assessment || '')) { out.push({ name: w.assessment, slugs: group.filter(s => TOPICS.includes(s)) }); group = []; }
+  });
+  return out.filter(p => p.slugs.length);
+}
+
+/* ── list view ────────────────────────────────────────── */
+let selected = new Set();
+function renderList() {
+  const box = $('topics'); box.innerHTML = '';
+  TOPICS.forEach(s => {
+    const b = document.createElement('button'); b.className = 'chip' + (selected.has(s) ? ' on' : ''); b.textContent = TITLES[s] || s;
+    b.addEventListener('click', () => { selected.has(s) ? selected.delete(s) : selected.add(s); renderList(); });
+    box.appendChild(b);
+  });
+  const pr = $('presets'); pr.innerHTML = PRESETS.length ? '<span class="status">presets:</span>' : '';
+  PRESETS.forEach(p => {
+    const b = document.createElement('button'); b.className = 'btn ghost small';
+    b.textContent = p.name + ' set'; b.title = p.slugs.map(s => TITLES[s] || s).join(', ');
+    b.addEventListener('click', () => { selected = new Set(p.slugs); renderList(); });
+    pr.appendChild(b);
+  });
+  const all = document.createElement('button'); all.className = 'btn ghost small'; all.textContent = selected.size === TOPICS.length ? 'clear' : 'select all';
+  all.addEventListener('click', () => { selected = selected.size === TOPICS.length ? new Set() : new Set(TOPICS); renderList(); });
+  pr.appendChild(all);
+
+  const done = load(S_DONE, {});
+  const show = QS.filter(q => selected.size === 0 || selected.has(q.topic));
+  $('qlist').innerHTML = show.map(q =>
+    '<li><span class="t"><a href="#" data-id="' + esc(q.id) + '">' + esc(q.title) + '</a></span>'
+    + '<span class="meta">' + esc(TITLES[q.topic] || q.topic) + ' · ' + esc(q.kind) + ' · ' + esc(q.difficulty) + '</span>'
+    + '<span class="done">' + (done[q.id] ? '✔ passed' : '') + '</span></li>').join('')
+    || '<li><span class="meta">no questions for that selection</span></li>';
+  $('qlist').querySelectorAll('a[data-id]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openQ(QS.find(q => q.id === a.dataset.id)); }));
+  $('start-set').disabled = show.length < 3;
+}
+
+/* ── question view ────────────────────────────────────── */
+function visibleTests(q) { return q.tests.slice(0, q.show || q.tests.length); }
+function testsTable(q, results) {
+  const tests = results ? q.tests : visibleTests(q);
+  const hidden = q.tests.length - visibleTests(q).length;
+  return '<table class="tests"><tr><th>Test</th><th>Expected</th>' + (results ? '<th>Got</th><th></th>' : '') + '</tr>'
+    + tests.map((t, i) => {
+      const r = results && results[i];
+      const cls = r ? (r.pass ? 'pass' : 'fail') : '';
+      return '<tr class="' + cls + '"><td><pre>' + esc(q.kind === 'program' ? (t.stdin ? 'input:\n' + t.stdin : '(no input)') : t.code) + '</pre></td>'
+        + '<td><pre>' + esc(t.expected) + '</pre></td>'
+        + (r ? '<td><pre>' + esc(r.got) + '</pre></td><td class="res">' + (r.pass ? '✔' : '✘') + '</td>' : '') + '</tr>';
+    }).join('') + '</table>'
+    + (!results && hidden ? '<p class="small-note">' + hidden + ' more test' + (hidden > 1 ? 's are' : ' is') + ' hidden until you check, as in the real thing.</p>' : '');
+}
+function openQ(q) {
+  current = q;
+  $('view-list').classList.add('hidden'); $('view-set').classList.add('hidden'); $('view-q').classList.remove('hidden');
+  $('qtag').textContent = (TITLES[q.topic] || q.topic) + ' · ' + q.kind + ' · ' + q.difficulty;
+  $('qtitle').textContent = q.title;
+  $('qtext').innerHTML = fmt(q.question) + (q.kind === 'class' ? '<p class="small-note">Write the class without <code>public</code>: the test harness supplies the public class.</p>' : '');
+  $('tests').innerHTML = testsTable(q, null);
+  $('editor').value = load(S_CODE, {})[q.id] || q.starter;
+  $('result').innerHTML = ''; $('status').textContent = '';
+  $('next').classList.toggle('hidden', !set);
+  $('setpos').textContent = set ? 'question ' + (set.idx + 1) + ' of ' + set.qs.length : '';
+  window.scrollTo(0, 0); $('editor').focus();
+}
+$('back').addEventListener('click', () => { if (set && !confirm('Leave the timed set? It will not be scored.')) return; endSet(); $('view-q').classList.add('hidden'); $('view-list').classList.remove('hidden'); renderList(); });
+$('reset').addEventListener('click', () => { if (confirm('Replace your code with the starter?')) { $('editor').value = current.starter; saveCode(); } });
+$('editor').addEventListener('input', saveCode);
+$('editor').addEventListener('keydown', e => {
+  if (e.key === 'Tab') { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + '    ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 4; saveCode(); }
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); $('check').click(); }
+});
+function saveCode() { const c = load(S_CODE, {}); c[current.id] = $('editor').value; save(S_CODE, c); }
+
+/* ── running code ─────────────────────────────────────── */
+async function runJobe(source, stdin) {
+  const j = jobe();
+  const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 45000);
+  try {
+    const r = await fetch(j.url, { method: 'POST', signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', 'X-API-KEY': j.key },
+      body: JSON.stringify({ run_spec: { language_id: 'java', sourcefilename: 'Main.java', sourcecode: source, input: stdin || '' } }) });
+    if (!r.ok) throw new Error('sandbox replied HTTP ' + r.status);
+    return await r.json();
+  } finally { clearTimeout(t); }
+}
+const OUTCOME = { 11: 'compile error', 12: 'runtime error', 13: 'time limit exceeded', 15: 'ok', 17: 'memory limit exceeded', 19: 'illegal system call', 20: 'sandbox error', 21: 'sandbox overloaded, try again in a moment' };
+
+async function check(q, code) {
+  const results = [];
+  if (q.kind === 'program') {
+    for (const t of q.tests) {
+      const r = await runJobe(wrap(q, code, []), t.stdin || '');
+      if (r.outcome === 11) return { compile: r.cmpinfo || r.stderr };
+      results.push({ got: r.outcome === 15 ? r.stdout : (r.stdout || '') + '\n' + (OUTCOME[r.outcome] || 'error') + (r.stderr ? '\n' + r.stderr.split('\n').slice(0, 3).join('\n') : ''),
+                     pass: r.outcome === 15 && norm(r.stdout) === norm(t.expected) });
+    }
+    return { results };
+  }
+  const r = await runJobe(wrap(q, code, q.tests), '');
+  if (r.outcome === 11) return { compile: r.cmpinfo || r.stderr };
+  if (r.outcome === 15) {
+    const pieces = r.stdout.split(SEP + '\n');
+    q.tests.forEach((t, i) => { const got = pieces[i] == null ? '' : pieces[i]; results.push({ got, pass: norm(got) === norm(t.expected) }); });
+    return { results };
+  }
+  /* A test threw or looped: run them one at a time so each gets its own verdict. */
+  for (const t of q.tests) {
+    const one = await runJobe(wrap(q, code, [t]), '');
+    if (one.outcome === 15) { const got = one.stdout.split(SEP + '\n')[0] || ''; results.push({ got, pass: norm(got) === norm(t.expected) }); }
+    else results.push({ got: (one.stdout || '') + '\n' + (OUTCOME[one.outcome] || 'error') + (one.stderr ? '\n' + one.stderr.split('\n').slice(0, 3).join('\n') : ''), pass: false });
+  }
+  return { results };
+}
+
+$('check').addEventListener('click', async () => {
+  const q = current, code = $('editor').value;
+  if (!code.trim()) return;
+  $('check').disabled = true; $('status').textContent = 'compiling and running…'; $('result').innerHTML = '';
+  try {
+    const out = await check(q, code);
+    if (out.compile !== undefined) {
+      $('result').innerHTML = '<div class="banner fail">Compile error — nothing was run.</div><pre class="err">' + esc(out.compile.trim() || 'no compiler message') + '</pre>';
+    } else {
+      const passed = out.results.filter(r => r.pass).length, all = passed === out.results.length;
+      if (all) { const d = load(S_DONE, {}); d[q.id] = true; save(S_DONE, d); }
+      if (set) set.passed += all ? 1 : 0;
+      $('result').innerHTML = '<div class="banner ' + (all ? 'pass' : 'fail') + '">' + (all ? 'Passed all tests! ✔' : 'Some tests failed: ' + passed + ' of ' + out.results.length + ' passed.') + '</div>' + testsTable(q, out.results);
+      $('tests').innerHTML = testsTable(q, null);
+    }
+  } catch (e) {
+    $('result').innerHTML = '<div class="banner fail">Could not reach the sandbox (' + esc(e.name === 'AbortError' ? 'timed out' : e.message) + '). Try again in a moment, or run your code in your Codespace.</div>';
+  } finally { $('check').disabled = false; $('status').textContent = ''; }
+});
+
+/* ── timed set ────────────────────────────────────────── */
+$('start-set').addEventListener('click', () => {
+  const pool = QS.filter(q => selected.size === 0 || selected.has(q.topic));
+  set = { qs: shuffle([...pool]).slice(0, 3), idx: 0, passed: 0, end: Date.now() + 20 * 60 * 1000 };
+  $('timer').classList.remove('hidden'); tick = setInterval(tickTimer, 500); tickTimer();
+  openQ(set.qs[0]);
+});
+function tickTimer() {
+  const left = set.end - Date.now();
+  if (left <= 0) { finishSet(true); return; }
+  const m = Math.floor(left / 60000), s = Math.floor(left % 60000 / 1000), el = $('timer');
+  el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  el.classList.toggle('warn', left < 5 * 60 * 1000 && left >= 60 * 1000); el.classList.toggle('crit', left < 60 * 1000);
+}
+$('next').addEventListener('click', () => { if (set.idx < set.qs.length - 1) { set.idx++; openQ(set.qs[set.idx]); } else finishSet(false); });
+function endSet() { clearInterval(tick); $('timer').classList.add('hidden'); set = null; }
+function finishSet(timedOut) {
+  const s = set; endSet();
+  $('view-q').classList.add('hidden'); $('view-set').classList.remove('hidden');
+  $('setsum').textContent = (timedOut ? 'Time up. ' : '') + 'You passed ' + s.passed + ' of ' + s.qs.length + ' questions' + (s.passed === s.qs.length ? ' — all of them.' : '.');
+  window.scrollTo(0, 0);
+}
+$('again').addEventListener('click', () => { $('view-set').classList.add('hidden'); $('view-list').classList.remove('hidden'); renderList(); });
+</script>
+</body>
+</html>

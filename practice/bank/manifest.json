@@ -1,5 +1,6 @@
 {
   "topics": [
+    { "slug": "introduction", "title": "Introduction" },
     { "slug": "classesandobjects", "title": "Classes and Objects" },
     { "slug": "methods", "title": "Methods" },
     { "slug": "arrays", "title": "Arrays" },

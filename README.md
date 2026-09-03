@@ -84,7 +84,8 @@ Source: [`mcq/README.md`](mcq/README.md), rendered to `/mcq/` by
 ## MCQ practice
 
 Self-test quizzes generated from the module's own content:
-**[MCQ practice](https://danielcregg.is-a.dev/object-oriented-computing/practice/)** —
+**[MCQ practice](https://danielcregg.is-a.dev/object-oriented-computing/practice/)** and
+**[coding practice](https://danielcregg.is-a.dev/object-oriented-computing/practice/coding/)** —
 pick your topics, then exam mode (30 questions, 60-minute timer) or
 instant-feedback practice mode. Per-topic progress is stored in your
 browser only. The practice bank (`practice/bank/`) is authored for this

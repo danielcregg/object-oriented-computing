@@ -44,10 +44,13 @@ an MCQ you accept the rules on this page.
 
 - The topics each MCQ covers are in the schedule at the top of the module's
   Moodle page.
-- The [practice site](https://danielcregg.is-a.dev/object-oriented-computing/practice/) has an exam mode: 30 questions
-  from the same topics in 60 minutes. The real MCQ adds three coding
-  questions and does not let you go back, so practise committing to an
-  answer before you move on.
+- The [practice site](https://danielcregg.is-a.dev/object-oriented-computing/practice/) has an "MCQ 1 set", "MCQ 2 set" and
+  "MCQ 3 set" preset, and an exam drill: 30 multiple-choice questions in
+  60 minutes, sequential, no going back.
+- The [coding practice](https://danielcregg.is-a.dev/object-oriented-computing/practice/coding/) page has questions in the
+  same shape as the three coding questions: write the method or class,
+  press Check, see each test pass or fail. Its timed set is three questions
+  in 20 minutes.
 
 > **By opening and attempting this assessment you are bound by the rules above
 > and by the ATU Code of Student Conduct.**

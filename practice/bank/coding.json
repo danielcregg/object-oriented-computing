@@ -1,0 +1,484 @@
+{
+  "questions": [
+    {
+      "id": "coding-classesandobjects-001",
+      "topic": "classesandobjects",
+      "difficulty": "easy",
+      "kind": "class",
+      "show": 2,
+      "title": "A Book class with a constructor",
+      "question": "Write a class `Book` with two fields, `String title` and `int pages`. Give it a constructor `Book(String title, int pages)` that sets both fields, a method `void describe()` that prints the title followed by the page count in brackets, exactly like `Dune (412 pages)`, and a method `boolean isLong()` that returns `true` when the book has 300 pages or more and `false` otherwise. A book of exactly 300 pages counts as long.",
+      "starter": "class Book {\n    // fields: title and pages\n\n    // constructor: Book(String title, int pages)\n\n    // methods: describe() and isLong()\n\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Book b1 = new Book(\"Dune\", 412);\nb1.describe();\nSystem.out.println(b1.isLong());",
+          "expected": "Dune (412 pages)\ntrue"
+        },
+        {
+          "code": "Book b2 = new Book(\"Hop On Pop\", 64);\nb2.describe();\nSystem.out.println(b2.isLong());",
+          "expected": "Hop On Pop (64 pages)\nfalse"
+        },
+        {
+          "code": "Book b3 = new Book(\"Ulysses\", 300);\nSystem.out.println(b3.isLong());",
+          "expected": "true"
+        },
+        {
+          "code": "Book b4 = new Book(\"Novella\", 299);\nb4.describe();\nSystem.out.println(b4.isLong());",
+          "expected": "Novella (299 pages)\nfalse"
+        }
+      ]
+    },
+    {
+      "id": "coding-classesandobjects-002",
+      "topic": "classesandobjects",
+      "difficulty": "medium",
+      "kind": "program",
+      "show": 2,
+      "title": "Build a Rectangle object from typed input",
+      "question": "The program reads a width and then a height from the keyboard. Finish the class `Rectangle` so that it stores both as fields, has a constructor `Rectangle(int width, int height)`, and has the methods `int area()`, `int perimeter()` and `boolean isSquare()`. Then finish `main` so it creates a `Rectangle` from the two numbers read and prints three lines: `Area: `, `Perimeter: ` and `Square: `, each followed by the matching value. The perimeter is twice the width plus twice the height, and a rectangle is a square when its width and height are equal.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int width = sc.nextInt();\n        int height = sc.nextInt();\n\n        // your code here\n    }\n}\n\nclass Rectangle {\n    // your code here\n}",
+      "tests": [
+        {
+          "stdin": "3\n4\n",
+          "expected": "Area: 12\nPerimeter: 14\nSquare: false"
+        },
+        {
+          "stdin": "5\n5\n",
+          "expected": "Area: 25\nPerimeter: 20\nSquare: true"
+        },
+        {
+          "stdin": "0\n7\n",
+          "expected": "Area: 0\nPerimeter: 14\nSquare: false"
+        }
+      ]
+    },
+    {
+      "id": "coding-methods-001",
+      "topic": "methods",
+      "difficulty": "easy",
+      "kind": "method",
+      "show": 2,
+      "title": "Add up the whole numbers from 1 to n",
+      "question": "Write a method with the signature `public static int sumTo(int n)` that returns the total of all the whole numbers from `1` up to and including `n`. So `sumTo(4)` is `1 + 2 + 3 + 4`. If `n` is zero or negative there is nothing to add, so return `0`.",
+      "starter": "public static int sumTo(int n) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(sumTo(4));",
+          "expected": "10"
+        },
+        {
+          "code": "System.out.println(sumTo(1));",
+          "expected": "1"
+        },
+        {
+          "code": "System.out.println(sumTo(0));",
+          "expected": "0"
+        },
+        {
+          "code": "System.out.println(sumTo(100));",
+          "expected": "5050"
+        }
+      ]
+    },
+    {
+      "id": "coding-methods-002",
+      "topic": "methods",
+      "difficulty": "easy",
+      "kind": "method",
+      "show": 2,
+      "title": "Turn a mark into a grade band",
+      "question": "Write a method with the signature `public static String grade(int mark)` that returns the grade band for a mark out of 100.\n\n`70` or above returns `\"First\"`, `60` to `69` returns `\"2.1\"`, `50` to `59` returns `\"2.2\"`, `40` to `49` returns `\"Pass\"`, and anything below `40` returns `\"Fail\"`.\n\nEach boundary belongs to the higher band, so a mark of exactly `70` is a `\"First\"`.",
+      "starter": "public static String grade(int mark) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(grade(82));",
+          "expected": "First"
+        },
+        {
+          "code": "System.out.println(grade(64));",
+          "expected": "2.1"
+        },
+        {
+          "code": "System.out.println(grade(70));",
+          "expected": "First"
+        },
+        {
+          "code": "System.out.println(grade(39));",
+          "expected": "Fail"
+        }
+      ]
+    },
+    {
+      "id": "coding-methods-003",
+      "topic": "methods",
+      "difficulty": "medium",
+      "kind": "method",
+      "show": 2,
+      "title": "Factorial by recursion",
+      "question": "Write a method with the signature `public static int factorial(int n)` that returns `n` factorial: the product of every whole number from `1` up to `n`, so `factorial(5)` is `5 * 4 * 3 * 2 * 1`. Write it recursively: the method must call itself on a smaller value. The base case is that `factorial(0)` and `factorial(1)` both return `1`, which is what stops the recursion.",
+      "starter": "public static int factorial(int n) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(factorial(5));",
+          "expected": "120"
+        },
+        {
+          "code": "System.out.println(factorial(1));",
+          "expected": "1"
+        },
+        {
+          "code": "System.out.println(factorial(0));",
+          "expected": "1"
+        },
+        {
+          "code": "System.out.println(factorial(10));",
+          "expected": "3628800"
+        }
+      ]
+    },
+    {
+      "id": "coding-arrays-001",
+      "topic": "arrays",
+      "difficulty": "easy",
+      "kind": "method",
+      "show": 2,
+      "title": "Find the largest value in an array",
+      "question": "Write a method with the signature `public static int largest(int[] numbers)` that returns the biggest value in the array, using the champion pattern: start with the first element as the current champion, then walk the rest of the array and replace the champion whenever you meet something bigger. The array always has at least one element, and the values may be negative, so do not start the champion at `0`.",
+      "starter": "public static int largest(int[] numbers) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(largest(new int[] {3, 9, 2, 7}));",
+          "expected": "9"
+        },
+        {
+          "code": "System.out.println(largest(new int[] {-5, -2, -9}));",
+          "expected": "-2"
+        },
+        {
+          "code": "System.out.println(largest(new int[] {4}));",
+          "expected": "4"
+        },
+        {
+          "code": "System.out.println(largest(new int[] {6, 6, 6}));",
+          "expected": "6"
+        }
+      ]
+    },
+    {
+      "id": "coding-arrays-002",
+      "topic": "arrays",
+      "difficulty": "medium",
+      "kind": "method",
+      "show": 2,
+      "title": "Reverse an array in place",
+      "question": "Write a method with the signature `public static void reverse(int[] numbers)` that reverses the order of the elements inside the array that was passed in. It returns nothing: the caller sees the change because the array is the same object. Swap the first element with the last, the second with the second last, and so on, stopping when the two positions meet. An array of one element is already reversed, so it must be left alone.",
+      "starter": "public static void reverse(int[] numbers) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "int[] a1 = {4, 1, 7, 2};\nreverse(a1);\nfor (int n : a1) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "2 7 1 4"
+        },
+        {
+          "code": "int[] a2 = {5, 6, 7};\nreverse(a2);\nfor (int n : a2) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "7 6 5"
+        },
+        {
+          "code": "int[] a3 = {8};\nreverse(a3);\nfor (int n : a3) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "8"
+        },
+        {
+          "code": "int[] a4 = {-1, 0};\nreverse(a4);\nfor (int n : a4) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "0 -1"
+        }
+      ]
+    },
+    {
+      "id": "coding-arrays-003",
+      "topic": "arrays",
+      "difficulty": "hard",
+      "kind": "method",
+      "show": 2,
+      "title": "Total each row of a 2D array",
+      "question": "Write a method with the signature `public static int[] rowTotals(int[][] grid)` that returns a new array holding one total per row: position `0` holds the total of row `0`, position `1` the total of row `1`, and so on. The result is therefore as long as `grid.length`. The rows are not all the same length, so use `grid[row].length` for the inner loop, and a row with no elements totals `0`.",
+      "starter": "public static int[] rowTotals(int[][] grid) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "int[] t1 = rowTotals(new int[][] {{1, 2, 3}, {4, 5, 6}});\nfor (int n : t1) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "6 15"
+        },
+        {
+          "code": "int[] t2 = rowTotals(new int[][] {{1, 2}, {3}, {4, 5, 6}});\nfor (int n : t2) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "3 3 15"
+        },
+        {
+          "code": "int[] t3 = rowTotals(new int[][] {{7}});\nfor (int n : t3) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "7"
+        },
+        {
+          "code": "int[] t4 = rowTotals(new int[][] {{}, {2, -2}});\nfor (int n : t4) System.out.print(n + \" \");\nSystem.out.println();",
+          "expected": "0 0"
+        }
+      ]
+    },
+    {
+      "id": "coding-strings-001",
+      "topic": "strings",
+      "difficulty": "easy",
+      "kind": "method",
+      "show": 2,
+      "title": "Count how often a character appears",
+      "question": "Write a method with the signature `public static int countChar(String text, char target)` that returns how many times `target` appears in `text`. Walk the string with a loop from `0` up to `text.length() - 1` and compare `text.charAt(i)` with `target` using `==`, which is the right comparison for a `char`. The count is `0` for an empty string, and the comparison is case sensitive, so `'a'` does not match `'A'`.",
+      "starter": "public static int countChar(String text, char target) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(countChar(\"banana\", 'a'));",
+          "expected": "3"
+        },
+        {
+          "code": "System.out.println(countChar(\"banana\", 'z'));",
+          "expected": "0"
+        },
+        {
+          "code": "System.out.println(countChar(\"\", 'a'));",
+          "expected": "0"
+        },
+        {
+          "code": "System.out.println(countChar(\"Mississippi\", 's'));",
+          "expected": "4"
+        }
+      ]
+    },
+    {
+      "id": "coding-strings-002",
+      "topic": "strings",
+      "difficulty": "medium",
+      "kind": "method",
+      "show": 2,
+      "title": "Build an acronym with a StringBuilder",
+      "question": "Write a method with the signature `public static String acronym(String[] words)` that returns the acronym made from the first letter of every word, in upper case: `{\"portable\", \"network\", \"graphics\"}` gives `\"PNG\"`. Build the answer with a `StringBuilder`, appending one letter per word and calling `toString()` at the end, rather than joining strings with `+` inside the loop. Take the first letter with `substring(0, 1)` and raise it with `toUpperCase()`; a letter that is already upper case stays as it is. No word is ever empty.",
+      "starter": "public static String acronym(String[] words) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(acronym(new String[] {\"portable\", \"network\", \"graphics\"}));",
+          "expected": "PNG"
+        },
+        {
+          "code": "System.out.println(acronym(new String[] {\"Atlantic\", \"technological\", \"University\"}));",
+          "expected": "ATU"
+        },
+        {
+          "code": "System.out.println(acronym(new String[] {\"java\"}));",
+          "expected": "J"
+        },
+        {
+          "code": "System.out.println(acronym(new String[] {\"read\", \"only\", \"memory\"}) + \" chip\");",
+          "expected": "ROM chip"
+        }
+      ]
+    },
+    {
+      "id": "coding-encapsulation-001",
+      "topic": "encapsulation",
+      "difficulty": "easy",
+      "kind": "class",
+      "show": 2,
+      "title": "A setter that validates before it stores",
+      "question": "Write a class `Thermostat` with a private field `int temperature` that starts at `18`. Add `public int getTemperature()`, which returns the field, and `public void setTemperature(int value)`, which stores `value` only when it is between `5` and `30` inclusive. For any other value the setter prints exactly `Invalid temperature: must be between 5 and 30.` and leaves the field unchanged, so the object is never left in a bad state. `5` and `30` are both accepted.",
+      "starter": "class Thermostat {\n    // a private temperature field that starts at 18\n\n    // getTemperature() and setTemperature(int value)\n\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Thermostat t1 = new Thermostat();\nt1.setTemperature(21);\nSystem.out.println(t1.getTemperature());",
+          "expected": "21"
+        },
+        {
+          "code": "Thermostat t2 = new Thermostat();\nt2.setTemperature(40);\nSystem.out.println(t2.getTemperature());",
+          "expected": "Invalid temperature: must be between 5 and 30.\n18"
+        },
+        {
+          "code": "Thermostat t3 = new Thermostat();\nt3.setTemperature(5);\nSystem.out.println(t3.getTemperature());\nt3.setTemperature(30);\nSystem.out.println(t3.getTemperature());",
+          "expected": "5\n30"
+        },
+        {
+          "code": "Thermostat t4 = new Thermostat();\nt4.setTemperature(4);\nSystem.out.println(t4.getTemperature());",
+          "expected": "Invalid temperature: must be between 5 and 30.\n18"
+        }
+      ]
+    },
+    {
+      "id": "coding-encapsulation-002",
+      "topic": "encapsulation",
+      "difficulty": "medium",
+      "kind": "program",
+      "show": 2,
+      "title": "A grade book that refuses bad marks",
+      "question": "`main` is already written: it reads three marks from the keyboard and hands each one to a `GradeBook`. Write the `GradeBook` class. It keeps two private fields, `int total` and `int accepted`, and offers three methods: `public void addMark(int mark)`, `public int getTotal()` and `public int getAccepted()`. `addMark` accepts a mark from `0` to `100` inclusive by adding it to the total and counting it; any other mark is refused, and the method prints `Rejected: ` followed by that mark and changes nothing. The two fields must stay private so a mark can only ever get in through `addMark`.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        GradeBook book = new GradeBook();\n        for (int i = 0; i < 3; i++) {\n            book.addMark(sc.nextInt());\n        }\n        System.out.println(\"Accepted: \" + book.getAccepted());\n        System.out.println(\"Total: \" + book.getTotal());\n    }\n}\n\nclass GradeBook {\n    // your code here\n}",
+      "tests": [
+        {
+          "stdin": "50\n60\n70\n",
+          "expected": "Accepted: 3\nTotal: 180"
+        },
+        {
+          "stdin": "50\n120\n-3\n",
+          "expected": "Rejected: 120\nRejected: -3\nAccepted: 1\nTotal: 50"
+        },
+        {
+          "stdin": "0\n100\n101\n",
+          "expected": "Rejected: 101\nAccepted: 2\nTotal: 100"
+        }
+      ]
+    },
+    {
+      "id": "coding-inheritance-001",
+      "topic": "inheritance",
+      "difficulty": "easy",
+      "kind": "class",
+      "show": 2,
+      "title": "A subclass that calls super",
+      "question": "`Vehicle` is written for you. Add a subclass `class Car extends Vehicle` with a private field `int doors`. Its constructor `Car(String make, int doors)` must call `super(make, 4)` on its very first line, because every car has four wheels, and then store `doors`. Add `int getDoors()`, which returns the doors, and `void honk()`, which prints the inherited `make` followed by ` says beep`. Do not change `Vehicle`, and do not redeclare `make`: `Car` inherits it because it is `protected`.",
+      "starter": "class Vehicle {\n    protected String make;\n    protected int wheels;\n\n    Vehicle(String make, int wheels) {\n        this.make = make;\n        this.wheels = wheels;\n    }\n\n    void describe() {\n        System.out.println(make + \" with \" + wheels + \" wheels\");\n    }\n}\n\nclass Car extends Vehicle {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Car c1 = new Car(\"Toyota\", 5);\nc1.describe();\nc1.honk();",
+          "expected": "Toyota with 4 wheels\nToyota says beep"
+        },
+        {
+          "code": "Car c2 = new Car(\"Fiat\", 3);\nSystem.out.println(c2.getDoors());\nc2.honk();",
+          "expected": "3\nFiat says beep"
+        },
+        {
+          "code": "Vehicle v3 = new Vehicle(\"Bus\", 6);\nv3.describe();\nCar c3 = new Car(\"Mini\", 2);\nc3.describe();",
+          "expected": "Bus with 6 wheels\nMini with 4 wheels"
+        }
+      ]
+    },
+    {
+      "id": "coding-inheritance-002",
+      "topic": "inheritance",
+      "difficulty": "medium",
+      "kind": "class",
+      "show": 2,
+      "title": "Override a method and still reuse the parent's",
+      "question": "`Employee` is written for you. Add a subclass `class Manager extends Employee` with a private field `int bonus` and a constructor `Manager(String name, int salary, int bonus)` that passes the name and salary up with `super(name, salary)` before storing the bonus. Override `printDetails()` so it first calls `super.printDetails()` to print the inherited line, then prints `Bonus: ` followed by the bonus on a second line. Also add `int totalPay()`, which returns the salary plus the bonus. A plain `Employee` must still print only its own single line.",
+      "starter": "class Employee {\n    protected String name;\n    protected int salary;\n\n    Employee(String name, int salary) {\n        this.name = name;\n        this.salary = salary;\n    }\n\n    void printDetails() {\n        System.out.println(name + \" earns \" + salary);\n    }\n}\n\nclass Manager extends Employee {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Manager m1 = new Manager(\"Ada\", 50000, 5000);\nm1.printDetails();\nSystem.out.println(m1.totalPay());",
+          "expected": "Ada earns 50000\nBonus: 5000\n55000"
+        },
+        {
+          "code": "Manager m2 = new Manager(\"Bob\", 30000, 0);\nm2.printDetails();\nSystem.out.println(m2.totalPay());",
+          "expected": "Bob earns 30000\nBonus: 0\n30000"
+        },
+        {
+          "code": "Employee e3 = new Employee(\"Cara\", 20000);\ne3.printDetails();\nManager m3 = new Manager(\"Dan\", 40000, 1000);\nm3.printDetails();",
+          "expected": "Cara earns 20000\nDan earns 40000\nBonus: 1000"
+        }
+      ]
+    },
+    {
+      "id": "coding-polymorphism-001",
+      "topic": "polymorphism",
+      "difficulty": "medium",
+      "kind": "class",
+      "show": 2,
+      "title": "Two animals that answer the same call differently",
+      "question": "`Animal` is written for you. Add two subclasses, `class Dog extends Animal` and `class Cat extends Animal`. Each needs a constructor taking the name and passing it up with `super(name)`, and each must override `speak()`: `Dog` prints the name followed by ` says Woof`, `Cat` prints the name followed by ` says Meow`. Neither subclass declares its own `name` field, and neither adds any other method. A `Dog` stored in an `Animal` variable must still bark, because the call is decided by the object, not by the variable's type.",
+      "starter": "class Animal {\n    protected String name;\n\n    Animal(String name) {\n        this.name = name;\n    }\n\n    void speak() {\n        System.out.println(name + \" makes a sound\");\n    }\n}\n\nclass Dog extends Animal {\n    // your code here\n}\n\nclass Cat extends Animal {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Animal[] pets = {new Dog(\"Rex\"), new Cat(\"Tom\"), new Animal(\"Blob\")};\nfor (Animal p : pets) p.speak();",
+          "expected": "Rex says Woof\nTom says Meow\nBlob makes a sound"
+        },
+        {
+          "code": "Animal a2 = new Dog(\"Fido\");\na2.speak();",
+          "expected": "Fido says Woof"
+        },
+        {
+          "code": "Animal[] cats = {new Cat(\"Kit\"), new Cat(\"Sox\")};\nfor (Animal c : cats) c.speak();",
+          "expected": "Kit says Meow\nSox says Meow"
+        }
+      ]
+    },
+    {
+      "id": "coding-polymorphism-002",
+      "topic": "polymorphism",
+      "difficulty": "easy",
+      "kind": "method",
+      "show": 2,
+      "title": "Three overloads of add",
+      "question": "Overloading is compile-time polymorphism: several methods share one name and the compiler picks between them by the arguments you pass. Write three methods, all called `add`, that return the sum of their arguments:\n\n`public static int add(int a, int b)`\n\n`public static double add(double a, double b)`\n\n`public static int add(int a, int b, int c)`\n\nThey differ by parameter type or parameter count, which is what makes them legal overloads.",
+      "starter": "public static int add(int a, int b) {\n    // your code here\n}\n\npublic static double add(double a, double b) {\n    // your code here\n}\n\npublic static int add(int a, int b, int c) {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "System.out.println(add(2, 3));",
+          "expected": "5"
+        },
+        {
+          "code": "System.out.println(add(2.5, 1.5));",
+          "expected": "4.0"
+        },
+        {
+          "code": "System.out.println(add(1, 2, 3));",
+          "expected": "6"
+        },
+        {
+          "code": "System.out.println(add(0.5, 0.25));",
+          "expected": "0.75"
+        }
+      ]
+    },
+    {
+      "id": "coding-abstraction-001",
+      "topic": "abstraction",
+      "difficulty": "medium",
+      "kind": "class",
+      "show": 2,
+      "title": "Implement an interface twice",
+      "question": "The interface `Instrument` is written for you: it is a contract naming two methods and saying nothing about how they work. Write `class Piano implements Instrument` and `class Guitar implements Instrument`. `Piano.play()` prints `Piano playing beautiful music` and `Piano.name()` returns `\"Piano\"`; `Guitar.play()` prints `Guitar strumming chords` and `Guitar.name()` returns `\"Guitar\"`. Both classes need a no-argument constructor, which you get for free by writing none. Interface methods are public, so each implementation must be declared `public` too.",
+      "starter": "interface Instrument {\n    void play();\n    String name();\n}\n\nclass Piano implements Instrument {\n    // your code here\n}\n\nclass Guitar implements Instrument {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Instrument i1 = new Piano();\ni1.play();\nSystem.out.println(i1.name());",
+          "expected": "Piano playing beautiful music\nPiano"
+        },
+        {
+          "code": "Instrument[] band = {new Piano(), new Guitar()};\nfor (Instrument x : band) x.play();",
+          "expected": "Piano playing beautiful music\nGuitar strumming chords"
+        },
+        {
+          "code": "Instrument i3 = new Guitar();\nSystem.out.println(i3.name() + \" is ready\");",
+          "expected": "Guitar is ready"
+        }
+      ]
+    },
+    {
+      "id": "coding-abstraction-002",
+      "topic": "abstraction",
+      "difficulty": "hard",
+      "kind": "class",
+      "show": 2,
+      "title": "Fill in an abstract class's missing method",
+      "question": "The abstract class `Shape` is written for you. It knows how to `report()` itself but it cannot work out an area, so `area()` is left abstract for its subclasses to supply. Write `class Square extends Shape`, whose constructor `Square(int side)` calls `super(\"Square\")` and whose `area()` returns the side squared, and `class Rectangle extends Shape`, whose constructor `Rectangle(int width, int height)` calls `super(\"Rectangle\")` and whose `area()` returns width times height. You never write `report()` again: it is inherited, and the `area()` it calls is the subclass's.",
+      "starter": "abstract class Shape {\n    protected String label;\n\n    Shape(String label) {\n        this.label = label;\n    }\n\n    abstract int area();\n\n    void report() {\n        System.out.println(label + \" has area \" + area());\n    }\n}\n\nclass Square extends Shape {\n    // your code here\n}\n\nclass Rectangle extends Shape {\n    // your code here\n}",
+      "tests": [
+        {
+          "code": "Shape s1 = new Square(4);\ns1.report();",
+          "expected": "Square has area 16"
+        },
+        {
+          "code": "Shape[] shapes = {new Square(3), new Rectangle(2, 5)};\nfor (Shape s : shapes) s.report();",
+          "expected": "Square has area 9\nRectangle has area 10"
+        },
+        {
+          "code": "Shape s3 = new Rectangle(7, 1);\nSystem.out.println(s3.area());",
+          "expected": "7"
+        },
+        {
+          "code": "Shape s4 = new Square(0);\ns4.report();",
+          "expected": "Square has area 0"
+        }
+      ]
+    }
+  ]
+}

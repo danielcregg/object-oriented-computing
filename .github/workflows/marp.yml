@@ -60,6 +60,7 @@ jobs:
           python3 scripts/check_schedule.py
           python3 scripts/verify_snippets.py
           python3 scripts/check_practice_bank.py
+          python3 scripts/check_coding_bank.py
           find labs/src -name '*.java' -print0 \
             | xargs -0 --no-run-if-empty javac -d "$RUNNER_TEMP/labs-classes"
 

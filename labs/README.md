@@ -14,14 +14,19 @@ You write your code in the lab's folder, beside its README.
    IDE opens in your browser, nothing to install. *(Local instead? Clone
    your repo and open it in VS Code with JDK 21 (the same version as the Codespace) and the "Extension Pack
    for Java" installed — same experience.)*
-3. Commit and push as you work, like any repo.
+3. **Save as you go** — see [Saving your work](#saving-your-work) below.
+   A Codespace is not a save: GitHub deletes one that sits unused for 30
+   days, and only what you have committed and pushed survives.
 
 ## Doing a lab
 
 Open the lab's folder below, read its `README.md` (right-click →
 *Open Preview* in VS Code), and follow it. Each folder already has the
 Java package and a `Main.java` with a run button (▶) — add your classes
-beside it.
+beside it. Two rules Java enforces when you create a file: a `public`
+class must live in a file with exactly its name (`Book` in `Book.java`),
+and every file in the folder starts with the same `package` line as
+`Main.java`.
 
 | Lab | Folder |
 |---|---|
@@ -36,6 +41,23 @@ beside it.
 
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.
+
+## Saving your work
+
+Git keeps your work, not the Codespace. After each exercise (or at least
+before you close the browser):
+
+1. Open the **Source Control** panel (the branch icon in the left bar, or
+   `Ctrl+Shift+G`).
+2. Type a one-line message such as `arrays DIY 3 done` in the box.
+3. Click **Commit**, then **Sync Changes** (that is the push).
+
+Your repo on GitHub now has the code, and stays there whatever happens to
+the Codespace. Every push also runs a small check that compiles all your
+lab code: a green tick means it all compiles, a red cross means one file
+does not, and the message says which. (You may also see two workflows
+listed as *skipped* on every push — those are the module's own site
+builders, switched off in copies by design. Ignore them.)
 
 ## Getting the latest lectures and lab instructions
 

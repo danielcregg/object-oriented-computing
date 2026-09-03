@@ -1,0 +1,37 @@
+name: labs
+
+# Do the labs compile? This is the one workflow that runs in a STUDENT's copy
+# of the template (deliberately unguarded): every push gets a green tick if
+# every .java file under labs/src compiles, and a red cross with the compiler's
+# message if not. It never runs anything, never grades, never comments.
+# The module's own CI (marp.yml) compiles the same files as one of its gates.
+
+on:
+  push:
+    paths: ['labs/src/**', '.github/workflows/labs.yml']
+  pull_request:
+    paths: ['labs/src/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21 (the same JDK as the Codespace)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Compile every lab source file
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/classes"
+          find labs/src -name '*.java' -print0 \
+            | xargs -0 --no-run-if-empty javac -d "$RUNNER_TEMP/classes"
+          echo "All lab sources compile." >> "$GITHUB_STEP_SUMMARY"

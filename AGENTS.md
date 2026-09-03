@@ -84,13 +84,20 @@ alone.
   CI compiles every lab source file. GitHub Classroom is retired.
   The repo is a TEMPLATE, not a fork source: a fork of a public repo
   cannot be made private, which would publish every student's lab work
-  and list the class on the fork network. Both workflows are guarded with
-  `if: github.repository == '<this repo>'` because a template copy has
-  Actions ENABLED (a fork does not) and would otherwise run this CI, and
-  in current-week.yml's case commit to the student's own README.
+  and list the class on the fork network. `marp.yml` and `current-week.yml`
+  are guarded with `if: github.repository == '<this repo>'` because a
+  template copy has Actions ENABLED (a fork does not) and would otherwise
+  run this CI, and in current-week.yml's case commit to the student's own
+  README. `labs.yml` is deliberately UNGUARDED: it is the student's green
+  tick, compiling `labs/src` on every push that touches it, and nothing
+  else. The devcontainer installs only the Java pack and opens
+  `labs/README.md` on first launch; students never author decks.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
-  block) → numbered sections → exercises as `### DIY k: <name>` with
+  block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
+  `Diy<k>.java` with its own `main`, mirroring the private solutions
+  repo's layout so each exercise stays runnable and checkable on its own)
+  → numbered sections → exercises as `### DIY k: <name>` with
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
   no week/module references (self-contained, like the decks).
@@ -132,11 +139,25 @@ alone.
   format. One page for all three MCQs; rendered to `/mcq/` and linked from
   the site index, the three MCQ week READMEs and the Moodle course.
 - `practice/` — the MCQ practice web app (`index.html`, self-contained
-  vanilla JS) + its question bank (`bank/<topic>.json`, one per topic).
-  Bank questions are PRACTICE questions authored from the decks and labs
-  — never the real Moodle assessment bank, and always self-contained (no
-  schedule references). `scripts/check_practice_bank.py` validates the
-  bank in CI; CI copies `practice/` to the site at `/practice/`.
+  vanilla JS) + its question bank (`bank/<topic>.json`, one per topic,
+  including `introduction`). Bank questions are PRACTICE questions authored
+  from the decks and labs — never the real Moodle assessment bank, and
+  always self-contained (no schedule references). The picker offers an
+  "MCQ n set" preset per assessment, derived at runtime from
+  `/schedule.json` (each MCQ covers the teaching rows since the previous
+  one; bank slug = deck folder without hyphens). `scripts/check_practice_bank.py`
+  validates the bank in CI; CI copies `practice/` to the site at `/practice/`.
+- `practice/coding/` — CodeRunner-style coding practice (`index.html`) over
+  `practice/bank/coding.json`: method / class / program questions with
+  per-test expected output, a visible-then-hidden tests table, and a Check
+  that compiles and runs the code on a Jobe sandbox (the engine behind
+  Moodle CodeRunner). Default sandbox: Canterbury's public evaluation
+  server; point it elsewhere by storing `{"url","key"}` under localStorage
+  `ooccode.jobe`. `scripts/check_coding_bank.py` validates the bank in CI,
+  and with `--solutions DIR` compiles and runs reference solutions through
+  the SAME wrapper the page uses — every expected output in the bank was
+  produced that way, never by reasoning. Reference solutions live in the
+  private labs-solutions repo, never here.
 - `scripts/build_index.py` — generates the Pages landing page from the
   schedule (CI runs it; styled to match the theme), plus a redirect stub
   for each pre-2026-09 `week-NN-` folder name.
@@ -151,7 +172,8 @@ alone.
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and FAILS if it is missing.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every deck
-  with javac, wrapping bare declarations or statements as needed. A fence
+  AND every lab README with javac, wrapping bare declarations or statements
+  as needed. A fence
   that is meant to be broken is skipped with `<!-- no-compile -->` on the
   line directly above it. CI gate; run it after editing any deck code.
 - `scripts/check_practice_bank.py` — validates `practice/bank/*.json`

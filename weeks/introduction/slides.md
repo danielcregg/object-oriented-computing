@@ -209,12 +209,12 @@ public class December {
 ## Assessment - three checkpoints
 
 <div class="cards">
-<div class="card"><span class="cwk">checkpoint 1</span><span class="cname">MCQ 1</span><span class="cpct">33%</span><span class="csub">in a lab · date on Moodle</span></div>
-<div class="card"><span class="cwk">checkpoint 2</span><span class="cname">MCQ 2</span><span class="cpct">33%</span><span class="csub">in a lab · date on Moodle</span></div>
-<div class="card"><span class="cwk">checkpoint 3</span><span class="cname">MCQ 3</span><span class="cpct">33%</span><span class="csub">in a lab · date on Moodle</span></div>
+<div class="card"><span class="cwk">checkpoint 1</span><span class="cname">MCQ 1</span><span class="cpct">one third</span><span class="csub">in a lab · date on Moodle</span></div>
+<div class="card"><span class="cwk">checkpoint 2</span><span class="cname">MCQ 2</span><span class="cpct">one third</span><span class="csub">in a lab · date on Moodle</span></div>
+<div class="card"><span class="cwk">checkpoint 3</span><span class="cname">MCQ 3</span><span class="cpct">one third</span><span class="csub">in a lab · date on Moodle</span></div>
 </div>
 
-- Three MCQs, worth **33% each** - all completed **in person, in a lab**.
+- Three MCQs, **a third of your grade each** - all completed **in person, in a lab**.
 
 * Your grade is spread across the semester: three chances, no single make-or-break day.
 * First checkpoint: MCQ 1, **only a few weeks from today** (the date is on the Moodle schedule). The reps start now.
@@ -544,6 +544,6 @@ System.out.println("Hello") System.out.println("World!");
 
 - This module: **object-oriented programming in Java** - you arrive with programming basics, you leave designing classes and objects of your own.
 - **12 teaching weeks over 13 calendar weeks** - reading week is the October bank-holiday week - and **labs start week 2**.
-- Assessment: **three MCQs - dates on the Moodle schedule, worth 33% each - in person, in a lab**, drawing on lecture *and* lab material, with standard questions **plus Coderunner coding questions**. Practise with AI-generated MCQs - **NotebookLM**.
+- Assessment: **three MCQs - dates on the Moodle schedule, a third of your grade each - in person, in a lab**, drawing on lecture *and* lab material, with standard questions **plus Coderunner coding questions**. Practise with AI-generated MCQs - **NotebookLM**.
 - Java compiles source to **bytecode**; the **JVM** runs it on any platform - *write once, run anywhere*. The **JDK** (`javac`, `javadoc`, …) is your toolkit, and precision - case, semicolons, braces - is the price of entry.
 - **This week:** enrol on Moodle - course **8963**, key `object`, pick the right module of the two; sign up for the **GitHub Student Developer Pack**; research **GitHub Codespaces**.

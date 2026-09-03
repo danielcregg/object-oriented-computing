@@ -61,11 +61,14 @@ builders, switched off in copies by design. Ignore them.)
 
 ## Getting the latest lectures and lab instructions
 
-Your copy doesn't update itself, so it can drift behind if a lab or a
-lecture is corrected mid-semester. Three ways to catch up, easiest first:
+If a lab or a lecture is corrected mid-semester, the fix reaches your copy
+on its own: every night a small workflow in your repo (`course-sync`) pulls
+the latest course content in, and a Codespace does the same each time you
+open it. So the first option is:
 
-1. **Do nothing.** In a Codespace it refreshes automatically every time you
-   open the workspace.
+1. **Do nothing.** Your repo catches up overnight, and your Codespace on
+   opening. (In the Codespace, click **Sync Changes** before you start, so
+   it picks up what the nightly run committed.)
 2. **Press the button.** *Terminal → Run Task → Update course content.*
 3. **Run one line:**
 

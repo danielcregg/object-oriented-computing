@@ -88,9 +88,15 @@ alone.
   are guarded with `if: github.repository == '<this repo>'` because a
   template copy has Actions ENABLED (a fork does not) and would otherwise
   run this CI, and in current-week.yml's case commit to the student's own
-  README. `labs.yml` is deliberately UNGUARDED: it is the student's green
-  tick, compiling `labs/src` on every push that touches it, and nothing
-  else. The devcontainer installs only the Java pack and opens
+  README. Two workflows are deliberately UNGUARDED because they exist FOR
+  the student's copy: `labs.yml`, the green tick that compiles `labs/src`
+  on every push that touches it, and `course-sync.yml`, which runs
+  `scripts/update-course-content.sh` there every night (01:05 UTC) so
+  corrections arrive without a Codespace ever being opened; it keeps the
+  script's baseline as the ref `refs/course-sync/baseline`, pushed back to
+  the student's repo, since a fresh checkout has no `.course-sync` file.
+  Neither the workflows nor `scripts/` are synced, so a copy made before a
+  workflow existed does not gain it. The devcontainer installs only the Java pack and opens
   `labs/README.md` on first launch; students never author decks.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard

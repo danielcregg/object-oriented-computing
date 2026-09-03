@@ -11,7 +11,8 @@
 # you created, and it skips anything you have edited yourself.
 #
 # Run it whenever you like:   bash scripts/update-course-content.sh
-# (In a Codespace it also runs by itself each time you open the workspace.)
+# (In a Codespace it also runs by itself each time you open the workspace,
+# and the course-sync workflow runs it in your repo on GitHub every night.)
 set -uo pipefail
 
 UPSTREAM_URL="https://github.com/danielcregg/object-oriented-computing.git"
@@ -38,7 +39,11 @@ git remote get-url upstream >/dev/null 2>&1 || {
 }
 
 say "Checking the module repo for updates..."
-if ! git fetch --quiet --depth=1 upstream "$BRANCH" 2>/dev/null; then
+# A full fetch, not --depth=1: a shallow tip cannot be pushed as the
+# course-sync baseline ref (git refuses "shallow update"), and the module repo
+# is small enough that the first fetch is a few seconds and later ones are
+# incremental.
+if ! git fetch --quiet upstream "$BRANCH" 2>/dev/null; then
   die "Could not reach the module repo (offline?). Nothing changed."
 fi
 
@@ -54,7 +59,11 @@ mapfile -t PATHS < <(
 # against HEAD would be wrong -- you are told to COMMIT your work, so an
 # edit you committed looks "clean" against HEAD and would be overwritten.
 MARKER=".course-sync"
-LAST="$(cat "$MARKER" 2>/dev/null || true)"
+# The baseline is remembered twice: in this gitignored file (a Codespace or
+# your laptop) and in the ref refs/course-sync/baseline, which the nightly
+# course-sync workflow pushes to your repo so a fresh checkout on GitHub
+# remembers it too. Whichever exists wins; the file is preferred.
+LAST="$(cat "$MARKER" 2>/dev/null || git rev-parse -q --verify refs/course-sync/baseline 2>/dev/null || true)"
 ROOT="$(git rev-list --max-parents=0 HEAD | tail -1)"
 
 skipped=0
@@ -91,13 +100,10 @@ done < <(git ls-files -- 'weeks/*' 'mcq/README.md' 'module/schedule.json')
 
 # Local bookkeeping only -- gitignored, never committed, never pushed.
 git rev-parse "upstream/$BRANCH" > "$MARKER"
-# ...and pin that commit with a ref so it stays reachable. It is otherwise
-# named only by the marker FILE: the next --depth=1 fetch moves
-# upstream/main off it, leaving it unreachable, and once `git gc` prunes it
-# the baseline silently falls back to your very first commit. Every file a
-# previous run had already refreshed would then look edited-by-you, and
-# would stop updating for good -- reported as "kept your version" for files
-# you never opened.
+# ...and pin that commit with a ref. The nightly course-sync workflow pushes
+# this ref to your repo and reads it back on the next run, which is how a
+# fresh checkout on GitHub knows what you last received; without it every
+# file a previous run refreshed would look edited-by-you and stop updating.
 git update-ref refs/course-sync/baseline "$(git rev-parse "upstream/$BRANCH")"
 
 # Commit ONLY the content paths this script rewrote. A bare `git commit`
@@ -107,7 +113,10 @@ git update-ref refs/course-sync/baseline "$(git rev-parse "upstream/$BRANCH")"
 # content sync.
 changed=()
 if [ ${#touched[@]} -gt 0 ]; then
-  mapfile -t changed < <(git diff --cached --name-only -- "${touched[@]}")
+  # --no-renames: a folder that moved upstream is a delete plus an add here,
+  # and rename detection would print only the new name, leaving the old
+  # file staged but never committed.
+  mapfile -t changed < <(git diff --cached --name-only --no-renames -- "${touched[@]}")
 fi
 
 if [ ${#changed[@]} -eq 0 ]; then

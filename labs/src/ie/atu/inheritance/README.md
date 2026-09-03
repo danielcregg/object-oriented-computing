@@ -9,6 +9,7 @@ By the end of this lab you will be able to:
 - Recognise single, multilevel and hierarchical inheritance, and explain why Java does not support multiple inheritance of classes
 - Explain the role of `Object` as the root superclass that every Java class implicitly inherits from
 - Initialise inherited state correctly by chaining constructors with the `super` keyword
+- Open a superclass field to its subclasses with `protected`, and choose between inheritance and containment using the is-a / has-a sentence test
 
 ## Table of Contents
 
@@ -17,10 +18,11 @@ By the end of this lab you will be able to:
 3. [Types of Inheritance](#3-types-of-inheritance)
 4. [The Object Class](#4-the-object-class)
 5. [Constructors in Inheritance](#5-constructors-in-inheritance)
+6. [Is-A or Has-A](#6-is-a-or-has-a)
 
 ## Getting started
 
-This lab lives in the package `ie.atu.inheritance` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.inheritance` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ## 1. Definition and Basics of Inheritance
 
@@ -349,9 +351,9 @@ Add a `Motorbike` class to the DIY 3 hierarchy to demonstrate hierarchical inher
    - Private field: `boolean hasSidecar`.
    - Constructor: `Motorbike(String type, boolean hasSidecar)` which calls `super(type)`.
    - Getter and setter for `hasSidecar`.
-   - Method: `void ride()` that prints a short message, e.g. "Riding the <type>", and indicates whether it has a sidecar.
-2. In `Main`, create a `Motorbike` instance and call its methods (`move()`, `ride()`).
-3. Use a `Vehicle` reference where appropriate (e.g. `Vehicle v = new Motorbike(...);`) and call `v.move()` - this demonstrates polymorphism: `Motorbike` and `Car` are both `Vehicle` instances.
+   - Method: `void ride()` that prints "Riding the " followed by the superclass field `type` **read directly** - not through `getType()` - and then indicates whether it has a sidecar.
+2. That direct read will not compile yet: `type` is `private` in `Vehicle`, so javac reports `type has private access in Vehicle`. Change `Vehicle`'s `type` field from `private` to `protected` and compile again. `protected` is the access level to reach for here because it opens the field to the subclasses (`Car`, `ElectricCar`, `Motorbike`) while keeping it closed to every unrelated class - `private` locks the family out, and `public` hands the field to the whole program.
+3. In `Main`, declare the variable with the subclass as its type - `Motorbike m = new Motorbike("motorbike", false);` - then call `m.move()` and `m.ride()`. `Motorbike` never declares `move()`; it inherits it from `Vehicle`, exactly as `Car` does.
 
 This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy - sometimes called hybrid inheritance.
 
@@ -360,14 +362,13 @@ This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, et
 ```text
 The motorbike is moving
 Riding the motorbike (no sidecar)
-The motorbike is moving
 ```
 
-(Exact wording will vary with your messages; the third line comes from calling `move()` through the `Vehicle` reference.)
+(Exact wording will vary with your messages.)
 
 <details><summary>Hint</summary>
 
-Suggested design for the full hierarchy from DIY 3 and DIY 4:
+`Motorbike` never declares `move()` - it comes down from `Vehicle`, which is also where `type` lives. A subclass inherits a `private` field's storage but not the right to touch it; `protected` is the access level that says "family only". Suggested design for the full hierarchy from DIY 3 and DIY 4:
 
 ```mermaid
 classDiagram
@@ -375,7 +376,7 @@ classDiagram
     Car <|-- ElectricCar
     Vehicle <|-- Motorbike
     class Vehicle {
-        - String type
+        # String type
         + getType() String
         + setType(type: String) void
         + move()
@@ -547,6 +548,70 @@ classDiagram
 
 </details>
 
+## 6. Is-A or Has-A
+
+### Explanation
+
+`extends` is not the only way to connect two classes, and reaching for it by reflex is the classic design bug. Before you write `extends`, run the **sentence test**: say "an X **is a** Y" out loud. If the sentence is true, inheritance is right and Y goes *above* X as its superclass. If the truth is really "an X **has a** Y", then Y goes *inside* X as a field.
+
+| Pair | Say it out loud | Relationship | In Java |
+|---|---|---|---|
+| `Employee`, `Person` | "an Employee is a Person" - true | is-a | `class Employee extends Person` |
+| `Car`, `Engine` | "a Car is an Engine" - nonsense | has-a | `class Car { private Engine engine; }` |
+
+The two do different work for you. Inheritance hands the subclass the whole superclass menu automatically. Containment hands you nothing automatically: the outer class holds the other object in a field and **delegates** - it asks the field to do the job. When you are genuinely torn, prefer has-a. A field is easy to change later; `extends` is a public promise that X is a Y, and you cannot take it back.
+
+### DIY 7: Is-a or has-a?
+
+1. For each pair below, run the sentence test and write your answer as a comment in `Main` - is it **is-a** (use `extends`) or **has-a** (make it a field)?
+   - `Car` and `Engine`
+   - `Dog` and `Animal`
+   - `Library` and `Book`
+   - `Square` and `Shape`
+2. Implement one of the **has-a** pairs. Write a `Book` class with a private `String title`, a constructor that sets it, a getter, and a `void read()` method that prints "Reading " followed by the title. Then write a `Library` class with a private `String name` **and a private `Book featured` field**. `Library`'s constructor takes a library name and a book title, and builds its own `Book` from that title. Give `Library` a `void showFeatured()` method that prints the library name followed by " features one book today:" and then delegates the rest of the job to the book by calling `featured.read()`.
+3. Implement one of the **is-a** pairs. Write a `Shape` class with a `void describe()` method that prints "I am a shape" (if you typed in the `Shape` example from section 3, just add the method to it). Then write `Square extends Shape` with a private `double side`, a constructor that sets it, and a `void printSide()` method that prints "My side is " followed by the side. `Square` writes no `describe()` of its own.
+4. In `Main`, create a `Library` named "ATU Library" featuring "The Hobbit" and call `showFeatured()`. Then create a `Square` with side `4.0` and call `describe()` followed by `printSide()`. That `describe()` call is the proof of the is-a link: `Square` never declared the method.
+
+**Expected output**
+
+```text
+ATU Library features one book today:
+Reading The Hobbit
+I am a shape
+My side is 4.0
+```
+
+<details><summary>Hint</summary>
+
+The sentence test is the whole exercise: can you say "an X **is a** Y" without lying? "a Square is a Shape" - fine, so `Square extends Shape`. "a Library is a Book" - nonsense; a library *holds* books, so `Book` becomes a field inside `Library`. Work the other two the same way, out loud.
+
+Then watch what each relationship gives you. `Square` gets `describe()` for free - inheritance copies the parent's whole menu down. `Library` gets nothing for free: it holds a `Book` and has to ask it, `featured.read()`, which is exactly what delegation means. Suggested design:
+
+```mermaid
+classDiagram
+    Library o-- Book : has-a
+    Shape <|-- Square : is-a
+    class Library {
+        - String name
+        - Book featured
+        + showFeatured() void
+    }
+    class Book {
+        - String title
+        + getTitle() String
+        + read() void
+    }
+    class Shape {
+        + describe() void
+    }
+    class Square {
+        - double side
+        + printSide() void
+    }
+```
+
+</details>
+
 ## Summary
 
 In this lab you covered:
@@ -556,5 +621,6 @@ In this lab you covered:
 - Types of Inheritance
 - The Object Class
 - Constructors in Inheritance
+- Is-A or Has-A
 
 Happy coding! Remember to test your classes and understand how inheritance affects the behaviour and structure of your objects.

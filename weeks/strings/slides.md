@@ -156,6 +156,7 @@ String c = new String("hello");    // 'new', like any other object
 
 - `a` and `b` are aliasing on purpose: **two arrows, one shared object**.
 - `new String(...)` always builds a fresh object - even with an identical String sitting in the pool.
+- `s.intern()` hands back the **pool's** copy of `s` - the way to prove the pool exists, and the tool the lab's experiments use.
 
 ---
 

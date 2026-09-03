@@ -17,7 +17,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.abstraction` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.abstraction` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ## 1. Abstract Classes
 
@@ -957,16 +957,22 @@ flowchart TD
     A2["🟡 Use INTERFACE<br/>━━━━━━━━━━━━━━━━<br/>✓ Contract only<br/>✓ Multiple inheritance<br/>✓ CAN-DO relationship"]
     A3["🔷🟡 Use BOTH!<br/>━━━━━━━━━━━━━━━━<br/>Abstract class for shared code<br/>+ Interface for capabilities"]
     
+    Q3{"Do UNRELATED classes also need<br/>that behaviour?"}
+    A4["Plain class<br/>━━━━━━━━━━━━━━━━<br/>No abstraction needed yet"]
+
     START --> Q1
-    Q1 --> |"YES"| Q2
+    Q1 --> |"YES"| Q3
+    Q3 --> |"YES"| A3
+    Q3 --> |"NO"| A1
     Q1 --> |"NO"| Q2
-    Q2 --> |"YES & shared code"| A3
-    Q2 --> |"YES only"| A2
-    Q1 --> |"YES only"| A1
+    Q2 --> |"YES"| A2
+    Q2 --> |"NO"| A4
 
     style START fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#0D47A1
     style Q1 fill:#FFF8E1,stroke:#F57C00,stroke-width:2px,color:#E65100
     style Q2 fill:#FFF8E1,stroke:#F57C00,stroke-width:2px,color:#E65100
+    style Q3 fill:#FFF8E1,stroke:#F57C00,stroke-width:2px,color:#E65100
+    style A4 fill:#ECEFF1,stroke:#607D8B,stroke-width:2px,color:#263238
     style A1 fill:#BBDEFB,stroke:#1976D2,stroke-width:3px,color:#0D47A1
     style A2 fill:#FFE0B2,stroke:#F57C00,stroke-width:3px,color:#E65100
     style A3 fill:#E1BEE7,stroke:#8E24AA,stroke-width:3px,color:#4A148C

@@ -4,8 +4,8 @@
 
 - Create, inspect, and transform text with the core `String` API
 - Compare strings safely with `equals()`, `equalsIgnoreCase()`, and `compareTo()` instead of `==`
-- Explain immutability and the string pool, and prove both with identity hash codes
-- Use `StringBuilder` for efficient editing and measure how much faster it is inside loops
+- Explain immutability and the string pool, and prove both with `==` and identity hash codes
+- Assemble text with `StringBuilder` (and meet `StringBuffer`, its synchronised twin), and see how the cost of `+` in a loop grows
 - Spot and fix common string bugs, from missing null checks to `substring` bounds and regex traps
 
 ## Table of Contents
@@ -14,15 +14,14 @@
 2. [Creating and Inspecting Strings](#2-creating-and-inspecting-strings)
 3. [Concatenation and Formatting](#3-concatenation-and-formatting)
 4. [Comparing Strings](#4-comparing-strings)
-5. [Immutability and the String Pool](#5-immutability-and-the-string-pool)
+5. [Immutability, the Pool, and Memory](#5-immutability-the-pool-and-memory)
 6. [Working with StringBuilder](#6-working-with-stringbuilder)
 7. [Common String Methods](#7-common-string-methods)
-8. [Strings in Memory](#8-strings-in-memory)
-9. [Common Mistakes and Debugging](#9-common-mistakes-and-debugging)
+8. [Common Mistakes and Debugging](#8-common-mistakes-and-debugging)
 
 ## Getting started
 
-This lab lives in the package `ie.atu.strings` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.strings` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ---
 
@@ -153,7 +152,7 @@ The last character lives at index `length() - 1`. Guard the empty string first -
 
 Combining strings is a common task. Java supports several approaches:
 
-* **Concatenation Operator (`+`):** Simple but creates multiple objects due to immutability.
+* **Concatenation Operator (`+`):** the natural choice for a handful of pieces - a single `+` expression is compiled into efficient building for you. Inside a loop it is a different story, which section 6 measures.
 * **`concat()` Method:** Equivalent to `+` for straightforward joins.
 * **`String.format()` / `printf()`:** Allows templates with placeholders.
 * **`String.join()` and `String.join(System.lineSeparator(), ...)`:** Ideal for joining collections or arrays.
@@ -184,7 +183,7 @@ flowchart LR
 1. In the `Main` class `main` method, create two String variables `title` with value `"Java"` and `topic` with value `"Strings"`. Use the `+` operator to concatenate them with a space in between and display the result.
 2. Create three variables: `name` (String), `age` (int), and `course` (String). Use `String.format("Name: %s, Age: %d, Course: %s", name, age, course)` to create a formatted sentence and print it.
 3. Create a String array with the words `{"Java", "Strings", "are", "powerful"}`. Use `String.join(" ", array)` to join them with spaces and print the result.
-4. Add a comment describing when you would avoid the `+` operator inside loops.
+4. Add a comment naming one place where `+` is the right tool (joining a handful of pieces in one expression) and one where a `StringBuilder` is (joining inside a loop).
 
 **Expected output**
 
@@ -246,7 +245,7 @@ Null-safe comparison passed.
 
 ---
 
-## 5. Immutability and the String Pool
+## 5. Immutability, the Pool, and Memory
 
 ### Explanation
 
@@ -254,7 +253,7 @@ Strings are immutable - once created, their value cannot change. Any method that
 
 **Benefits:**
 
-* Thread-safety without extra synchronization.
+* Thread-safety without extra synchronisation.
 * Security for values like configuration keys or user names.
 * Caching via the **string pool**, which stores literal strings for reuse.
 
@@ -268,127 +267,65 @@ String original = "Java";
 String modified = original + " Strings"; // original stays "Java"
 ```
 
-### Mermaid Diagram: String Pool and Immutability
+**Where those objects actually live:**
+
+* Literals go into the string pool, so two identical literals share one object.
+* `new String(...)` builds a distinct heap object every time, even when a literal with the same text already exists.
+* A `StringBuilder` owns an internal `char[]` buffer that grows as you append to it.
+
+### Memory Layout Diagram
 
 ```mermaid
-sequenceDiagram
-    participant Code
-    participant Pool as String Pool
-    participant Heap as Heap Object
-
-    Code->>Pool: Request literal "Lab"
-    alt Not in pool
-        Pool->>Heap: Create new String("Lab")
-        Heap-->>Pool: Store reference
+graph TD
+    subgraph StringPool["String Pool"]
+        L1["Hello"]
+        L2["World"]
     end
-    Pool-->>Code: Return pooled reference
-    Code->>Heap: Call concat(" Module")
-    Heap-->>Code: New String("Lab Module")
-    Note right of Code: Original "Lab" remains<br/>unchanged in pool
+    subgraph Heap
+        S1["String@0x1"]
+        S2["String@0x2"]
+        SB["StringBuilder"]
+        BUF["char[] buffer: H e l l o   W o r l d"]
+    end
+    L1 -.->|references| S1
+    L2 -.->|references| S2
+    SB -->|contains| BUF
 ```
 
-### DIY 5: Prove immutability
+### DIY 5: Prove immutability and the pool
 
-**Objective:** See immutability in action and contrast with StringBuilder's mutability.
+**Objective:** Prove that a String never changes, that literals are shared, and that a `StringBuilder` behaves the opposite way.
 
-1. In the `Main` class `main` method, test String immutability: create a String variable `original` with value `"Hello"`. Print its identity hash code using `System.identityHashCode(original)`. Now concatenate it: `original = original + " World"`. Print the new identity hash code and compare - they should be different, proving a new object was created.
-2. Test the String pool: create two String variables using literals: `String pooled1 = "Lab"` and `String pooled2 = "Lab"`. Compare them with `==` and print the result (should be `true` - same object in pool).
-3. Test `intern()`: create a String using the constructor: `String constructed = new String("Lab")`. Compare it with `pooled1` using `==` (should be `false`). Now call `constructed.intern()` and compare again with `pooled1` using `==` (should be `true`).
-4. Compare with StringBuilder: create a StringBuilder with value `"Hello"`. Print its identity hash code. Use `append(" World")` to modify it. Print the identity hash code again - it should be the same, proving the same object was modified.
-5. Add comments explaining why repeated `+` concatenations hurt performance (each creates a new object).
+1. In the `Main` class `main` method, test immutability: create a String variable `original` with value `"Hello"`. Store `System.identityHashCode(original)` in an `int` before you touch it, reassign `original = original + " World"`, then store the identity hash code again. Print whether the two numbers are equal, then print the text.
+2. Test the string pool: create two String variables using literals, `String lit1 = "Lab"` and `String lit2 = "Lab"`. Compare them with `==` and print the result.
+3. Test `new`: create `String heap1 = new String("Lab")` and `String heap2 = new String("Lab")`. Print whether `heap1 == heap2`, then print whether `heap1 == lit1`.
+4. Test `intern()`: print whether `heap1.intern() == lit1`. Note that `intern()` *returns* the pooled object rather than changing `heap1`, so the result has to be used or assigned.
+5. Contrast with `StringBuilder`: create a StringBuilder holding `"Hello"`, store its identity hash code, call `append(" World")`, then store the identity hash code again. Print whether the two numbers are equal, and print the text.
+6. Watch the buffer grow: create an empty StringBuilder with `new StringBuilder()` and print its `capacity()`. Append 50 characters in a loop, then print `capacity()` again to see that it resized itself.
+7. Add comments explaining why repeated `+` concatenation costs more with every round (each round copies everything built so far) and why sharing one String between two variables is always safe.
 
 **Expected output**
 
 ```text
-Original hash: 366712642
-After concat hash: 1829164700
-Same reference? false
-Literal A == Literal B? true
-Constructed == Literal? false
-Constructed.intern() == Literal? true
-Builder hash before: 1580066828
-Builder hash after: 1580066828
-Same builder object? true
+Same object after concat? false
+Text now: Hello World
+Two literals are the same object? true
+Two new Strings are the same object? false
+A new String is the pooled object? false
+intern() returns the pooled object? true
+Same builder object after append? true
+Builder now: Hello World
+Initial capacity: 16
+Capacity after 50 appends: 70
 ```
 
-*Identity hash codes vary from run to run - the pattern of matches is what matters.*
+*Identity hash codes differ from run to run, which is why this exercise prints the comparison rather than the number - every line above is the same on every run.*
 
 <details><summary>Hint</summary>
 
-`System.identityHashCode(obj)` identifies the object itself, not its contents: two variables print the same number only when they point at the same object. `intern()` asks the pool for the shared copy of that text and hands it back, so `constructed.intern() == literal` is `true` even though `constructed == literal` is `false` - note it *returns* the pooled object rather than changing `constructed`, so the result has to be used or assigned. Remember to reassign the result of concatenation too - `original = original + " World";` - or nothing appears to change.
+`System.identityHashCode(obj)` describes the object itself, not its contents: the same object always reports the same number, and two different objects usually - though not always - report different ones. That "usually" is why the exercise prints `before == after` instead of the numbers, and why `==` on the strings themselves is the stronger evidence. `intern()` asks the pool for the shared copy of that text and hands it back, so `heap1.intern() == lit1` is `true` even though `heap1 == lit1` is `false`. Remember to reassign the result of concatenation - `original = original + " World";` - or nothing appears to change. `capacity()` is a `StringBuilder` method: a `String` has no spare room to report, and a default builder starts at 16 and grows on its own.
 
 </details>
-
-### Optional method: `compareStringAndBuilder()`
-
-**Objective:** Directly compare immutable String behavior with mutable StringBuilder behavior.
-
-```java
-public void compareStringAndBuilder() {
-	System.out.println("\n=== String vs StringBuilder Identity Test ===\n");
-	
-	// String - immutable: modification creates NEW object
-	String str = "Hello";
-	System.out.println("String before: " + str);
-	int stringHash1 = System.identityHashCode(str);
-	System.out.println("String identity hash: " + stringHash1);
-	
-	str = str + " World";  // Creates NEW String object
-	System.out.println("String after concat: " + str);
-	int stringHash2 = System.identityHashCode(str);
-	System.out.println("String identity hash: " + stringHash2);
-	System.out.println("String hashes differ? " + (stringHash1 != stringHash2));
-	System.out.println("Conclusion: String created NEW object on modification\n");
-	
-	// StringBuilder - mutable: modification changes SAME object
-	StringBuilder sb = new StringBuilder("Hello");
-	System.out.println("StringBuilder before: " + sb);
-	int sbHash1 = System.identityHashCode(sb);
-	System.out.println("StringBuilder identity hash: " + sbHash1);
-	
-	sb.append(" World");  // Modifies SAME object
-	System.out.println("StringBuilder after append: " + sb);
-	int sbHash2 = System.identityHashCode(sb);
-	System.out.println("StringBuilder identity hash: " + sbHash2);
-	System.out.println("StringBuilder hashes same? " + (sbHash1 == sbHash2));
-	System.out.println("Conclusion: StringBuilder modified SAME object\n");
-	
-	// Summary
-	System.out.println("KEY INSIGHT:");
-	System.out.println("- String: Every modification = NEW object (inefficient for loops)");
-	System.out.println("- StringBuilder: Modifications reuse SAME object (efficient for loops)");
-}
-```
-
-**Sample Output:**
-
-```text
-=== String vs StringBuilder Identity Test ===
-
-String before: Hello
-String identity hash: 366712642
-String after concat: Hello World
-String identity hash: 1829164700
-String hashes differ? true
-Conclusion: String created NEW object on modification
-
-StringBuilder before: Hello
-StringBuilder identity hash: 1580066828
-StringBuilder after append: Hello World
-StringBuilder identity hash: 1580066828
-StringBuilder hashes same? true
-Conclusion: StringBuilder modified SAME object
-
-KEY INSIGHT:
-- String: Every modification = NEW object (inefficient for loops)
-- StringBuilder: Modifications reuse SAME object (efficient for loops)
-```
-
-**Why This Matters:**
-- **SEE** the difference directly with hash codes
-- Makes abstract concept concrete
-- Perfect setup for why StringBuilder exists
-- Explains performance difference before measuring it
 
 ---
 
@@ -412,6 +349,8 @@ sb.append(" ").append("Strings");
 String result = sb.toString();
 ```
 
+`StringBuffer` is the older sibling: same method names, same behaviour, one difference. Every `StringBuffer` method is synchronised, so several threads can share one buffer safely - and that lock costs time no single-threaded program ever gets back. Hence the three-way choice: `String` for text you read, pass and compare; `StringBuilder` for assembling; `StringBuffer` only when threads genuinely share one builder.
+
 ### Mermaid Diagram: Builder Workflow
 
 ```mermaid
@@ -430,13 +369,14 @@ stateDiagram-v2
 
 ### DIY 6: Build with StringBuilder
 
-**Objective:** Gain hands-on experience with `StringBuilder` and **measure actual performance differences**.
+**Objective:** Assemble text with a builder, meet its synchronised twin, and see how the cost of `+` in a loop grows.
 
 1. In the `Main` class `main` method, build a menu: create a StringBuilder. Use a for loop (1 to 3) to append numbered menu items like `"1. Start\n"`, `"2. Settings\n"`, `"3. Exit\n"`. Convert to String with `toString()` and print.
-2. Reverse words: create a String `sentence = "learn to love strings"`. Use `split(" ")` to get a String array of words. Create a StringBuilder and use a reverse for loop to append words from end to start. Print the result.
-3. Build a report: create a StringBuilder. Append a title like `"Report\n"`, then use `"=".repeat(title.length())` for the underline, then append bullet points in a loop. Print the result.
-4. Performance test: record start time with `long start = System.nanoTime()`. Use a for loop (10,000 iterations) to concatenate with `+`. Record end time and calculate duration. Repeat with StringBuilder using `append()`. Compare and print the time difference.
-5. Add comments summarizing which approach is faster and by how much.
+2. Reverse words: create a String `sentence = "learn to love strings"`. Use `split(" ")` to get a String array of words. Create a StringBuilder and use a reverse for loop to append the words from end to start, separated by single spaces. Print the result.
+3. Build a report: create a StringBuilder. Append the title `"Report"` on its own line, then an underline built with `"=".repeat(title.length())`, then three bullet points appended in a loop. Print the result.
+4. Swap the class: copy your menu code from step 1 and change `StringBuilder` to `StringBuffer` - nothing else. Run it, then print whether the two menus are `equals()`. The output is identical because the two classes share one API and differ only in thread-safety: `StringBuffer` synchronises every method so threads can share a buffer, and that lock is the only thing you are choosing between when you pick one.
+5. Compare the two approaches: choose a loop count of 50,000. Time a loop that appends `"a"` to a String with `+=` using `System.nanoTime()`, then time the same loop written with a StringBuilder. Print whether both produced the same text, the length of the result, and whether the builder was faster. Print the comparison rather than the milliseconds - how many milliseconds this costs depends on your machine, your JDK and even which run it is.
+6. Add a comment on when each tool is right: `+` for a handful of pieces in one expression, a builder the moment you are assembling inside a loop.
 
 **Expected output**
 
@@ -449,125 +389,74 @@ Menu:
 Reversed: strings love to learn
 
 Report
-=======
+======
 - Point one
 - Point two
 - Point three
 
-String (+) took: 1247 ms
-StringBuilder took: 1 ms
-Difference: 1246 ms
+Same menu from StringBuffer? true
+Same text from both? true
+Length: 50000
+StringBuilder was faster? true
 ```
-
-*A representative run - timings vary from machine to machine; the gap is what matters.*
 
 <details><summary>Hint</summary>
 
-Walk the words backwards with `for (int i = words.length - 1; i >= 0; i--)`, appending `words[i]` and a space each time. `System.nanoTime()` returns nanoseconds - divide by `1_000_000` to convert a duration to milliseconds.
+Walk the words backwards with `for (int i = words.length - 1; i >= 0; i--)`, appending `words[i]` and a space each time - skip the space after the last word so the line does not end in one. For the swap, `StringBuffer` accepts exactly the same calls as `StringBuilder`, so only the type name changes; compare the two results with `menu.toString().equals(buffer.toString())`. `System.nanoTime()` returns a count of nanoseconds: subtract the start from the end and compare the two durations directly - there is no need to convert to milliseconds when the answer you print is which one won.
 
 </details>
 
-### Guided method: `measurePerformance()`
+### Guided method: `countTheCopying()`
 
-**Objective:** Prove StringBuilder's performance advantage with real measurements.
+**Objective:** See the *shape* of the cost rather than a headline number. Add this method to a class in the package and call it from `main`.
 
 ```java
-public void measurePerformance() {
-	System.out.println("\n=== Performance Comparison: String vs StringBuilder ===\n");
-	
-	int iterations = 10000;
-	System.out.println("Task: Concatenate 'a' " + iterations + " times\n");
-	
-	// Test 1: String concatenation (INEFFICIENT)
-	long startTime = System.nanoTime();
-	String result = "";
-	for (int i = 0; i < iterations; i++) {
-		result += "a";  // Creates NEW String object each time!
+public void countTheCopying() {
+	System.out.println("Building a string one character at a time");
+	System.out.println("     n | characters copied by + | characters written by a builder");
+
+	for (int n = 1000; n <= 8000; n *= 2) {
+		long plusCopies = 0;
+		for (int i = 0; i < n; i++) {
+			plusCopies += i + 1;  // copy the i characters built so far, then write one more
+		}
+		long builderWrites = n;   // a builder writes each character exactly once
+
+		System.out.printf("  %4d | %21d | %31d%n", n, plusCopies, builderWrites);
 	}
-	long stringTime = (System.nanoTime() - startTime) / 1_000_000; // Convert to milliseconds
-	
-	System.out.println("String Concatenation Results:");
-	System.out.println("  Final length: " + result.length());
-	System.out.println("  Time taken: " + stringTime + " ms");
-	System.out.println("  Objects created: ~" + iterations + " temporary String objects");
-	System.out.println("  Memory impact: HIGH - many short-lived objects");
-	
-	// Test 2: StringBuilder (EFFICIENT)
-	startTime = System.nanoTime();
-	StringBuilder builder = new StringBuilder();
-	for (int i = 0; i < iterations; i++) {
-		builder.append("a");  // Modifies SAME object each time!
-	}
-	String builderResult = builder.toString();
-	long builderTime = (System.nanoTime() - startTime) / 1_000_000;
-	
-	System.out.println("\nStringBuilder Results:");
-	System.out.println("  Final length: " + builderResult.length());
-	System.out.println("  Time taken: " + builderTime + " ms");
-	System.out.println("  Objects created: 1 StringBuilder (reused)");
-	System.out.println("  Memory impact: LOW - single object modified");
-	
-	// Calculate speedup
-	System.out.println("\n=== COMPARISON ===");
-	if (builderTime > 0) {
-		long speedup = stringTime / builderTime;
-		System.out.println("StringBuilder is ~" + speedup + "x FASTER than String concatenation!");
-	} else {
-		System.out.println("StringBuilder was too fast to measure accurately (< 1ms)");
-		System.out.println("String took: " + stringTime + " ms");
-	}
-	
-	System.out.println("\nKEY TAKEAWAY:");
-	System.out.println("✅ Use StringBuilder for loops and repeated modifications");
-	System.out.println("✅ Use String for simple, one-time concatenations");
-	System.out.println("❌ NEVER use String concatenation (+) inside loops!");
+
+	System.out.println();
+	System.out.println("Double n and the + column grows about four times over;");
+	System.out.println("the builder column simply doubles.");
+	System.out.println("That is the whole argument: + in a loop grows with the SQUARE");
+	System.out.println("of the length, a builder grows in step with it.");
 }
 ```
 
-**Sample Output:**
+**Expected output**
 
 ```text
-=== Performance Comparison: String vs StringBuilder ===
+Building a string one character at a time
+     n | characters copied by + | characters written by a builder
+  1000 |                500500 |                            1000
+  2000 |               2001000 |                            2000
+  4000 |               8002000 |                            4000
+  8000 |              32004000 |                            8000
 
-Task: Concatenate 'a' 10000 times
-
-String Concatenation Results:
-  Final length: 10000
-  Time taken: 1247 ms
-  Objects created: ~10000 temporary String objects
-  Memory impact: HIGH - many short-lived objects
-
-StringBuilder Results:
-  Final length: 10000
-  Time taken: 1 ms
-  Objects created: 1 StringBuilder (reused)
-  Memory impact: LOW - single object modified
-
-=== COMPARISON ===
-StringBuilder is ~1247x FASTER than String concatenation!
-
-KEY TAKEAWAY:
-✅ Use StringBuilder for loops and repeated modifications
-✅ Use String for simple, one-time concatenations
-❌ NEVER use String concatenation (+) inside loops!
+Double n and the + column grows about four times over;
+the builder column simply doubles.
+That is the whole argument: + in a loop grows with the SQUARE
+of the length, a builder grows in step with it.
 ```
 
 **Why This Matters:**
-- You **measure** real performance differences (not just theory)
-- Concrete numbers make the point undeniable (~1000x speedup!)
-- Shows memory impact, not just speed
-- Provides clear recommendations (✅/❌)
-- Reinforces Section 5's immutability concept
+- It counts the work instead of timing it, so the numbers are identical on every machine and every JDK.
+- It shows the growth, not one point on it: quadratic for `+`, linear for a builder. A stopwatch only ever reports one size on one machine.
+- The exact speed-up you measure will differ from a classmate's, and from your own next run. The shape will not.
 
 ### Extension Challenge (Optional)
 
-Try different iteration counts and graph the results:
-- 100 iterations
-- 1,000 iterations
-- 10,000 iterations
-- 50,000 iterations
-
-Create a table showing how the performance gap grows!
+Add a line to your step 5 code that prints the two durations in milliseconds (divide the nanosecond difference by `1_000_000`), then run it at 10,000, 25,000 and 50,000 rounds and write the figures down. Compare them with someone else's: the numbers will not match - they depend on the machine, the JDK and even the run - but on every list the `+` version will have grown far faster than the loop count did. That growth is the point; the number never was, which is why it is not in the expected output above.
 
 ---
 
@@ -621,71 +510,7 @@ For the mask, everything between index `1` and `atIndex` needs replacing - `"*".
 
 ---
 
-## 8. Strings in Memory
-
-### Explanation
-
-Visualizing how strings occupy memory clarifies why immutability matters and when to pick `StringBuilder` over repeated concatenation.
-
-**Memory Highlights:**
-
-* Literals go into the string pool during class loading.
-* Constructors (`new String`) create distinct heap objects, even if content matches a literal.
-* Builders manage an internal `char[]` buffer that grows as needed.
-
-### Memory Layout Diagram
-
-```mermaid
-graph TD
-    subgraph StringPool["String Pool"]
-        L1["Hello"]
-        L2["World"]
-    end
-    subgraph Heap
-        S1["String@0x1"]
-        S2["String@0x2"]
-        SB["StringBuilder"]
-        BUF["char[] buffer: H e l l o   W o r l d"]
-    end
-    L1 -.->|references| S1
-    L2 -.->|references| S2
-    SB -->|contains| BUF
-```
-
-### DIY 8: Watch strings in memory
-
-**Objective:** Observe how the JVM handles string memory.
-
-1. In the `Main` class `main` method, test the string pool: create two string literals `String lit1 = "Hello"` and `String lit2 = "Hello"`. Print their identity hash codes with `System.identityHashCode()`. They should be the same because they share the pooled object.
-2. Test heap strings: create two strings with constructors: `String heap1 = new String("Hello")` and `String heap2 = new String("Hello")`. Print their identity hashes. They should be different because each creates a new heap object.
-3. Test `intern()`: create `String heap3 = new String("World")` and `String lit3 = "World"`. Compare them with `==` (should be `false`). Now assign `heap3 = heap3.intern()` and compare with `==` again (should be `true`).
-4. Test StringBuilder capacity: create a StringBuilder with `new StringBuilder()`. Print its initial capacity with `capacity()`. Append 50 characters in a loop. Print the capacity again to see how it grows automatically.
-5. Add comments documenting your observations about the string pool and memory allocation.
-
-**Expected output**
-
-```text
-Literal 1 hash: 11258999
-Literal 2 hash: 11258999
-Heap 1 hash: 99887766
-Heap 2 hash: 87651234
-heap3 == lit3? false
-After intern == lit3? true
-Initial capacity: 16
-Capacity after 50 appends: 70
-```
-
-*Identity hash codes vary from run to run - the pattern of matches is what matters.*
-
-<details><summary>Hint</summary>
-
-`capacity()` is a `StringBuilder` method - a `String` has no spare room to report. A default `new StringBuilder()` starts with capacity 16 and grows automatically as you append. `intern()` returns the pooled object rather than changing the variable, so assign the result: `heap3 = heap3.intern();`.
-
-</details>
-
----
-
-## 9. Common Mistakes and Debugging
+## 8. Common Mistakes and Debugging
 
 ### Explanation
 
@@ -704,7 +529,7 @@ System.out.println(input.equals("YES")); // true
 ```java
 String result = "";
 for (int i = 0; i < 1000; i++) {
-	result += i; // inefficient; creates 1000+ objects
+	result += i; // each round copies everything built so far, then discards it
 }
 ```
 
@@ -728,11 +553,11 @@ Remember: `substring(start, end)` includes `start` but excludes `end`.
 ### Debugging Tips
 
 * Log intermediate strings with context labels.
-* Print identity hash codes to confirm whether objects change.
+* Print identity hash codes to confirm whether objects change - the same object always reports the same number, and different objects usually report different ones.
 * Use your IDE debugger to inspect string values step by step.
 * Consider third-party tools or profilers to detect excessive allocations.
 
-### DIY 9: Fix the bugs
+### DIY 8: Fix the bugs
 
 **Objective:** Identify and correct common mistakes.
 
@@ -804,7 +629,7 @@ public class BuggyStrings {
 1. Create the `BuggyStrings` class from the listing above in the `ie.atu.strings` package and fix all 10 labeled issues.
 2. String comparison: in the `Main` class `main` method, create `String input = new String("YES")`. Try comparing with `==` to `"YES"` (returns `false`). Fix by using `equals()` instead.
 3. Null safety: create `String text = null`. Try calling `text.contains("test")` (throws an exception). Fix by adding an `if (text != null)` check before the method call.
-4. Loop concatenation: create an empty String. Use a for loop to concatenate 100 numbers with `+=` (slow). Fix by using StringBuilder with `append()` instead.
+4. Loop concatenation: create an empty String. Use a for loop to concatenate 100 numbers with `+=`, so every round copies everything built so far. Fix by using StringBuilder with `append()` instead.
 5. Substring bounds: create `String str = "Java"`. Try `str.substring(0, 4)` to get the first 4 chars (works), then try `str.substring(0, 5)` - it throws an exception. Remember: the end index is exclusive.
 6. Replace vs replaceAll: create `String version = "1.2.3"`. Try `version.replaceAll(".", "-")` (every character becomes `-` because `.` is a regex wildcard). Fix by using `replace()` for a literal replacement.
 7. Add comments explaining each fix and why the original code failed. When you are done, your updated class should compile and every scenario should behave correctly.
@@ -837,23 +662,23 @@ This lab guided you through essential string concepts:
 
 * Declaring, inspecting, and transforming strings.
 * Comparing strings safely and handling nulls.
-* Understanding immutability and the string pool.
-* Comparing String immutability with StringBuilder mutability using identity hash codes.
-* Leveraging `StringBuilder` for efficient modifications.
-* Measuring actual performance differences between String and StringBuilder.
+* Understanding immutability, the string pool, and where string objects live.
+* Contrasting String immutability with StringBuilder mutability using identity hash codes.
+* Assembling text with `StringBuilder`, and meeting `StringBuffer`, its synchronised twin.
+* Counting the work that `+` in a loop repeats, and seeing how that work grows.
 * Applying core string methods for real-world tasks.
 
 ### Key Takeaways
 
 ✅ Strings are immutable; every change creates a new object.
 
-✅ Identity hash codes prove String creates new objects while StringBuilder reuses the same object.
+✅ Identity hash codes show that String creates a new object while StringBuilder reuses the same one - the same object always reports the same number, and two different objects usually report different ones.
 
 ✅ Avoid `==` for string comparisons - use `equals` or `equalsIgnoreCase`.
 
-✅ `StringBuilder` is the go-to for repeated concatenation or heavy editing.
+✅ `StringBuilder` is the go-to for repeated concatenation or heavy editing; `StringBuffer` shares its API and adds a thread-safety lock you rarely need.
 
-✅ Performance measurements show StringBuilder is ~1000x faster than String concatenation in loops!
+✅ `+` in a loop copies everything built so far on every round, so the work grows with the square of the length while a builder's grows in step with it. How many milliseconds that costs varies with your machine, your JDK and the run; the shape of the growth does not.
 
 ✅ Always validate inputs to prevent null pointer issues.
 
@@ -869,6 +694,6 @@ This lab guided you through essential string concepts:
 
 ✔ Document assumptions about casing, whitespace, and locales.
 
-✔ Profile string-heavy code paths to avoid hidden performance costs.
+✔ Measure string-heavy code paths on the machine that will run them, rather than trusting a remembered number.
 
-✔ Always use StringBuilder for string concatenation inside loops!
+✔ A handful of pieces in one expression? `+` is fine. Assembling inside a loop? Reach for a `StringBuilder`.

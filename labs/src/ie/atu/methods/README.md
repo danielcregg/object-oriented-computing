@@ -22,7 +22,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.methods` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.methods` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ---
 
@@ -380,41 +380,50 @@ public class BankAccount {
 }
 ```
 
-### DIY 5: Password validator
+### DIY 5: PIN validator
 
-1. Create a class named `PasswordValidator`.
+A bank card PIN is four digits, and not every four-digit number is acceptable: `7777` and `1234` are the first two anyone guesses.
+
+1. Create a class named `PinValidator`.
 2. Add two **public** methods:
-   * `boolean isValidPassword(String password)` - true only if all four checks below pass
-   * `void printValidationReport(String password)` - prints whether the password is valid and which checks pass/fail
-3. Add four **private** helper methods:
-   * `hasMinimumLength` - length ≥ 8
-   * `hasDigit` - at least one digit
-   * `hasUppercase` - at least one uppercase letter
-   * `hasLowercase` - at least one lowercase letter
-4. `isValidPassword()` must call all four helpers.
-5. Test at least two passwords in `main` - one weak, one strong.
+   * `boolean isValidPin(int pin)` - true only if all four checks below pass
+   * `void printValidationReport(int pin)` - prints whether the PIN is valid, then the result of each individual check
+3. Add four **private** helper methods, each returning `boolean`:
+   * `hasFourDigits` - the PIN is between 1000 and 9999
+   * `hasMixedDigits` - the four digits are not all the same (`7777` fails)
+   * `isNotAscendingRun` - the digits do not each climb by one (`1234` fails)
+   * `isNotDescendingRun` - the digits do not each drop by one (`5432` fails)
+4. `isValidPin()` must call all four helpers - it does no digit arithmetic of its own.
+5. Test three PINs in `main`: two rejected for different reasons, one accepted.
 
 **Expected output**
 
 ```text
-Testing password: "abc123"
+Testing PIN: 1234
 Valid: false
-- Minimum length (8): false
-- Contains digit: true
-- Contains uppercase: false
-- Contains lowercase: true
+- Four digits (1000-9999): true
+- Not all the same digit: true
+- Not an ascending run: false
+- Not a descending run: true
 
-Testing password: "Secure123"
+Testing PIN: 7777
+Valid: false
+- Four digits (1000-9999): true
+- Not all the same digit: false
+- Not an ascending run: true
+- Not a descending run: true
+
+Testing PIN: 4830
 Valid: true
-- Minimum length (8): true
-- Contains digit: true
-- Contains uppercase: true
-- Contains lowercase: true
+- Four digits (1000-9999): true
+- Not all the same digit: true
+- Not an ascending run: true
+- Not a descending run: true
 ```
 
 <details><summary>Hint</summary>
 
-Loop over the characters and use `password.length()`, `Character.isDigit(c)`, `Character.isUpperCase(c)`, and `Character.isLowerCase(c)`.
+Pull the digits apart with arithmetic - `/` and `%` are the only tools you need. For a four-digit `pin`: `pin / 1000` is the first digit, `(pin / 100) % 10` the second, `(pin / 10) % 10` the third, and `pin % 10` the last. Each helper is then a single `return` of a boolean expression, and a `!` in front of a bracketed condition flips "is a run" into "is not a run". `isValidPin` joins the four helper calls with `&&`.
 
 </details>
 
@@ -494,40 +503,39 @@ public class Counter {
 }
 ```
 
-### DIY 6: String and array utilities
+### DIY 6: Number utilities
 
-1. Create a class `StringUtils` with these **static** methods:
-   * `int countVowels(String text)` - counts a, e, i, o, u (case-insensitive)
-   * `String reverse(String text)` - returns the reversed string
-   * `boolean isPalindrome(String text)` - reads the same both ways (ignore case and spaces)
-   * `int countWords(String text)` - words are separated by spaces
-2. Create a class `ArrayUtils` with these **static** methods:
-   * `int findMax(int[] numbers)`
-   * `int findMin(int[] numbers)`
-   * `double calculateAverage(int[] numbers)`
-   * `void printArray(int[] numbers)` - prints in the format `[1, 2, 3, 4]`
-3. Test every method in `main` **without** creating any objects.
+Build a small library of `static` maths helpers - the kind of thing `Math` itself is made of.
+
+1. Create a class named `NumberUtils` with these **static** methods:
+   * `boolean isEven(int n)` - true when `n` divides by 2 exactly
+   * `int digitSum(int n)` - adds the digits: `digitSum(4821)` is 15
+   * `int reverseDigits(int n)` - `reverseDigits(4821)` is 1284
+   * `boolean isNumberPalindrome(int n)` - reads the same both ways; **call `reverseDigits` rather than repeating its loop**
+   * `int gcd(int a, int b)` - the greatest common divisor of two positive numbers
+   * `int lcm(int a, int b)` - the lowest common multiple; **call `gcd`**
+   * `boolean isPrime(int n)` - true when `n` is 2 or more and divides evenly by nothing but 1 and itself
+2. Call every one of them from `main` and print the results - **without creating a single object**.
 
 **Expected output**
 
 ```text
-Testing StringUtils:
-Vowels in "Hello World": 3
-Reversed "Java": avaJ
-Is "racecar" a palindrome? true
-Is "hello" a palindrome? false
-Words in "Learning Java is fun": 4
-
-Testing ArrayUtils:
-Array: [5, 2, 8, 1, 9]
-Maximum: 9
-Minimum: 1
-Average: 5.0
+Testing NumberUtils:
+Is 14 even? true
+Is 7 even? false
+Digit sum of 4821: 15
+Reverse of 4821: 1284
+Is 1221 a palindrome? true
+Is 1234 a palindrome? false
+GCD of 48 and 18: 6
+LCM of 4 and 6: 12
+Is 29 prime? true
+Is 27 prime? false
 ```
 
 <details><summary>Hint</summary>
 
-`text.toLowerCase()`, `text.replace(" ", "")`, and `text.split(" ")` do the heavy lifting. For `reverse`, loop from the last index down to 0, appending characters as you go.
+`%` and `/` do all the work here. To walk the digits of `n`, loop while `n > 0`, taking `n % 10` as the last digit and then shrinking `n` with `n = n / 10`. For `gcd`, keep replacing the pair `(a, b)` with `(b, a % b)` until `b` is 0 - the answer is whatever `a` holds then. Then `lcm(a, b)` is `a / gcd(a, b) * b`. For `isPrime`, reject anything below 2, then try divisors from 2 upward while `i * i <= n`.
 
 </details>
 
@@ -680,7 +688,7 @@ Every recursive method needs the same two pieces as `factorial`: a base case tha
 
 ## 9. Common Mistakes and Debugging
 
-Six errors account for most method bugs. Each snippet shows the mistake and its fix:
+Seven errors account for most method bugs. Each snippet shows the mistake and its fix:
 
 **1. Missing return statement** - every path through a non-void method must return:
 
@@ -739,83 +747,102 @@ public void greet(String name) { ... }   // 'name' is the parameter
 greet("Alice");                          // "Alice" is the argument
 ```
 
+**7. Arguments in the wrong order** - arguments fill parameters left to right, by position:
+
+<!-- no-compile -->
+```java
+subtract(3, 10);   // compiles, runs, and quietly answers -7
+subtract(10, 3);   // correct - the order is on you, not the compiler
+```
+
+Notice which of these the compiler can catch. Mistakes **1, 2, 4 and 5 stop the build** - `javac` names the file and the line, and you cannot ship until you fix them. Mistakes **3 and 7 are legal Java**: the class builds, runs, and is simply wrong - nothing but reading will find them. (6 is vocabulary rather than a bug.) That split is exactly what the next exercise is about.
+
 **Debugging tips:** print on entry (`"Entering divide with " + a + ", " + b`), print every return value before using it, and learn your IDE's debugger - stepping through line by line beats guessing.
 
 ### DIY 9: Fix the buggy calculator
 
-The class below contains **10 labelled errors**:
+The class below carries **10 labelled faults: 8 compile errors and 2 design faults.** The compiler finds the first eight for you. The last two are legal Java - the class builds and runs with them still in place, so only reading will catch them.
 
 <!-- no-compile -->
 ```java
 public class BuggyCalculator {
 
-    // Error 1: Missing return type
-    public calculateSum(int a, int b) {
+    // Compile error 1: no return type
+    public static calculateSum(int a, int b) {
         return a + b;
     }
 
-    // Error 2: void method returning a value
-    public void getProduct(int a, int b) {
+    // Compile error 2: a void method handing back a value
+    public static void getProduct(int a, int b) {
         return a * b;
     }
 
-    // Error 3: Missing return statement on all paths
-    public int checkValue(int num) {
+    // Compile error 3: no return when num is 0
+    public static int checkValue(int num) {
         if (num > 0) {
             return 1;
         } else if (num < 0) {
             return -1;
         }
-        // no return for num == 0
     }
 
-    // Error 4: Static method accessing a non-static variable
     private int multiplier = 10;
 
+    // Compile error 4: a static method reading an instance field
     public static int scaleValue(int value) {
         return value * multiplier;
     }
 
-    // Error 5: Instance method - watch how main calls it
+    // Compile error 5: a void method handing back a value
+    public static void printResult() {
+        return 42;
+    }
+
+    // Not a fault - this declaration is fine. Watch how main calls it.
     public void displayMessage() {
         System.out.println("Hello!");
     }
 
-    public static void main(String[] args) {
-        // Error 6: Wrong argument type
-        int sum = calculateSum(5, "10");
-
-        // Error 7: Return value not stored or used
-        calculateSum(3, 4);
-
-        // Error 8: Instance method called without an object
-        displayMessage();
-
-        // Error 9: Wrong number of arguments
-        int product = getProduct(5);
-
-        // Error 10: see printResult below
-        printResult();
+    // Not a fault either - this one is correct. Watch how main uses it.
+    public static int subtract(int a, int b) {
+        return a - b;
     }
 
-    public static void printResult() {
-        return 42;   // void can't return a value
+    public static void main(String[] args) {
+        // Compile error 6: wrong argument type
+        int sum = calculateSum(5, "10");
+
+        // Compile error 7: an instance method called with no object
+        displayMessage();
+
+        // Compile error 8: wrong number of arguments
+        getProduct(5);
+
+        // Design fault 9: legal Java - the answer is computed, then thrown away
+        subtract(10, 3);
+
+        // Design fault 10: legal Java - but read the label against the arguments
+        System.out.println("10 - 3 = " + subtract(3, 10));
     }
 }
 ```
 
 1. Copy the class into your package.
-2. For each of the 10 errors: identify it, explain why it's wrong, and fix it (section 9's list above covers every category).
-3. Make `main` print each result so you can verify your fixes.
-4. Compile and run.
+2. Fix the eight compile errors first. Faults 1-5 are in the declarations, 6-8 in how `main` calls them - repair the declarations and most of the calls fall into place.
+3. Expect `javac` to report **far fewer than eight at a time**. Fault 1 is a *parse* error, so on the first run it is the only message you get - and the missing-return check does not run at all until the type errors above it are gone. Fix, recompile, repeat until the class builds.
+4. Now hunt faults 9 and 10 by **reading**, not compiling: the build is already green and stays green with both still in place. For each, say what the code does and what it was clearly meant to do.
+5. Make `main` store and print every result, so each fix shows up in the output.
+6. Compile and run.
 
 **Expected output**
 
 ```text
 Sum: 15
-Sum: 7
 Hello!
 Product: 20
+Check 0: 0
+Scaled: 70
+10 - 3 = 7
 Result: 42
 ```
 
@@ -823,7 +850,7 @@ Result: 42
 
 <details><summary>Hint</summary>
 
-Errors 1-5 live in the method declarations; errors 6-10 live in how `main` calls them. Fix the declarations first and the calls follow naturally. For Error 4, make `multiplier` static - or pass it in as a parameter.
+Work top-down. Faults 1-5 live in the method declarations: one has no return type, two hand a value back from a `void` method, one leaves a path with nothing to return, and one reads an instance field from a `static` method - make `multiplier` static, or pass it in as a parameter. Faults 6-8 live in `main`: check each call's argument types, its argument count, and whether the method it names needs an object first. For fault 9, ask where the answer goes - a call sitting alone on a line computes and then discards. For fault 10, compare the printed label with the parameter list of the method being called.
 
 </details>
 
@@ -842,4 +869,4 @@ You can now:
 
 Habits worth keeping: give methods verb names that say what they do, keep each method focused on one task, prefer returning values over printing, and test edge cases (zero, negatives, empty strings).
 
-Want more practice? Build a student grade system (final grades, letter grades, GPA), a text analyzer (character/word/sentence counts, reading time), or a number guessing game (random number, guess checking, hints, score tracking) - methods everywhere.
+Want more practice? Build a student grade system (final grades, letter grades, GPA), a number toolkit (prime testing, digit sums, factors, base conversion), or a number guessing game (random number, guess checking, hints, score tracking) - methods everywhere.

@@ -3,7 +3,7 @@
 **Object-Oriented Computing** — Java, semester 1, Atlantic Technological
 University. 12 teaching weeks: a module introduction (week 1, no lab), eight
 topic weeks, and three Moodle MCQs (each held during the lab slot of its week,
-33% each, no projects). Reading week is always the week of the Irish
+one third of the grade each, no projects). Reading week is always the week of the Irish
 October bank holiday, with 6 teaching weeks before it and 6 after.
 
 Live slide decks: <https://danielcregg.is-a.dev/object-oriented-computing/>
@@ -55,7 +55,7 @@ members. The method call stack and how to trace it, common mistakes
 (e.g. missing return statements) and how to fix them, and method best
 practices.
 
-## MCQ 1 *(33%)*
+## MCQ 1 *(one third)*
 
 [Details](../weeks/mcq1/README.md) — runs in Moodle during the lab
 slot. Examines everything taught before it: the introduction material,
@@ -78,7 +78,7 @@ multidimensional arrays. Includes an in-class quiz.
 [Lab](../labs/src/ie/atu/strings/)
 
 Strings as objects: creating them (literals vs `new`) and how the String
-pool and memory work. String immutability — what it means, why it's good
+pool and memory work (`intern()` as the proof). String immutability — what it means, why it's good
 (safety, caching, thread-safety), and when it hurts (looped concatenation).
 That motivates StringBuilder: its key methods in action, then String vs
 StringBuffer vs StringBuilder (mutability, thread-safety, performance),
@@ -104,7 +104,7 @@ sequence on *why* getters/setters earn their keep — validation, read-only
 properties, freedom to change internal representation — then encapsulation
 visualised, a coding example, and the benefits.
 
-## MCQ 2 *(33%)*
+## MCQ 2 *(one third)*
 
 [Details](../weeks/mcq2/README.md) — runs in Moodle during the lab
 slot. Examines the weeks since MCQ 1: arrays, strings, and encapsulation.
@@ -149,7 +149,7 @@ real-world examples). The comparison ladder — class vs interface, interface
 vs abstract class, concrete vs abstract vs interface — plus why interfaces
 exist and the benefits of abstraction.
 
-## MCQ 3 *(33%)*
+## MCQ 3 *(one third)*
 
 [Details](../weeks/mcq3/README.md) — runs in Moodle during the lab
 slot. Examines the weeks since MCQ 2: inheritance, polymorphism, and abstraction.

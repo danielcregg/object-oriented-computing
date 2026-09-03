@@ -5,8 +5,8 @@
 * How to define a class with fields and methods, and create objects from it with `new`
 * How to initialize objects with default and parameterized constructors
 * How to use the `this` keyword to resolve name clashes and chain constructors
-* The difference between reference identity (`==`) and logical equality (`equals()`)
-* How the Single Responsibility Principle (SRP) and `toString()` keep classes focused
+* The difference between two references to one object and two objects that merely hold the same values
+* How the Single Responsibility Principle (SRP) keeps a class focused on one job
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@
 
 ## Getting started
 
-This lab lives in the package `ie.atu.classesandobjects` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.classesandobjects` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ---
 
@@ -374,66 +374,51 @@ Registered: true
 In Java, variables of a class type hold **references** to objects, not the objects themselves. Two different variables can reference the **same** object, or two different objects can have the **same field values** but be distinct in memory.
 
 * `==` compares **reference identity** (are the two references pointing to the *same* object?).
-* `equals()` compares **logical equality** (do the two objects represent the same value/meaning?). By default, `Object.equals()` behaves like `==` unless you override it.
+* `==` never looks inside the objects. Two objects built by two separate `new` calls are two objects, however identical their fields, so `==` between them is always `false`.
 
 **Example:**
 
 ```java
 Student s1 = new Student("S001", 20, true);
-Student s2 = s1; // s2 references the same object as s1
-Student s3 = new Student("S001", 20, true); // same data, different object
+Student s2 = s1; // s2 copies the ARROW - it builds nothing
+Student s3 = new Student("S001", 20, true); // same data, its own object
 
-System.out.println(s1 == s2);   // true (same identity)
-System.out.println(s1 == s3);   // false (different objects)
-
-System.out.println(s1.equals(s3)); // false unless equals() is overridden
+System.out.println(s1 == s2);   // true (one object, two arrows)
+System.out.println(s1 == s3);   // false (two objects, identical contents)
 ```
 
-**Overriding `equals()` and `hashCode()`:** the same pattern works for any
-class - here it is on a `Book`, keyed on its ISBN. Pick the one field that
-decides identity, compare that, and derive the hash from the same field.
+Count the objects by counting the `new` calls, not the variable names: three
+variables above, two objects.
 
-```java
-class Book {
-  String isbn;
-  String title;
-  int year;
-
-  // constructors omitted for brevity
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Book other = (Book) o;
-    return isbn != null && isbn.equals(other.isbn);
-  }
-
-  @Override
-  public int hashCode() {
-    return isbn == null ? 0 : isbn.hashCode();
-  }
-}
-```
+So `==` answers "the same object?" and never "the same contents?". When a
+program needs the second question answered, the class has to answer it
+itself - you give it a method that compares the fields, and *you* decide
+which fields make two objects count as the same thing. A library catalogue,
+for instance, settles it on the catalogue number and the year rather than
+the title: two different books can share a title, so a title makes a poor
+identity.
 
 ### DIY 5: Identity vs equality
 
-1. Create three `Student` references as in the example (`s1`, `s2`, `s3`) and print the results of `s1 == s2`, `s1 == s3`, and `s1.equals(s3)` before overriding `equals()`.
-2. Implement `equals()` and `hashCode()` in `Student` using `studentID` as the identity key; re-run the comparisons and observe the difference.
-3. (Stretch) Add `toString()` to print a friendly summary of a student.
+1. Write a `Book` class beside `Main.java` with three fields - `String title`, `int catalogueNumber` and `int year` - and one constructor that takes all three and assigns them using `this`.
+2. In `main`, build `b1` and `b2` from two separate `new` calls, giving both exactly the same three values. Then add `Book b3 = b1;` and a fourth book `b4` with a different catalogue number and year.
+3. Print `b1 == b2` and `b1 == b3`, each on its own labelled line as in the expected output below. Predict both answers before you run it.
+4. Add an instance method `boolean sameBookAs(Book other)` to `Book` that returns `true` only when `this` and `other` have the same `catalogueNumber` *and* the same `year`.
+5. Print `b1.sameBookAs(b2)` and `b1.sameBookAs(b4)` in the same labelled style. Now compare line 1 with line 3: the same two objects, opposite answers, because the two lines ask different questions.
 
-**Expected output** (after step 2; in step 1, before `equals()` is overridden, the last line prints `false`):
+**Expected output**
 
 ```text
-true
-false
-true
+b1 == b2: false
+b1 == b3: true
+b1.sameBookAs(b2): true
+b1.sameBookAs(b4): false
 ```
 
 <details>
 <summary>Hint</summary>
 
-`==` on objects only ever asks "the same object?", never "the same contents?" - which is why the third line prints `false` until you override `equals()`. When you write it, compare the `studentID` values with `.equals()` rather than `==`, or you repeat the identical mistake one level down. Return a value derived from that same field in `hashCode()`, so two students your `equals()` calls equal never disagree about their hash.
+`==` between two object variables only ever asks "the same object?" - it compares the arrows, not what they point at, so two separate `new` calls can never be `==`, however identical their fields. Inside `sameBookAs`, though, `==` is comparing `int` fields, where it *does* mean "the same value": the body is a single `return` of two `==` tests joined with `&&`. Reach the other book's fields through its own reference - `other.year` - exactly as `main` reaches `b1.title`. One trap when you print: `+` binds tighter than `==`, so the comparison needs brackets of its own, `... + (b1 == b2)`.
 
 </details>
 
@@ -450,46 +435,45 @@ true
 
 **Refactor idea:**
 
-* Keep `Student` focused on representing student data and related domain behavior.
-* Prefer `toString()` for simple textual representation and print outside the class.
+* Keep `Student` focused on representing student data and related domain behaviour.
+* Have the class *build* its description and hand it back; let the caller decide where the text goes - the screen today, a file or a web page tomorrow.
 * If you need parsing or persistence, create `StudentParser` / `StudentRepository`.
 
-**Example:**
+**Example:** a class that returns its description rather than printing it.
 
-<!-- no-compile -->
 ```java
-class Student {
-  String studentID;
-  int age;
-  boolean isRegistered;
+class Lecturer {
+  String name;
+  String office;
 
-  @Override
-  public String toString() {
-    // Build the line and RETURN it - nothing is printed in here.
-    // The exact format to produce is in the expected output below.
-    ...
+  // Builds the line and RETURNS it - nothing is printed in here.
+  String describe() {
+    return name + " (office " + office + ")";
   }
 }
-
-// elsewhere
-System.out.println(s1); // println calls toString() for you
 ```
 
-### DIY 6: Refactor to `toString()`
+The caller does the printing: `System.out.println(lecturer1.describe());`.
+Java has a standard name for a method like this - `toString()` - which you
+will meet when you learn about overriding; until then, name it yourself.
 
-1. Refactor `displayInfo()` into a `toString()` method in `Student` that *returns* the formatted string instead of printing it.
-2. In `Main`, print your students with `System.out.println(...)` instead of calling `displayInfo()`.
+### DIY 6: Return the description instead of printing it
+
+1. Add a method `String describe()` to `Student` that builds the one-line summary shown below out of `this.studentID`, `this.age` and `this.isRegistered`, and **returns** it. Nothing is printed inside the method.
+2. In `Main`, print both of your students by passing the result of `describe()` to `System.out.println(...)`, instead of calling `displayInfo()`.
+3. Say what moved: `displayInfo()` decided both *what* the text says and *where* it goes, so it held two jobs; `describe()` keeps only the first. That is SRP applied to a single method.
 
 **Expected output** (match this format exactly; your values may differ):
 
 ```text
+Student{id='N/A', age=0, registered=false}
 Student{id='S00234', age=22, registered=true}
 ```
 
 <details>
 <summary>Hint</summary>
 
-`System.out.println(someObject)` calls that object's `toString()` automatically, so `System.out.println(s1);` is all you need.
+`describe()` hands a `String` back, so its body ends in a `return`, not a `println` - the same `+` concatenation you used in `displayInfo()`, joined into one value instead of three printed lines. The single quotes around the ID are ordinary characters inside the text, so they sit inside the double quotes you are concatenating.
 
 </details>
 
@@ -502,5 +486,5 @@ This lab introduced fundamental object-oriented programming concepts in Java. Yo
 * Define classes and their members (fields and methods)
 * Create objects using constructors
 * Use the `this` keyword and constructor chaining
-* Distinguish between **reference identity** (`==`) and **logical equality** (`equals`)
+* Distinguish **reference identity** (`==`, the same object) from two separate objects that merely hold the same values
 * Apply the **Single Responsibility Principle (SRP)** to keep classes focused

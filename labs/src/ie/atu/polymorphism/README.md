@@ -7,18 +7,20 @@ By the end of this lab you will be able to:
 - Use method overriding so the same call behaves differently at runtime depending on the actual object type (runtime polymorphism)
 - Overload methods with the same name but different signatures, and explain how the compiler chooses between them (compile-time polymorphism)
 - Convert references up and down an inheritance hierarchy safely using upcasting, downcasting and `instanceof`
-- Store different subclasses in a single collection of their parent type and process them uniformly (heterogeneous collections)
+- Store different subclasses in a single array of their parent type and process them all in one loop
+- Override the methods every class inherits from `Object` - `toString()` and `equals()` - so your own classes print and compare the way you mean them to
 
 ## Table of Contents
 
 1. [Runtime Polymorphism: Understanding "Many Forms"](#1-runtime-polymorphism-understanding-many-forms)
 2. [Compile-time Polymorphism (Method Overloading)](#2-compile-time-polymorphism-method-overloading)
 3. [Reference Type Conversions](#3-reference-type-conversions)
-4. [Heterogeneous Collections](#4-heterogeneous-collections)
+4. [One Array, Many Animals](#4-one-array-many-animals)
+5. [Overriding toString and equals](#5-overriding-tostring-and-equals)
 
 ## Getting started
 
-This lab lives in the package `ie.atu.polymorphism` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works, then write each exercise's classes beside it in the same package.
+This lab lives in the package `ie.atu.polymorphism` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ## 1. Runtime Polymorphism: Understanding "Many Forms"
 
@@ -399,9 +401,9 @@ Formulas: circumference = `2 * Math.PI * radius`, diagonal = `side * Math.sqrt(2
 
 </details>
 
-## 4. Heterogeneous Collections
+## 4. One Array, Many Animals
 
-Because every `Dog`, `Cat` and `Bird` is-an `Animal`, a single `List<Animal>` can hold all of them at once, and polymorphism decides whose `makeSound()` or `move()` runs on each loop iteration:
+Because every `Dog`, `Cat` and `Bird` is-an `Animal`, a single `Animal[]` can hold all of them at once, and polymorphism decides whose `makeSound()` or `move()` runs on each loop iteration. An array has a fixed length, so a class that stores objects this way keeps a `count` alongside it - how many of the slots are actually in use:
 
 ```mermaid
 classDiagram
@@ -436,7 +438,8 @@ classDiagram
         +soar()
     }
     class AnimalShelter {
-        -List~Animal~ animals
+        -Animal[] animals
+        -int count
         +addAnimal(Animal)
         +makeAllSounds()
         +exerciseAnimals()
@@ -545,32 +548,31 @@ public class Bird extends Animal {
 }
 ```
 
-<!-- no-compile -->
 ```java
 public class AnimalShelter {
-    private List<Animal> animals;
-    
-    public AnimalShelter() {
-        this.animals = new ArrayList<>();
-    }
-    
+    private Animal[] animals = new Animal[10];
+    private int count = 0;
+
     public void addAnimal(Animal animal) {
-        animals.add(animal);
+        animals[count] = animal;
+        count++;
     }
-    
+
     public void makeAllSounds() {
         System.out.println("\nAll animals making sounds:");
-        for (Animal animal : animals) {
-            animal.makeSound();
+        for (int i = 0; i < count; i++) {
+            animals[i].makeSound();
         }
     }
-    
+
     public void exerciseAnimals() {
         System.out.println("\nExercising all animals:");
-        for (Animal animal : animals) {
+        for (int i = 0; i < count; i++) {
+            Animal animal = animals[i];
+
             // Common behavior
             animal.move();
-            
+
             // Type-specific behavior
             if (animal instanceof Dog) {
                 ((Dog) animal).fetch();
@@ -579,14 +581,15 @@ public class AnimalShelter {
             } else if (animal instanceof Bird) {
                 ((Bird) animal).soar();
             }
-            
+
             System.out.println("---------------");
         }
     }
 }
 ```
 
-<!-- no-compile -->
+Every box in `animals` is typed `Animal`, so a `Dog`, a `Cat` and a `Bird` all fit - each one upcast automatically on the way in. The two loops walk `0` to `count - 1` rather than the whole array, because the slots past `count` still hold `null`.
+
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -607,19 +610,28 @@ public class Main {
 }
 ```
 
-### Key Benefits of Heterogeneous Collections
-1. Single Collection Type: Store different but related objects in one collection
-2. Unified Processing: Handle different types uniformly when needed
-3. Type-Specific Operations: Still possible through instanceof and casting
-4. Flexibility: Easy to add new animal types without changing existing code
-5. Code Organization: Common behaviors in parent class, specific in subclasses
+### Key Benefits of One Array of a Supertype
+1. Single Array Type: store different but related objects in one `Animal[]`
+2. Unified Processing: one loop handles every element, whatever it really is
+3. Type-Specific Operations: still possible through `instanceof` and casting - at a price, see below
+4. Flexibility: a new animal type needs no change to any loop that only calls `Animal` methods
+5. Code Organization: common behaviors in parent class, specific in subclasses
+
+### The chain that grows, and the override that doesn't
+
+Look again at `exerciseAnimals()`. Its `if (animal instanceof Dog) ... else if ...` chain names every subclass out loud, so **every new kind of animal means editing that method** - and forgetting to edit it is a silent bug: the new animal just quietly gets no type-specific exercise.
+
+Now compare it with the loop in `makeAllSounds()`. That loop calls one method, `makeSound()`, and names no subclass at all. Add `Horse`, add `Rabbit`, add anything you like: that loop was finished the day it was written. The work moved out of the loop and into the classes, where each animal answers for itself.
+
+That is the choice in front of you every time you are about to type `instanceof`: **an `instanceof` chain grows with the hierarchy; an overridden method does not.** DIY 4 builds the shelter's roster the second way, so you can see both in the same class.
 
 ### DIY 4: Extend the Shelter
 Grow the animal kingdom from the example above:
 
 1. Add a fourth animal class: a `Horse` with a `breed` field (plus the usual name and age), overriding `makeSound()` to print `<name> neighs: Neigh!` and `move()` to print `<name> gallops across the field`. Give it a `getBreed()` method.
 2. Add the new animal to the shelter in `main`, after the example's four animals: `new Horse("Star", 6, "Connemara")`. Run the program - `makeAllSounds()` and `exerciseAnimals()` pick it up without a single change to `AnimalShelter`.
-3. Add a `printRoster()` method to `AnimalShelter` that prints all the animals' names and breeds: a blank line and the heading `Shelter roster:`, then one line per animal showing `getInfo()`, plus ` - ` and the breed for animals that have one (give `Dog` a `getBreed()` method too). Call it at the end of `main`.
+3. Give `Animal` a `String rosterLine()` method that **returns** (does not print) the result of `getInfo()`. Override it in `Dog` and in `Horse` so each returns `getInfo()` followed by ` - ` and its breed. Leave `Cat` and `Bird` alone - they inherit the base version, which is exactly right for animals with no breed. Give `Dog` a `getBreed()` method too, to match `Horse`.
+4. Add a `printRoster()` method to `AnimalShelter`: print a blank line and the heading `Shelter roster:`, then loop over the animals printing `rosterLine()` for each one. Call it at the end of `main`. Notice what that loop does *not* contain - no `instanceof`, no cast, no subclass name anywhere - which is why the `Rabbit` you add in DIY 5 will not touch it either.
 
 **Expected output**
 
@@ -658,18 +670,19 @@ Star (6 years old) - Connemara
 
 <details><summary>Hint</summary>
 
-Step 2 is the whole point of heterogeneous collections: `addAnimal(Animal animal)` already accepts any `Animal` subclass, so the shelter needs no changes. Notice that `exerciseAnimals()` still moves the horse but gives it no type-specific exercise - its `instanceof` chain doesn't know about `Horse`. For the roster, build each line with `instanceof` and a cast:
+Step 2 is the whole point of an `Animal[]`: `addAnimal(Animal animal)` already accepts any `Animal` subclass, so the shelter needs no changes at all. Notice that `exerciseAnimals()` still moves the horse but gives it no type-specific exercise - its `instanceof` chain has never heard of `Horse`, and never will until a human edits it.
+
+`rosterLine()` is the other approach, and it has the same shape as `makeSound()`: same signature in every class, `@Override` on each subclass version, one line of body. The only new thing is that it *returns* a `String` instead of printing one:
 
 <!-- no-compile -->
 ```java
-String line = animal.getInfo();
-if (animal instanceof Dog) {
-    line += " - " + ((Dog) animal).getBreed();
-} else if (animal instanceof Horse) {
-    line += " - " + ((Horse) animal).getBreed();
+@Override
+public String rosterLine() {
+    return getInfo() + " - " + breed;
 }
-System.out.println(line);
 ```
+
+`printRoster()` is then a single loop with a single call inside it - and it stays that way no matter how many animals the shelter learns about.
 
 </details>
 
@@ -701,12 +714,112 @@ Thumper is a gentle brown rabbit.
 
 </details>
 
+## 5. Overriding toString and equals
+
+### Explanation
+Every class you write extends `Object` whether you say so or not, so every object you create already has a `toString()`, an `equals()` and a `hashCode()`. Those inherited versions are deliberately dumb. Replacing them is nothing new - it is the same overriding you have been doing since section 1, applied to methods you inherited from the top of the hierarchy instead of from a class you wrote yourself.
+
+Here is what you get for free:
+
+```java
+public class Coin {
+    private int value;
+
+    public Coin(int value) {
+        this.value = value;
+    }
+}
+```
+
+```java
+Coin a = new Coin(50);
+Coin b = new Coin(50);
+
+System.out.println(a);             // ie.atu.polymorphism.Coin@1dbd16a6
+System.out.println(a == b);        // false
+System.out.println(a.equals(b));   // false
+```
+
+`Object.toString()` prints the fully qualified class name and a hash code (yours will be a different number), and `Object.equals()` asks only "are these the same object?" - the very question `==` asks. Two coins both worth 50c are still two separate objects, so both comparisons say `false`. Override the two methods and the class starts behaving the way you mean it to:
+
+```java
+public class Coin {
+    private int value;
+
+    public Coin(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Coin(" + value + "c)";
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Coin)) {
+            return false;
+        }
+        Coin c = (Coin) other;
+        return value == c.value;
+    }
+}
+```
+
+Now `System.out.println(a)` prints `Coin(50c)` and `a.equals(b)` is `true`, while `a == b` stays `false` - the two objects really are two objects, and that has not changed.
+
+Two details worth naming:
+
+- `System.out.println(anyObject)` calls that object's `toString()` for you. You never write `.toString()` yourself.
+- `equals` takes an `Object`, not a `Coin`. It has to: an override must keep the **same signature** as the method it overrides, and `Object.equals` takes an `Object`. That is why the body opens with `instanceof` and a cast - the same guarded downcast from section 3. Narrow the parameter to `equals(Coin other)` and you have written an **overload**, not an override - and `@Override` refuses to compile it: *"method does not override or implement a method from a supertype"*. That is the seatbelt doing its job.
+
+`equals()` has a partner, `hashCode()`, which any class overriding `equals()` should override too, so that two objects your `equals()` calls equal never disagree about their hash. It matters for the standard library types that store objects by hash; you are not asked to write one here.
+
+### DIY 6: Overriding Object's methods: toString and equals
+Give the `Cat` class from section 4 a printable form and a real notion of equality:
+
+1. Override `toString()` in `Cat`, marked `@Override`, so that it **returns** the string `Cat: <name> (<age> years old)`. Return it - do not print it.
+2. In `main`, create two separate `Cat` objects carrying the same values: `Cat a = new Cat("Luna", 4, true);` and `Cat b = new Cat("Luna", 4, true);`. Print the first with `System.out.println(a);` - just the variable, no `.toString()` call - and check that your override is what appears.
+3. Print `a == b`, then print `a.equals(b)`. Both come out `false`: `==` asks "the same object?", and the `equals()` that `Cat` inherited from `Object` asks exactly the same question, ignoring the fields completely.
+4. Override `equals(Object other)` in `Cat`, marked `@Override`. Return `false` unless `other` is a `Cat` (use `instanceof`); otherwise cast `other` to `Cat` and return `true` when both the names and the ages match. Run it again: `a == b` is still `false` - still two objects - but `a.equals(b)` is now `true`.
+
+**Expected output**
+
+```text
+Cat: Luna (4 years old)
+false
+true
+```
+
+(At step 3, before you override `equals()`, the last line prints `false` too. That change from `false` to `true` is the whole exercise.)
+
+<details><summary>Hint</summary>
+
+`toString()` hands back a `String`; `println` is what turns it into output, so the method body is a single `return`. Inside `equals()`, compare the two names with `.equals()` and never with `==`, or you repeat one level down the very mistake this exercise is about; ages are `int`, so `==` is the right comparison for those. The skeleton is the `Coin` example above with `Cat` in place of `Coin`:
+
+<!-- no-compile -->
+```java
+@Override
+public boolean equals(Object other) {
+    if (!(other instanceof Cat)) {
+        return false;
+    }
+    Cat c = (Cat) other;
+    return ...;
+}
+```
+
+`name` and `age` are `protected` in `Animal`, so `Cat` can read them directly - on itself and on `c`.
+
+</details>
+
 ## Summary
 Through these examples and exercises, we've seen how polymorphism:
 - Enables more flexible and reusable code
 - Simplifies program structure and maintenance
 - Allows uniform treatment of different objects
-- Facilitates easy extension through new subclasses
+- Facilitates easy extension through new subclasses - an overridden method absorbs a new subtype where an `instanceof` chain has to be edited
+- Reaches all the way up to `Object`: overriding `toString()` and `equals()` is the same mechanism, applied to methods every class already has
 - Promotes better code organization
 
 These benefits make polymorphism a fundamental concept in object-oriented programming, essential for creating maintainable and scalable applications.

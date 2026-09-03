@@ -231,7 +231,7 @@ printReceipt(2.75, 6);
 - Parameters in, `return` out
 - Scope and the photocopy rule
 - `public`, `private`, `static`
-- The call stack - push, pop, trace
+- The call stack - push, pop, trace, and a method that calls itself
 - Mistakes, habits, and the till program done right
 
 ---
@@ -637,6 +637,50 @@ public static void main(String[] args) {
 
 ---
 
+<!-- Speaker notes: ~0:47. The call-stack payoff: a method may call ITSELF, and the frame model explains it with nothing new - every call is a fresh frame with its own copy of n. Two things to land: the base case is the return that does not recurse, and without it the stack grows until StackOverflowError. Do not sell recursion as a technique to reach for; sell it as proof they understand frames. The lab has them write countdown and factorial; the arrays deck never needs it. -->
+
+## A method that calls itself
+
+```java
+public static void countdown(int n) {
+    if (n == 0) {          // the base case: stop pushing frames
+        System.out.println("liftoff");
+        return;
+    }
+    System.out.println(n);
+    countdown(n - 1);      // a fresh frame, with its own n
+}
+```
+
+* `countdown(3)` prints `3` · `2` · `1` · `liftoff` - four frames, each with a **different `n`**, popped in reverse.
+* Nothing new is happening: a call is a call, even when the method being called is the one running. That is **recursion**.
+* The line that does *not* call again is the **base case**. Leave it out and frames pile up until the JVM gives up: `StackOverflowError`.
+
+---
+
+<!-- Speaker notes: ~0:48. Predict beat, and the one that separates "I get frames" from "I can trace them". The wrong answer to expect is `1 2 3` printed in that order or, more often, a shrug: the print sits AFTER the recursive call, so nothing prints on the way down and everything prints on the way back up as frames pop. Walk the stack on the board: three frames stacked, then unwind. Students who get this get every "what does this recursive method print" MCQ; students who guess treat the method as a loop. -->
+
+## Predict: what prints?
+
+```java
+public static void climb(int n) {
+    if (n > 3) {
+        return;
+    }
+    climb(n + 1);
+    System.out.println(n);
+}
+public static void main(String[] args) {
+    climb(1);
+}
+```
+
+* `3` · `2` · `1` - not `1 2 3`.
+* Each frame **waits** for the call above it to finish before it reaches its `println`, so the deepest frame prints first.
+* The order of output is the order frames are *popped*, and the base case (`n > 3`) is what starts the popping.
+
+---
+
 <!-- Speaker notes: ~0:49. Predict beat, and the very next slide, Common mistakes, calls back to this one directly. This snippet is tagged no-compile because failing to compile IS the correct answer: the room typically guesses it compiles fine, reasoning from the one visible `return 1;` without tracing the implicit path where `score < 40` and control falls off the end with nothing to hand back. The faulty model is picturing the compiler as running one example value rather than proving every possible path returns - the same every-path-must-return rule that bites any time a non-void method grows an `if` with no `else`. -->
 
 ## Predict: does this compile?
@@ -713,3 +757,4 @@ public class Receipts {
 - Java passes **photocopies**: of the value for primitives, of the **arrow** for objects - so a method can't change your `int`, but can reach your array's boxes.
 - `public` invites callers, `private` hides helpers, `static` lives on the class - one shared box, called as `ClassName.method(…)`.
 - Calls run on the **stack**: push on call, pop on return, LIFO - the deepest call finishes first.
+- A method may call **itself**: recursion. Every call is a fresh frame with its own copies; the **base case** is the return that stops the pushing, and without it the stack overflows.

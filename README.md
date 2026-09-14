@@ -36,7 +36,7 @@ Conventions and editing rules live in [`AGENTS.md`](AGENTS.md).
 ## Module schedule
 
 <!-- current-week:start -->
-> 🗓️ **Semester has not started yet** — teaching begins the week of 14 Sep 2026.
+> 🗓️ **Current teaching week: 1 — Introduction** (week beginning 14 Sep 2026).
 <!-- current-week:end -->
 
 The schedule is defined once, in [`module/schedule.json`](module/schedule.json);
@@ -46,7 +46,7 @@ generated from it.
 <!-- schedule-table:start -->
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|
-| 1 | Introduction | [slides](weeks/introduction/slides.md) | _No lab in week 1_ |
+| **➡️ 1** | Introduction | [slides](weeks/introduction/slides.md) | _No lab in week 1_ |
 | 2 | Classes and Objects | [slides](weeks/classes-and-objects/slides.md) | [lab](labs/src/ie/atu/classesandobjects/) |
 | 3 | Methods | [slides](weeks/methods/slides.md) | [lab](labs/src/ie/atu/methods/) |
 | 4 | **MCQ 1** · held during lab slot | [details](weeks/mcq1/README.md) · [brief](mcq/README.md) | — |

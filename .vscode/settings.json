@@ -3,5 +3,12 @@
     "./themes/ooc.css"
   ],
   "markdown.marp.html": "all",
-  "java.project.sourcePaths": ["lectures-and-labs"]
+  "java.project.sourcePaths": ["lectures-and-labs"],
+  "java.server.launchMode": "Standard",
+  "redhat.telemetry.enabled": false,
+  "java.help.firstView": "none",
+  "java.help.showReleaseNotes": false,
+  "java.debug.settings.onBuildFailureProceed": true,
+  "chat.useAgentsMdFile": true,
+  "git.autofetch": true
 }

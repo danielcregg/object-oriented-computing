@@ -13,28 +13,12 @@
         // module theme set in .vscode/settings.json.
         "marp-team.marp-vscode"
       ],
+      // The settings that matter on a laptop too (Java launch mode, the
+      // pre-answered start-up prompts, Copilot Chat following AGENTS.md,
+      // git auto-fetch) live in .vscode/settings.json, which VS Code applies
+      // locally and in a Codespace alike. Only what is Codespace-specific
+      // is here.
       "settings": {
-        "java.project.sourcePaths": ["lectures-and-labs"],
-        // No start-up prompts. Full Java support from the start (the default
-        // "Hybrid" mode starts lightweight and can ask to switch), Red Hat's
-        // usage-data question answered "no" (it only asks while this is
-        // unset), and no Java welcome or release-notes tab covering the labs
-        // README.
-        "java.server.launchMode": "Standard",
-        "redhat.telemetry.enabled": false,
-        "java.help.firstView": "none",
-        "java.help.showReleaseNotes": false,
-        // Every lab shares one source tree, so an unfinished exercise in one
-        // lab would otherwise interrupt running any other file with "Build
-        // failed, continue?". Errors still show in the editor.
-        "java.debug.settings.onBuildFailureProceed": true,
-        // Copilot Chat reads AGENTS.md at the workspace root, whose student
-        // section says: coach, never hand over a lab solution. Set explicitly
-        // so that holds whatever VS Code's default becomes.
-        "chat.useAgentsMdFile": true,
-        // Fetch in the background, so Sync Changes shows when the nightly
-        // course update is waiting on GitHub.
-        "git.autofetch": true,
         "editor.minimap.enabled": false,
         // Markdown opens rendered, so the week index (opened on start) is a
         // clickable menu, a lab's README reads as instructions, and a

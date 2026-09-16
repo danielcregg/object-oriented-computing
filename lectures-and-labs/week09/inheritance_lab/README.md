@@ -94,7 +94,7 @@ classDiagram
 2. Create a `Dog` class that `extends` (i.e. inherits from) `Animal`, with:
    - A `private` field `name` (String).
    - Getter and setter methods for the `name` field.
-3. In `Main`, create an instance of `Dog`, call `setSpecies()` and `setName()`, then print both values to the terminal using `getSpecies()` and `getName()`.
+3. In `Diy1`, create an instance of `Dog`, call `setSpecies()` and `setName()`, then print both values to the terminal using `getSpecies()` and `getName()`.
 
 **Expected output**
 
@@ -139,7 +139,7 @@ Inheritance establishes a hierarchy between classes, where the subclass extends 
 
 1. **Superclass:** create a class `Vehicle` with a method `move()` that prints "The vehicle is moving."
 2. **Subclass:** create a class `Car` that extends `Vehicle` and adds a method `playRadio()` that prints "Playing radio."
-3. In `Main`, create an instance of `Car` and call both `move()` and `playRadio()` on it.
+3. In `Diy2`, create an instance of `Car` and call both `move()` and `playRadio()` on it.
 
 **Expected output**
 
@@ -317,7 +317,7 @@ Create (or evolve from DIY 2) the classes listed below in this package, building
    - Constructor: `ElectricCar(String type, int doors, int batteryCapacity)` which calls `super(type, doors)`.
    - Getter and setter for `batteryCapacity`.
    - Method: `void charge()` that prints a short message, e.g. "Charging...".
-4. In `Main`:
+4. In `Diy3`:
    - Create an instance of `ElectricCar` using the constructor.
    - Call `move()`, `honk()`, and `charge()` on the instance.
    - Use the getters to retrieve and print the `type`, `doors`, and `batteryCapacity` values.
@@ -353,7 +353,7 @@ Add a `Motorbike` class to the DIY 3 hierarchy to demonstrate hierarchical inher
    - Getter and setter for `hasSidecar`.
    - Method: `void ride()` that prints "Riding the " followed by the superclass field `type` **read directly** - not through `getType()` - and then indicates whether it has a sidecar.
 2. That direct read will not compile yet: `type` is `private` in `Vehicle`, so javac reports `type has private access in Vehicle`. Change `Vehicle`'s `type` field from `private` to `protected` and compile again. `protected` is the access level to reach for here because it opens the field to the subclasses (`Car`, `ElectricCar`, `Motorbike`) while keeping it closed to every unrelated class - `private` locks the family out, and `public` hands the field to the whole program.
-3. In `Main`, declare the variable with the subclass as its type - `Motorbike m = new Motorbike("motorbike", false);` - then call `m.move()` and `m.ride()`. `Motorbike` never declares `move()`; it inherits it from `Vehicle`, exactly as `Car` does.
+3. In `Diy4`, declare the variable with the subclass as its type - `Motorbike m = new Motorbike("motorbike", false);` - then call `m.move()` and `m.ride()`. `Motorbike` never declares `move()`; it inherits it from `Vehicle`, exactly as `Car` does.
 
 This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy - sometimes called hybrid inheritance.
 
@@ -427,7 +427,7 @@ classDiagram
 ### DIY 5: Implicit Inheritance
 
 1. Create a class `Gadget` - do not specify a superclass.
-2. In `Main`, create an instance of `Gadget` and print the result of calling `toString()` on it.
+2. In `Diy5`, create an instance of `Gadget` and print the result of calling `toString()` on it.
 3. Type the variable name followed by a dot (`.`) and look at the list of methods your editor suggests - call one more method inherited from `Object` (e.g. `hashCode()`) and print its result.
 
 **Expected output**
@@ -513,7 +513,7 @@ sequenceDiagram
    - A private field: `studentId` (String).
    - A constructor that initializes `name`, `age`, and `studentId`.
    - Getters and setters for its field.
-3. In `Main`, create instances of both `Person` and `Student`, and print the details of both using the getter methods.
+3. In `Diy6`, create instances of both `Person` and `Student`, and print the details of both using the getter methods.
 
 **Expected output**
 
@@ -563,14 +563,14 @@ The two do different work for you. Inheritance hands the subclass the whole supe
 
 ### DIY 7: Is-a or has-a?
 
-1. For each pair below, run the sentence test and write your answer as a comment in `Main` - is it **is-a** (use `extends`) or **has-a** (make it a field)?
+1. For each pair below, run the sentence test and write your answer as a comment in `Diy7` - is it **is-a** (use `extends`) or **has-a** (make it a field)?
    - `Car` and `Engine`
    - `Dog` and `Animal`
    - `Library` and `Book`
    - `Square` and `Shape`
 2. Implement one of the **has-a** pairs. Write a `Book` class with a private `String title`, a constructor that sets it, a getter, and a `void read()` method that prints "Reading " followed by the title. Then write a `Library` class with a private `String name` **and a private `Book featured` field**. `Library`'s constructor takes a library name and a book title, and builds its own `Book` from that title. Give `Library` a `void showFeatured()` method that prints the library name followed by " features one book today:" and then delegates the rest of the job to the book by calling `featured.read()`.
 3. Implement one of the **is-a** pairs. Write a `Shape` class with a `void describe()` method that prints "I am a shape" (if you typed in the `Shape` example from section 3, just add the method to it). Then write `Square extends Shape` with a private `double side`, a constructor that sets it, and a `void printSide()` method that prints "My side is " followed by the side. `Square` writes no `describe()` of its own.
-4. In `Main`, create a `Library` named "ATU Library" featuring "The Hobbit" and call `showFeatured()`. Then create a `Square` with side `4.0` and call `describe()` followed by `printSide()`. That `describe()` call is the proof of the is-a link: `Square` never declared the method.
+4. In `Diy7`, create a `Library` named "ATU Library" featuring "The Hobbit" and call `showFeatured()`. Then create a `Square` with side `4.0` and call `describe()` followed by `printSide()`. That `describe()` call is the proof of the is-a link: `Square` never declared the method.
 
 **Expected output**
 

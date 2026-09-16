@@ -143,13 +143,14 @@ instructions, scripts, workflows and the practice bank alone.
   under `scripts/` or `.vscode/` is synced either. The devcontainer (a
   Codespace-only setup) installs the Java pack, Copilot Chat and Marp, turns
   on `chat.useAgentsMdFile` so Copilot Chat follows the student section of
-  this file, pre-answers the Java start-up prompts (Standard launch mode,
-  Red Hat telemetry off, no Java welcome or release-notes tab, proceed on
-  build failure), auto-fetches, hides the tooling folders from the explorer with
+  this file, hides the tooling folders from the explorer with
   `files.exclude` (never list anything a lab asks students to open), opens
   markdown rendered (`workbench.editorAssociations`), and opens
   `lectures-and-labs/README.md` on first launch; students never author
-  decks.
+  decks. `.vscode/settings.json` carries what matters on a laptop as well:
+  Standard Java launch mode, the pre-answered start-up prompts (Red Hat
+  telemetry off, no Java welcome or release-notes tab, proceed on build
+  failure), `chat.useAgentsMdFile`, git auto-fetch, and the Marp theme.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
@@ -405,7 +406,7 @@ Before any push, the same gates CI runs (all must print nothing / exit 0):
     python scripts/verify_snippets.py     # every ```java fence compiles
     python scripts/check_practice_bank.py # practice bank is well-formed
     python scripts/check_schedule.py      # week folders agree with the schedule
-    find lectures-and-labs -name '*.java' | xargs javac -d /tmp/labs-classes   # labs compile
+    find lectures-and-labs -name '*.java' -print0 | xargs -0 javac -d /tmp/labs-classes   # labs compile
 
 Local preview of a deck while editing: `npm run preview` (see above).
 After editing a deck's layout, re-render and check nothing overflows the

@@ -35,3 +35,11 @@ jobs:
         run: |
           bash scripts/update-course-content.sh | tee "$RUNNER_TEMP/sync.log"
           { echo '```'; cat "$RUNNER_TEMP/sync.log"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          # The script never exits non-zero (it must never stop a Codespace
+          # from opening), so a refresh it could not push would otherwise
+          # vanish with this runner and leave a green tick. Make that red.
+          git fetch --quiet origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "::error::The course update was made but could not be pushed to this repository; see the log above."
+            exit 1
+          fi

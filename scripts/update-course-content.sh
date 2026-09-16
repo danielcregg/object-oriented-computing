@@ -111,7 +111,9 @@ trap 'rm -f "$PUBLISHED"' EXIT
 # One "path blob" line for every version the module repo has ever published
 # of every file that can be course content. Every path COURSE matches must be
 # covered here, or its untouched copies would all look edited.
-git log --root --format= --raw --no-abbrev --no-renames "$UP" -- \
+# -m: without it a merge commit lists no files, so a version that first
+# appeared in a merge (a conflict resolved on GitHub) would be missing here.
+git log --root --format= --raw --no-abbrev --no-renames -m "$UP" -- \
     README.md lectures-and-labs mcq module .devcontainer/devcontainer.json \
     scripts/update-course-content.sh weeks labs 2>/dev/null |
   awk '$4 !~ /^0+$/ { print $6 " " $4 }' > "$PUBLISHED"
@@ -176,8 +178,17 @@ elif ! git -c user.name="course-update" -c user.email="course-update@local" \
 else
   printf 'Updated:\n'
   printf '  %s\n' "${changed[@]}"
-  if [ "$online" -eq 1 ] && [ "$ahead" -eq 0 ] &&
-     git push --quiet origin "HEAD:$BRANCH" 2>/dev/null; then
+  pushed=0
+  if [ "$online" -eq 1 ] && [ "$ahead" -eq 0 ]; then
+    if err="$(git push --quiet origin "HEAD:$BRANCH" 2>&1)"; then
+      pushed=1
+    else
+      # Say why, so a failed push in the nightly run is not a quiet loss.
+      printf '%s\n' "Could not save the update to GitHub:"
+      printf '  %s\n' "$err"
+    fi
+  fi
+  if [ "$pushed" -eq 1 ]; then
     printf '%s\n' "Saved to your repo on GitHub. Your own work was not touched."
   else
     printf '%s\n' "Your own work was not touched. Click Sync Changes to save this update to GitHub."

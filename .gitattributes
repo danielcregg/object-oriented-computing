@@ -1,0 +1,9 @@
+# The sync script runs as the Codespace's postAttachCommand inside a Linux
+# container, and students may also run it from a laptop. A CRLF checkout of
+# a shell script fails on WSL and macOS bash ("$'\r': command not found"), so
+# shell scripts are always LF whatever the platform's autocrlf setting.
+*.sh text eol=lf
+
+# Images are never line-ending-normalised.
+*.png binary
+*.jpg binary

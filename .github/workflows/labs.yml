@@ -1,10 +1,14 @@
 name: labs
 
-# Do the labs compile? This is the one workflow that runs in a STUDENT's copy
-# of the template (deliberately unguarded): every push gets a green tick if
-# every .java file under lectures-and-labs compiles, and a red cross with the compiler's
-# message if not. It never runs anything, never grades, never comments.
-# The module's own CI (marp.yml) compiles the same files as one of its gates.
+# Do the labs compile? One of the two workflows that run in a STUDENT's copy
+# of the template (deliberately unguarded; course-sync.yml is the other):
+# every push gets a green tick if every .java file under lectures-and-labs
+# compiles, and a red cross with the compiler's message if not. It never
+# runs anything, never grades, never comments. The module's own CI (marp.yml)
+# compiles the same files as one of its gates.
+#
+# Actions are pinned by commit, not by tag: this runs in hundreds of copies,
+# so a retagged or compromised "v4" would reach all of them at once.
 
 on:
   push:
@@ -20,10 +24,10 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Set up Java 21 (the same JDK as the Codespace)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
         with:
           distribution: temurin
           java-version: '21'

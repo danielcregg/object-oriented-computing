@@ -138,6 +138,15 @@ instructions, scripts, workflows and the practice bank alone.
   migrates over two nights: its old script updates itself, then the new
   one adds today's files and removes the untouched old course files (its
   LEGACY pattern).
+  **Who that empowers:** because the sync ships `update-course-content.sh`
+  and `devcontainer.json` themselves, whoever can push to this repo's
+  `main` can run code in every student's Codespace (as the student) and
+  nightly in every copy's Actions (with `contents: write`). That is the
+  design, so `main` must stay protected: only the lecturer pushes, never a
+  force-push, and the actions the student-copy workflows use are pinned by
+  commit. GitHub also pauses a scheduled workflow after 60 days without a
+  commit to that copy; a Codespace's `--attach` run and the VS Code task
+  still catch up, so nothing is lost.
   Workflows cannot be synced (the nightly token may not push workflow
   files), so a copy never gains a workflow added later, and nothing else
   under `scripts/` or `.vscode/` is synced either. The devcontainer (a

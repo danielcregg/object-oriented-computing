@@ -13,6 +13,14 @@ name: course-sync
 # edited.
 #
 # In the module's own repo there is nothing to sync from: the job is skipped.
+#
+# The checkout action is pinned by commit, not by tag: this job has write
+# access in hundreds of student copies, so a retagged or compromised "v4"
+# would reach all of them at once.
+
+# One run at a time: a manual run overlapping the nightly one would push
+# the same refresh twice and report a spurious failure.
+concurrency: course-sync
 
 on:
   schedule:
@@ -27,7 +35,7 @@ jobs:
     if: github.repository != 'danielcregg/object-oriented-computing'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0          # the script reads this repo's history to respect files the student deleted
 

@@ -31,7 +31,9 @@
         //   1. files.exclude also removes a path from quick-open and search,
         //      so nothing a lab asks a student to open or edit may appear here.
         //   2. Bare names match the workspace root only; "**/" matches anywhere.
-        // It applies in Codespaces only, not to the repo opened locally.
+        // It applies when the repo is opened in this dev container (a
+        // Codespace, or VS Code's Dev Containers extension), not when it is
+        // opened plainly in VS Code.
         "files.exclude": {
           "**/.devcontainer": true,
           "**/.vscode": true,

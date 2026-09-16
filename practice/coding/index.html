@@ -185,7 +185,7 @@ function wrap(q, code, tests) {
   try { PRESETS = presetsFrom(await fetch('../../schedule.json').then(r => r.json())); } catch { PRESETS = []; }
   renderList();
   const j = jobe();
-  $('jobe-note').textContent = 'Sandbox: ' + new URL(j.url).host + (j === JOBE_DEFAULT ? ' (a shared evaluation server — press Check when your code is ready, not on every keystroke)' : '');
+  $('jobe-note').textContent = 'Check sends your code to ' + new URL(j.url).host + ' to compile and run it' + (j === JOBE_DEFAULT ? ' (the University of Canterbury’s shared evaluation server): press Check when your code is ready, not on every keystroke, and don’t paste anything you want to keep private.' : '.');
 })();
 
 /* The MCQ presets follow the schedule: each MCQ covers the teaching rows since

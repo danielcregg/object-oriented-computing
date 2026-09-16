@@ -32,7 +32,11 @@ from schedule import load  # noqa: E402
 
 LABS = Path("labs/src/ie/atu")
 BRIEF = Path("mcq/README.md")
-REPO_URL = "https://github.com/danielcregg/object-oriented-computing"
+# GitHub's "new repository" form, prefilled: this template, the student's own
+# account, Private already chosen. (The repo's own /generate link opens the
+# same form with no visibility chosen.)
+COPY_URL = html.escape("https://github.com/new?template_owner=danielcregg"
+                       "&template_name=object-oriented-computing&visibility=private")
 
 # Both scripts are third-party code executed on the module's public site, so
 # each carries a Subresource Integrity hash: the browser refuses to run the
@@ -245,9 +249,9 @@ def main() -> None:
         body = md.convert(preprocess(text))
 
         banner = (f'<div class="copy-banner">Read-only preview. To <strong>do</strong> '
-                  f'this lab: <a href="{REPO_URL}/generate">make your own copy of the '
-                  f'repo</a> ("Use this template"), open a Codespace on it, and work '
-                  f'in <code>labs/src/ie/atu/{slug}/</code>.</div>')
+                  f'this lab: <a href="{COPY_URL}">make your own private copy of the '
+                  f'repo</a> ("Use this template", not Fork), open a Codespace on it, '
+                  f'and work in <code>labs/src/ie/atu/{slug}/</code>.</div>')
         deck = sched.deck_for_lab(slug)
         lecture = f' · <a href="../../{deck}/index.html">lecture</a>' if deck else ''
         kicker = f'<a href="./..">labs</a>{lecture} · object-oriented computing'
@@ -267,8 +271,9 @@ def main() -> None:
                   f"<p>The module's lab exercises, in teaching order, one page per lab — read-only "
                   f"previews of the instructions, always the current version. To "
                   f"complete a lab you work in your own copy of the repo: "
-                  f'<a href="{REPO_URL}/generate">Use this template</a>, then open '
-                  f"a Codespace on it.</p>\n<ul class=\"row-list\">\n{rows}</ul>\n"
+                  f'<a href="{COPY_URL}">Use this template</a> (set it to Private, and '
+                  f"don't Fork), then open a Codespace on it.</p>\n"
+                  f"<ul class=\"row-list\">\n{rows}</ul>\n"
                   f'<p class="kicker"><a href="../">back to the lecture decks</a></p>')
     (out_root / "index.html").write_text(
         page("OOC Labs", "object-oriented computing", index_body, False),

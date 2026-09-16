@@ -6,8 +6,11 @@ app (https://github.com/danielcregg/module-schedule-table-builder). It is edited
 there and re-exported here, and it is the same file the Moodle course-page table
 is generated from (scripts/build_moodle_schedule.py). The site index, README's
 banner and schedule table, the labs index order and the CI gate
-(scripts/check_schedule.py) all import this module and read that file. Nothing
-else in the repo may state a week number or a semester date.
+(scripts/check_schedule.py) all import this module and read that file. The
+week folders under lectures-and-labs/ are named from it (week01, week02, ...,
+and the reading week as weekNNb-reading-week right after week NN), and the
+gate fails if a folder disagrees. Nothing else in the repo may state a
+semester date, and no deck or lab states its week.
 
 Rows are consecutive calendar weeks from `startDate` (a Monday), and the "X"
 reading-week row is one of them, so row i covers startDate + 7*i days.
@@ -27,8 +30,10 @@ from pathlib import Path
 
 SCHEDULE = Path("module/schedule.json")
 SITE = "https://danielcregg.is-a.dev/object-oriented-computing/"
-WEEKS = Path("weeks")
-LABS = Path("labs/src/ie/atu")
+# One folder per schedule row: lecture.md (a teaching week), README.md (the lab
+# instructions, or the MCQ / reading-week explainer) and Main.java, whose Java
+# package is the folder name (`package week05;`), so this is the source root.
+ROOT = Path("lectures-and-labs")
 MCQ_RE = re.compile(r"^MCQ (\d)$")
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
 
@@ -38,10 +43,11 @@ class Row:
     index: int          # position in the semester, 0-based, reading week included
     week: str           # "1".."12", or "X" for the reading week
     topic: str          # "Arrays"; empty on MCQ and reading-week rows
-    deck: str | None    # weeks/<deck>/slides.md, from lectureUrl
-    lab: str | None     # labs/src/ie/atu/<lab>/, from labUrl
+    deck: str | None    # the lecture's site folder (/<deck>/), from lectureUrl
+    lab: str | None     # the lab's site folder (/labs/<lab>/), from labUrl
     assessment: str     # "MCQ 1", or empty
     notes: str
+    dir: str            # its folder under lectures-and-labs/: week05, week06b-reading-week
 
     @property
     def is_break(self) -> bool:
@@ -54,15 +60,8 @@ class Row:
         return m.group(1) if m else None
 
     @property
-    def folder(self) -> str | None:
-        """The weeks/ folder this row owns: its deck, mcq<n>, or reading-week."""
-        if self.deck:
-            return self.deck
-        if self.mcq:
-            return f"mcq{self.mcq}"
-        if self.is_break:
-            return "reading-week"
-        return None
+    def path(self) -> Path:
+        return ROOT / self.dir
 
     @property
     def label(self) -> str:
@@ -101,6 +100,11 @@ class Schedule:
                 return r.deck
         return None
 
+    @property
+    def labs(self) -> tuple[Row, ...]:
+        """The rows that have a lab, in teaching order."""
+        return tuple(r for r in self.rows if r.lab)
+
 
 def _name_under(url: str, prefix: str, what: str, week: str) -> str | None:
     """`https://<site>/<prefix><name>/` -> name; '' -> None; anything else fails."""
@@ -126,8 +130,16 @@ def load(path: Path = SCHEDULE) -> Schedule:
     except (KeyError, TypeError, ValueError):
         raise SystemExit(f"schedule: {path} needs a startDate of the form YYYY-MM-DD")
     rows = []
+    previous = 0          # the last numbered week, which names the reading-week folder
     for i, w in enumerate(raw.get("weeks", [])):
         week = str(w.get("week", "")).strip()
+        if week == "X":
+            folder = f"week{previous:02d}b-reading-week"
+        elif week.isdigit():
+            previous = int(week)
+            folder = f"week{previous:02d}"
+        else:
+            raise SystemExit(f"schedule: row {i + 1}: week must be a number or X (got {week!r})")
         rows.append(Row(
             index=i,
             week=week,
@@ -136,6 +148,7 @@ def load(path: Path = SCHEDULE) -> Schedule:
             lab=_name_under(str(w.get("labUrl", "")), SITE + "labs/", "labUrl", week),
             assessment=str(w.get("assessment", "")).strip(),
             notes=str(w.get("notes", "")).strip(),
+            dir=folder,
         ))
     if not rows:
         raise SystemExit(f"schedule: {path} has no weeks")

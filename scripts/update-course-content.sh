@@ -6,11 +6,12 @@
 # reports every differing file as an add/add CONFLICT, even files you never
 # opened. This script copies files instead, which cannot conflict.
 #
-# It touches ONLY what the module provides -- the lectures, the lab
-# instructions, the README, the Codespace setup (.devcontainer/devcontainer.json)
-# and this script itself, so fixes to either still reach your copy. It never
-# touches Main.java, any class you wrote, or any file you created, and it
-# leaves alone any of those module files you have edited.
+# It touches ONLY what the module provides -- in each week folder the
+# lecture, the lab instructions and the Main.java starter; the READMEs; the
+# Codespace setup (.devcontainer/devcontainer.json); and this script itself,
+# so fixes to either still reach your copy. It never touches a class you
+# wrote or any file you created, and it leaves alone any of those module
+# files you have edited (a Main.java you changed stays exactly as it is).
 #
 # How it can tell: it knows every version of every course file the module
 # repo has ever published. A file matching one of them, however old, is
@@ -44,9 +45,13 @@ UPSTREAM_SLUG="danielcregg/object-oriented-computing"
 BRANCH="main"
 MODE="${1:-}"
 # The course content, file by file rather than whole folders, so editing one
-# deck never stops the rest from updating. Workflows are deliberately absent:
-# the nightly run's token is not allowed to push changes to workflow files.
-COURSE='^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
+# lecture never stops the rest from updating. Your own classes sit beside
+# these files in the week folders and match none of them. Workflows are
+# deliberately absent: the nightly run's token may not push workflow files.
+COURSE='^(README\.md|mcq/README\.md|module/schedule\.json|lectures-and-labs/README\.md|lectures-and-labs/week[^/]+/(lecture\.md|README\.md|Main\.java|img/.+)|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
+# The layout before the week folders (September 2026). A copy made from it
+# gets the week folders added, and its untouched old course files removed.
+LEGACY='^(labs/README\.md|weeks/.+|labs/src/ie/atu/[^/]+/(README\.md|Main\.java))$'
 
 say() { [ "$MODE" = "--attach" ] || printf '%s\n' "$@"; }   # one line per argument
 stop() { say "$@"; exit 0; }   # always exit 0: never block a Codespace from starting
@@ -104,8 +109,8 @@ trap 'rm -f "$PUBLISHED"' EXIT
 # of every file that can be course content. Every path COURSE matches must be
 # covered here, or its untouched copies would all look edited.
 git log --root --format= --raw --no-abbrev --no-renames "$UP" -- \
-    README.md labs mcq module weeks .devcontainer/devcontainer.json \
-    scripts/update-course-content.sh 2>/dev/null |
+    README.md lectures-and-labs mcq module .devcontainer/devcontainer.json \
+    scripts/update-course-content.sh weeks labs 2>/dev/null |
   awk '$4 !~ /^0+$/ { print $6 " " $4 }' > "$PUBLISHED"
 published() { grep -qxF "$1 $2" "$PUBLISHED"; }
 
@@ -131,10 +136,12 @@ while IFS= read -r p; do
 done < <(git ls-tree -r --name-only "$UP" | grep -E "$COURSE")
 
 # Course files the module repo has since removed or renamed (a week folder
-# under its new name, a retired page): drop the old copy too, unless you
-# edited it. Your lab work is never considered.
+# under its new name, the pre-week-folder layout): drop the old copy too,
+# unless you edited it. Only paths that are (or were) course files are
+# considered, so your own classes beside them never are.
 while IFS= read -r p; do
   [ -n "$p" ] || continue
+  printf '%s\n' "$p" | grep -Eq "$COURSE|$LEGACY" || continue
   git cat-file -e "$UP:$p" 2>/dev/null && continue
   [ -e "$p" ] || continue
   if published "$p" "$(git hash-object -- "$p")"; then
@@ -142,7 +149,7 @@ while IFS= read -r p; do
   else
     say "  kept your version (retired upstream): $p"
   fi
-done < <(git ls-files -- 'weeks/*' 'mcq/README.md' 'module/schedule.json')
+done < <(git ls-files -- lectures-and-labs mcq module weeks labs)
 
 # 4. Commit ONLY the paths refreshed above. A bare `git commit` would sweep in
 #    anything you had staged, under the author "course-update". Never signed:

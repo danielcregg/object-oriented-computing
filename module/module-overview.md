@@ -18,7 +18,7 @@ topic weeks teach the four OOP pillars in dependency order
 
 ## Introduction
 
-[Slides](../weeks/introduction/slides.md) · no lab in week 1
+[Slides](../lectures-and-labs/week01/lecture.md) · no lab in week 1
 
 Two halves. First, module logistics: learning outcomes, delivery format and
 timetable, the assessment matrix (three MCQs), the lab coding environment,
@@ -30,8 +30,8 @@ common syntax errors beginners hit.
 
 ## Classes and Objects
 
-[Slides](../weeks/classes-and-objects/slides.md) ·
-[Lab](../labs/src/ie/atu/classesandobjects/)
+[Slides](../lectures-and-labs/week02/lecture.md) ·
+[Lab](../lectures-and-labs/week02/README.md)
 
 The conceptual core of the module. What a class is (blueprint), attributes
 / members, class declaration syntax, and the benefits of classes; what an
@@ -44,8 +44,8 @@ class-design habit.
 
 ## Methods
 
-[Slides](../weeks/methods/slides.md) ·
-[Lab](../labs/src/ie/atu/methods/)
+[Slides](../lectures-and-labs/week03/lecture.md) ·
+[Lab](../lectures-and-labs/week03/README.md)
 
 What a method is, method syntax and anatomy (modifiers, return type, name,
 parameter list, body). Parameters and arguments, return values, `void` vs
@@ -57,14 +57,14 @@ practices.
 
 ## MCQ 1 *(one third)*
 
-[Details](../weeks/mcq1/README.md) — runs in Moodle during the lab
+[Details](../lectures-and-labs/week04/README.md) — runs in Moodle during the lab
 slot. Examines everything taught before it: the introduction material,
 classes and objects, and methods.
 
 ## Arrays
 
-[Slides](../weeks/arrays/slides.md) ·
-[Lab](../labs/src/ie/atu/arrays/)
+[Slides](../lectures-and-labs/week05/lecture.md) ·
+[Lab](../lectures-and-labs/week05/README.md)
 
 What an array is and its characteristics: fixed length, homogeneous
 element type, zero-based indices. Declaring, constructing, and assigning
@@ -74,8 +74,8 @@ multidimensional arrays. Includes an in-class quiz.
 
 ## Strings
 
-[Slides](../weeks/strings/slides.md) ·
-[Lab](../labs/src/ie/atu/strings/)
+[Slides](../lectures-and-labs/week06/lecture.md) ·
+[Lab](../lectures-and-labs/week06/README.md)
 
 Strings as objects: creating them (literals vs `new`) and how the String
 pool and memory work (`intern()` as the proof). String immutability — what it means, why it's good
@@ -87,13 +87,13 @@ is the on-ramp to encapsulation next teaching week.
 
 ## Reading week — no lecture or lab
 
-[Details](../weeks/reading-week/README.md) — always the week of
+[Details](../lectures-and-labs/week06b-reading-week/README.md) — always the week of
 the Irish October bank holiday (the last Monday of October).
 
 ## Encapsulation
 
-[Slides](../weeks/encapsulation/slides.md) ·
-[Lab](../labs/src/ie/atu/encapsulation/)
+[Slides](../lectures-and-labs/week07/lecture.md) ·
+[Lab](../lectures-and-labs/week07/README.md)
 
 Opens the four-pillars block; this deck is the canonical home of the
 "four major principles of OOP" overview (later pillar decks open with a
@@ -106,13 +106,13 @@ visualised, a coding example, and the benefits.
 
 ## MCQ 2 *(one third)*
 
-[Details](../weeks/mcq2/README.md) — runs in Moodle during the lab
+[Details](../lectures-and-labs/week08/README.md) — runs in Moodle during the lab
 slot. Examines the weeks since MCQ 1: arrays, strings, and encapsulation.
 
 ## Inheritance
 
-[Slides](../weeks/inheritance/slides.md) ·
-[Lab](../labs/src/ie/atu/inheritance/)
+[Slides](../lectures-and-labs/week09/lecture.md) ·
+[Lab](../lectures-and-labs/week09/README.md)
 
 Definition and terminology (superclass/subclass, is-a), implementing
 inheritance with `extends`, and a worked coding example. The `Object`
@@ -125,8 +125,8 @@ key Java facts.
 
 ## Polymorphism
 
-[Slides](../weeks/polymorphism/slides.md) ·
-[Lab](../labs/src/ie/atu/polymorphism/)
+[Slides](../lectures-and-labs/week10/lecture.md) ·
+[Lab](../lectures-and-labs/week10/README.md)
 
 The two kinds of polymorphism. Compile-time: method signatures and
 overloading, with worked examples. Runtime: method overriding, why it must
@@ -138,8 +138,8 @@ benefits and a recap.
 
 ## Abstraction
 
-[Slides](../weeks/abstraction/slides.md) ·
-[Lab](../labs/src/ie/atu/abstraction/)
+[Slides](../lectures-and-labs/week11/lecture.md) ·
+[Lab](../lectures-and-labs/week11/README.md)
 
 What abstraction is and how it differs from encapsulation, with real-life
 examples. Java's two mechanisms: abstract classes (abstract vs concrete
@@ -151,5 +151,5 @@ exist and the benefits of abstraction.
 
 ## MCQ 3 *(one third)*
 
-[Details](../weeks/mcq3/README.md) — runs in Moodle during the lab
+[Details](../lectures-and-labs/week12/README.md) — runs in Moodle during the lab
 slot. Examines the weeks since MCQ 2: inheritance, polymorphism, and abstraction.

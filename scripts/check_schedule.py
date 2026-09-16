@@ -4,15 +4,20 @@
 Fails (exit 1, every finding listed) when:
   - the schedule itself is malformed: startDate not a Monday, week numbers not
     1..N in order, not exactly one reading-week row;
-  - a row names a deck, lab or non-teaching page that does not exist;
-  - a folder under weeks/ is not claimed by any row (it would vanish from the
-    site with CI green), or still carries a week number in its name;
-  - a deck declares `week:` in its frontmatter or a week number in its kicker,
-    or an MCQ page titles itself with a week -- the schedule is stated ONCE;
-  - README's generated schedule table is stale (run update_current_week.py);
-  - labs/README.md's lab table does not list every lab in schedule order
-    (VS Code can only sort the lab folders alphabetically, so that table is
-    how students find the next lab);
+  - a row's folder under lectures-and-labs/ (named from its week number) lacks
+    what the row promises: lecture.md for a lecture, and it must be that
+    topic's lecture (its frontmatter `topic` is the row's lectureUrl folder);
+    README.md titled for the topic plus Main.java for a lab; README.md for an
+    MCQ week or the reading week;
+  - a tracked Java file there does not declare its week folder as its package,
+    or sits deeper than a week folder;
+  - a tracked folder under lectures-and-labs/ belongs to no schedule row, or
+    anything is tracked under the retired weeks/ or labs/ layout;
+  - a lecture declares `week:` in its frontmatter or a week number in its
+    kicker, or an MCQ page titles itself with a week (the folder name is the
+    only place a week number belongs);
+  - README.md or lectures-and-labs/README.md holds a stale week table (run
+    scripts/update_current_week.py);
   - module/module-overview.md lacks a section per row, or has them out of order.
 
 Usage:
@@ -21,16 +26,42 @@ Usage:
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from schedule import LABS, WEEKS, load  # noqa: E402
-import update_current_week  # noqa: E402
+from schedule import ROOT, load  # noqa: E402
+import update_current_week as ucw  # noqa: E402
 
 OVERVIEW = Path("module/module-overview.md")
-README = Path("README.md")
-LABS_INDEX = Path("labs/README.md")
+MARKER_RE = re.compile(r"\*\*➡️ (.*?)\*\*")
+
+
+def tracked(*paths: str) -> list[str]:
+    out = subprocess.run(["git", "ls-files", "--", *paths], capture_output=True, text=True)
+    return out.stdout.split() if out.returncode == 0 else []
+
+
+def frontmatter_topic(text: str) -> str | None:
+    fm = re.match(r"---\r?\n(.*?)\r?\n---", text, re.S)
+    topic = re.search(r"(?m)^topic:\s*(\S+)", fm.group(1)) if fm else None
+    return topic.group(1).strip("\"'") if topic else None
+
+
+def first_line(path: Path) -> str:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return lines[0] if lines else ""
+
+
+def table_findings(path: Path, want: str) -> list[str]:
+    text = path.read_text(encoding="utf-8")
+    m = re.search(r"<!-- schedule-table:start -->\n(.*?)<!-- schedule-table:end -->", text, re.S)
+    if not m:
+        return [f"{path}: schedule-table markers are missing"]
+    if MARKER_RE.sub(r"\1", m.group(1)).strip() != want.strip():
+        return [f"{path}: the week table is stale; run scripts/update_current_week.py"]
+    return []
 
 
 def main() -> None:
@@ -45,54 +76,67 @@ def main() -> None:
     if sum(r.is_break for r in sched.rows) != 1:
         findings.append("expected exactly one reading-week row (week \"X\")")
 
-    claimed: set[str] = set()
     for r in sched.rows:
-        f = r.folder
-        if f is None:
+        d = r.path
+        if not (r.deck or r.mcq or r.is_break):
             findings.append(f"week {r.week}: has no lecture, is not an MCQ and is not the reading week")
+        if not d.is_dir():
+            findings.append(f"week {r.week}: {d.as_posix()}/ does not exist")
             continue
-        claimed.add(f)
-        if r.deck and not (WEEKS / f / "slides.md").is_file():
-            findings.append(f"week {r.week}: weeks/{f}/slides.md does not exist")
-        if not r.deck and not (WEEKS / f / "README.md").is_file():
-            findings.append(f"week {r.week}: weeks/{f}/README.md does not exist")
-        if r.lab and not (LABS / r.lab).is_dir():
-            findings.append(f"week {r.week}: labs/src/ie/atu/{r.lab}/ does not exist")
-        if r.deck and not r.topic:
-            findings.append(f"week {r.week}: a lecture row needs a topic")
+        lecture = d / "lecture.md"
+        if r.deck:
+            if not r.topic:
+                findings.append(f"week {r.week}: a lecture row needs a topic")
+            if not lecture.is_file():
+                findings.append(f"week {r.week}: {lecture.as_posix()} does not exist")
+            else:
+                topic = frontmatter_topic(lecture.read_text(encoding="utf-8"))
+                if topic != r.deck:
+                    findings.append(f"week {r.week}: {lecture.as_posix()} is the {topic!r} lecture, "
+                                    f"but the schedule puts {r.deck!r} in this week")
+        elif lecture.exists():
+            findings.append(f"week {r.week}: {lecture.as_posix()} exists, but the schedule has no lecture this week")
+        readme = d / "README.md"
+        if r.lab:
+            if not readme.is_file():
+                findings.append(f"week {r.week}: {readme.as_posix()} (the lab instructions) does not exist")
+            elif r.topic.lower() not in first_line(readme).lower():
+                findings.append(f"week {r.week}: {readme.as_posix()} is titled "
+                                f"{first_line(readme)!r}, not as the {r.topic} lab")
+            if not (d / "Main.java").is_file():
+                findings.append(f"week {r.week}: {d.as_posix()}/Main.java (the lab's starter) does not exist")
+        elif (r.mcq or r.is_break) and not readme.is_file():
+            findings.append(f"week {r.week}: {readme.as_posix()} does not exist")
+        if r.mcq and readme.is_file() and re.search(r"[Ww]eek \d", first_line(readme)):
+            findings.append(f"{readme.as_posix()}: the title must not state a week number")
 
-    for d in sorted(p.name for p in WEEKS.iterdir() if p.is_dir()):
-        if d not in claimed:
-            findings.append(f"weeks/{d}/ is not in module/schedule.json, so it would not be on the site")
-        if re.match(r"week-\d", d):
-            findings.append(f"weeks/{d}/: folder names carry no week number; the schedule does")
+    folders = {r.dir for r in sched.rows}
+    for f in tracked(ROOT.as_posix()):
+        parts = Path(f).parts
+        if len(parts) > 2 and parts[1] not in folders:
+            findings.append(f"{f}: {ROOT.as_posix()}/{parts[1]}/ is not the folder of any schedule "
+                            f"row (week folders are named from the schedule's week numbers)")
+        if f.endswith(".java"):
+            if len(parts) != 3:
+                findings.append(f"{f}: Java files live directly in a week folder, whose name is the package")
+                continue
+            src = Path(f).read_text(encoding="utf-8")
+            pkg = re.search(r"(?m)^\s*package\s+([\w.]+)\s*;", src)
+            if not pkg or pkg.group(1) != parts[1]:
+                findings.append(f"{f}: must declare `package {parts[1]};` "
+                                f"(declares {pkg.group(1) if pkg else 'no package'})")
+    for f in tracked("weeks", "labs"):
+        findings.append(f"{f}: the weeks/ and labs/ layout is retired; everything lives under {ROOT.as_posix()}/")
 
-    for deck in sorted(WEEKS.glob("*/slides.md")):
-        text = deck.read_text(encoding="utf-8")
+    for lecture in sorted(ROOT.glob("*/lecture.md")):
+        text = lecture.read_text(encoding="utf-8")
         if re.search(r"(?m)^week:", text):
-            findings.append(f"{deck}: frontmatter must not declare week: (the schedule does)")
+            findings.append(f"{lecture.as_posix()}: frontmatter must not declare week: (the folder name does)")
         if re.search(r'class="kicker">// week \d', text):
-            findings.append(f"{deck}: the title kicker must not state a week number")
-    for r in sched.rows:
-        if r.mcq and (WEEKS / r.folder / "README.md").is_file():
-            first = (WEEKS / r.folder / "README.md").read_text(encoding="utf-8").splitlines()[0]
-            if re.search(r"[Ww]eek \d", first):
-                findings.append(f"weeks/{r.folder}/README.md: the title must not state a week number")
+            findings.append(f"{lecture.as_posix()}: the title kicker must not state a week number")
 
-    readme = README.read_text(encoding="utf-8")
-    m = re.search(r"<!-- schedule-table:start -->\n(.*?)<!-- schedule-table:end -->", readme, re.S)
-    if not m:
-        findings.append("README.md: schedule-table markers are missing")
-    else:
-        committed = re.sub(r"\*\*➡️ (.*?)\*\*", r"\1", m.group(1)).strip()
-        if committed != update_current_week.render_table(sched, None).strip():
-            findings.append("README.md: the schedule table is stale; run scripts/update_current_week.py")
-
-    want_labs = [r.lab for r in sched.rows if r.lab]
-    listed = re.findall(r"\]\(src/ie/atu/([^/)]+)/README\.md\)", LABS_INDEX.read_text(encoding="utf-8"))
-    if listed != want_labs:
-        findings.append(f"{LABS_INDEX}: the lab table must link each lab's README in schedule "
-                        f"order {want_labs}; it links {listed}")
+    findings += table_findings(ucw.README, ucw.render_table(sched, None, ucw.FROM_ROOT))
+    findings += table_findings(ucw.INDEX, ucw.render_table(sched, None, ucw.FROM_INDEX))
 
     heads = [l[3:].strip() for l in OVERVIEW.read_text(encoding="utf-8").splitlines() if l.startswith("## ")]
     last = -1

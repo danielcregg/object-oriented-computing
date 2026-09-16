@@ -16,8 +16,10 @@ line. The schedule's startDate is baked into the page and the row index is
 whole weeks since it, so the highlight moves without a rebuild.
 `?date=YYYY-MM-DD` previews any date.
 
-The deck folders carried week numbers until 2026-09; each old name gets a
-one-line redirect page so links made before the rename still resolve.
+Site addresses carried week numbers until 2026-09; each old name gets a
+one-line redirect page so links made before the rename still resolve. (The
+repo's folders carry week numbers again since then, lectures-and-labs/weekNN,
+but the site keeps topic addresses, taken from the schedule.)
 
 Usage:
     python scripts/build_index.py [OUTPUT_DIR]     # default: build
@@ -40,15 +42,15 @@ OLD_FOLDERS = {
     "week-02-classes-and-objects": "classes-and-objects",
     "week-03-methods": "methods",
     "week-04-arrays": "arrays",
-    "week-05-mcq1": "mcq1",
+    "week-05-mcq1": "mcq",
     "week-06-strings": "strings",
-    "week-06b-reading-week": "reading-week",
+    "week-06b-reading-week": "",
     "week-07-encapsulation": "encapsulation",
     "week-08-inheritance": "inheritance",
-    "week-09-mcq2": "mcq2",
+    "week-09-mcq2": "mcq",
     "week-10-polymorphism": "polymorphism",
     "week-11-abstraction": "abstraction",
-    "week-12-mcq3": "mcq3",
+    "week-12-mcq3": "mcq",
 }
 
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
@@ -266,10 +268,11 @@ def build_rows(sched: Schedule) -> tuple[str, int, int]:
 
 
 def redirect_page(new: str) -> str:
+    target = f"../{new}/" if new else "../"
     return (f'<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n'
-            f'<meta http-equiv="refresh" content="0; url=../{new}/">\n'
-            f'<link rel="canonical" href="../{new}/">\n<title>Moved</title></head>\n'
-            f'<body><p>This deck moved to <a href="../{new}/">../{new}/</a>.</p></body></html>\n')
+            f'<meta http-equiv="refresh" content="0; url={target}">\n'
+            f'<link rel="canonical" href="{target}">\n<title>Moved</title></head>\n'
+            f'<body><p>This page moved to <a href="{target}">{target}</a>.</p></body></html>\n')
 
 
 def main() -> None:

@@ -3,18 +3,18 @@
   "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
   "customizations": {
     "codespaces": {
-      "openFiles": ["labs/README.md"]
+      "openFiles": ["lectures-and-labs/README.md"]
     },
     "vscode": {
       "extensions": [
         "vscjava.vscode-java-pack",
         "GitHub.copilot-chat",
-        // Opens a lecture's slides.md as slides (Open Preview), using the
+        // Opens a week's lecture.md as slides (Open Preview), using the
         // module theme set in .vscode/settings.json.
         "marp-team.marp-vscode"
       ],
       "settings": {
-        "java.project.sourcePaths": ["labs/src"],
+        "java.project.sourcePaths": ["lectures-and-labs"],
         // No start-up prompts. Full Java support from the start (the default
         // "Hybrid" mode starts lightweight and can ask to switch), Red Hat's
         // usage-data question answered "no" (it only asks while this is
@@ -36,9 +36,9 @@
         // course update is waiting on GitHub.
         "git.autofetch": true,
         "editor.minimap.enabled": false,
-        // Markdown opens rendered, so the labs index (opened on start) is a
+        // Markdown opens rendered, so the week index (opened on start) is a
         // clickable menu, a lab's README reads as instructions, and a
-        // lecture's slides.md shows as slides. "Reopen Editor With..." still
+        // week's lecture.md shows as slides. "Reopen Editor With..." still
         // gives the text view.
         "workbench.editorAssociations": { "*.md": "vscode.markdown.preview.editor" },
         // A student opens this repo to do the labs, so the explorer shows the

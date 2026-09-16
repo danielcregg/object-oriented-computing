@@ -27,14 +27,16 @@ opposite things. Work out which you are before doing anything.
 
 Your job is to help them **learn Java**, using this module's own material.
 
-**Where the content is.** Lectures: `weeks/<topic>/slides.md`
-— Marp markdown, so expect YAML frontmatter, a `<style>` block, and HTML
-`<div>`s that draw diagrams. Skip that machinery; the teaching is in the
-prose, the ```java fences, and the `<!-- Speaker notes: ... -->` comments.
-Labs: `labs/src/ie/atu/<topic>/README.md` (instructions) beside a
-`Main.java` the student edits. A rendered, easier-to-read version of
-everything is at
-https://danielcregg.is-a.dev/object-oriented-computing/.
+**Where the content is.** One folder per week under `lectures-and-labs/`
+(`week01` … `week12`, plus `week06b-reading-week`), listed with links in
+`lectures-and-labs/README.md`. A week's lecture is `lecture.md` — Marp
+markdown, so expect YAML frontmatter, a `<style>` block, and HTML `<div>`s
+that draw diagrams. Skip that machinery; the teaching is in the prose, the
+```java fences, and the `<!-- Speaker notes: ... -->` comments. A lab week
+also has `README.md` (the lab instructions) beside a `Main.java` starter;
+the student's own classes go in the same folder, in the package named after
+it (`package week05;`). A rendered, easier-to-read version of everything is
+at https://danielcregg.is-a.dev/object-oriented-computing/.
 
 **How to help.** Explain concepts in the module's own vocabulary and
 notation so nothing clashes with the lecture. Work from the deck the topic
@@ -59,29 +61,43 @@ and the labs are examinable in the MCQs. So:
   not complete it, and offer the next hint instead.
 
 **Their work is theirs.** Edit only the files they are working in
-(their lab folder). Leave decks, scripts, workflows and the practice bank
-alone.
+(their own classes in the week folder). Leave the lectures, the lab
+instructions, scripts, workflows and the practice bank alone.
 
 ## Map
 
-- `module/schedule.json` — THE schedule, and the only place a week number
-  or a semester date may appear. It is an export of the lecturer's
+- `module/schedule.json` — THE schedule, and the only place a semester
+  date may appear. It is an export of the lecturer's
   module-schedule-table-builder app, edited there and re-exported here.
-  `scripts/schedule.py` loads it; the site index, README's banner and
-  schedule table, the labs index order and the Moodle course-page block
-  are all generated from it, and `scripts/check_schedule.py` fails CI if
-  any folder, deck, page or the README disagrees with it. To reorder the
-  semester: change the JSON, run `scripts/update_current_week.py`, push;
-  then paste the regenerated block (`/moodle-schedule-table.html` on the
-  site) into Moodle.
-- `weeks/<topic>/slides.md` — Marp deck, THE canonical lecture;
-  `<topic>/img/` beside it holds its images. Folder names carry NO week
-  number: a week's position is the schedule's business, so a reorder
-  changes one JSON file and no URLs.
-- `labs/src/ie/atu/<topic>/` — THE canonical labs: `README.md` (the full
-  instructions students follow) + `Main.java` starter per lab. Students
-  copy the repo from the template and work here (devcontainer provided);
-  CI compiles every lab source file. GitHub Classroom is retired.
+  `scripts/schedule.py` loads it and names each row's folder; the site
+  index, the week tables in README.md and lectures-and-labs/README.md, the
+  README banner and the Moodle course-page block are all generated from it,
+  and `scripts/check_schedule.py` fails CI if any folder, lecture, lab,
+  page or table disagrees with it. Site addresses come from each row's
+  `lectureUrl` (`/<topic>/`) and `labUrl` (`/labs/<topic>/`), never from
+  the week folder, so they survive a reorder.
+- `lectures-and-labs/weekNN/` — one folder per schedule row, named from its
+  week number (`week01` … `week12`; the reading week is
+  `weekNNb-reading-week`, right after week NN, so it sorts in place). A
+  teaching week holds `lecture.md` (the Marp deck, THE canonical lecture,
+  whose frontmatter `topic` must equal the row's lectureUrl folder) and
+  `img/` if it has images. A lab week adds `README.md` (THE canonical lab
+  instructions) and `Main.java`, a starter in `package weekNN` — the week
+  folder is the Java package, and `lectures-and-labs/` is the source root.
+  MCQ weeks (`week04`, `week08`, `week12`) and the reading week hold only a
+  `README.md` explainer whose title states no week. MCQ question content
+  lives in Moodle only — never commit it here.
+  **Week numbers are part of these names, and so of the Java packages.**
+  Reordering the semester means `git mv`-ing week folders and rewriting
+  their `package` lines, then `scripts/update_current_week.py`; the gate
+  says what disagrees. Never do that while students hold copies: their own
+  classes live in those packages and the sync cannot move them.
+- `lectures-and-labs/README.md` — the students' guide and route through
+  the weeks (opened when a Codespace starts): setup, saving, updates, and a
+  generated week table linking every lecture, lab and explainer.
+- Students copy the repo from the template and work in the week folders
+  (devcontainer provided); CI compiles every Java file under
+  `lectures-and-labs/`. GitHub Classroom is retired.
   The repo is a TEMPLATE, not a fork source: a fork of a public repo
   cannot be made private, which would publish every student's lab work
   and list the class on the fork network. `marp.yml` and `current-week.yml`
@@ -89,8 +105,9 @@ alone.
   template copy has Actions ENABLED (a fork does not) and would otherwise
   run this CI, and in current-week.yml's case commit to the student's own
   README. Two workflows are deliberately UNGUARDED because they exist FOR
-  the student's copy: `labs.yml`, the green tick that compiles `labs/src`
-  on every push that touches it, and `course-sync.yml`, which runs
+  the student's copy: `labs.yml`, the green tick that compiles every Java
+  file under `lectures-and-labs/` on every push that touches one, and
+  `course-sync.yml`, which runs
   `scripts/update-course-content.sh` there every night (01:05 UTC) so
   corrections arrive without a Codespace ever being opened. The script
   stores no state: a course file counts as the student's own edit only if
@@ -103,10 +120,18 @@ alone.
   competing commits. It also sets `pull.rebase false` in the copy, without
   which a Codespace's git refuses Sync Changes ("divergent branches") the
   first time a nightly update meets unpushed work.
-  Besides course content the sync refreshes `.devcontainer/devcontainer.json`
-  and `scripts/update-course-content.sh` itself (untouched copies only), so
+  Course content means the READMEs, `module/schedule.json`, and in each
+  week folder `lecture.md`, `img/`, `README.md` and the `Main.java`
+  starter (an edited starter is kept, like any edited file); the student's
+  own classes beside them match nothing and are never considered. The sync
+  also refreshes `.devcontainer/devcontainer.json` and
+  `scripts/update-course-content.sh` itself (untouched copies only), so
   fixes to the Codespace setup or the sync still reach every copy; its
   published-versions list must cover every path its COURSE pattern matches.
+  A copy made from the pre-week-folder layout (`weeks/`, `labs/src/ie/atu/`)
+  migrates over two nights: its old script updates itself, then the new
+  one adds the week folders and removes the untouched old course files
+  (its LEGACY pattern).
   Workflows cannot be synced (the nightly token may not push workflow
   files), so a copy never gains a workflow added later, and nothing else
   under `scripts/` or `.vscode/` is synced either. The devcontainer (a
@@ -117,11 +142,8 @@ alone.
   build failure), auto-fetches, hides the tooling folders from the explorer with
   `files.exclude` (never list anything a lab asks students to open), opens
   markdown rendered (`workbench.editorAssociations`), and opens
-  `labs/README.md` on first launch; students never author decks. That
-  index is the students' route through the labs: VS Code's explorer can
-  only sort the lab folders alphabetically, and Java package names cannot
-  start with a digit, so the lab folders stay unnumbered and the index
-  table lists them in schedule order (a CI gate checks it).
+  `lectures-and-labs/README.md` on first launch; students never author
+  decks.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
@@ -147,12 +169,6 @@ alone.
   vocabulary differs per lab (`Code Example` / `Real-World Example` /
   `Explanation` / `Key Concepts`…), and two labs use no sub-headings at
   all. Match the lab you are editing; don't import another lab's style.
-- Week folders hold the lecture only. There are no per-week lab stubs —
-  the README schedule table links straight to `labs/src/ie/atu/<topic>/`.
-- `weeks/mcq1|mcq2|mcq3/` and `weeks/reading-week/` — non-teaching
-  weeks; each holds only a `README.md`, which git needs to track the
-  folder at all. The schedule places them; their titles state no week.
-  MCQ question content lives in Moodle only — never commit it here.
 - `module/module-overview.md` — weekly topics + per-week summaries, the
   map an assistant should read before helping with any topic. Lecturer
   planning and Moodle page assets live OUTSIDE this repo (it is a public
@@ -175,7 +191,7 @@ alone.
   always self-contained (no schedule references). The picker offers an
   "MCQ n set" preset per assessment, derived at runtime from
   `/schedule.json` (each MCQ covers the teaching rows since the previous
-  one; bank slug = deck folder without hyphens). `scripts/check_practice_bank.py`
+  one; bank slug = the lectureUrl folder without hyphens). `scripts/check_practice_bank.py`
   validates the bank in CI; CI copies `practice/` to the site at `/practice/`.
 - `practice/coding/` — CodeRunner-style coding practice (`index.html`) over
   `practice/bank/coding.json`: method / class / program questions with
@@ -190,20 +206,29 @@ alone.
   private labs-solutions repo, never here.
 - `scripts/build_index.py` — generates the Pages landing page from the
   schedule (CI runs it; styled to match the theme), plus a redirect stub
-  for each pre-2026-09 `week-NN-` folder name.
+  for each pre-2026-09 `week-NN-` site address.
+- `scripts/render_decks.py` — renders each week's `lecture.md` to
+  `/<topic>/index.html` + `slides.pdf` (the topic from the row's
+  lectureUrl), copying `img/`; CI runs it (set `MARP="npx --no-install
+  marp"` to run it locally).
 - `scripts/build_moodle_schedule.py` — generates the Moodle course-page
   schedule block from the schedule, with DOM-built rows because Moodle
   strips closing tags out of inline scripts (CI publishes it at
   `/moodle-schedule-table.html`).
-- `scripts/check_schedule.py` — CI gate: the schedule is well-formed, every
-  row's folder/lab/page exists, no orphan week folder, no week number in
-  frontmatter/kickers/MCQ titles, README's table is current, `labs/README.md`
-  links every lab's README in schedule order, the module overview has
-  every section in order.
-- `scripts/build_lab_pages.py` — renders each lab README as a read-only
-  styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and FAILS if it is missing.
-- `scripts/verify_snippets.py` — compiles every ```java fence in every deck
-  AND every lab README with javac, wrapping bare declarations or statements
+- `scripts/check_schedule.py` — CI gate: the schedule is well-formed; every
+  row's week folder holds what the row promises (the right topic's
+  lecture, a lab README titled for the topic plus `Main.java`, or an
+  explainer); every tracked Java file declares its week folder as its
+  package; no orphan week folder and nothing left under `weeks/` or
+  `labs/`; no week number in lecture frontmatter/kickers or MCQ titles;
+  both generated week tables are current; the module overview has every
+  section in order.
+- `scripts/build_lab_pages.py` — renders each week's lab README as a
+  read-only styled page at `/labs/<labUrl folder>/` (CI runs it; needs
+  `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and
+  FAILS if it is missing.
+- `scripts/verify_snippets.py` — compiles every ```java fence in every
+  `lecture.md` AND every week README with javac, wrapping bare declarations or statements
   as needed. A fence
   that is meant to be broken is skipped with `<!-- no-compile -->` on the
   line directly above it. CI gate; run it after editing any deck code.
@@ -215,17 +240,19 @@ alone.
   heading that exists (its `slugify` mirrors `gh_slugify` in
   `build_lab_pages.py`, so renaming a lab section without updating its
   Table of Contents fails the build). External URLs are never fetched. CI gate;
-  it exists because the layout is DERIVED (week folder → deck, topic → lab
+  it exists because the layout is DERIVED (week number → week folder →
   package), so any rename silently breaks prose that names the old path —
   which is how README's whole schedule table once shipped nine 404s with
   every other gate green.
 - `scripts/update_current_week.py` — regenerates README's current-week
-  banner AND its schedule table from the schedule, with the ➡️ marker on
-  the live row. A GitHub Action runs it every Monday; `--date YYYY-MM-DD`
+  banner AND the week tables in README.md and lectures-and-labs/README.md
+  from the schedule, with the ➡️ marker on the live row. A GitHub Action
+  runs it every Monday and commits both files; `--date YYYY-MM-DD`
   overrides today for testing. The Pages index highlights the same row in
   inline JS from the schedule's start date baked into the page.
-- `.github/workflows/marp.yml` — renders every `weeks/*/slides.md`
-  to HTML + PDF on push, then publishes the site with
+- `.github/workflows/marp.yml` — on push to main runs the gates, renders
+  every lecture (`scripts/render_decks.py`) to HTML + PDF, builds the
+  index, lab pages and Moodle block, then publishes the site with
   `actions/upload-pages-artifact` + `actions/deploy-pages`. **There is no
   gh-pages branch** — build output never enters git, so the copies
   students make carry only source, and deployments get history + rollback in the
@@ -237,10 +264,11 @@ alone.
 
 ## Conventions (guaranteed repo-wide)
 
-- Folder/file names: kebab-case, no spaces.
-- Every `slides.md` starts with YAML frontmatter: `title`, `topic` (kebab
-  slug), `type` (`lecture`), `source` (`authored`) — no `week`: the
-  schedule owns that,
+- Folder/file names: kebab-case, no spaces. Week folders are `weekNN`
+  (two digits, so they sort) and `weekNNb-reading-week`.
+- Every `lecture.md` starts with YAML frontmatter: `title`, `topic` (kebab
+  slug, equal to the row's lectureUrl folder), `type` (`lecture`),
+  `source` (`authored`) — no `week`: the folder and the schedule own that,
   `marp: true`, `theme`, `paginate`. Lab READMEs carry no frontmatter —
   they are read as plain markdown on GitHub and on the site.
 - Slides are separated by `---` on its own line; slide 1 uses `#`, the rest `##`.
@@ -289,7 +317,7 @@ alone.
   HTML** and are readable by anyone viewing source, so write them
   publishable: no remarks about individual students or cohorts.
 - Diagrams in decks are drawn in deck-local CSS (a `<style>` block at the
-  top of each `slides.md`: memory boxes, pillar strips, hierarchy trees,
+  top of each `lecture.md`: memory boxes, pillar strips, hierarchy trees,
   call-stack frames…) — no image files and no build pipeline. That block
   holds only what is BESPOKE to the deck. The components every deck shares
   — `.kicker`, `.callout`, `.legend`, and the `.mem` memory-cell strip —
@@ -318,17 +346,19 @@ alone.
 
 ## Editing rules
 
-- To change a lecture: edit its `slides.md` and push — CI re-renders decks.
-- To add a topic: create `weeks/<topic>/slides.md`, add its lab under
-  `labs/src/ie/atu/<topic>/`, add the row to `module/schedule.json` (or
-  export it from the builder), run `scripts/update_current_week.py`.
-- A lecture and its lab are linked by the schedule row (`lectureUrl` and
-  `labUrl`), not by a naming rule; by convention the lab package is the
-  topic with hyphens removed (`classes-and-objects` → `classesandobjects`)
-  because Java package segments cannot contain hyphens. A row with a
-  lecture and no lab is allowed (week 1); `check_schedule.py` fails the
-  build if a row names a deck, lab or page that does not exist, or if a
-  folder under `weeks/` is not in the schedule.
+- To change a lecture: edit its week's `lecture.md` and push — CI
+  re-renders the decks.
+- To add a topic: add the row to `module/schedule.json` (or export it from
+  the builder) with a `lectureUrl` and `labUrl` naming its site folders,
+  create its week folder with `lecture.md` (frontmatter `topic` = the
+  lectureUrl folder), `README.md` and a `Main.java` in `package weekNN`,
+  renumber the week folders after it if it was inserted, and run
+  `scripts/update_current_week.py`.
+- A lecture and its lab share their week's folder; their site addresses
+  come from the row's `lectureUrl` and `labUrl` (by convention the lab's is
+  the topic without hyphens, `classesandobjects`). A row with a lecture
+  and no lab is allowed (week 1). `check_schedule.py` fails the build on
+  any mismatch between the schedule and the week folders.
 - `module/module-overview.md` has one `## <Topic>` section per schedule
   row, in schedule order, with no week numbers; the gate checks the order.
 
@@ -340,10 +370,10 @@ alone.
                          # `npm install -g <pinned>` and never reads one, so
                          # it only added ~1900 lines to a repo students copy.
                          # npm regenerates it locally; it is gitignored.
-    npm run preview      # live server over weeks/ -> http://localhost:8080
+    npm run preview      # live server over the repo -> http://localhost:8080
     npm run export:intro # one deck straight to build/…/slides.pdf
 
-Browse to any deck (e.g. `/introduction/slides.md`); edit the
+Browse to any deck (e.g. `/lectures-and-labs/week01/lecture.md`); edit the
 markdown, refresh the browser to see it. `npm run preview:intro` opens a
 self-refreshing preview window instead, and the Marp for VS Code extension
 gives instant side-panel previews while editing. Preview locally first —
@@ -365,7 +395,8 @@ Before any push, the same gates CI runs (all must print nothing / exit 0):
     python scripts/check_links.py         # every relative link resolves
     python scripts/verify_snippets.py     # every ```java fence compiles
     python scripts/check_practice_bank.py # practice bank is well-formed
-    find labs/src -name '*.java' | xargs javac -d /tmp/labs-classes   # labs compile
+    python scripts/check_schedule.py      # week folders agree with the schedule
+    find lectures-and-labs -name '*.java' | xargs javac -d /tmp/labs-classes   # labs compile
 
 Local preview of a deck while editing: `npm run preview` (see above).
 After editing a deck's layout, re-render and check nothing overflows the

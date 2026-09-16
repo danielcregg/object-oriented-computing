@@ -2,15 +2,15 @@ name: labs
 
 # Do the labs compile? This is the one workflow that runs in a STUDENT's copy
 # of the template (deliberately unguarded): every push gets a green tick if
-# every .java file under labs/src compiles, and a red cross with the compiler's
+# every .java file under lectures-and-labs compiles, and a red cross with the compiler's
 # message if not. It never runs anything, never grades, never comments.
 # The module's own CI (marp.yml) compiles the same files as one of its gates.
 
 on:
   push:
-    paths: ['labs/src/**', '.github/workflows/labs.yml']
+    paths: ['lectures-and-labs/**/*.java', '.github/workflows/labs.yml']
   pull_request:
-    paths: ['labs/src/**']
+    paths: ['lectures-and-labs/**/*.java']
   workflow_dispatch:
 
 permissions:
@@ -32,6 +32,6 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/classes"
-          find labs/src -name '*.java' -print0 \
+          find lectures-and-labs -name '*.java' -print0 \
             | xargs -0 --no-run-if-empty javac -d "$RUNNER_TEMP/classes"
           echo "All lab sources compile." >> "$GITHUB_STEP_SUMMARY"

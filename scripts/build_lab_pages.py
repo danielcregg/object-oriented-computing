@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Render the lab READMEs and the MCQ brief as styled pages for GitHub Pages.
 
-For every labs/src/ie/atu/<slug>/README.md this emits
-OUTPUT_DIR/labs/<slug>/index.html in the site's visual identity, plus a
+For every lab in the schedule (lectures-and-labs/<weekNN>/README.md) this
+emits OUTPUT_DIR/labs/<lab>/index.html, <lab> being the schedule's labUrl
+folder (so the page keeps its address when the semester is reordered), in the site's visual identity, plus a
 labs index page at OUTPUT_DIR/labs/index.html. Pages are READ-ONLY
 previews — each carries a banner telling students to make their own
 copy of the repo from the template and work in a Codespace.
@@ -30,13 +31,13 @@ import markdown
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from schedule import load  # noqa: E402
 
-LABS = Path("labs/src/ie/atu")
 BRIEF = Path("mcq/README.md")
 # GitHub's "new repository" form, prefilled: this template, the student's own
 # account, Private already chosen. (The repo's own /generate link opens the
 # same form with no visibility chosen.)
 COPY_URL = html.escape("https://github.com/new?template_owner=danielcregg"
-                       "&template_name=object-oriented-computing&visibility=private")
+                       "&template_name=object-oriented-computing&visibility=private"
+                       "&name=object-oriented-computing-module")
 
 # Both scripts are third-party code executed on the module's public site, so
 # each carries a Subresource Integrity hash: the browser refuses to run the
@@ -219,14 +220,13 @@ def main() -> None:
     out_root = Path(sys.argv[1] if len(sys.argv) > 1 else "build") / "labs"
     out_root.mkdir(parents=True, exist_ok=True)
 
-    # Teaching order from the schedule, then any lab the schedule does not
-    # name (alphabetically) -- never silently dropped.
+    # Teaching order from the schedule. check_schedule.py guarantees every
+    # week folder belongs to a schedule row, so no lab can be left out.
     sched = load()
-    ordered = [r.lab for r in sched.rows if r.lab]
-    extras = sorted(p.parent.name for p in LABS.glob("*/README.md") if p.parent.name not in ordered)
     labs = []
-    for slug in ordered + extras:
-        readme = LABS / slug / "README.md"
+    for row in sched.labs:
+        slug = row.lab
+        readme = row.path / "README.md"
         if not readme.is_file():
             raise SystemExit(f"build_lab_pages: the schedule names lab {slug!r} but {readme} does not exist")
         text = readme.read_text(encoding="utf-8")
@@ -251,7 +251,7 @@ def main() -> None:
         banner = (f'<div class="copy-banner">Read-only preview. To <strong>do</strong> '
                   f'this lab: <a href="{COPY_URL}">make your own private copy of the '
                   f'repo</a> ("Use this template", not Fork), open a Codespace on it, '
-                  f'and work in <code>labs/src/ie/atu/{slug}/</code>.</div>')
+                  f'and work in <code>lectures-and-labs/{row.dir}/</code>.</div>')
         deck = sched.deck_for_lab(slug)
         lecture = f' · <a href="../../{deck}/index.html">lecture</a>' if deck else ''
         kicker = f'<a href="./..">labs</a>{lecture} · object-oriented computing'

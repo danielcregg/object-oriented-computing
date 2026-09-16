@@ -95,8 +95,8 @@ CONTEXT_RADIUS = 40  # chars of context kept either side of a match in output
 # ---------------------------------------------------------------------------
 # Check 3: only these top-level paths may be tracked.
 TOP_LEVEL_ALLOW_RE = re.compile(
-    r"^(\.github/|\.gitignore$|README\.md$|CLAUDE\.md$|AGENTS\.md$|docs/|module/|scripts/|weeks/"
-    r"|themes/|\.vscode/|\.devcontainer/|labs/|practice/|mcq/|package\.json$|package-lock\.json$)"
+    r"^(\.github/|\.gitignore$|README\.md$|CLAUDE\.md$|AGENTS\.md$|docs/|module/|scripts/|lectures-and-labs/"
+    r"|themes/|\.vscode/|\.devcontainer/|practice/|mcq/|package\.json$|package-lock\.json$)"
 )
 
 # ---------------------------------------------------------------------------

@@ -61,7 +61,7 @@ jobs:
           python3 scripts/verify_snippets.py
           python3 scripts/check_practice_bank.py
           python3 scripts/check_coding_bank.py
-          find labs/src -name '*.java' -print0 \
+          find lectures-and-labs -name '*.java' -print0 \
             | xargs -0 --no-run-if-empty javac -d "$RUNNER_TEMP/labs-classes"
 
       - name: Install Marp CLI
@@ -78,23 +78,12 @@ jobs:
           cp module/schedule.json build/schedule.json
           mkdir -p build/practice
           cp -R practice/. build/practice/
-          # mapfile, NOT find|while: a piped while-loop hands the pipe to the
-          # loop body's stdin, and marp-cli treats piped stdin as an extra
-          # markdown input ("Converting 2 markdowns" + output-path error).
-          mapfile -t decks < <(find weeks -type f -name 'slides.md' | sort)
-          for f in "${decks[@]}"; do
-            week_dir_path=$(dirname "$f")
-            week_dir=$(basename "$week_dir_path")
-            out="build/$week_dir"
-            mkdir -p "$out"
-            if [ -d "$week_dir_path/img" ]; then cp -R "$week_dir_path/img" "$out/img"; fi
-            marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/index.html"
-            # PDF only. Marp's pptx export wraps each slide as an image, so it
-            # offers nothing the PDF doesn't, while adding ~6 MB per deck to
-            # every deploy -- and pptx are zip archives, so git cannot delta
-            # them and the gh-pages history grew by that much on every push.
-            marp "$f" --html --allow-local-files --theme-set themes/ooc.css -o "$out/slides.pdf"
-          done
+          # Each lecture.md -> build/<its topic>/index.html + slides.pdf. The
+          # site folder comes from the schedule's lectureUrl, not from the week
+          # folder, so a lecture keeps its address when the semester is
+          # reordered. PDF only: Marp's pptx export wraps each slide as an
+          # image, adding ~6 MB per deck for nothing the PDF doesn't give.
+          python3 scripts/render_decks.py build
           touch build/.nojekyll   # serve the output as-is; no Jekyll pass
 
       - name: Upload rendered decks as a downloadable artifact

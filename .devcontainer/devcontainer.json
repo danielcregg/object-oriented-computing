@@ -15,6 +15,19 @@
       ],
       "settings": {
         "java.project.sourcePaths": ["labs/src"],
+        // No start-up prompts. Full Java support from the start (the default
+        // "Hybrid" mode starts lightweight and can ask to switch), Red Hat's
+        // usage-data question answered "no" (it only asks while this is
+        // unset), and no Java welcome or release-notes tab covering the labs
+        // README.
+        "java.server.launchMode": "Standard",
+        "redhat.telemetry.enabled": false,
+        "java.help.firstView": "none",
+        "java.help.showReleaseNotes": false,
+        // Every lab shares one source tree, so an unfinished exercise in one
+        // lab would otherwise interrupt running any other file with "Build
+        // failed, continue?". Errors still show in the editor.
+        "java.debug.settings.onBuildFailureProceed": true,
         // Copilot Chat reads AGENTS.md at the workspace root, whose student
         // section says: coach, never hand over a lab solution. Set explicitly
         // so that holds whatever VS Code's default becomes.

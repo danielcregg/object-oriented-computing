@@ -112,7 +112,9 @@ alone.
   under `scripts/` or `.vscode/` is synced either. The devcontainer (a
   Codespace-only setup) installs the Java pack, Copilot Chat and Marp, turns
   on `chat.useAgentsMdFile` so Copilot Chat follows the student section of
-  this file, auto-fetches, hides the tooling folders from the explorer with
+  this file, pre-answers the Java start-up prompts (Standard launch mode,
+  Red Hat telemetry off, no Java welcome or release-notes tab, proceed on
+  build failure), auto-fetches, hides the tooling folders from the explorer with
   `files.exclude` (never list anything a lab asks students to open), and
   opens `labs/README.md` on first launch; students never author decks.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What

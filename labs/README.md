@@ -23,24 +23,28 @@ You write your code in the lab's folder, beside its README.
 
 ## Doing a lab
 
-Open the lab's folder below, read its `README.md` (right-click →
-*Open Preview* in VS Code), and follow it. Each folder already has the
-Java package and a `Main.java` with a run button (▶) — add your classes
-beside it. Two rules Java enforces when you create a file: a `public`
-class must live in a file with exactly its name (`Book` in `Book.java`),
-and every file in the folder starts with the same `package` line as
-`Main.java`.
+The labs below are in the order you'll do them. (VS Code's file explorer
+always lists the folders under `src/ie/atu/` alphabetically, so start
+from this list, not from the explorer.) Click a lab to open its
+instructions; in a Codespace they open ready to read, and in VS Code on
+your own computer you right-click the `README.md` → *Open Preview*.
 
-| Lab | Folder |
+Each lab's folder already has the Java package and a `Main.java` with a
+run button (▶) — add your classes beside it. Two rules Java enforces when
+you create a file: a `public` class must live in a file with exactly its
+name (`Book` in `Book.java`), and every file in the folder starts with
+the same `package` line as `Main.java`.
+
+| Lab, in the order you'll do them | Its folder |
 |---|---|
-| Classes and Objects | [`src/ie/atu/classesandobjects/`](src/ie/atu/classesandobjects/) |
-| Methods | [`src/ie/atu/methods/`](src/ie/atu/methods/) |
-| Arrays | [`src/ie/atu/arrays/`](src/ie/atu/arrays/) |
-| Strings | [`src/ie/atu/strings/`](src/ie/atu/strings/) |
-| Encapsulation | [`src/ie/atu/encapsulation/`](src/ie/atu/encapsulation/) |
-| Inheritance | [`src/ie/atu/inheritance/`](src/ie/atu/inheritance/) |
-| Polymorphism | [`src/ie/atu/polymorphism/`](src/ie/atu/polymorphism/) |
-| Abstraction | [`src/ie/atu/abstraction/`](src/ie/atu/abstraction/) |
+| [Classes and Objects](src/ie/atu/classesandobjects/README.md) | `src/ie/atu/classesandobjects/` |
+| [Methods](src/ie/atu/methods/README.md) | `src/ie/atu/methods/` |
+| [Arrays](src/ie/atu/arrays/README.md) | `src/ie/atu/arrays/` |
+| [Strings](src/ie/atu/strings/README.md) | `src/ie/atu/strings/` |
+| [Encapsulation](src/ie/atu/encapsulation/README.md) | `src/ie/atu/encapsulation/` |
+| [Inheritance](src/ie/atu/inheritance/README.md) | `src/ie/atu/inheritance/` |
+| [Polymorphism](src/ie/atu/polymorphism/README.md) | `src/ie/atu/polymorphism/` |
+| [Abstraction](src/ie/atu/abstraction/README.md) | `src/ie/atu/abstraction/` |
 
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.

@@ -10,6 +10,9 @@ Fails (exit 1, every finding listed) when:
   - a deck declares `week:` in its frontmatter or a week number in its kicker,
     or an MCQ page titles itself with a week -- the schedule is stated ONCE;
   - README's generated schedule table is stale (run update_current_week.py);
+  - labs/README.md's lab table does not list every lab in schedule order
+    (VS Code can only sort the lab folders alphabetically, so that table is
+    how students find the next lab);
   - module/module-overview.md lacks a section per row, or has them out of order.
 
 Usage:
@@ -27,6 +30,7 @@ import update_current_week  # noqa: E402
 
 OVERVIEW = Path("module/module-overview.md")
 README = Path("README.md")
+LABS_INDEX = Path("labs/README.md")
 
 
 def main() -> None:
@@ -83,6 +87,12 @@ def main() -> None:
         committed = re.sub(r"\*\*➡️ (.*?)\*\*", r"\1", m.group(1)).strip()
         if committed != update_current_week.render_table(sched, None).strip():
             findings.append("README.md: the schedule table is stale; run scripts/update_current_week.py")
+
+    want_labs = [r.lab for r in sched.rows if r.lab]
+    listed = re.findall(r"\]\(src/ie/atu/([^/)]+)/README\.md\)", LABS_INDEX.read_text(encoding="utf-8"))
+    if listed != want_labs:
+        findings.append(f"{LABS_INDEX}: the lab table must link each lab's README in schedule "
+                        f"order {want_labs}; it links {listed}")
 
     heads = [l[3:].strip() for l in OVERVIEW.read_text(encoding="utf-8").splitlines() if l.startswith("## ")]
     last = -1

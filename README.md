@@ -10,9 +10,9 @@ That's the whole module in one page — every lecture, every lab, and the
 MCQ practice, all readable in the browser with nothing to install.
 
 **Doing the labs?** You need your own copy: click **Use this template →
-Create a new repository** (green button, top-right). Name it whatever you
-like and **you may set it to Private** — it's your work. Then on *your*
-repo choose **Code → Codespaces → Create codespace**: a full Java setup
+Create a new repository** (the green button, top-right; not *Fork*). Name
+it whatever you like and set it to **Private**: it's your work. Then on
+*your* repo choose **Code → Codespaces → Create codespace**: a full Java setup
 opens in your browser, nothing to install. Pick a lab folder under
 `labs/src/ie/atu/` and follow its README. Details in
 **[labs/README.md](labs/README.md)**.

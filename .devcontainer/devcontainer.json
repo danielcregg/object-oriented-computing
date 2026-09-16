@@ -15,9 +15,11 @@
     }
   },
   "postCreateCommand": "java -version",
-  // Refresh the lectures and lab instructions from the module repo each time
-  // the workspace is opened. Content only -- it never touches your own code,
-  // and it exits quietly (never non-zero) so it can't stop the Codespace
-  // starting if you are offline. In the module's own repo it does nothing.
-  "postAttachCommand": "bash scripts/update-course-content.sh --quiet || true"
+  // Each time the workspace opens: catch up with your repo on GitHub (what the
+  // nightly update committed) and, while the two agree, bring in any newer
+  // lecture or lab-instruction fix and save it straight back. Content only --
+  // it never touches your own code -- and it is quiet and never fails, so it
+  // can't stop the Codespace starting if you are offline. In the module's own
+  // repo it does nothing.
+  "postAttachCommand": "bash scripts/update-course-content.sh --attach || true"
 }

@@ -6,10 +6,13 @@ You write your code in the lab's folder, beside its README.
 
 ## Getting started (once)
 
-1. **Use this template → Create a new repository** (green button, top-right
-   on GitHub). That gives you your own copy to save work into. Call it
-   anything you like — and you can set it to **Private**, since it's your
-   work, not something anyone else needs to see.
+1. **Use this template → Create a new repository** (the green button,
+   top-right on the module's GitHub page; not *Fork*, because a fork can't
+   be private), or open
+   [this link](https://github.com/new?template_owner=danielcregg&template_name=object-oriented-computing&visibility=private),
+   which fills that form in for you. That gives you your own copy to save
+   work into. Call it anything you like and set it to **Private**: it's
+   your work, not something anyone else needs to see.
 2. On **your** repo: **Code → Codespaces → Create codespace** — a full Java
    IDE opens in your browser, nothing to install. *(Local instead? Clone
    your repo and open it in VS Code with JDK 21 (the same version as the Codespace) and the "Extension Pack
@@ -55,22 +58,20 @@ before you close the browser):
 Your repo on GitHub now has the code, and stays there whatever happens to
 the Codespace. Every push also runs a small check that compiles all your
 lab code: a green tick means it all compiles, a red cross means one file
-does not, and the message says which. (You may also see two workflows
-listed as *skipped* on every push — those are the module's own site
-builders, switched off in copies by design. Ignore them.)
+does not, and the message says which. (The Actions tab also lists the
+module's own site builders as *skipped*: they are switched off in copies
+by design. Ignore them.)
 
 ## Getting the latest lectures and lab instructions
 
 If a lab or a lecture is corrected mid-semester, the fix reaches your copy
-on its own: every night a small workflow in your repo (`course-sync`) pulls
-the latest course content in, and a Codespace does the same each time you
-open it. So the first option is:
+on its own: every night a small workflow in your repo (`course-sync`)
+brings the latest course content in, and your Codespace catches up each
+time you open it. So there is usually nothing to do. To get a fix this
+minute instead, either:
 
-1. **Do nothing.** Your repo catches up overnight, and your Codespace on
-   opening. (In the Codespace, click **Sync Changes** before you start, so
-   it picks up what the nightly run committed.)
-2. **Press the button.** *Terminal → Run Task → Update course content.*
-3. **Run one line:**
+1. **Press the button:** *Terminal → Run Task → Update course content*, or
+2. **Run one line:**
 
    ```bash
    bash scripts/update-course-content.sh
@@ -78,7 +79,9 @@ open it. So the first option is:
 
 It only ever refreshes the lectures, the lab instructions and the README.
 **Your own code is never touched**, and if you have edited one of those
-files yourself it keeps your version and tells you so.
+files yourself it keeps your version and tells you so. If it says your
+repo on GitHub has newer commits, click **Sync Changes** first, then run it
+again.
 
 And the
 **[module site](https://danielcregg.is-a.dev/object-oriented-computing/)**

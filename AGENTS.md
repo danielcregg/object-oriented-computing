@@ -92,9 +92,17 @@ alone.
   the student's copy: `labs.yml`, the green tick that compiles `labs/src`
   on every push that touches it, and `course-sync.yml`, which runs
   `scripts/update-course-content.sh` there every night (01:05 UTC) so
-  corrections arrive without a Codespace ever being opened; it keeps the
-  script's baseline as the ref `refs/course-sync/baseline`, pushed back to
-  the student's repo, since a fresh checkout has no `.course-sync` file.
+  corrections arrive without a Codespace ever being opened. The script
+  stores no state: a course file counts as the student's own edit only if
+  it matches no version this repo has ever published, and that list is
+  read from `main`'s history, so **never rewrite history on `main`** (every
+  untouched file in every copy would suddenly look edited and stop
+  updating). It commits only while the copy and GitHub agree, pushing at
+  once; a Codespace runs it with `--attach` on opening, which first
+  fast-forwards to whatever the nightly run pushed, so the two never make
+  competing commits. It also sets `pull.rebase false` in the copy, without
+  which a Codespace's git refuses Sync Changes ("divergent branches") the
+  first time a nightly update meets unpushed work.
   Neither the workflows nor `scripts/` are synced, so a copy made before a
   workflow existed does not gain it. The devcontainer installs only the Java pack and opens
   `labs/README.md` on first launch; students never author decks.

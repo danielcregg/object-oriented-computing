@@ -8,126 +8,162 @@
 #
 # It touches ONLY course content -- the lectures, the lab instructions and
 # the README. It never touches Main.java, any class you wrote, or any file
-# you created, and it skips anything you have edited yourself.
+# you created, and it leaves alone any course file you have edited.
 #
-# Run it whenever you like:   bash scripts/update-course-content.sh
-# (In a Codespace it also runs by itself each time you open the workspace,
-# and the course-sync workflow runs it in your repo on GitHub every night.)
+# How it can tell: it knows every version of every course file the module
+# repo has ever published. A file matching one of them, however old, is
+# course material you have not touched, so it is refreshed; anything else is
+# your edit and stays. Nothing about "what you last received" is stored
+# anywhere, so the nightly workflow, a Codespace and a laptop always agree.
+#
+# It also keeps ONE history: it first catches up with your repo on GitHub,
+# and it only refreshes content while this copy and GitHub agree, pushing the
+# refresh straight back. The nightly run and a Codespace therefore never
+# commit the same update separately -- which is what would turn your next
+# "Sync Changes" into a merge conflict in a file you never opened.
+#
+#   bash scripts/update-course-content.sh            refresh now
+#   bash scripts/update-course-content.sh --attach   what a Codespace runs each
+#                                                    time it opens (quiet)
+#
+# The course-sync workflow runs the first form in your repo every night.
+
+# One { ... } block, so bash has read the whole script before it runs any of
+# it, whatever happens to this file in the meantime.
+{
 set -uo pipefail
 
 UPSTREAM_URL="https://github.com/danielcregg/object-oriented-computing.git"
 UPSTREAM_SLUG="danielcregg/object-oriented-computing"
 BRANCH="main"
-QUIET="${1:-}"                       # --quiet: say nothing unless something changed
+MODE="${1:-}"
+# The course content, file by file rather than whole folders, so editing one
+# deck never stops the rest from updating.
+COURSE='^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$'
 
-say() { [ "$QUIET" = "--quiet" ] || printf '%s\n' "$*"; }
-die() { printf '%s\n' "$*" >&2; exit 0; }   # exit 0: never block a Codespace from starting
+say() { [ "$MODE" = "--attach" ] || printf '%s\n' "$@"; }   # one line per argument
+stop() { say "$@"; exit 0; }   # always exit 0: never block a Codespace from starting
 
-command -v git >/dev/null || die "git not found."
-git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "Not a git repository."
-cd "$(git rev-parse --show-toplevel)"
+command -v git >/dev/null || stop "git not found."
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || stop "Not a git repository."
+cd "$(git rev-parse --show-toplevel)" || stop "Cannot find the top of the repository."
 
 # In the module's own repo there is nothing to pull from -- do nothing at all.
 if git remote get-url origin 2>/dev/null | grep -qi "$UPSTREAM_SLUG"; then
-  say "This IS the module repo - nothing to update."
+  stop "This IS the module repo - nothing to update."
+fi
+[ "$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" = "$BRANCH" ] ||
+  stop "You are not on the $BRANCH branch - nothing changed."
+
+# "Sync Changes" is git pull, then git push. When GitHub has a commit this
+# copy lacks (a nightly update) and this copy has one GitHub lacks (your
+# work), git must be told to merge the two or it stops with "divergent
+# branches". They never touch the same files, so that merge is clean.
+git config pull.rebase >/dev/null 2>&1 || git config pull.rebase false
+
+# 1. Catch up with your repo on GitHub. Fast-forward only: if this copy has
+#    work GitHub has not seen yet, nothing moves.
+online=0; ahead=0; behind=0
+if git fetch --quiet origin "$BRANCH" 2>/dev/null; then
+  online=1
+  read -r ahead behind < <(git rev-list --left-right --count "HEAD...origin/$BRANCH" 2>/dev/null || echo "0 0")
+  if [ "$behind" -gt 0 ] && [ "$ahead" -eq 0 ] &&
+     git merge --ff-only --quiet "origin/$BRANCH" >/dev/null 2>&1; then
+    behind=0
+    printf '%s\n' "Caught up with your repo on GitHub."
+  fi
+fi
+if [ "$behind" -gt 0 ]; then
+  stop "Your repo on GitHub has newer commits that could not be brought in here automatically." \
+       "Click Sync Changes (or run: git pull), then try again."
+fi
+# A Codespace opening with work GitHub has not seen leaves the content alone:
+# the nightly run delivers it on GitHub, and Sync Changes merges it in.
+if [ "$MODE" = "--attach" ] && { [ "$online" -eq 0 ] || [ "$ahead" -gt 0 ]; }; then
   exit 0
 fi
 
-git remote get-url upstream >/dev/null 2>&1 || {
-  say "Adding the module repo as 'upstream'."
-  git remote add upstream "$UPSTREAM_URL"
-}
-
+# 2. The module repo, fetched in full: the list of published versions below
+#    is read from its history, and the repo is small.
 say "Checking the module repo for updates..."
-# A full fetch, not --depth=1: a shallow tip cannot be pushed as the
-# course-sync baseline ref (git refuses "shallow update"), and the module repo
-# is small enough that the first fetch is a few seconds and later ones are
-# incremental.
-if ! git fetch --quiet upstream "$BRANCH" 2>/dev/null; then
-  die "Could not reach the module repo (offline?). Nothing changed."
-fi
+git remote get-url upstream >/dev/null 2>&1 || git remote add upstream "$UPSTREAM_URL"
+git fetch --quiet upstream "$BRANCH" 2>/dev/null ||
+  stop "Could not reach the module repo (offline?). Nothing changed."
+UP="upstream/$BRANCH"
 
-# The content files, listed one by one (not as directories) so that editing
-# one deck never blocks the rest from updating.
-mapfile -t PATHS < <(
-  git ls-tree -r --name-only "upstream/$BRANCH" | grep -E \
-    '^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$' || true
-)
+PUBLISHED="$(mktemp)" || stop "Could not create a temporary file. Nothing changed."
+trap 'rm -f "$PUBLISHED"' EXIT
+# One "path blob" line for every version of every file the module repo has
+# published under those folders.
+git log --root --format= --raw --no-abbrev --no-renames "$UP" -- \
+    README.md labs mcq module weeks 2>/dev/null |
+  awk '$4 !~ /^0+$/ { print $6 " " $4 }' > "$PUBLISHED"
+published() { grep -qxF "$1 $2" "$PUBLISHED"; }
 
-# Baseline = the content as you last received it: the commit recorded by the
-# previous run, or the initial template commit on the first run. Comparing
-# against HEAD would be wrong -- you are told to COMMIT your work, so an
-# edit you committed looks "clean" against HEAD and would be overwritten.
-MARKER=".course-sync"
-# The baseline is remembered twice: in this gitignored file (a Codespace or
-# your laptop) and in the ref refs/course-sync/baseline, which the nightly
-# course-sync workflow pushes to your repo so a fresh checkout on GitHub
-# remembers it too. Whichever exists wins; the file is preferred.
-LAST="$(cat "$MARKER" 2>/dev/null || git rev-parse -q --verify refs/course-sync/baseline 2>/dev/null || true)"
-ROOT="$(git rev-list --max-parents=0 HEAD | tail -1)"
-
-skipped=0
+# 3. Refresh every course file you have not edited.
 touched=()
-for p in "${PATHS[@]}"; do
-  [ -n "$p" ] || continue
-  base="$ROOT"
-  if [ -n "$LAST" ] && git cat-file -e "$LAST:$p" 2>/dev/null; then base="$LAST"; fi
-  # Untouched since you received it? Safe to refresh. Otherwise it is yours.
-  if git cat-file -e "$base:$p" 2>/dev/null && ! git diff --quiet "$base" -- "$p" 2>/dev/null; then
-    say "  kept your version: $p"
-    skipped=$((skipped + 1))
-    continue
-  fi
-  git checkout --quiet "upstream/$BRANCH" -- "$p" 2>/dev/null && touched+=("$p")
-done
-
-# Course-owned paths that upstream has since removed or renamed (a week folder
-# under its new name, a retired page): drop our copy too, or the old and the
-# new sit side by side. Same rule as above -- a file you edited is yours and
-# stays. Only the course-owned areas are considered; your lab work is never
-# touched.
+kept=0
 while IFS= read -r p; do
   [ -n "$p" ] || continue
-  case " ${PATHS[*]} " in *" $p "*) continue;; esac
-  base="$ROOT"
-  if [ -n "$LAST" ] && git cat-file -e "$LAST:$p" 2>/dev/null; then base="$LAST"; fi
-  if git cat-file -e "$base:$p" 2>/dev/null && ! git diff --quiet "$base" -- "$p" 2>/dev/null; then
-    say "  kept your version (retired upstream): $p"
+  if [ -e "$p" ]; then
+    have="$(git hash-object -- "$p")"
+    [ "$have" = "$(git rev-parse "$UP:$p")" ] && continue    # already current
+    if ! published "$p" "$have"; then
+      say "  kept your version: $p"
+      kept=$((kept + 1))
+      continue
+    fi
+  elif [ -n "$(git log -1 --format=%h HEAD -- "$p" 2>/dev/null)" ]; then
+    say "  kept your deletion: $p"          # it was here once and you removed it
+    kept=$((kept + 1))
     continue
   fi
-  git rm -q -- "$p" 2>/dev/null && touched+=("$p") && say "  removed (retired upstream): $p"
+  git checkout --quiet "$UP" -- "$p" && touched+=("$p")
+done < <(git ls-tree -r --name-only "$UP" | grep -E "$COURSE")
+
+# Course files the module repo has since removed or renamed (a week folder
+# under its new name, a retired page): drop the old copy too, unless you
+# edited it. Your lab work is never considered.
+while IFS= read -r p; do
+  [ -n "$p" ] || continue
+  git cat-file -e "$UP:$p" 2>/dev/null && continue
+  [ -e "$p" ] || continue
+  if published "$p" "$(git hash-object -- "$p")"; then
+    git rm --quiet -- "$p" && touched+=("$p") && say "  removed (retired upstream): $p"
+  else
+    say "  kept your version (retired upstream): $p"
+  fi
 done < <(git ls-files -- 'weeks/*' 'mcq/README.md' 'module/schedule.json')
 
-# Local bookkeeping only -- gitignored, never committed, never pushed.
-git rev-parse "upstream/$BRANCH" > "$MARKER"
-# ...and pin that commit with a ref. The nightly course-sync workflow pushes
-# this ref to your repo and reads it back on the next run, which is how a
-# fresh checkout on GitHub knows what you last received; without it every
-# file a previous run refreshed would look edited-by-you and stop updating.
-git update-ref refs/course-sync/baseline "$(git rev-parse "upstream/$BRANCH")"
-
-# Commit ONLY the content paths this script rewrote. A bare `git commit`
-# would sweep in anything you happened to have staged -- and this runs
-# automatically when a Codespace attaches, so work you had run `git add` on
-# would land in a commit authored "course-update" and captioned as a
-# content sync.
+# 4. Commit ONLY the paths refreshed above. A bare `git commit` would sweep in
+#    anything you had staged, under the author "course-update". Never signed:
+#    a Codespace with GitHub's commit signing switched on refuses to sign for
+#    an author that isn't you, and the commit would fail.
 changed=()
 if [ ${#touched[@]} -gt 0 ]; then
-  # --no-renames: a folder that moved upstream is a delete plus an add here,
-  # and rename detection would print only the new name, leaving the old
-  # file staged but never committed.
-  mapfile -t changed < <(git diff --cached --name-only --no-renames -- "${touched[@]}")
+  # --no-renames: a moved folder is a delete plus an add here; rename
+  # detection would list only the new name and leave the deletion behind.
+  while IFS= read -r p; do
+    [ -n "$p" ] && changed+=("$p")
+  done < <(git diff --cached --name-only --no-renames -- "${touched[@]}")
 fi
 
 if [ ${#changed[@]} -eq 0 ]; then
   say "Already up to date."
+elif ! git -c user.name="course-update" -c user.email="course-update@local" \
+       -c commit.gpgsign=false commit --quiet -m "chore: update course content from the module repo" \
+       -- "${changed[@]}"; then
+  printf '%s\n' "Could not commit the update; nothing was saved. Try again later."
 else
   printf 'Updated:\n'
   printf '  %s\n' "${changed[@]}"
-  git -c user.name="course-update" -c user.email="course-update@local" \
-      commit --quiet -m "chore: update course content from the module repo" \
-      -- "${changed[@]}"
-  printf 'Done - your own work was not touched.\n'
+  if [ "$online" -eq 1 ] && [ "$ahead" -eq 0 ] &&
+     git push --quiet origin "HEAD:$BRANCH" 2>/dev/null; then
+    printf '%s\n' "Saved to your repo on GitHub. Your own work was not touched."
+  else
+    printf '%s\n' "Your own work was not touched. Click Sync Changes to save this update to GitHub."
+  fi
 fi
-[ "$skipped" -gt 0 ] && printf '(%s file(s) left alone because you had edited them.)\n' "$skipped"
+[ "$kept" -eq 0 ] || say "($kept course file(s) left alone because you have edited them.)"
 exit 0
+}

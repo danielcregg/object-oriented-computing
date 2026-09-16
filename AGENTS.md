@@ -103,9 +103,18 @@ alone.
   competing commits. It also sets `pull.rebase false` in the copy, without
   which a Codespace's git refuses Sync Changes ("divergent branches") the
   first time a nightly update meets unpushed work.
-  Neither the workflows nor `scripts/` are synced, so a copy made before a
-  workflow existed does not gain it. The devcontainer installs only the Java pack and opens
-  `labs/README.md` on first launch; students never author decks.
+  Besides course content the sync refreshes `.devcontainer/devcontainer.json`
+  and `scripts/update-course-content.sh` itself (untouched copies only), so
+  fixes to the Codespace setup or the sync still reach every copy; its
+  published-versions list must cover every path its COURSE pattern matches.
+  Workflows cannot be synced (the nightly token may not push workflow
+  files), so a copy never gains a workflow added later, and nothing else
+  under `scripts/` or `.vscode/` is synced either. The devcontainer (a
+  Codespace-only setup) installs the Java pack, Copilot Chat and Marp, turns
+  on `chat.useAgentsMdFile` so Copilot Chat follows the student section of
+  this file, auto-fetches, hides the tooling folders from the explorer with
+  `files.exclude` (never list anything a lab asks students to open), and
+  opens `labs/README.md` on first launch; students never author decks.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,

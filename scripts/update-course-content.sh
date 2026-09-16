@@ -6,9 +6,11 @@
 # reports every differing file as an add/add CONFLICT, even files you never
 # opened. This script copies files instead, which cannot conflict.
 #
-# It touches ONLY course content -- the lectures, the lab instructions and
-# the README. It never touches Main.java, any class you wrote, or any file
-# you created, and it leaves alone any course file you have edited.
+# It touches ONLY what the module provides -- the lectures, the lab
+# instructions, the README, the Codespace setup (.devcontainer/devcontainer.json)
+# and this script itself, so fixes to either still reach your copy. It never
+# touches Main.java, any class you wrote, or any file you created, and it
+# leaves alone any of those module files you have edited.
 #
 # How it can tell: it knows every version of every course file the module
 # repo has ever published. A file matching one of them, however old, is
@@ -32,14 +34,19 @@
 # it, whatever happens to this file in the meantime.
 {
 set -uo pipefail
+# Git for Windows' bash rewrites any argument that looks like a path before
+# git sees it: "upstream/main:.devcontainer/devcontainer.json" would arrive as
+# "upstream\main;.devcontainer\devcontainer.json". This turns that off.
+export MSYS_NO_PATHCONV=1
 
 UPSTREAM_URL="https://github.com/danielcregg/object-oriented-computing.git"
 UPSTREAM_SLUG="danielcregg/object-oriented-computing"
 BRANCH="main"
 MODE="${1:-}"
 # The course content, file by file rather than whole folders, so editing one
-# deck never stops the rest from updating.
-COURSE='^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md)$'
+# deck never stops the rest from updating. Workflows are deliberately absent:
+# the nightly run's token is not allowed to push changes to workflow files.
+COURSE='^(README\.md|labs/README\.md|mcq/README\.md|module/schedule\.json|weeks/.*|labs/src/ie/atu/[^/]+/README\.md|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
 
 say() { [ "$MODE" = "--attach" ] || printf '%s\n' "$@"; }   # one line per argument
 stop() { say "$@"; exit 0; }   # always exit 0: never block a Codespace from starting
@@ -93,10 +100,12 @@ UP="upstream/$BRANCH"
 
 PUBLISHED="$(mktemp)" || stop "Could not create a temporary file. Nothing changed."
 trap 'rm -f "$PUBLISHED"' EXIT
-# One "path blob" line for every version of every file the module repo has
-# published under those folders.
+# One "path blob" line for every version the module repo has ever published
+# of every file that can be course content. Every path COURSE matches must be
+# covered here, or its untouched copies would all look edited.
 git log --root --format= --raw --no-abbrev --no-renames "$UP" -- \
-    README.md labs mcq module weeks 2>/dev/null |
+    README.md labs mcq module weeks .devcontainer/devcontainer.json \
+    scripts/update-course-content.sh 2>/dev/null |
   awk '$4 !~ /^0+$/ { print $6 " " $4 }' > "$PUBLISHED"
 published() { grep -qxF "$1 $2" "$PUBLISHED"; }
 

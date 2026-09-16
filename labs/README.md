@@ -77,7 +77,9 @@ minute instead, either:
    bash scripts/update-course-content.sh
    ```
 
-It only ever refreshes the lectures, the lab instructions and the README.
+It only ever refreshes the lectures, the lab instructions, the README and
+the Codespace's own setup (if that changes, VS Code offers to rebuild the
+Codespace: say yes when you're at a stopping point).
 **Your own code is never touched**, and if you have edited one of those
 files yourself it keeps your version and tells you so. If it says your
 repo on GitHub has newer commits, click **Sync Changes** first, then run it

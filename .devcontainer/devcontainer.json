@@ -7,19 +7,55 @@
     },
     "vscode": {
       "extensions": [
-        "vscjava.vscode-java-pack"
+        "vscjava.vscode-java-pack",
+        "GitHub.copilot-chat",
+        // Opens a lecture's slides.md as slides (Open Preview), using the
+        // module theme set in .vscode/settings.json.
+        "marp-team.marp-vscode"
       ],
       "settings": {
-        "java.project.sourcePaths": ["labs/src"]
+        "java.project.sourcePaths": ["labs/src"],
+        // Copilot Chat reads AGENTS.md at the workspace root, whose student
+        // section says: coach, never hand over a lab solution. Set explicitly
+        // so that holds whatever VS Code's default becomes.
+        "chat.useAgentsMdFile": true,
+        // Fetch in the background, so Sync Changes shows when the nightly
+        // course update is waiting on GitHub.
+        "git.autofetch": true,
+        "editor.minimap.enabled": false,
+        // A student opens this repo to do the labs, so the explorer shows the
+        // labs, the lectures, the MCQ brief and the module notes, and hides the
+        // tooling. Two rules for this list:
+        //   1. files.exclude also removes a path from quick-open and search,
+        //      so nothing a lab asks a student to open or edit may appear here.
+        //   2. Bare names match the workspace root only; "**/" matches anywhere.
+        // It applies in Codespaces only, not to the repo opened locally.
+        "files.exclude": {
+          "**/.devcontainer": true,
+          "**/.vscode": true,
+          "**/.github": true,
+          "**/.gitignore": true,
+          "**/*.class": true,
+          "bin": true,
+          "build": true,
+          "node_modules": true,
+          "practice": true,
+          "scripts": true,
+          "themes": true,
+          "package.json": true,
+          "package-lock.json": true,
+          "CLAUDE.md": true,
+          "CLAUDE.local.md": true
+        }
       }
     }
   },
   "postCreateCommand": "java -version",
   // Each time the workspace opens: catch up with your repo on GitHub (what the
   // nightly update committed) and, while the two agree, bring in any newer
-  // lecture or lab-instruction fix and save it straight back. Content only --
-  // it never touches your own code -- and it is quiet and never fails, so it
-  // can't stop the Codespace starting if you are offline. In the module's own
-  // repo it does nothing.
+  // lecture, lab-instruction or setup fix and save it straight back. It never
+  // touches your own code, and it is quiet and never fails, so it can't stop
+  // the Codespace starting if you are offline. In the module's own repo it
+  // does nothing.
   "postAttachCommand": "bash scripts/update-course-content.sh --attach || true"
 }

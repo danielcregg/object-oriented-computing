@@ -1,4 +1,4 @@
-package week11;
+package week11.abstraction_lab;
 
 public class Main {
     public static void main(String[] args) {

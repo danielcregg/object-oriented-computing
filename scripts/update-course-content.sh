@@ -7,7 +7,8 @@
 # opened. This script copies files instead, which cannot conflict.
 #
 # It touches ONLY what the module provides -- in each week folder the
-# lecture, the lab instructions and the Main.java starter; the READMEs; the
+# lecture, and in its lab folder the instructions and the Main.java starter;
+# the READMEs; the
 # Codespace setup (.devcontainer/devcontainer.json); and this script itself,
 # so fixes to either still reach your copy. It never touches a class you
 # wrote or any file you created, and it leaves alone any of those module
@@ -48,10 +49,12 @@ MODE="${1:-}"
 # lecture never stops the rest from updating. Your own classes sit beside
 # these files in the week folders and match none of them. Workflows are
 # deliberately absent: the nightly run's token may not push workflow files.
-COURSE='^(README\.md|mcq/README\.md|module/schedule\.json|lectures-and-labs/README\.md|lectures-and-labs/week[^/]+/(lecture\.md|README\.md|Main\.java|img/.+)|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
-# The layout before the week folders (September 2026). A copy made from it
-# gets the week folders added, and its untouched old course files removed.
-LEGACY='^(labs/README\.md|weeks/.+|labs/src/ie/atu/[^/]+/(README\.md|Main\.java))$'
+COURSE='^(README\.md|mcq/README\.md|module/schedule\.json|lectures-and-labs/README\.md|lectures-and-labs/week[^/]+/([^/]+-lecture\.md|README\.md|img/.+|[^/]+_lab/(README\.md|Main\.java))|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
+# Earlier layouts (September 2026): topic folders under weeks/ and
+# labs/src/ie/atu/, then briefly lecture.md, README.md and Main.java straight
+# in the week folder. A copy made from either gets today's files added and
+# its untouched old course files removed.
+LEGACY='^(labs/README\.md|weeks/.+|labs/src/ie/atu/[^/]+/(README\.md|Main\.java)|lectures-and-labs/week[^/]+/(lecture\.md|Main\.java))$'
 
 say() { [ "$MODE" = "--attach" ] || printf '%s\n' "$@"; }   # one line per argument
 stop() { say "$@"; exit 0; }   # always exit 0: never block a Codespace from starting

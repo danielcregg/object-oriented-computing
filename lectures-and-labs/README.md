@@ -3,10 +3,11 @@
 Everything for each week of the module is here, one folder per week, in
 order. A teaching week's folder holds:
 
-- **`lecture.md`**: that week's lecture slides,
-- **`README.md`**: the lab instructions,
-- **`Main.java`**: a runnable starter for the lab. Your own code goes
-  beside it.
+- **`<topic>-lecture.md`**: that week's lecture slides (for example
+  `arrays-lecture.md`),
+- **`<topic>_lab/`**: the lab, with its **`README.md`** (the instructions)
+  and a runnable **`Main.java`** starter. Your own code goes in that folder
+  too.
 
 The MCQ weeks and the reading week hold just a `README.md` saying what
 happens that week. In a Codespace every `.md` file opens ready to read, and
@@ -16,18 +17,18 @@ file → *Open Preview*.
 <!-- schedule-table:start -->
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|
-| **➡️ 1** | Introduction | [lecture](week01/lecture.md) | _No lab in week 1_ |
-| 2 | Classes and Objects | [lecture](week02/lecture.md) | [lab](week02/README.md) |
-| 3 | Methods | [lecture](week03/lecture.md) | [lab](week03/README.md) |
+| **➡️ 1** | Introduction | [lecture](week01/introduction-lecture.md) | _No lab in week 1_ |
+| 2 | Classes and Objects | [lecture](week02/classes-and-objects-lecture.md) | [lab](week02/classes_and_objects_lab/README.md) |
+| 3 | Methods | [lecture](week03/methods-lecture.md) | [lab](week03/methods_lab/README.md) |
 | 4 | **MCQ 1** · held during lab slot | [details](week04/README.md) · [brief](../mcq/README.md) | — |
-| 5 | Arrays | [lecture](week05/lecture.md) | [lab](week05/README.md) |
-| 6 | Strings | [lecture](week06/lecture.md) | [lab](week06/README.md) |
+| 5 | Arrays | [lecture](week05/arrays-lecture.md) | [lab](week05/arrays_lab/README.md) |
+| 6 | Strings | [lecture](week06/strings-lecture.md) | [lab](week06/strings_lab/README.md) |
 | — | Reading week | [details](week06b-reading-week/README.md) | — |
-| 7 | Encapsulation | [lecture](week07/lecture.md) | [lab](week07/README.md) |
+| 7 | Encapsulation | [lecture](week07/encapsulation-lecture.md) | [lab](week07/encapsulation_lab/README.md) |
 | 8 | **MCQ 2** · held during lab slot | [details](week08/README.md) · [brief](../mcq/README.md) | — |
-| 9 | Inheritance | [lecture](week09/lecture.md) | [lab](week09/README.md) |
-| 10 | Polymorphism | [lecture](week10/lecture.md) | [lab](week10/README.md) |
-| 11 | Abstraction | [lecture](week11/lecture.md) | [lab](week11/README.md) |
+| 9 | Inheritance | [lecture](week09/inheritance-lecture.md) | [lab](week09/inheritance_lab/README.md) |
+| 10 | Polymorphism | [lecture](week10/polymorphism-lecture.md) | [lab](week10/polymorphism_lab/README.md) |
+| 11 | Abstraction | [lecture](week11/abstraction-lecture.md) | [lab](week11/abstraction_lab/README.md) |
 | 12 | **MCQ 3** · held during lab slot | [details](week12/README.md) · [brief](../mcq/README.md) | — |
 <!-- schedule-table:end -->
 
@@ -52,12 +53,13 @@ file → *Open Preview*.
 
 ## Doing a lab
 
-Open the week's folder and follow its `README.md`. The `Main.java` there is
-ready to run with the ▶ button; add your classes beside it. Two rules Java
-enforces when you create a file: a `public` class must live in a file with
-exactly its name (`Book` in `Book.java`), and every file in the folder
-starts with the same `package` line as `Main.java`, which is the folder's
-name (for example `package week05;`).
+Open the week's lab folder (for example `week05/arrays_lab/`) and follow
+its `README.md`. The `Main.java` there is ready to run with the ▶ button;
+add your classes beside it. Two rules Java enforces when you create a file:
+a `public` class must live in a file with exactly its name (`Book` in
+`Book.java`), and every file in the folder starts with the same `package`
+line as `Main.java`, which names the folder (for example
+`package week05.arrays_lab;`).
 
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.

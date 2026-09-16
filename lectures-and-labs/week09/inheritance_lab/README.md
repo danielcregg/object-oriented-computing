@@ -22,7 +22,7 @@ By the end of this lab you will be able to:
 
 ## Getting started
 
-This lab lives in the package `week09` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week09.inheritance_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ## 1. Definition and Basics of Inheritance
 
@@ -433,7 +433,7 @@ classDiagram
 **Expected output**
 
 ```text
-week09.Gadget@7a81197d
+week09.inheritance_lab.Gadget@7a81197d
 2055281021
 ```
 

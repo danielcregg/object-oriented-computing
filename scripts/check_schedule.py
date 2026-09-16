@@ -5,12 +5,13 @@ Fails (exit 1, every finding listed) when:
   - the schedule itself is malformed: startDate not a Monday, week numbers not
     1..N in order, not exactly one reading-week row;
   - a row's folder under lectures-and-labs/ (named from its week number) lacks
-    what the row promises: lecture.md for a lecture, and it must be that
-    topic's lecture (its frontmatter `topic` is the row's lectureUrl folder);
-    README.md titled for the topic plus Main.java for a lab; README.md for an
-    MCQ week or the reading week;
-  - a tracked Java file there does not declare its week folder as its package,
-    or sits deeper than a week folder;
+    what the row promises, or holds another shape: a teaching week has exactly
+    one lecture, <topic>-lecture.md for that topic (its frontmatter `topic` is
+    the row's lectureUrl folder); a lab week has <topic>_lab/ holding README.md
+    titled for the topic plus Main.java, and nothing of the lab at week level;
+    an MCQ week or the reading week has README.md and no lab folder;
+  - a tracked Java file is not in its week's lab folder, or does not declare
+    that folder path as its package;
   - a tracked folder under lectures-and-labs/ belongs to no schedule row, or
     anything is tracked under the retired weeks/ or labs/ layout;
   - a lecture declares `week:` in its frontmatter or a week number in its
@@ -83,52 +84,82 @@ def main() -> None:
         if not d.is_dir():
             findings.append(f"week {r.week}: {d.as_posix()}/ does not exist")
             continue
-        lecture = d / "lecture.md"
+
+        lectures = sorted(p.name for p in d.iterdir() if p.is_file() and p.name.endswith("lecture.md"))
         if r.deck:
             if not r.topic:
                 findings.append(f"week {r.week}: a lecture row needs a topic")
-            if not lecture.is_file():
-                findings.append(f"week {r.week}: {lecture.as_posix()} does not exist")
+            if not r.lecture.is_file():
+                findings.append(f"week {r.week}: {r.lecture.as_posix()} does not exist")
             else:
-                topic = frontmatter_topic(lecture.read_text(encoding="utf-8"))
+                topic = frontmatter_topic(r.lecture.read_text(encoding="utf-8"))
                 if topic != r.deck:
-                    findings.append(f"week {r.week}: {lecture.as_posix()} is the {topic!r} lecture, "
+                    findings.append(f"week {r.week}: {r.lecture.as_posix()} is the {topic!r} lecture, "
                                     f"but the schedule puts {r.deck!r} in this week")
-        elif lecture.exists():
-            findings.append(f"week {r.week}: {lecture.as_posix()} exists, but the schedule has no lecture this week")
-        readme = d / "README.md"
-        if r.lab:
-            if not readme.is_file():
-                findings.append(f"week {r.week}: {readme.as_posix()} (the lab instructions) does not exist")
-            elif r.topic.lower() not in first_line(readme).lower():
-                findings.append(f"week {r.week}: {readme.as_posix()} is titled "
-                                f"{first_line(readme)!r}, not as the {r.topic} lab")
-            if not (d / "Main.java").is_file():
-                findings.append(f"week {r.week}: {d.as_posix()}/Main.java (the lab's starter) does not exist")
-        elif (r.mcq or r.is_break) and not readme.is_file():
-            findings.append(f"week {r.week}: {readme.as_posix()} does not exist")
-        if r.mcq and readme.is_file() and re.search(r"[Ww]eek \d", first_line(readme)):
-            findings.append(f"{readme.as_posix()}: the title must not state a week number")
+            extra = [n for n in lectures if n != r.lecture.name]
+            if extra:
+                findings.append(f"week {r.week}: {d.as_posix()}/ also holds {extra}; the lecture is {r.lecture.name}")
+        elif lectures:
+            findings.append(f"week {r.week}: {d.as_posix()}/ holds {lectures}, but the schedule has no lecture this week")
 
-    folders = {r.dir for r in sched.rows}
+        folders = sorted(p.name for p in d.iterdir() if p.is_dir() and p.name != "img")
+        if r.lab:
+            if not r.deck:
+                findings.append(f"week {r.week}: a lab row needs a lecture (the lab folder is named from its topic)")
+            else:
+                ld = r.lab_dir
+                if not ld.is_dir():
+                    findings.append(f"week {r.week}: {ld.as_posix()}/ (the lab folder) does not exist")
+                else:
+                    readme = ld / "README.md"
+                    if not readme.is_file():
+                        findings.append(f"week {r.week}: {readme.as_posix()} (the lab instructions) does not exist")
+                    elif r.topic.lower() not in first_line(readme).lower():
+                        findings.append(f"week {r.week}: {readme.as_posix()} is titled "
+                                        f"{first_line(readme)!r}, not as the {r.topic} lab")
+                    if not (ld / "Main.java").is_file():
+                        findings.append(f"week {r.week}: {ld.as_posix()}/Main.java (the lab's starter) does not exist")
+                extra = [n for n in folders if n != r.lab_folder]
+                if extra:
+                    findings.append(f"week {r.week}: {d.as_posix()}/ holds folders {extra}; the lab folder is {r.lab_folder}/")
+            for stray in ("README.md", "Main.java"):
+                if (d / stray).exists():
+                    findings.append(f"week {r.week}: {d.as_posix()}/{stray} exists, but a lab week keeps "
+                                    f"its {stray} inside {r.lab_folder or '<topic>_lab'}/")
+        else:
+            if folders:
+                findings.append(f"week {r.week}: {d.as_posix()}/ holds folders {folders}, but the schedule has no lab this week")
+            if (d / "Main.java").exists():
+                findings.append(f"week {r.week}: {d.as_posix()}/Main.java exists, but the schedule has no lab this week")
+            if r.mcq or r.is_break:
+                readme = d / "README.md"
+                if not readme.is_file():
+                    findings.append(f"week {r.week}: {readme.as_posix()} does not exist")
+                elif r.mcq and re.search(r"[Ww]eek \d", first_line(readme)):
+                    findings.append(f"{readme.as_posix()}: the title must not state a week number")
+
+    rows_by_dir = {r.dir: r for r in sched.rows}
     for f in tracked(ROOT.as_posix()):
         parts = Path(f).parts
-        if len(parts) > 2 and parts[1] not in folders:
+        if len(parts) > 2 and parts[1] not in rows_by_dir:
             findings.append(f"{f}: {ROOT.as_posix()}/{parts[1]}/ is not the folder of any schedule "
                             f"row (week folders are named from the schedule's week numbers)")
+            continue
         if f.endswith(".java"):
-            if len(parts) != 3:
-                findings.append(f"{f}: Java files live directly in a week folder, whose name is the package")
+            row = rows_by_dir.get(parts[1]) if len(parts) > 2 else None
+            if row is None or not row.lab_folder or len(parts) != 4 or parts[2] != row.lab_folder:
+                where = f"{row.dir}/{row.lab_folder}/" if row and row.lab_folder else "a week with a lab"
+                findings.append(f"{f}: Java files live in their week's lab folder ({where})")
                 continue
             src = Path(f).read_text(encoding="utf-8")
             pkg = re.search(r"(?m)^\s*package\s+([\w.]+)\s*;", src)
-            if not pkg or pkg.group(1) != parts[1]:
-                findings.append(f"{f}: must declare `package {parts[1]};` "
+            if not pkg or pkg.group(1) != row.package:
+                findings.append(f"{f}: must declare `package {row.package};` "
                                 f"(declares {pkg.group(1) if pkg else 'no package'})")
     for f in tracked("weeks", "labs"):
         findings.append(f"{f}: the weeks/ and labs/ layout is retired; everything lives under {ROOT.as_posix()}/")
 
-    for lecture in sorted(ROOT.glob("*/lecture.md")):
+    for lecture in sorted(ROOT.glob("*/*-lecture.md")):
         text = lecture.read_text(encoding="utf-8")
         if re.search(r"(?m)^week:", text):
             findings.append(f"{lecture.as_posix()}: frontmatter must not declare week: (the folder name does)")

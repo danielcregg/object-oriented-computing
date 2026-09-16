@@ -1,4 +1,4 @@
-package week07;
+package week07.encapsulation_lab;
 
 public class Main {
     public static void main(String[] args) {

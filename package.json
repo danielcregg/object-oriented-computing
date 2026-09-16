@@ -7,7 +7,7 @@
   },
   "scripts": {
     "preview": "marp -s --html . --theme-set themes/ooc.css",
-    "preview:intro": "marp --preview --html --allow-local-files lectures-and-labs/week01/lecture.md --theme-set themes/ooc.css",
-    "export:intro": "marp --html --allow-local-files lectures-and-labs/week01/lecture.md -o build/introduction/slides.pdf --theme-set themes/ooc.css"
+    "preview:intro": "marp --preview --html --allow-local-files lectures-and-labs/week01/introduction-lecture.md --theme-set themes/ooc.css",
+    "export:intro": "marp --html --allow-local-files lectures-and-labs/week01/introduction-lecture.md -o build/introduction/slides.pdf --theme-set themes/ooc.css"
   }
 }

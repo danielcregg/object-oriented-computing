@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the lab READMEs and the MCQ brief as styled pages for GitHub Pages.
 
-For every lab in the schedule (lectures-and-labs/<weekNN>/README.md) this
+For every lab in the schedule (lectures-and-labs/<weekNN>/<topic>_lab/README.md) this
 emits OUTPUT_DIR/labs/<lab>/index.html, <lab> being the schedule's labUrl
 folder (so the page keeps its address when the semester is reordered), in the site's visual identity, plus a
 labs index page at OUTPUT_DIR/labs/index.html. Pages are READ-ONLY
@@ -226,7 +226,7 @@ def main() -> None:
     labs = []
     for row in sched.labs:
         slug = row.lab
-        readme = row.path / "README.md"
+        readme = row.lab_dir / "README.md"
         if not readme.is_file():
             raise SystemExit(f"build_lab_pages: the schedule names lab {slug!r} but {readme} does not exist")
         text = readme.read_text(encoding="utf-8")
@@ -251,7 +251,7 @@ def main() -> None:
         banner = (f'<div class="copy-banner">Read-only preview. To <strong>do</strong> '
                   f'this lab: <a href="{COPY_URL}">make your own private copy of the '
                   f'repo</a> ("Use this template", not Fork), open a Codespace on it, '
-                  f'and work in <code>lectures-and-labs/{row.dir}/</code>.</div>')
+                  f'and work in <code>lectures-and-labs/{row.dir}/{row.lab_folder}/</code>.</div>')
         deck = sched.deck_for_lab(slug)
         lecture = f' · <a href="../../{deck}/index.html">lecture</a>' if deck else ''
         kicker = f'<a href="./..">labs</a>{lecture} · object-oriented computing'

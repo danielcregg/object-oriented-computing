@@ -1,4 +1,4 @@
-package week02;
+package week02.classes_and_objects_lab;
 
 public class Main {
     public static void main(String[] args) {

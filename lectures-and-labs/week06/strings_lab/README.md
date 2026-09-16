@@ -21,7 +21,7 @@
 
 ## Getting started
 
-This lab lives in the package `week06` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week06.strings_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
 ---
 
@@ -49,7 +49,7 @@ Strings are sequences of characters that power almost every Java application. Fr
 
 **Objective:** Prepare your environment and experiment with basic strings.
 
-1. Open the `Main` class in the `week06` package.
+1. Open the `Main` class in the `week06.strings_lab` package.
 2. In the `main` method, declare three string variables using literals.
 3. Print them to confirm everything compiles.
 
@@ -92,7 +92,7 @@ String constructedGreeting = new String("Welcome to Java Strings"); // forces ne
 ### Example
 
 ```java
-package week06;
+package week06.strings_lab;
 
 public class StringInspector {
 	public static void main(String[] args) {
@@ -564,7 +564,7 @@ Remember: `substring(start, end)` includes `start` but excludes `end`.
 Fix the 10 labeled issues in the following class:
 
 ```java
-package week06;
+package week06.strings_lab;
 
 public class BuggyStrings {
 
@@ -626,7 +626,7 @@ public class BuggyStrings {
 }
 ```
 
-1. Create the `BuggyStrings` class from the listing above in the `week06` package and fix all 10 labeled issues.
+1. Create the `BuggyStrings` class from the listing above in the `week06.strings_lab` package and fix all 10 labeled issues.
 2. String comparison: in the `Main` class `main` method, create `String input = new String("YES")`. Try comparing with `==` to `"YES"` (returns `false`). Fix by using `equals()` instead.
 3. Null safety: create `String text = null`. Try calling `text.contains("test")` (throws an exception). Fix by adding an `if (text != null)` check before the method call.
 4. Loop concatenation: create an empty String. Use a for loop to concatenate 100 numbers with `+=`, so every round copies everything built so far. Fix by using StringBuilder with `append()` instead.

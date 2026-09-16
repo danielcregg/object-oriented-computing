@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render every lecture for the site: lectures-and-labs/<weekNN>/lecture.md ->
+"""Render every lecture for the site: lectures-and-labs/<weekNN>/<topic>-lecture.md ->
 OUTPUT_DIR/<topic>/index.html and OUTPUT_DIR/<topic>/slides.pdf.
 
 <topic> is the folder named by the schedule's lectureUrl, not the week folder,
@@ -36,7 +36,7 @@ def main() -> None:
         marp[0] += ".cmd"           # Windows resolves the npm shims by their .cmd name
     rows = load().teaching
     for row in rows:
-        src = row.path / "lecture.md"
+        src = row.lecture
         if not src.is_file():
             raise SystemExit(f"render_decks: week {row.week} ({row.topic}) has no {src}")
         out = out_root / row.deck

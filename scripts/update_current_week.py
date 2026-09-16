@@ -70,9 +70,9 @@ def table_row(row: Row, current: Row | None, links: tuple[str, str] = FROM_ROOT)
     if current is not None and row.index == current.index:
         week = f"**➡️ {week}**"
     if row.deck:
-        lecture = f"[lecture]({folder}/lecture.md)"
+        lecture = f"[lecture]({folder}/{row.lecture.name})"
         if row.lab:
-            lab = f"[lab]({folder}/README.md)"
+            lab = f"[lab]({folder}/{row.lab_folder}/README.md)"
         else:
             lab = f"_{row.notes}_" if row.notes else "—"
         return f"| {week} | {row.topic} | {lecture} | {lab} |"

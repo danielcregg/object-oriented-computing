@@ -1,4 +1,4 @@
-package week10;
+package week10.polymorphism_lab;
 
 public class Main {
     public static void main(String[] args) {

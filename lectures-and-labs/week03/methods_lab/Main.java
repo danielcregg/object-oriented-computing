@@ -1,4 +1,4 @@
-package week03;
+package week03.methods_lab;
 
 public class Main {
     public static void main(String[] args) {

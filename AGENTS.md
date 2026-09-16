@@ -29,14 +29,15 @@ Your job is to help them **learn Java**, using this module's own material.
 
 **Where the content is.** One folder per week under `lectures-and-labs/`
 (`week01` … `week12`, plus `week06b-reading-week`), listed with links in
-`lectures-and-labs/README.md`. A week's lecture is `lecture.md` — Marp
-markdown, so expect YAML frontmatter, a `<style>` block, and HTML `<div>`s
-that draw diagrams. Skip that machinery; the teaching is in the prose, the
-```java fences, and the `<!-- Speaker notes: ... -->` comments. A lab week
-also has `README.md` (the lab instructions) beside a `Main.java` starter;
-the student's own classes go in the same folder, in the package named after
-it (`package week05;`). A rendered, easier-to-read version of everything is
-at https://danielcregg.is-a.dev/object-oriented-computing/.
+`lectures-and-labs/README.md`. A week's lecture is `<topic>-lecture.md` —
+Marp markdown, so expect YAML frontmatter, a `<style>` block, and HTML
+`<div>`s that draw diagrams. Skip that machinery; the teaching is in the
+prose, the ```java fences, and the `<!-- Speaker notes: ... -->` comments.
+A lab week also has a `<topic>_lab/` folder: `README.md` (the lab
+instructions) beside a `Main.java` starter. The student's own classes go in
+that folder, in its package (`package week05.arrays_lab;`). A rendered,
+easier-to-read version of everything is at
+https://danielcregg.is-a.dev/object-oriented-computing/.
 
 **How to help.** Explain concepts in the module's own vocabulary and
 notation so nothing clashes with the lecture. Work from the deck the topic
@@ -61,7 +62,7 @@ and the labs are examinable in the MCQs. So:
   not complete it, and offer the next hint instead.
 
 **Their work is theirs.** Edit only the files they are working in
-(their own classes in the week folder). Leave the lectures, the lab
+(their own classes in the week's lab folder). Leave the lectures, the lab
 instructions, scripts, workflows and the practice bank alone.
 
 ## Map
@@ -79,14 +80,17 @@ instructions, scripts, workflows and the practice bank alone.
 - `lectures-and-labs/weekNN/` — one folder per schedule row, named from its
   week number (`week01` … `week12`; the reading week is
   `weekNNb-reading-week`, right after week NN, so it sorts in place). A
-  teaching week holds `lecture.md` (the Marp deck, THE canonical lecture,
-  whose frontmatter `topic` must equal the row's lectureUrl folder) and
-  `img/` if it has images. A lab week adds `README.md` (THE canonical lab
-  instructions) and `Main.java`, a starter in `package weekNN` — the week
-  folder is the Java package, and `lectures-and-labs/` is the source root.
-  MCQ weeks (`week04`, `week08`, `week12`) and the reading week hold only a
-  `README.md` explainer whose title states no week. MCQ question content
-  lives in Moodle only — never commit it here.
+  teaching week holds `<topic>-lecture.md` (the Marp deck, THE canonical
+  lecture; `<topic>` is the row's lectureUrl folder and the frontmatter
+  `topic` must equal it) and `img/` if it has images. A lab week adds the
+  folder `<topic>_lab/` (the topic with hyphens as underscores, because a
+  Java package segment allows no hyphen) holding `README.md` (THE canonical
+  lab instructions) and `Main.java`, a starter in
+  `package weekNN.<topic>_lab` — the folder path is the Java package, and
+  `lectures-and-labs/` is the source root. MCQ weeks (`week04`, `week08`,
+  `week12`) and the reading week hold only a `README.md` explainer whose
+  title states no week. MCQ question content lives in Moodle only — never
+  commit it here.
   **Week numbers are part of these names, and so of the Java packages.**
   Reordering the semester means `git mv`-ing week folders and rewriting
   their `package` lines, then `scripts/update_current_week.py`; the gate
@@ -121,17 +125,19 @@ instructions, scripts, workflows and the practice bank alone.
   which a Codespace's git refuses Sync Changes ("divergent branches") the
   first time a nightly update meets unpushed work.
   Course content means the READMEs, `module/schedule.json`, and in each
-  week folder `lecture.md`, `img/`, `README.md` and the `Main.java`
-  starter (an edited starter is kept, like any edited file); the student's
-  own classes beside them match nothing and are never considered. The sync
+  week folder the lecture, `img/`, an explainer `README.md`, and the lab
+  folder's `README.md` and `Main.java` starter (an edited starter is kept,
+  like any edited file); the student's own classes beside them match
+  nothing and are never considered. The sync
   also refreshes `.devcontainer/devcontainer.json` and
   `scripts/update-course-content.sh` itself (untouched copies only), so
   fixes to the Codespace setup or the sync still reach every copy; its
   published-versions list must cover every path its COURSE pattern matches.
-  A copy made from the pre-week-folder layout (`weeks/`, `labs/src/ie/atu/`)
+  A copy made from an earlier layout (`weeks/` + `labs/src/ie/atu/`, or
+  the brief `weekNN/lecture.md` + `README.md` + `Main.java` shape)
   migrates over two nights: its old script updates itself, then the new
-  one adds the week folders and removes the untouched old course files
-  (its LEGACY pattern).
+  one adds today's files and removes the untouched old course files (its
+  LEGACY pattern).
   Workflows cannot be synced (the nightly token may not push workflow
   files), so a copy never gains a workflow added later, and nothing else
   under `scripts/` or `.vscode/` is synced either. The devcontainer (a
@@ -207,7 +213,7 @@ instructions, scripts, workflows and the practice bank alone.
 - `scripts/build_index.py` — generates the Pages landing page from the
   schedule (CI runs it; styled to match the theme), plus a redirect stub
   for each pre-2026-09 `week-NN-` site address.
-- `scripts/render_decks.py` — renders each week's `lecture.md` to
+- `scripts/render_decks.py` — renders each week's `<topic>-lecture.md` to
   `/<topic>/index.html` + `slides.pdf` (the topic from the row's
   lectureUrl), copying `img/`; CI runs it (set `MARP="npx --no-install
   marp"` to run it locally).
@@ -216,19 +222,20 @@ instructions, scripts, workflows and the practice bank alone.
   strips closing tags out of inline scripts (CI publishes it at
   `/moodle-schedule-table.html`).
 - `scripts/check_schedule.py` — CI gate: the schedule is well-formed; every
-  row's week folder holds what the row promises (the right topic's
-  lecture, a lab README titled for the topic plus `Main.java`, or an
-  explainer); every tracked Java file declares its week folder as its
-  package; no orphan week folder and nothing left under `weeks/` or
-  `labs/`; no week number in lecture frontmatter/kickers or MCQ titles;
-  both generated week tables are current; the module overview has every
-  section in order.
+  row's week folder holds what the row promises (`<topic>-lecture.md` for
+  the right topic, a `<topic>_lab/` folder with a README titled for the
+  topic plus `Main.java`, or an explainer) and nothing of another shape;
+  every tracked Java file sits in its week's lab folder and declares that
+  path as its package; no orphan week folder and nothing left under
+  `weeks/` or `labs/`; no week number in lecture frontmatter/kickers or MCQ
+  titles; both generated week tables are current; the module overview has
+  every section in order.
 - `scripts/build_lab_pages.py` — renders each week's lab README as a
   read-only styled page at `/labs/<labUrl folder>/` (CI runs it; needs
   `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and
   FAILS if it is missing.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every
-  `lecture.md` AND every week README with javac, wrapping bare declarations or statements
+  lecture AND every lab README with javac, wrapping bare declarations or statements
   as needed. A fence
   that is meant to be broken is skipped with `<!-- no-compile -->` on the
   line directly above it. CI gate; run it after editing any deck code.
@@ -265,8 +272,9 @@ instructions, scripts, workflows and the practice bank alone.
 ## Conventions (guaranteed repo-wide)
 
 - Folder/file names: kebab-case, no spaces. Week folders are `weekNN`
-  (two digits, so they sort) and `weekNNb-reading-week`.
-- Every `lecture.md` starts with YAML frontmatter: `title`, `topic` (kebab
+  (two digits, so they sort) and `weekNNb-reading-week`; lab folders are
+  `<topic>_lab` (underscores: they are Java package segments).
+- Every `<topic>-lecture.md` starts with YAML frontmatter: `title`, `topic` (kebab
   slug, equal to the row's lectureUrl folder), `type` (`lecture`),
   `source` (`authored`) — no `week`: the folder and the schedule own that,
   `marp: true`, `theme`, `paginate`. Lab READMEs carry no frontmatter —
@@ -317,7 +325,7 @@ instructions, scripts, workflows and the practice bank alone.
   HTML** and are readable by anyone viewing source, so write them
   publishable: no remarks about individual students or cohorts.
 - Diagrams in decks are drawn in deck-local CSS (a `<style>` block at the
-  top of each `lecture.md`: memory boxes, pillar strips, hierarchy trees,
+  top of each lecture file: memory boxes, pillar strips, hierarchy trees,
   call-stack frames…) — no image files and no build pipeline. That block
   holds only what is BESPOKE to the deck. The components every deck shares
   — `.kicker`, `.callout`, `.legend`, and the `.mem` memory-cell strip —
@@ -346,13 +354,14 @@ instructions, scripts, workflows and the practice bank alone.
 
 ## Editing rules
 
-- To change a lecture: edit its week's `lecture.md` and push — CI
+- To change a lecture: edit its week's `<topic>-lecture.md` and push — CI
   re-renders the decks.
 - To add a topic: add the row to `module/schedule.json` (or export it from
   the builder) with a `lectureUrl` and `labUrl` naming its site folders,
-  create its week folder with `lecture.md` (frontmatter `topic` = the
-  lectureUrl folder), `README.md` and a `Main.java` in `package weekNN`,
-  renumber the week folders after it if it was inserted, and run
+  create its week folder with `<topic>-lecture.md` (frontmatter `topic` =
+  the lectureUrl folder) and a `<topic>_lab/` folder holding `README.md`
+  and a `Main.java` in `package weekNN.<topic>_lab`, renumber the week
+  folders after it if it was inserted, and run
   `scripts/update_current_week.py`.
 - A lecture and its lab share their week's folder; their site addresses
   come from the row's `lectureUrl` and `labUrl` (by convention the lab's is
@@ -373,7 +382,7 @@ instructions, scripts, workflows and the practice bank alone.
     npm run preview      # live server over the repo -> http://localhost:8080
     npm run export:intro # one deck straight to build/…/slides.pdf
 
-Browse to any deck (e.g. `/lectures-and-labs/week01/lecture.md`); edit the
+Browse to any deck (e.g. `/lectures-and-labs/week01/introduction-lecture.md`); edit the
 markdown, refresh the browser to see it. `npm run preview:intro` opens a
 self-refreshing preview window instead, and the Marp for VS Code extension
 gives instant side-panel previews while editing. Preview locally first —

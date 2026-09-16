@@ -1,4 +1,4 @@
-package week06;
+package week06.strings_lab;
 
 public class Main {
     public static void main(String[] args) {

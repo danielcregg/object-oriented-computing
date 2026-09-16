@@ -18,7 +18,7 @@ topic weeks teach the four OOP pillars in dependency order
 
 ## Introduction
 
-[Slides](../lectures-and-labs/week01/lecture.md) · no lab in week 1
+[Slides](../lectures-and-labs/week01/introduction-lecture.md) · no lab in week 1
 
 Two halves. First, module logistics: learning outcomes, delivery format and
 timetable, the assessment matrix (three MCQs), the lab coding environment,
@@ -30,8 +30,8 @@ common syntax errors beginners hit.
 
 ## Classes and Objects
 
-[Slides](../lectures-and-labs/week02/lecture.md) ·
-[Lab](../lectures-and-labs/week02/README.md)
+[Slides](../lectures-and-labs/week02/classes-and-objects-lecture.md) ·
+[Lab](../lectures-and-labs/week02/classes_and_objects_lab/README.md)
 
 The conceptual core of the module. What a class is (blueprint), attributes
 / members, class declaration syntax, and the benefits of classes; what an
@@ -44,8 +44,8 @@ class-design habit.
 
 ## Methods
 
-[Slides](../lectures-and-labs/week03/lecture.md) ·
-[Lab](../lectures-and-labs/week03/README.md)
+[Slides](../lectures-and-labs/week03/methods-lecture.md) ·
+[Lab](../lectures-and-labs/week03/methods_lab/README.md)
 
 What a method is, method syntax and anatomy (modifiers, return type, name,
 parameter list, body). Parameters and arguments, return values, `void` vs
@@ -63,8 +63,8 @@ classes and objects, and methods.
 
 ## Arrays
 
-[Slides](../lectures-and-labs/week05/lecture.md) ·
-[Lab](../lectures-and-labs/week05/README.md)
+[Slides](../lectures-and-labs/week05/arrays-lecture.md) ·
+[Lab](../lectures-and-labs/week05/arrays_lab/README.md)
 
 What an array is and its characteristics: fixed length, homogeneous
 element type, zero-based indices. Declaring, constructing, and assigning
@@ -74,8 +74,8 @@ multidimensional arrays. Includes an in-class quiz.
 
 ## Strings
 
-[Slides](../lectures-and-labs/week06/lecture.md) ·
-[Lab](../lectures-and-labs/week06/README.md)
+[Slides](../lectures-and-labs/week06/strings-lecture.md) ·
+[Lab](../lectures-and-labs/week06/strings_lab/README.md)
 
 Strings as objects: creating them (literals vs `new`) and how the String
 pool and memory work (`intern()` as the proof). String immutability — what it means, why it's good
@@ -92,8 +92,8 @@ the Irish October bank holiday (the last Monday of October).
 
 ## Encapsulation
 
-[Slides](../lectures-and-labs/week07/lecture.md) ·
-[Lab](../lectures-and-labs/week07/README.md)
+[Slides](../lectures-and-labs/week07/encapsulation-lecture.md) ·
+[Lab](../lectures-and-labs/week07/encapsulation_lab/README.md)
 
 Opens the four-pillars block; this deck is the canonical home of the
 "four major principles of OOP" overview (later pillar decks open with a
@@ -111,8 +111,8 @@ slot. Examines the weeks since MCQ 1: arrays, strings, and encapsulation.
 
 ## Inheritance
 
-[Slides](../lectures-and-labs/week09/lecture.md) ·
-[Lab](../lectures-and-labs/week09/README.md)
+[Slides](../lectures-and-labs/week09/inheritance-lecture.md) ·
+[Lab](../lectures-and-labs/week09/inheritance_lab/README.md)
 
 Definition and terminology (superclass/subclass, is-a), implementing
 inheritance with `extends`, and a worked coding example. The `Object`
@@ -125,8 +125,8 @@ key Java facts.
 
 ## Polymorphism
 
-[Slides](../lectures-and-labs/week10/lecture.md) ·
-[Lab](../lectures-and-labs/week10/README.md)
+[Slides](../lectures-and-labs/week10/polymorphism-lecture.md) ·
+[Lab](../lectures-and-labs/week10/polymorphism_lab/README.md)
 
 The two kinds of polymorphism. Compile-time: method signatures and
 overloading, with worked examples. Runtime: method overriding, why it must
@@ -138,8 +138,8 @@ benefits and a recap.
 
 ## Abstraction
 
-[Slides](../lectures-and-labs/week11/lecture.md) ·
-[Lab](../lectures-and-labs/week11/README.md)
+[Slides](../lectures-and-labs/week11/abstraction-lecture.md) ·
+[Lab](../lectures-and-labs/week11/abstraction_lab/README.md)
 
 What abstraction is and how it differs from encapsulation, with real-life
 examples. Java's two mechanisms: abstract classes (abstract vs concrete

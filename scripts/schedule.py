@@ -30,9 +30,10 @@ from pathlib import Path
 
 SCHEDULE = Path("module/schedule.json")
 SITE = "https://danielcregg.is-a.dev/object-oriented-computing/"
-# One folder per schedule row: lecture.md (a teaching week), README.md (the lab
-# instructions, or the MCQ / reading-week explainer) and Main.java, whose Java
-# package is the folder name (`package week05;`), so this is the source root.
+# One folder per schedule row. A teaching week holds <topic>-lecture.md; a lab
+# week also holds <topic>_lab/ with README.md (the instructions) and Main.java,
+# whose Java package is that folder path (`package week05.arrays_lab;`), so
+# this is the source root. MCQ weeks and the reading week hold README.md.
 ROOT = Path("lectures-and-labs")
 MCQ_RE = re.compile(r"^MCQ (\d)$")
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
@@ -62,6 +63,26 @@ class Row:
     @property
     def path(self) -> Path:
         return ROOT / self.dir
+
+    @property
+    def lecture(self) -> Path | None:
+        """The week's lecture: lectures-and-labs/weekNN/<topic>-lecture.md."""
+        return self.path / f"{self.deck}-lecture.md" if self.deck else None
+
+    @property
+    def lab_folder(self) -> str | None:
+        """The lab folder's name, which is also its Java package segment: the
+        topic with hyphens as underscores (a package allows no hyphen) + _lab."""
+        return f"{self.deck.replace('-', '_')}_lab" if self.lab and self.deck else None
+
+    @property
+    def lab_dir(self) -> Path | None:
+        return self.path / self.lab_folder if self.lab_folder else None
+
+    @property
+    def package(self) -> str | None:
+        """What every Java file in the lab folder must declare."""
+        return f"{self.dir}.{self.lab_folder}" if self.lab_folder else None
 
     @property
     def label(self) -> str:

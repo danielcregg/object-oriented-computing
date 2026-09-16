@@ -1,4 +1,4 @@
-package week05;
+package week05.arrays_lab;
 
 public class Main {
     public static void main(String[] args) {

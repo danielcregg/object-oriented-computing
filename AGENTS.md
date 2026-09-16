@@ -115,8 +115,13 @@ alone.
   this file, pre-answers the Java start-up prompts (Standard launch mode,
   Red Hat telemetry off, no Java welcome or release-notes tab, proceed on
   build failure), auto-fetches, hides the tooling folders from the explorer with
-  `files.exclude` (never list anything a lab asks students to open), and
-  opens `labs/README.md` on first launch; students never author decks.
+  `files.exclude` (never list anything a lab asks students to open), opens
+  markdown rendered (`workbench.editorAssociations`), and opens
+  `labs/README.md` on first launch; students never author decks. That
+  index is the students' route through the labs: VS Code's explorer can
+  only sort the lab folders alphabetically, and Java package names cannot
+  start with a digit, so the lab folders stay unnumbered and the index
+  table lists them in schedule order (a CI gate checks it).
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
@@ -192,8 +197,9 @@ alone.
   `/moodle-schedule-table.html`).
 - `scripts/check_schedule.py` — CI gate: the schedule is well-formed, every
   row's folder/lab/page exists, no orphan week folder, no week number in
-  frontmatter/kickers/MCQ titles, README's table is current, the module
-  overview has every section in order.
+  frontmatter/kickers/MCQ titles, README's table is current, `labs/README.md`
+  links every lab's README in schedule order, the module overview has
+  every section in order.
 - `scripts/build_lab_pages.py` — renders each lab README as a read-only
   styled page at `/labs/<slug>/` (CI runs it; needs `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and FAILS if it is missing.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every deck

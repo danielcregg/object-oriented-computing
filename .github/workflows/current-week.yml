@@ -1,5 +1,9 @@
 name: current-week
 
+# One run at a time: a manual run overlapping the Monday one would commit
+# the same banner twice and fail the second push for no reason.
+concurrency: current-week
+
 on:
   schedule:
     - cron: '4 0 * * 1'   # Mondays 00:04 UTC (00:04/01:04 Irish time)
@@ -16,7 +20,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Update current-week banner
         run: python3 scripts/update_current_week.py

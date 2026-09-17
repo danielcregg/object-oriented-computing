@@ -61,6 +61,10 @@ BAD_EXTENSION_RE = re.compile(r"\.(xlsx|xls|mbz|zip|class|jar)$", re.IGNORECASE)
 # shape is suppressed.
 TEXT_SCAN_GLOBS = ("*.md", "*.yml", "*.yaml", "*.py", "*.html", "*.xml", "*.json")
 SENSITIVE_RE = re.compile(r"assignsubmission|G00[0-9]{6}|\b[0-9a-f]{32}\b", re.IGNORECASE)
+# Known and deliberate: practice/coding/index.html carries the University of
+# Canterbury's PUBLISHED Jobe evaluation key (29 hex characters, so the
+# 32-hex rule above does not match it). It is not a secret. A real token
+# swapped in there would be 32+ characters and would be reported.
 
 # Classroom URL shapes. GitHub Classroom is RETIRED for this module and no
 # Classroom URL is referenced anywhere in the repo any more, so there is no

@@ -70,7 +70,8 @@ instructions, scripts, workflows and the practice bank alone.
 - `module/schedule.json` — THE schedule, and the only place a semester
   date may appear. It is an export of the lecturer's
   module-schedule-table-builder app, edited there and re-exported here.
-  `scripts/schedule.py` loads it and names each row's folder; the site
+  `scripts/schedule.py` loads it and derives each row's folder name from
+  its week number (the folders themselves are moved by hand); the site
   index, the week tables in README.md and lectures-and-labs/README.md, the
   README banner and the Moodle course-page block are all generated from it,
   and `scripts/check_schedule.py` fails CI if any folder, lecture, lab,
@@ -124,11 +125,12 @@ instructions, scripts, workflows and the practice bank alone.
   competing commits. It also sets `pull.rebase false` in the copy, without
   which a Codespace's git refuses Sync Changes ("divergent branches") the
   first time a nightly update meets unpushed work.
-  Course content means the READMEs, `module/schedule.json`, and in each
-  week folder the lecture, `img/`, an explainer `README.md`, and the lab
-  folder's `README.md` and `Main.java` starter (an edited starter is kept,
-  like any edited file); the student's own classes beside them match
-  nothing and are never considered. The sync
+  Course content means the READMEs, `module/schedule.json`,
+  `module/module-overview.md`, and in each week folder the lecture,
+  `img/`, an explainer `README.md`, and the lab folder's `README.md` and
+  `Main.java` starter (an edited starter is kept, like any edited file);
+  the student's own classes beside them match nothing and are never
+  considered. The sync
   also refreshes `.devcontainer/devcontainer.json` and
   `scripts/update-course-content.sh` itself (untouched copies only), so
   fixes to the Codespace setup or the sync still reach every copy; its
@@ -147,19 +149,21 @@ instructions, scripts, workflows and the practice bank alone.
   commit. GitHub also pauses a scheduled workflow after 60 days without a
   commit to that copy; a Codespace's `--attach` run and the VS Code task
   still catch up, so nothing is lost.
-  Workflows cannot be synced (the nightly token may not push workflow
-  files), so a copy never gains a workflow added later, and nothing else
-  under `scripts/` or `.vscode/` is synced either. The devcontainer (a
-  Codespace-only setup) installs the Java pack, Copilot Chat and Marp, turns
-  on `chat.useAgentsMdFile` so Copilot Chat follows the student section of
-  this file, hides the tooling folders from the explorer with
+  `.vscode/settings.json` and `.vscode/tasks.json` (the editor settings and
+  the "Update course content" task) and `module/module-overview.md` are
+  synced the same way. Workflows cannot be (the nightly token may not push
+  workflow files), so a copy never gains a workflow added later, and
+  nothing else under `scripts/` is synced either. The devcontainer (a
+  Codespace-only setup) installs the Java pack, Copilot Chat and Marp,
+  hides the tooling folders from the explorer with
   `files.exclude` (never list anything a lab asks students to open), opens
   markdown rendered (`workbench.editorAssociations`), and opens
   `lectures-and-labs/README.md` on first launch; students never author
   decks. `.vscode/settings.json` carries what matters on a laptop as well:
   Standard Java launch mode, the pre-answered start-up prompts (Red Hat
   telemetry off, no Java welcome or release-notes tab, proceed on build
-  failure), `chat.useAgentsMdFile`, git auto-fetch, and the Marp theme.
+  failure), `chat.useAgentsMdFile` so Copilot Chat follows the student
+  section of this file, git auto-fetch, and the Marp theme.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
@@ -414,6 +418,7 @@ Before any push, the same gates CI runs (all must print nothing / exit 0):
     python scripts/check_links.py         # every relative link resolves
     python scripts/verify_snippets.py     # every ```java fence compiles
     python scripts/check_practice_bank.py # practice bank is well-formed
+    python scripts/check_coding_bank.py   # coding bank is well-formed
     python scripts/check_schedule.py      # week folders agree with the schedule
     find lectures-and-labs -name '*.java' -print0 | xargs -0 javac -d /tmp/labs-classes   # labs compile
 

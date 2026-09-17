@@ -13,8 +13,8 @@ Checks relative link and image targets only. External URLs are NOT fetched:
 a link checker that hits the network turns an unrelated outage into a red
 build, and the failure this guards against is internal renames.
 
-Anchors (`#section`) are checked as far as the file existing; the fragment
-itself is not resolved.
+Anchors (`#section`) are resolved too: the target file must exist and the
+fragment must name one of its headings, slugified the way GitHub does it.
 
 Run from the repo root:  python scripts/check_links.py
 Prints one line per broken link and exits 1; silent + exit 0 when clean.

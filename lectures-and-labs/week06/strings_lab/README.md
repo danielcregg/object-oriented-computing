@@ -433,6 +433,8 @@ public void countTheCopying() {
 }
 ```
 
+This counts each character once per round. The real JVM copies it twice (into a temporary builder, then out again into the new `String`), so the lecture's figure of about 100 million for 10,000 rounds is this count doubled. The shape is the same either way: the work grows with the square of the length.
+
 **Expected output**
 
 ```text
@@ -650,7 +652,7 @@ replace(".", "-"): 1-2-3
 
 <details><summary>Hint</summary>
 
-The same few fixes cover most of the errors: use `equals` (or `equalsIgnoreCase`) instead of `==`; check `!= null` before calling any method; capture returned values, because `text.toUpperCase()` on its own changes nothing; and prefer `replace` unless you genuinely need a regular expression.
+The same few fixes cover most of the errors: use `equals` (or `equalsIgnoreCase`) instead of `==`; check `!= null` before calling any method; capture returned values, because `text.toUpperCase()` on its own changes nothing; and prefer `replace` unless you genuinely need a regular expression. Two need a little more: `trimInput` must put its result somewhere, either by returning the trimmed `String` or by replacing the builder's contents (`setLength(0)`, then `append`); and `split(",")` silently drops empty fields at the end of a line, so `"a,b,"` gives two parts instead of three - `split(",", -1)` keeps them.
 
 </details>
 

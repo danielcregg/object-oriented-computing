@@ -8,7 +8,8 @@
 #
 # It touches ONLY what the module provides -- in each week folder the
 # lecture, and in its lab folder the instructions and the Main.java starter;
-# the READMEs; the
+# the READMEs and the module overview; the editor settings and the "Update
+# course content" task (.vscode/); the
 # Codespace setup (.devcontainer/devcontainer.json); and this script itself,
 # so fixes to either still reach your copy. It never touches a class you
 # wrote or any file you created, and it leaves alone any of those module
@@ -28,7 +29,8 @@
 #
 #   bash scripts/update-course-content.sh            refresh now
 #   bash scripts/update-course-content.sh --attach   what a Codespace runs each
-#                                                    time it opens (quiet)
+#                                                    time it opens: says nothing
+#                                                    unless it brought something in
 #
 # The course-sync workflow runs the first form in your repo every night.
 
@@ -49,7 +51,7 @@ MODE="${1:-}"
 # lecture never stops the rest from updating. Your own classes sit beside
 # these files in the week folders and match none of them. Workflows are
 # deliberately absent: the nightly run's token may not push workflow files.
-COURSE='^(README\.md|mcq/README\.md|module/schedule\.json|lectures-and-labs/README\.md|lectures-and-labs/week[^/]+/([^/]+-lecture\.md|README\.md|img/.+|[^/]+_lab/(README\.md|Main\.java))|\.devcontainer/devcontainer\.json|scripts/update-course-content\.sh)$'
+COURSE='^(README\.md|mcq/README\.md|module/(schedule\.json|module-overview\.md)|lectures-and-labs/README\.md|lectures-and-labs/week[^/]+/([^/]+-lecture\.md|README\.md|img/.+|[^/]+_lab/(README\.md|Main\.java))|\.devcontainer/devcontainer\.json|\.vscode/(settings|tasks)\.json|scripts/update-course-content\.sh)$'
 # Earlier layouts (September 2026): topic folders under weeks/ and
 # labs/src/ie/atu/, then briefly lecture.md, README.md and Main.java straight
 # in the week folder. A copy made from either gets today's files added and
@@ -115,6 +117,7 @@ trap 'rm -f "$PUBLISHED"' EXIT
 # appeared in a merge (a conflict resolved on GitHub) would be missing here.
 git log --root --format= --raw --no-abbrev --no-renames -m "$UP" -- \
     README.md lectures-and-labs mcq module .devcontainer/devcontainer.json \
+    .vscode/settings.json .vscode/tasks.json \
     scripts/update-course-content.sh weeks labs 2>/dev/null |
   awk '$4 !~ /^0+$/ { print $6 " " $4 }' > "$PUBLISHED"
 published() { grep -qxF "$1 $2" "$PUBLISHED"; }
@@ -154,7 +157,7 @@ while IFS= read -r p; do
   else
     say "  kept your version (retired upstream): $p"
   fi
-done < <(git ls-files -- lectures-and-labs mcq module weeks labs)
+done < <(git ls-files -- lectures-and-labs mcq module .vscode weeks labs)
 
 # 4. Commit ONLY the paths refreshed above. A bare `git commit` would sweep in
 #    anything you had staged, under the author "course-update". Never signed:

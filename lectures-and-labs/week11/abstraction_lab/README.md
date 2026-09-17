@@ -13,7 +13,7 @@
 2. [Interfaces](#2-interfaces)
 3. [Abstract Classes vs. Interfaces](#3-abstract-classes-vs-interfaces)
 4. [Practical Applications](#4-practical-applications)
-5. [Choosing the Right Tool](#diy-5-choosing-the-right-tool)
+5. [DIY 5: Choosing the Right Tool](#diy-5-choosing-the-right-tool)
 
 ## Getting started
 

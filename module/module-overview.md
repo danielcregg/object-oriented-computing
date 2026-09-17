@@ -1,10 +1,11 @@
 # Module overview
 
 **Object-Oriented Computing** — Java, semester 1, Atlantic Technological
-University. 12 teaching weeks: a module introduction (week 1, no lab), eight
-topic weeks, and three Moodle MCQs (each held during the lab slot of its week,
-one third of the grade each, no projects). Reading week is always the week of the Irish
-October bank holiday, with 6 teaching weeks before it and 6 after.
+University. 12 timetabled weeks: a module introduction (week 1, no lab), eight
+topic weeks, and three MCQ weeks (each Moodle MCQ held during the lab slot of
+its week, one third of the grade each, no projects). Reading week is always
+the week of the Irish October bank holiday, with six timetabled weeks before
+it and six after.
 
 Live slide decks: <https://danielcregg.is-a.dev/object-oriented-computing/>
 

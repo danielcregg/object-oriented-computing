@@ -63,6 +63,8 @@ line as `Main.java`, which names the folder (for example
 
 Stuck? Every exercise has a **Hint** you can expand, and every expected
 output is printed in the README — compare yours against it before asking.
+If ▶ reports *Unresolved compilation problem*, the file still has an error
+underlined in red: fix that first, then run again.
 
 ## Saving your work
 
@@ -97,12 +99,16 @@ minute instead, either:
    ```
 
 It only ever refreshes the lectures, the lab instructions, the week pages,
-the READMEs, an untouched `Main.java` starter and the Codespace's own setup
-(if that changes, VS Code offers to rebuild the Codespace: say yes when
-you're at a stopping point). **Your own code is never touched**, and if you
-have edited one of those files yourself it keeps your version and tells you
-so. If it says your repo on GitHub has newer commits, click **Sync
-Changes** first, then run it again.
+the READMEs, an untouched `Main.java` starter, the editor settings and the
+Codespace's own setup (if that changes, VS Code offers to rebuild the
+Codespace: say yes when you're at a stopping point). **Your own code is
+never touched**, and if you have edited one of those files yourself it
+keeps your version and tells you so; one you deleted stays deleted, and the
+module site always has the current copy. If it says your repo on GitHub
+has newer commits, click **Sync Changes** first, then run it again. Should
+Sync Changes ever report a *conflict*, it is in a file you edited that the
+module also updated: open the file, choose **Accept Current Change** to
+keep yours, commit, and sync again.
 
 And the
 **[module site](https://danielcregg.is-a.dev/object-oriented-computing/)**

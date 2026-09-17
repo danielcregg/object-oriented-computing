@@ -58,8 +58,8 @@
   // Each time the workspace opens: catch up with your repo on GitHub (what the
   // nightly update committed) and, while the two agree, bring in any newer
   // lecture, lab-instruction or setup fix and save it straight back. It never
-  // touches your own code, and it is quiet and never fails, so it can't stop
-  // the Codespace starting if you are offline. In the module's own repo it
-  // does nothing.
+  // touches your own code, it says nothing unless it brought something in,
+  // and it never fails, so it can't stop the Codespace starting if you are
+  // offline. In the module's own repo it does nothing.
   "postAttachCommand": "bash scripts/update-course-content.sh --attach || true"
 }

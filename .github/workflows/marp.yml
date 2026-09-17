@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # Java MUST be set up before the gates below: they shell out to javac.
       # This step used to sit AFTER them, so the pin never applied and the
@@ -36,7 +36,7 @@ jobs:
       # ship -- silent drift if GitHub changes that default, and a hard
       # failure if an image ever ships without a JDK at all.
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
         with:
           distribution: temurin
           # 21, to match .devcontainer/devcontainer.json
@@ -47,7 +47,7 @@ jobs:
           java-version: '21'
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
 
@@ -71,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          python3 -m pip install --quiet markdown
+          python3 -m pip install --quiet markdown==3.10.3   # pinned like everything else this job runs
           python3 scripts/build_index.py build
           python3 scripts/build_lab_pages.py build
           python3 scripts/build_moodle_schedule.py build
@@ -87,13 +87,13 @@ jobs:
           touch build/.nojekyll   # serve the output as-is; no Jekyll pass
 
       - name: Upload rendered decks as a downloadable artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rendered-decks
           path: build/
 
       - name: Package the site for Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
           path: ./build/
 
@@ -111,4 +111,4 @@ jobs:
     steps:
       - name: Publish to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

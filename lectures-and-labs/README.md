@@ -17,8 +17,8 @@ file → *Open Preview*.
 <!-- schedule-table:start -->
 | Week | Topic | Lecture | Lab |
 |---|---|---|---|
-| **➡️ 1** | Introduction | [lecture](week01/introduction-lecture.md) | _No lab in week 1_ |
-| 2 | Classes and Objects | [lecture](week02/classes-and-objects-lecture.md) | [lab](week02/classes_and_objects_lab/README.md) |
+| 1 | Introduction | [lecture](week01/introduction-lecture.md) | _No lab in week 1_ |
+| **➡️ 2** | Classes and Objects | [lecture](week02/classes-and-objects-lecture.md) | [lab](week02/classes_and_objects_lab/README.md) |
 | 3 | Methods | [lecture](week03/methods-lecture.md) | [lab](week03/methods_lab/README.md) |
 | 4 | **MCQ 1** · held during lab slot | [details](week04/README.md) · [brief](../mcq/README.md) | — |
 | 5 | Arrays | [lecture](week05/arrays-lecture.md) | [lab](week05/arrays_lab/README.md) |

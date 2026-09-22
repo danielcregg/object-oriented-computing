@@ -20,7 +20,7 @@
 
 ## Getting started
 
-This lab lives in the package `week02.classes_and_objects_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week02.classes_and_objects_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Student.java` for DIY 1 and `Book.java` for DIY 5. Every new file starts with the package line you see in `Main.java`.
 
 ---
 
@@ -76,7 +76,7 @@ classDiagram
 ### DIY 1: Define the `Student` class
 
 1. Define a class named `Student`.
-**Let VS Code start the file for you.** In the Explorer side bar, open the **JAVA PROJECTS** section at the bottom (it fills in once Java has finished loading) and expand it down to the package `week02.classes_and_objects_lab`. Hover over the package, click the **+** that appears beside it, choose **Class**, type `Student` (without `.java`) and press Enter. VS Code creates `Student.java` in this folder with the package line and an empty `public class Student` already written, ready for your fields and method. The same **+** makes every other file this lab asks for, `Diy1.java` included.
+**Let VS Code start the file for you.** In the Explorer side bar, open the **JAVA PROJECTS** section at the bottom (it fills in once Java has finished loading) and expand it down to the package `week02.classes_and_objects_lab`. Hover over the package, click the **+** that appears beside it, choose **Class**, type `Student` (without `.java`) and press Enter. VS Code creates `Student.java` in this folder with the package line and an empty `public class Student` already written, ready for your fields and method.
 
 
 2. Add fields: `String studentID`, `int age`, `boolean isRegistered`.
@@ -151,7 +151,7 @@ sequenceDiagram
 
 ### DIY 2: Create a `Student` object
 
-1. In `Diy2.java`'s `main` method (this is where your program execution starts), create an instance of `Student`.
+1. In `Main.java`'s `main` method (this is where your program execution starts), create an instance of `Student`.
 2. Assign values to its fields (`studentID`, `age`, `isRegistered`). This requires a default constructor, or setting the values after creating the object, as we did in the `Person` example.
 3. Call the `displayInfo()` method to print the student's details.
 
@@ -239,7 +239,7 @@ public class Main {
 
 1. In your `Student` class, add a default constructor that sets reasonable default values for the fields (`studentID`, `age`, `isRegistered`). For example, you might set `studentID` to "N/A".
 2. Add a parameterized constructor that accepts `studentID`, `age`, and `isRegistered` as parameters and initializes the object's fields with those values.
-3. Modify your `Diy3` class to create a `Student` object using the default constructor and call `displayInfo()`.
+3. Update `Main.java` to create a `Student` object using the default constructor and call `displayInfo()`.
 4. Create another `Student` object using the parameterized constructor and call `displayInfo()`.
 
 **Expected output**
@@ -403,7 +403,7 @@ identity.
 
 ### DIY 5: Identity vs equality
 
-1. Write a `Book` class beside `Diy5.java` with three fields - `String title`, `int catalogueNumber` and `int year` - and one constructor that takes all three and assigns them using `this`.
+1. Create `Book.java` beside `Main.java`, then write a `Book` class with three fields - `String title`, `int catalogueNumber` and `int year` - and one constructor that takes all three and assigns them using `this`.
 2. In `main`, build `b1` and `b2` from two separate `new` calls, giving both exactly the same three values. Then add `Book b3 = b1;` and a fourth book `b4` with a different catalogue number and year.
 3. Print `b1 == b2` and `b1 == b3`, each on its own labelled line as in the expected output below. Predict both answers before you run it.
 4. Add an instance method `boolean sameBookAs(Book other)` to `Book` that returns `true` only when `this` and `other` have the same `catalogueNumber` *and* the same `year`.
@@ -463,7 +463,7 @@ will meet when you learn about overriding; until then, name it yourself.
 ### DIY 6: Return the description instead of printing it
 
 1. Add a method `String describe()` to `Student` that builds the one-line summary shown below out of `this.studentID`, `this.age` and `this.isRegistered`, and **returns** it. Nothing is printed inside the method.
-2. In `Diy6`, print both of your students by passing the result of `describe()` to `System.out.println(...)`, instead of calling `displayInfo()`.
+2. In `Main.java`, print both of your students by passing the result of `describe()` to `System.out.println(...)`, instead of calling `displayInfo()`.
 3. Say what moved: `displayInfo()` decided both *what* the text says and *where* it goes, so it held two jobs; `describe()` keeps only the first. That is SRP applied to a single method.
 
 **Expected output** (match this format exactly; your values may differ):

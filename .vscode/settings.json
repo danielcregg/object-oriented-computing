@@ -10,5 +10,8 @@
   "java.help.showReleaseNotes": false,
   "java.debug.settings.onBuildFailureProceed": true,
   "chat.useAgentsMdFile": true,
-  "git.autofetch": true
+  "github.copilot.editor.enableAutoCompletions": false,
+  "editor.inlayHints.enabled": "off",
+  "git.autofetch": true,
+  "java.dependency.packagePresentation": "hierarchical"
 }

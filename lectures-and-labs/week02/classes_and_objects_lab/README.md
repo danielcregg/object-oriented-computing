@@ -10,13 +10,13 @@
 
 ## Table of Contents
 
-1. [Introduction](#1-introduction)
-2. [Defining Classes](#2-defining-classes)
-3. [Creating Objects](#3-creating-objects)
-4. [Constructors](#4-constructors)
-5. [The `this` Keyword](#5-the-this-keyword)
-6. [Reference Variables vs Object Identity](#6-reference-variables-vs-object-identity)
-7. [Single Responsibility Principle (SRP)](#7-single-responsibility-principle-srp)
+* [Introduction](#introduction)
+1. [Defining Classes](#1-defining-classes)
+2. [Creating Objects](#2-creating-objects)
+3. [Constructors](#3-constructors)
+4. [The `this` Keyword](#4-the-this-keyword)
+5. [Reference Variables vs Object Identity](#5-reference-variables-vs-object-identity)
+6. [Single Responsibility Principle (SRP)](#6-single-responsibility-principle-srp)
 
 ## Getting started
 
@@ -24,7 +24,7 @@ This lab lives in the package `week02.classes_and_objects_lab` - this folder. A 
 
 ---
 
-## 1. Introduction
+## Introduction
 
 Object-Oriented Programming (OOP) is a powerful programming paradigm that organizes code around "objects" rather than actions and data. Instead of focusing on procedures (like in procedural programming), OOP emphasizes *objects* which encapsulate both data (attributes or fields) and the actions that can be performed on that data (methods or functions). This approach offers several key advantages:
 
@@ -45,7 +45,7 @@ As you work through this lab, think about how real-world objects can be represen
 
 ---
 
-## 2. Defining Classes
+## 1. Defining Classes
 
 In Java, a class is defined using the `class` keyword, followed by the class name, and enclosed in curly braces `{}`. Inside the curly braces, you declare the fields (data) and methods (behavior) that define the class. The `public` keyword means this class is accessible from anywhere. You'll learn about other access modifiers (like `private`, `protected`) later.
 
@@ -76,6 +76,9 @@ classDiagram
 ### DIY 1: Define the `Student` class
 
 1. Define a class named `Student`.
+**Let VS Code start the file for you.** In the Explorer side bar, open the **JAVA PROJECTS** section at the bottom (it fills in once Java has finished loading) and expand it down to the package `week02.classes_and_objects_lab`. Hover over the package, click the **+** that appears beside it, choose **Class**, type `Student` (without `.java`) and press Enter. VS Code creates `Student.java` in this folder with the package line and an empty `public class Student` already written, ready for your fields and method. The same **+** makes every other file this lab asks for, `Diy1.java` included.
+
+
 2. Add fields: `String studentID`, `int age`, `boolean isRegistered`.
 3. Write a method `displayInfo()` that prints the student's details. Make sure the output is neatly formatted.
 
@@ -96,7 +99,7 @@ Model `displayInfo()` on the `Person` class's `introduce()` method: build each l
 
 ---
 
-## 3. Creating Objects
+## 2. Creating Objects
 
 A class is just a blueprint; to actually use it, you need to create an *object* - an instance of the class. This is done using the `new` keyword, followed by a call to the class's constructor (we'll cover constructors in detail next).
 
@@ -169,7 +172,7 @@ Reach the object's fields and methods through the reference with the dot operato
 
 ---
 
-## 4. Constructors
+## 3. Constructors
 
 Constructors are special members of a class - not methods, since they have no return type - that run automatically when you create a new object using the `new` keyword. They are used to initialize the object's fields to initial values. They have the same name as the class and do *not* have a return type (not even `void`).
 
@@ -260,7 +263,7 @@ A constructor has the same name as the class and no return type - not even `void
 
 ---
 
-## 5. The `this` Keyword
+## 4. The `this` Keyword
 
 The `this` keyword is a reference to the current object instance. It's primarily used in two scenarios:
 
@@ -369,7 +372,7 @@ Registered: true
 
 ---
 
-## 6. Reference Variables vs Object Identity
+## 5. Reference Variables vs Object Identity
 
 In Java, variables of a class type hold **references** to objects, not the objects themselves. Two different variables can reference the **same** object, or two different objects can have the **same field values** but be distinct in memory.
 
@@ -424,7 +427,7 @@ b1.sameBookAs(b4): false
 
 ---
 
-## 7. Single Responsibility Principle (SRP)
+## 6. Single Responsibility Principle (SRP)
 
 **SRP:** A class should have **one reason to change**. Keep responsibilities focused.
 

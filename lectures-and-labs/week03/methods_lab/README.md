@@ -10,14 +10,15 @@
 
 ## Table of Contents
 
-- [1. Introduction](#1-introduction)
-- [2. Defining Simple Methods](#2-defining-simple-methods)
-- [3. Methods with Parameters](#3-methods-with-parameters)
-- [4. Methods with Return Values](#4-methods-with-return-values)
-- [5. void vs Return Types](#5-void-vs-return-types)
-- [6. Method Visibility: public and private](#6-method-visibility-public-and-private)
-- [7. Static Methods](#7-static-methods)
-- [8. Method Call Stack and Execution Flow](#8-method-call-stack-and-execution-flow)
+- [Introduction](#introduction)
+- [1. Defining Simple Methods](#1-defining-simple-methods)
+- [2. Methods with Parameters](#2-methods-with-parameters)
+- [3. Methods with Return Values](#3-methods-with-return-values)
+- [4. void vs Return Types](#4-void-vs-return-types)
+- [5. Method Visibility: public and private](#5-method-visibility-public-and-private)
+- [6. Static Methods](#6-static-methods)
+- [7. Method Call Stack and Execution Flow](#7-method-call-stack-and-execution-flow)
+- [8. Recursion](#8-recursion)
 - [9. Common Mistakes and Debugging](#9-common-mistakes-and-debugging)
 
 ## Getting started
@@ -26,7 +27,7 @@ This lab lives in the package `week03.methods_lab` - this folder. A runnable `Ma
 
 ---
 
-## 1. Introduction
+## Introduction
 
 A **method** is a named block of code that performs one task and can be reused anywhere in your program. Instead of copy-pasting the same lines, you write them once and *call* the method wherever you need it. Methods make code **reusable** (write once, call many times), **modular** (big problems become small pieces), **readable** (a good name like `calculateAverage` documents itself), and **maintainable** (fix a bug in one place, not everywhere it was pasted).
 
@@ -39,7 +40,7 @@ Four terms you'll meet constantly:
 
 ---
 
-## 2. Defining Simple Methods
+## 1. Defining Simple Methods
 
 Every method follows the same pattern:
 
@@ -111,7 +112,7 @@ Both methods are `void`: they print and hand nothing back, so neither needs a `r
 
 ---
 
-## 3. Methods with Parameters
+## 2. Methods with Parameters
 
 **Parameters** let a method accept input. You name them in the method definition; the **arguments** are the actual values you supply in the call. At the moment of the call, each argument's *value is copied* into the matching parameter - the method then works on its own copy, so reassigning a parameter never changes the caller's variable:
 
@@ -184,7 +185,7 @@ Four `void` methods again, but this time each one declares its two values as par
 
 ---
 
-## 4. Methods with Return Values
+## 3. Methods with Return Values
 
 A method with a non-`void` return type sends a value back to the caller with the `return` keyword. That's far more powerful than printing, because the caller can store the result and keep computing with it.
 
@@ -248,7 +249,7 @@ Test `b == 0` at the top of `divide()` and return early - check *before* you div
 
 ---
 
-## 5. void vs Return Types
+## 4. void vs Return Types
 
 The choice is simpler than it looks:
 
@@ -333,7 +334,7 @@ Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer divis
 
 ---
 
-## 6. Method Visibility: public and private
+## 5. Method Visibility: public and private
 
 **Access modifiers** control who may call a method:
 
@@ -429,7 +430,7 @@ Pull the digits apart with arithmetic - `/` and `%` are the only tools you need.
 
 ---
 
-## 7. Static Methods
+## 6. Static Methods
 
 A **static** method belongs to the class itself, not to any object. Call it as `ClassName.methodName()` - no `new` required.
 
@@ -541,7 +542,7 @@ Is 27 prime? false
 
 ---
 
-## 8. Method Call Stack and Execution Flow
+## 7. Method Call Stack and Execution Flow
 
 When methods call other methods, Java tracks them on the **call stack** - Last-In-First-Out, like a stack of plates:
 
@@ -606,16 +607,6 @@ sequenceDiagram
     Note over M: stack is main only
 ```
 
-**Recursion** is a method calling itself. Every call pushes a fresh frame, so a **base case** must eventually stop the chain:
-
-```java
-public static int factorial(int n) {
-    if (n <= 1) return 1;            // base case - stops the recursion
-    return n * factorial(n - 1);     // recursive step - pushes another frame
-}
-// factorial(5) -> 5 * 4 * 3 * 2 * 1 = 120
-```
-
 ### DIY 7: Trace the call stack
 
 1. Create a class named `ExecutionTracer`.
@@ -642,6 +633,20 @@ A end
 All three methods are `static`, so `main` calls them by name with no object involved. The order is not three tidy pairs: `methodA` cannot reach its `A end` line until `methodB` has completely finished, and `methodB` cannot finish until `methodC` has. Draw the stack growing downward as each call is pushed, then unwinding from the bottom as each returns - the printed order is the shape of that drawing.
 
 </details>
+
+---
+
+## 8. Recursion
+
+**Recursion** is a method calling itself. Every call pushes a fresh frame, so a **base case** must eventually stop the chain:
+
+```java
+public static int factorial(int n) {
+    if (n <= 1) return 1;            // base case - stops the recursion
+    return n * factorial(n - 1);     // recursive step - pushes another frame
+}
+// factorial(5) -> 5 * 4 * 3 * 2 * 1 = 120
+```
 
 ### DIY 8: Simple recursion
 

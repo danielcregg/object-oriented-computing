@@ -16,7 +16,8 @@ By the end of this lab you will be able to:
 2. [Compile-time Polymorphism (Method Overloading)](#2-compile-time-polymorphism-method-overloading)
 3. [Reference Type Conversions](#3-reference-type-conversions)
 4. [One Array, Many Animals](#4-one-array-many-animals)
-5. [Overriding toString and equals](#5-overriding-tostring-and-equals)
+5. [Adding a New Subclass](#5-adding-a-new-subclass)
+6. [Overriding toString and equals](#6-overriding-tostring-and-equals)
 
 ## Getting started
 
@@ -686,6 +687,8 @@ public String rosterLine() {
 
 </details>
 
+## 5. Adding a New Subclass
+
 ### DIY 5: The Adoption Board
 The shelter wants a one-line advert for each animal, for a scrolling board on its adoption website. Build it with one array typed `Animal`, one loop, and let every element answer in its own voice - then add a brand new kind of animal and watch that same loop pick it up without changing a single line.
 
@@ -714,7 +717,7 @@ Thumper is a gentle brown rabbit.
 
 </details>
 
-## 5. Overriding toString and equals
+## 6. Overriding toString and equals
 
 ### Explanation
 Every class you write extends `Object` whether you say so or not, so every object you create already has a `toString()`, an `equals()` and a `hashCode()`. Those inherited versions are deliberately dumb. Replacing them is nothing new - it is the same overriding you have been doing since section 1, applied to methods you inherited from the top of the hierarchy instead of from a class you wrote yourself.

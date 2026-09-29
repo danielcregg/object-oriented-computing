@@ -10,22 +10,26 @@
 
 ## Table of Contents
 
-1. [Introduction](#1-introduction)
-2. [Default Values in Arrays](#2-default-values-in-arrays)
-3. [Declaring and Assigning Arrays](#3-declaring-and-assigning-arrays)
-4. [Accessing and Iterating Over Array Elements](#4-accessing-and-iterating-over-array-elements)
-5. [Array Length and Modifying Arrays](#5-array-length-and-modifying-arrays)
+* [Introduction](#introduction)
+1. [Default Values in Arrays](#1-default-values-in-arrays)
+2. [Declaring and Assigning Arrays](#2-declaring-and-assigning-arrays)
+3. [Accessing and Iterating Over Array Elements](#3-accessing-and-iterating-over-array-elements)
+4. [Array Length](#4-array-length)
+5. [Modifying Arrays](#5-modifying-arrays)
 6. [Arrays of Objects](#6-arrays-of-objects)
-7. [Common Array Operations](#7-common-array-operations)
-8. [2D Arrays](#8-2d-arrays)
-9. [Passing Arrays to Methods](#9-passing-arrays-to-methods)
-10. [The Champion and Search Patterns](#10-the-champion-and-search-patterns)
+7. [Copying and Sorting Arrays](#7-copying-and-sorting-arrays)
+8. [The Arrays Utility Class](#8-the-arrays-utility-class)
+9. [Cloning Arrays](#9-cloning-arrays)
+10. [2D Arrays](#10-2d-arrays)
+11. [Passing Arrays to Methods](#11-passing-arrays-to-methods)
+12. [The Champion Pattern](#12-the-champion-pattern)
+13. [The Search Pattern](#13-the-search-pattern)
 
 ## Getting started
 
 This lab lives in the package `week05.arrays_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
 
-## 1. Introduction
+## Introduction
 
 In Java, an array is a collection of variables of the same type, stored in a contiguous block of memory. Arrays allow you to store multiple values in a single variable, which can be accessed using an index. Understanding arrays is fundamental in programming as they provide a way to manage and manipulate data efficiently.
 
@@ -46,7 +50,7 @@ D --> E[...]
 E --> F[Element at index N-1]
 ```
 
-## 2. Default Values in Arrays
+## 1. Default Values in Arrays
 
 Before we delve deeper into arrays, it's important to understand the default values assigned to array elements when they are not explicitly initialized.
 
@@ -116,7 +120,7 @@ Do not initialize the array elements; simply print them using a loop.
 
 </details>
 
-## 3. Declaring and Assigning Arrays
+## 2. Declaring and Assigning Arrays
 
 There are several ways to declare and initialize arrays in Java.
 
@@ -197,7 +201,7 @@ Use inline initialization similar to the examples above.
 
 </details>
 
-## 4. Accessing and Iterating Over Array Elements
+## 3. Accessing and Iterating Over Array Elements
 
 After declaring and initializing an array, you can access its elements using indices and iterate over them using loops.
 
@@ -298,9 +302,7 @@ Use a `for` loop starting from the last index.
 
 </details>
 
-## 5. Array Length and Modifying Arrays
-
-### Array Length
+## 4. Array Length
 
 The length of an array refers to the number of elements it can hold. In Java, you can access the length using the `.length` property.
 
@@ -340,7 +342,7 @@ Create an array and use the `.length` property to get its size.
 
 </details>
 
-### Modifying Arrays
+## 5. Modifying Arrays
 
 You can modify array elements by accessing them via their index and assigning new values.
 
@@ -463,7 +465,7 @@ Define a `Book` class with appropriate attributes and methods.
 
 </details>
 
-## 7. Common Array Operations
+## 7. Copying and Sorting Arrays
 
 Java gives you several ready-made ways to copy, sort, search, compare, and clone arrays.
 
@@ -544,11 +546,11 @@ Use `System.arraycopy` and `Arrays.sort`.
 
 </details>
 
-### The Arrays Utility Class
+## 8. The Arrays Utility Class
 
 The `java.util.Arrays` class provides utility methods for array manipulation.
 
-#### Converting Arrays to Strings
+### Converting Arrays to Strings
 
 ```java
 import java.util.Arrays;
@@ -570,7 +572,7 @@ public class ArraysToString {
 
 </details>
 
-#### Searching Arrays
+### Searching Arrays
 
 ```java
 import java.util.Arrays;
@@ -613,7 +615,7 @@ Use `Arrays.equals(array1, array2)`.
 
 </details>
 
-### Cloning Arrays
+## 9. Cloning Arrays
 
 You can also create a copy of an array using the `clone()` method.
 
@@ -663,7 +665,7 @@ Verify the independence of the arrays after modification.
 
 </details>
 
-## 8. 2D Arrays
+## 10. 2D Arrays
 
 A 2D array is an array of arrays, useful for representing grids or tables.
 
@@ -745,7 +747,7 @@ Use nested loops to traverse the 2D array and accumulate the sum.
 
 </details>
 
-## 9. Passing Arrays to Methods
+## 11. Passing Arrays to Methods
 
 Arrays can be passed to methods as parameters, and methods can return arrays.
 
@@ -808,11 +810,9 @@ Iterate over the input array, double each element, and store it in a new array.
 
 </details>
 
-## 10. The Champion and Search Patterns
+## 12. The Champion Pattern
 
 Two more loop shapes come up everywhere: finding the best value in an array, and checking whether a value is in there at all.
-
-### The Champion Pattern
 
 Track the best value seen "so far" as you sweep the array: start by naming the first element champion, then challenge it with every element that follows.
 
@@ -863,7 +863,7 @@ Do not start `highest` (or `lowest`) at `0` - start it at `scores[0]`, then loop
 
 </details>
 
-### The Search Pattern
+## 13. The Search Pattern
 
 Walk the array and return the moment you find what you are looking for - an early exit, not a scan that keeps going after the answer is known. If the loop finishes with no match, return `-1`: an index that can never be real.
 

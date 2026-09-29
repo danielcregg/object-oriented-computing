@@ -15,10 +15,11 @@ By the end of this lab you will be able to:
 
 1. [Definition and Basics of Inheritance](#1-definition-and-basics-of-inheritance)
 2. [Terminology](#2-terminology)
-3. [Types of Inheritance](#3-types-of-inheritance)
-4. [The Object Class](#4-the-object-class)
-5. [Constructors in Inheritance](#5-constructors-in-inheritance)
-6. [Is-A or Has-A](#6-is-a-or-has-a)
+3. [Single and Multilevel Inheritance](#3-single-and-multilevel-inheritance)
+4. [Hierarchical and Multiple Inheritance](#4-hierarchical-and-multiple-inheritance)
+5. [The Object Class](#5-the-object-class)
+6. [Constructors in Inheritance](#6-constructors-in-inheritance)
+7. [Is-A or Has-A](#7-is-a-or-has-a)
 
 ## Getting started
 
@@ -165,11 +166,11 @@ classDiagram
 
 </details>
 
-## 3. Types of Inheritance
+## 3. Single and Multilevel Inheritance
 
 ### Explanation and Examples
 
-#### 1. Single Inheritance
+#### Single Inheritance
 One class inherits from one superclass.
 
 ```java
@@ -197,7 +198,7 @@ classDiagram
     }
 ```
 
-#### 2. Multilevel Inheritance
+#### Multilevel Inheritance
 Chain of inheritance where subclass becomes superclass for another class.
 
 ```java
@@ -234,69 +235,6 @@ classDiagram
         +bark()
     }
 ```
-
-#### 3. Hierarchical Inheritance
-Multiple classes inherit from one superclass.
-
-```java
-public class Shape {
-    public void draw() {
-        System.out.println("Drawing shape");
-    }
-}
-
-public class Circle extends Shape {
-    public void radius() {
-        System.out.println("Has radius");
-    }
-}
-
-public class Square extends Shape {
-    public void sides() {
-        System.out.println("Has four sides");
-    }
-}
-```
-
-```mermaid
-classDiagram
-    Shape <|-- Circle
-    Shape <|-- Square
-    class Shape{
-        +draw()
-    }
-    class Circle{
-        +radius()
-    }
-    class Square{
-        +sides()
-    }
-```
-
-#### 4. Multiple Inheritance (Not Supported in Java)
-One class inheriting from multiple superclasses.
-
-```mermaid
-classDiagram
-    ClassA <|-- ClassC
-    ClassB <|-- ClassC
-    class ClassA{
-        +methodA()
-    }
-    class ClassB{
-        +methodB()
-    }
-    class ClassC{
-        +methodC()
-    }
-```
-
-Java doesn't support multiple inheritance with classes to avoid:
-1. Ambiguity when same method exists in multiple parent classes
-2. Complexity in method resolution
-3. Potential naming conflicts
-
-Instead, Java provides interfaces for implementing multiple inheritance of behaviour.
 
 ### DIY 3: Electric Car
 
@@ -342,6 +280,73 @@ Battery capacity: 75 kWh
 The first statement of each subclass constructor must be its `super(...)` call: `ElectricCar` hands `type` and `doors` up to `Car`, and `Car` hands `type` up to `Vehicle`. Each class initialises only its own field.
 
 </details>
+
+## 4. Hierarchical and Multiple Inheritance
+
+### Explanation and Examples
+
+#### Hierarchical Inheritance
+Multiple classes inherit from one superclass.
+
+```java
+public class Shape {
+    public void draw() {
+        System.out.println("Drawing shape");
+    }
+}
+
+public class Circle extends Shape {
+    public void radius() {
+        System.out.println("Has radius");
+    }
+}
+
+public class Square extends Shape {
+    public void sides() {
+        System.out.println("Has four sides");
+    }
+}
+```
+
+```mermaid
+classDiagram
+    Shape <|-- Circle
+    Shape <|-- Square
+    class Shape{
+        +draw()
+    }
+    class Circle{
+        +radius()
+    }
+    class Square{
+        +sides()
+    }
+```
+
+#### Multiple Inheritance (Not Supported in Java)
+One class inheriting from multiple superclasses.
+
+```mermaid
+classDiagram
+    ClassA <|-- ClassC
+    ClassB <|-- ClassC
+    class ClassA{
+        +methodA()
+    }
+    class ClassB{
+        +methodB()
+    }
+    class ClassC{
+        +methodC()
+    }
+```
+
+Java doesn't support multiple inheritance with classes to avoid:
+1. Ambiguity when same method exists in multiple parent classes
+2. Complexity in method resolution
+3. Potential naming conflicts
+
+Instead, Java provides interfaces for implementing multiple inheritance of behaviour.
 
 ### DIY 4: Motorbike
 
@@ -403,7 +408,7 @@ classDiagram
 
 </details>
 
-## 4. The Object Class
+## 5. The Object Class
 
 ### Explanation
 
@@ -453,7 +458,7 @@ classDiagram
 
 </details>
 
-## 5. Constructors in Inheritance
+## 6. Constructors in Inheritance
 
 ### Explanation
 
@@ -548,7 +553,7 @@ classDiagram
 
 </details>
 
-## 6. Is-A or Has-A
+## 7. Is-A or Has-A
 
 ### Explanation
 
@@ -569,7 +574,7 @@ The two do different work for you. Inheritance hands the subclass the whole supe
    - `Library` and `Book`
    - `Square` and `Shape`
 2. Implement one of the **has-a** pairs. Write a `Book` class with a private `String title`, a constructor that sets it, a getter, and a `void read()` method that prints "Reading " followed by the title. Then write a `Library` class with a private `String name` **and a private `Book featured` field**. `Library`'s constructor takes a library name and a book title, and builds its own `Book` from that title. Give `Library` a `void showFeatured()` method that prints the library name followed by " features one book today:" and then delegates the rest of the job to the book by calling `featured.read()`.
-3. Implement one of the **is-a** pairs. Write a `Shape` class with a `void describe()` method that prints "I am a shape" (if you typed in the `Shape` example from section 3, just add the method to it). Then write `Square extends Shape` with a private `double side`, a constructor that sets it, and a `void printSide()` method that prints "My side is " followed by the side. `Square` writes no `describe()` of its own.
+3. Implement one of the **is-a** pairs. Write a `Shape` class with a `void describe()` method that prints "I am a shape" (if you typed in the `Shape` example from section 4, just add the method to it). Then write `Square extends Shape` with a private `double side`, a constructor that sets it, and a `void printSide()` method that prints "My side is " followed by the side. `Square` writes no `describe()` of its own.
 4. In `Diy7`, create a `Library` named "ATU Library" featuring "The Hobbit" and call `showFeatured()`. Then create a `Square` with side `4.0` and call `describe()` followed by `printSide()`. That `describe()` call is the proof of the is-a link: `Square` never declared the method.
 
 **Expected output**
@@ -618,7 +623,8 @@ In this lab you covered:
 
 - Definition and Basics of Inheritance
 - Terminology
-- Types of Inheritance
+- Single and Multilevel Inheritance
+- Hierarchical and Multiple Inheritance
 - The Object Class
 - Constructors in Inheritance
 - Is-A or Has-A

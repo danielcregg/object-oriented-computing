@@ -467,7 +467,7 @@ Define a `Book` class with appropriate attributes and methods.
 
 ## 7. Copying and Sorting Arrays
 
-Java gives you several ready-made ways to copy, sort, search, compare, and clone arrays.
+Java gives you several ready-made ways to copy, sort, search, compare, and clone arrays. This section covers copying and sorting; the next two cover the `Arrays` utility class and cloning.
 
 ### Copying Arrays
 
@@ -933,5 +933,6 @@ In this lab, we've covered:
 - Cloning arrays to create independent copies.
 - Understanding and working with 2D arrays.
 - Passing arrays to methods.
+- Finding the highest and lowest values with the champion pattern, and searching an array for a value.
 
 Arrays are a foundational aspect of Java programming, enabling efficient data storage and manipulation. Mastery of arrays will significantly aid in understanding more complex data structures and algorithms.

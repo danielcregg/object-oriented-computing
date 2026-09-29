@@ -463,7 +463,7 @@ will meet when you learn about overriding; until then, name it yourself.
 ### DIY 6: Return the description instead of printing it
 
 1. Add a method `String describe()` to `Student` that builds the one-line summary shown below out of `this.studentID`, `this.age` and `this.isRegistered`, and **returns** it. Nothing is printed inside the method.
-2. In `Main.java`, print both of your students by passing the result of `describe()` to `System.out.println(...)`, instead of calling `displayInfo()`.
+2. In `Main.java`, recreate your two students from DIY 3 and print both by passing the result of `describe()` to `System.out.println(...)`, instead of calling `displayInfo()`.
 3. Say what moved: `displayInfo()` decided both *what* the text says and *where* it goes, so it held two jobs; `describe()` keeps only the first. That is SRP applied to a single method.
 
 **Expected output** (match this format exactly; your values may differ):

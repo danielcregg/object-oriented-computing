@@ -17,7 +17,7 @@
 
 ## Getting started
 
-This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class or an interface, give it its own file beside `Main.java`: `Shape.java`, `Circle.java` and `Square.java` for DIY 1 and `GameCharacter.java` for DIY 2. Every new file starts with the package line you see in `Main.java`. When a step gives you a whole `Main` class to test with, keep the `package` line at the top of the file.
+This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class or an interface, give it its own file beside `Main.java`: `Shape.java`, `Circle.java` and `Square.java` for DIY 1, `GameCharacter.java`, `Hero.java` and `Villain.java` for DIY 2, and so on. Every new file starts with the package line you see in `Main.java`. When a step gives you a whole `Main` class to test with, keep the `package` line at the top of the file.
 
 ## 1. Abstract Classes
 
@@ -195,7 +195,7 @@ public class Main {
 ```
 
 ### DIY 1: Simple Shape System
-Create a basic shape system with three classes: `Shape`, `Circle`, `Square`, and `Main.java` to test them.
+Create a basic shape system with three classes, `Shape`, `Circle` and `Square`, and test them from `Main.java`.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF5722', 'primaryTextColor': '#BF360C', 'primaryBorderColor': '#E64A19', 'lineColor': '#4CAF50', 'secondaryColor': '#FFC107', 'tertiaryColor': '#FBE9E7', 'classText': '#BF360C'}}}%%

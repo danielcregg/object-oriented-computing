@@ -21,7 +21,7 @@ By the end of this lab you will be able to:
 
 ## Getting started
 
-This lab lives in the package `week10.polymorphism_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Shape.java`, `Square.java` and `Circle.java` for DIY 1 and `PriceCalculator.java` for DIY 2. Every new file starts with the package line you see in `Main.java`.
+This lab lives in the package `week10.polymorphism_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Shape.java`, `Square.java` and `Circle.java` for DIY 1, `PriceCalculator.java` for DIY 2, and so on. DIY 4 builds on the section 4 example: give each of its classes its own file, and put its `main` method in `Main.java`. Every new file starts with the package line you see in `Main.java`, and when a listing shows a whole `Main` class, keep the `package` line at the top of the file.
 
 ## 1. Runtime Polymorphism: Understanding "Many Forms"
 
@@ -697,7 +697,7 @@ The shelter wants a one-line advert for each animal, for a scrolling board on it
    * `Cat` - `<name> is a purr-fect companion.`
    * `Bird` - `<name> will brighten up your home with song.`
    * `Horse` - `<name> the <breed> needs plenty of space to run.`
-2. In `main`, declare your own array, `Animal[] board`, separate from `shelter`, holding four new objects: a `Dog` called "Milo" (age 2, breed "Beagle"), a `Cat` called "Luna" (age 4, indoor), a `Bird` called "Kiwi" (age 1, wingspan 18.0) and a `Horse` called "Ash" (age 3, breed "Shire").
+2. In `Main.java`'s `main`, replace DIY 4's shelter code and declare your own array, `Animal[] board` (no `AnimalShelter` this time), holding four new objects: a `Dog` called "Milo" (age 2, breed "Beagle"), a `Cat` called "Luna" (age 4, indoor), a `Bird` called "Kiwi" (age 1, wingspan 18.0) and a `Horse` called "Ash" (age 3, breed "Shire").
 3. Write a loop over `board` that calls `tagline()` on every element, then run the program: four different adverts print, one per animal, in array order.
 4. Add a fifth kind of animal: a `Rabbit` class that extends `Animal`, with a `furColor` field (plus the usual name and age), overriding `tagline()` to print `<name> is a gentle <furColor> rabbit.`. Add a `Rabbit` called "Thumper" (age 1, fur color "brown") as the last element of `board`, and run the program again - the same loop prints Thumper's advert too, with no change to the loop itself.
 

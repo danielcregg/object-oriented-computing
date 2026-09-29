@@ -23,7 +23,7 @@
 
 ## Getting started
 
-This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1 and `TemperatureConverter.java` for DIY 4. Every new file starts with the package line you see in `Main.java`. DIY 9 is the one exception: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
+This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1, `TemperatureConverter.java` for DIY 4, and so on. Every new file starts with the package line you see in `Main.java`. DIY 9 is the one exception: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
 
 ---
 
@@ -832,7 +832,7 @@ public class BuggyCalculator {
 }
 ```
 
-1. Copy the class into a new file, `BuggyCalculator.java`, in your package. It has a `main` of its own, so this is the one exercise that does not use `Main.java`: run it with the ▶ above its own `main`.
+1. Copy the class into a new file, `BuggyCalculator.java`, in your package (start it with the same `package` line as `Main.java`). It has a `main` of its own, so this is the one exercise that does not use `Main.java`: run it with the ▶ above its own `main`.
 2. Fix the eight compile errors first. Faults 1-5 are in the declarations, 6-8 in how `main` calls them - repair the declarations and most of the calls fall into place.
 3. Expect `javac` to report **far fewer than eight at a time**. Fault 1 is a *parse* error, so on the first run it is the only message you get - and the missing-return check does not run at all until the type errors above it are gone. Fix, recompile, repeat until the class builds.
 4. Now hunt faults 9 and 10 by **reading**, not compiling: the build is already green and stays green with both still in place. For each, say what the code does and what it was clearly meant to do.

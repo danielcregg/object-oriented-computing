@@ -19,7 +19,7 @@
 
 ## Getting started
 
-This lab lives in the package `week07.encapsulation_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Student.java` for DIY 1 and `Temperature.java` for DIY 3. Every new file starts with the package line you see in `Main.java`.
+This lab lives in the package `week07.encapsulation_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Student.java` for DIY 1, `SecretMessage.java` for DIY 2, and so on. Every new file starts with the package line you see in `Main.java`.
 
 ## 1. Access Modifiers
 
@@ -123,7 +123,7 @@ error: name has private access in Student
 <details>
 <summary>Hint</summary>
 
-After you make the fields private, the direct assignments from Part 1 (`student.studentId = -1;` and `student.gpa = 5.5;`) stop compiling too. Hover over each red underline in VS Code to read the compiler error, then comment those lines out so the rest of your `main` method can run.
+After you make the fields private, the direct assignments from Part 1 (`student.studentId = -1;` and `student.gpa = 5.5;`) stop compiling too. Hover over each red underline in VS Code to read the compiler error, then comment those lines out (and the `student.name` line from step 7) so the rest of your `main` method can run.
 
 </details>
 
@@ -166,7 +166,7 @@ Create a `SecretMessage` class that keeps its data hidden:
 1. Give the class a private String field to store a message.
 2. Add a public method to display the message.
 3. Create a `SecretMessage` object in `Main.java`'s `main` method.
-4. Try to call the message field directly using the dot operator - you should get a compilation error.
+4. Try to call the message field directly using the dot operator - you should get a compilation error. Then comment that line out so the rest of `main` can run.
 5. Print the message to the console using the public method.
 
 **Expected output**
@@ -552,5 +552,6 @@ This lab covered the essential concepts of encapsulation in Java:
 2. **Data hiding** using private fields - understanding why we protect our data
 3. **Controlled access** through getters and setters - learning how to safely expose data
 4. **Data validation** for maintaining integrity - ensuring data remains valid throughout an object's lifecycle
+5. **Defensive copies** of array fields - returning a copy so callers cannot change what is inside
 
 By mastering these concepts, you can write more robust, maintainable, and secure Java applications. Encapsulation is not just a good practice - it's essential for professional software development.

@@ -168,22 +168,24 @@ instructions, scripts, workflows and the practice bank alone.
   you'll learn" → "Table of Contents" → "Getting started" (standard
   block: `Main.java` is the setup check and then the one program students
   keep editing; each exercise's test code goes in its `main`, replaced as
-  they move on, and every class an exercise asks for gets its own file
-  beside it. A supplied class that carries a `main` of its own (methods
-  DIY 9) is the exception and keeps its own file. The private solutions
-  repo still keeps one runnable `Diy<k>.java` per exercise, which is how
-  `check_solutions.py` runs and checks each one; students never see that
-  layout) → numbered sections → exercises as `### DIY k: <name>` with
+  they move on, every class an exercise asks for gets its own file beside
+  it, and a helper method goes in Main beside `main`, as `static`. A
+  supplied class that carries a `main` of its own (methods DIY 9) is the
+  exception and keeps its own file. The private solutions repo still keeps
+  one runnable `Diy<k>.java` per exercise, which is how `check_solutions.py`
+  runs and checks each one; students never see that layout) → numbered
+  sections → exercises as `### DIY k: <name>` with
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
   no week/module references (self-contained, like the decks).
-  **Section k holds DIY k.** The Introduction carries no number, a section
-  that would hold two exercises is split where the teaching changes so each
-  exercise follows the text it drills, and a section with no exercise is
-  unnumbered. A student can then go from `## 3.` to `### DIY 3` without a
+  **Section k holds DIY k.** A section with no exercise (an Introduction, a
+  Summary) carries no number, and a section that would hold two exercises is
+  split where the teaching changes so each exercise follows the text it
+  drills. A student can then go from `## 3.` to `### DIY 3` without a
   lookup, and the private solutions repo's `Diy3.java` sits under the same
-  number. Renumbering sections is safe; renumbering DIYs is not (that repo
-  and the lectures' speaker notes name them).
+  number. Renumber sections if you must, never DIYs (that repo and the
+  lectures' speaker notes name them), and grep the labs for prose pointers
+  such as "section 4" when you do: `check_links.py` reads anchors, not prose.
   **Every DIY has a hint** — six were missing and were written on
   2026-08-10; do not add an exercise without one.
 - **Size a lab to a two-hour slot, and judge it by COMPOSITION, not
@@ -196,7 +198,7 @@ instructions, scripts, workflows and the practice bank alone.
   as the exercise. When a lab runs long, cut transcription before you cut
   exercises.
 - Lab sections are NOT uniform below that top-level formula, and that is
-  tolerated rather than intended: section counts run 4–9, sub-heading
+  tolerated rather than intended: section counts run 5–13, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /
   `Explanation` / `Key Concepts`…), and two labs use no sub-headings at
   all. Match the lab you are editing; don't import another lab's style.

@@ -21,7 +21,7 @@ By the end of this lab you will be able to:
 
 ## Getting started
 
-This lab lives in the package `week10.polymorphism_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week10.polymorphism_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Shape.java`, `Square.java` and `Circle.java` for DIY 1 and `PriceCalculator.java` for DIY 2. Every new file starts with the package line you see in `Main.java`.
 
 ## 1. Runtime Polymorphism: Understanding "Many Forms"
 
@@ -145,7 +145,7 @@ Create a simple shape hierarchy that demonstrates method overriding:
 1. Create a base `Shape` class with a color property and two methods: `getPerimeter()` (base version returns `0.0`) and `describe()` (base version prints a generic message).
 2. Create two subclasses: `Square` (add a side length) and `Circle` (add a radius).
 3. In each subclass, override `getPerimeter()` to calculate the correct perimeter, and override `describe()` to print shape-specific information in the form `A red square with side 4.0`.
-4. In your main program, create a red `Square` with side `4.0` and a blue `Circle` with radius `5.0`, store both in `Shape` variables, and for each one call `describe()` and then print `"Perimeter: " + getPerimeter()` to demonstrate overriding.
+4. In `Main.java`'s `main` method, create a red `Square` with side `4.0` and a blue `Circle` with radius `5.0`, store both in `Shape` variables, and for each one call `describe()` and then print `"Perimeter: " + getPerimeter()` to demonstrate overriding.
 
 **Expected output**
 
@@ -245,7 +245,7 @@ Create a price calculator for a small shop that needs to handle various types of
    * `calculatePrice(double basePrice, double discountPercent)` - returns the price after applying a percentage discount
    * `calculatePrice(double basePrice, boolean hasStudentId)` - returns the price with the student discount ($5 off with valid ID)
    * `calculatePrice(double basePrice, double discountPercent, boolean hasStudentId)` - returns the price with both discounts applied: the percentage discount first, then $5 off
-2. In your main method, create a test case with an item priced at $50.00.
+2. In `Main.java`'s `main` method, create a test case with an item priced at $50.00.
 3. Show how the price changes with: no discount, a 10% discount, the student discount, and both the 10% and student discounts together.
 4. Print all results clearly showing which discount was applied, using the labels shown below.
 

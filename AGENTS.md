@@ -166,13 +166,24 @@ instructions, scripts, workflows and the practice bank alone.
   section of this file, git auto-fetch, and the Marp theme.
 - Lab READMEs share one formula: title (`# Java <Topic> Lab`) → "What
   you'll learn" → "Table of Contents" → "Getting started" (standard
-  block: `Main.java` is the setup check, then ONE FILE PER EXERCISE,
-  `Diy<k>.java` with its own `main`, mirroring the private solutions
-  repo's layout so each exercise stays runnable and checkable on its own)
-  → numbered sections → exercises as `### DIY k: <name>` with
+  block: `Main.java` is the setup check and then the one program students
+  keep editing; each exercise's test code goes in its `main`, replaced as
+  they move on, and every class an exercise asks for gets its own file
+  beside it. A supplied class that carries a `main` of its own (methods
+  DIY 9) is the exception and keeps its own file. The private solutions
+  repo still keeps one runnable `Diy<k>.java` per exercise, which is how
+  `check_solutions.py` runs and checks each one; students never see that
+  layout) → numbered sections → exercises as `### DIY k: <name>` with
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
   no week/module references (self-contained, like the decks).
+  **Section k holds DIY k.** The Introduction carries no number, a section
+  that would hold two exercises is split where the teaching changes so each
+  exercise follows the text it drills, and a section with no exercise is
+  unnumbered. A student can then go from `## 3.` to `### DIY 3` without a
+  lookup, and the private solutions repo's `Diy3.java` sits under the same
+  number. Renumbering sections is safe; renumbering DIYs is not (that repo
+  and the lectures' speaker notes name them).
   **Every DIY has a hint** — six were missing and were written on
   2026-08-10; do not add an exercise without one.
 - **Size a lab to a two-hour slot, and judge it by COMPOSITION, not

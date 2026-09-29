@@ -27,7 +27,7 @@
 
 ## Getting started
 
-This lab lives in the package `week05.arrays_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week05.arrays_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Write each exercise in the `main` method of this one `Main.java`, replacing the previous exercise's code as you go (commit each exercise when you finish it, and it stays in your history). When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Book.java` for DIY 6. Every new file starts with the package line you see in `Main.java`.
 
 ## Introduction
 
@@ -447,7 +447,7 @@ Eva is 22 years old.
 
 ### DIY 6: Array of Book objects
 
-1. Define a `Book` class with `title` and `author` fields, a constructor, and getter methods (model it on the `Student` class above).
+1. In its own file, `Book.java`, define a `Book` class with `title` and `author` fields, a constructor, and getter methods (model it on the `Student` class above).
 2. Create a `Book[]` array holding `new Book("Dracula", "Bram Stoker")` and `new Book("Emma", "Jane Austen")`.
 3. Loop over the array and print each book's details in the form `<title> by <author>`.
 
@@ -794,7 +794,7 @@ Squared array: [1, 4, 9]
 
 ### DIY 11: Double the values
 
-1. Write a method that takes an array of integers and returns a new array with each element doubled.
+1. In `Main.java`, beside `main`, write a `static` method that takes an array of integers and returns a new array with each element doubled.
 2. In `main`, call your method with the array `{1, 2, 3}` and print the returned array using `Arrays.toString()`, labelled as shown below.
 
 **Expected output**
@@ -899,7 +899,7 @@ Index of Alan: -1
 
 ### DIY 13: Search for a number
 
-1. Write a method `indexOf(int[] numbers, int target)` that searches `numbers` for `target`, `return`-ing its index the moment it finds a match.
+1. In `Main.java`, beside `main`, write a `static` method `indexOf(int[] numbers, int target)` that searches `numbers` for `target`, `return`-ing its index the moment it finds a match.
 2. If the loop finishes without a match, `return -1` after it.
 3. In `main`, create the array `int[] numbers = {12, 27, 33, 48, 9};`.
 4. Call your method twice - once for `48` (a value that is present) and once for `100` (a value that is absent) - and print both results in the form shown below.

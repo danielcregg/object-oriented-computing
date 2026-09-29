@@ -19,7 +19,7 @@
 
 ## Getting started
 
-This lab lives in the package `week07.encapsulation_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week07.encapsulation_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Student.java` for DIY 1 and `Temperature.java` for DIY 3. Every new file starts with the package line you see in `Main.java`.
 
 ## 1. Access Modifiers
 
@@ -95,7 +95,7 @@ graph LR
    - `studentId` (int)
    - `gpa` (double)
 2. Add a constructor that accepts all three parameters.
-3. In your `Diy1` class, create a `Student` object, type `student.` and observe the autocomplete list in VS Code - you see `name`, `studentId`, `gpa`, and more: all fields appear in the list.
+3. In `Main.java`'s `main` method, create a `Student` object, type `student.` and observe the autocomplete list in VS Code - you see `name`, `studentId`, `gpa`, and more: all fields appear in the list.
 4. Set invalid values directly:
 
    <!-- no-compile -->
@@ -107,14 +107,14 @@ graph LR
 **Part 2: Fixing with private fields**
 
 5. Change all fields in the `Student` class to **private**.
-6. In your `Diy1` class, type `student.` again and observe the autocomplete list - `name`, `studentId` and `gpa` have disappeared from the list and are inaccessible.
+6. In `Main.java`, type `student.` again and observe the autocomplete list - `name`, `studentId` and `gpa` have disappeared from the list and are inaccessible.
 7. Try to access `student.name` directly - you'll get a compilation error.
 
 The private fields have "disappeared" from outside access! Later we will show how to create public **getter** and **setter** methods that will provide access to these private instance variables.
 
 **Expected output**
 
-Once the fields are private, the compiler rejects every direct field access from `Diy1`:
+Once the fields are private, the compiler rejects every direct field access from `Main`:
 
 ```text
 error: name has private access in Student
@@ -165,7 +165,7 @@ Create a `SecretMessage` class that keeps its data hidden:
 
 1. Give the class a private String field to store a message.
 2. Add a public method to display the message.
-3. Create a `SecretMessage` object in the `Diy2` class.
+3. Create a `SecretMessage` object in `Main.java`'s `main` method.
 4. Try to call the message field directly using the dot operator - you should get a compilation error.
 5. Print the message to the console using the public method.
 
@@ -228,7 +228,7 @@ Create a `Temperature` class that:
 2. Provides a getter method for `celsius`.
 3. Provides a setter method that accepts celsius values.
 
-Then test your class in `Diy3`'s `main` method:
+Then test your class in `Main.java`'s `main` method:
 
 4. Create a `Temperature` object.
 5. Set a temperature value using the setter.
@@ -375,7 +375,7 @@ public class Grade {
 }
 ```
 
-Then test your `Grade` class in `Diy4`:
+Then test your `Grade` class in `Main.java`:
 
 5. Create a valid `Grade` object.
 6. Create an invalid `Grade` object (with a grade of 150).
@@ -502,7 +502,7 @@ graph TD
 
 1. Create a `ReportCard` class with a private field `int[] grades` initialized to `{88, 91, 76}`.
 2. Add a getter `getGrades()` that returns the `grades` field directly.
-3. In your `Diy5` class, create a `ReportCard` object.
+3. In `Main.java`'s `main` method, create a `ReportCard` object.
 4. Print `reportCard.getGrades()[0]` - this is the value before anything touches it.
 5. Call `getGrades()`, store the result in a local `int[] view`, then set `view[0] = 0;`.
 6. Print `reportCard.getGrades()[0]` again. Even though no code anywhere wrote `reportCard.grades = ...`, the private field changed.

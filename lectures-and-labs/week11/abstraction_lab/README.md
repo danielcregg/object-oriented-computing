@@ -17,7 +17,7 @@
 
 ## Getting started
 
-This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class or an interface, give it its own file beside `Main.java`: `Shape.java`, `Circle.java` and `Square.java` for DIY 1 and `GameCharacter.java` for DIY 2. Every new file starts with the package line you see in `Main.java`. When a step gives you a whole `Main` class to test with, keep the `package` line at the top of the file.
 
 ## 1. Abstract Classes
 
@@ -195,7 +195,7 @@ public class Main {
 ```
 
 ### DIY 1: Simple Shape System
-Create a basic shape system with three classes: `Shape`, `Circle`, `Square`, and a `Diy1` class to test them.
+Create a basic shape system with three classes: `Shape`, `Circle`, `Square`, and `Main.java` to test them.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF5722', 'primaryTextColor': '#BF360C', 'primaryBorderColor': '#E64A19', 'lineColor': '#4CAF50', 'secondaryColor': '#FFC107', 'tertiaryColor': '#FBE9E7', 'classText': '#BF360C'}}}%%
@@ -257,10 +257,10 @@ public abstract class Shape {
    - Add a constructor that takes `color` and `sideLength` as parameters
    - Implement the `getArea()` method using the formula: `sideLength × sideLength`
 
-4. Update the `Diy1` class to test your shapes:
+4. Update `Main.java` to test your shapes:
 <!-- no-compile -->
 ```java
-public class Diy1 {
+public class Main {
     public static void main(String[] args) {
         // Use Shape references (polymorphism)
         Shape circle = new Circle("Red", 5.0);
@@ -415,10 +415,10 @@ Create a simple game character system:
    - `Hero` - implements methods with heroic behavior (e.g., "Hero charges forward!", "For justice!", "Hero uses health potion!")
    - `Villain` - implements methods with villainous behavior (e.g., "Villain sneaks in shadows!", "You'll never stop me!", "Villain uses poison!")
 
-3. Test your characters in the `Diy2` class:
+3. Test your characters in `Main.java`:
 <!-- no-compile -->
 ```java
-public class Diy2 {
+public class Main {
     public static void main(String[] args) {
         // Create game characters
         GameCharacter hero = new Hero();
@@ -632,10 +632,10 @@ Create a simple school system:
    - Implement the `study()` method (e.g., "[name] is studying hard!")
    - Implement the `doHomework()` method (e.g., "[name] is doing homework...")
 
-4. Test your `Student` class in the `Diy3` class:
+4. Test your `Student` class in `Main.java`:
 <!-- no-compile -->
 ```java
-public class Diy3 {
+public class Main {
     public static void main(String[] args) {
         // Create a student
         Student student = new Student("Alice", 20);
@@ -788,10 +788,10 @@ classDiagram
      2. Call `service.sendMessage(message)`
      3. Print `Notification sent successfully!`
 
-5. Test everything in the `Diy4` class:
+5. Test everything in `Main.java`:
 <!-- no-compile -->
 ```java
-public class Diy4 {
+public class Main {
     public static void main(String[] args) {
         // Create the notification manager
         NotificationManager manager = new NotificationManager();
@@ -835,7 +835,7 @@ SMS: New text received!
 
 <details><summary>Hint</summary>
 
-Write `MessageService` the same way `Playable` is written above - just the two signatures, no bodies. Watch the difference between them: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `Diy4` does the printing. For `NotificationManager`, the parameter list `sendNotification(MessageService service, String message)` is the one line that matters: type the parameter as the interface `MessageService`, not as `WhatsAppService` or `SMSService`.
+Write `MessageService` the same way `Playable` is written above - just the two signatures, no bodies. Watch the difference between them: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `main` does the printing. For `NotificationManager`, the parameter list `sendNotification(MessageService service, String message)` is the one line that matters: type the parameter as the interface `MessageService`, not as `WhatsAppService` or `SMSService`.
 
 </details>
 
@@ -862,10 +862,10 @@ In DIY 1 to DIY 4, every exercise told you upfront whether to write an abstract 
    - `Chargeable` declares one behaviour: `charge()` (returns nothing)
    - `FitnessTracker` needs both behaviours at once: `wear()` prints `FitnessTracker strapped to your wrist`; `charge()` prints `FitnessTracker charging on the dock`. Check the class vs. interface comparison earlier in this lab for how many classes you may `extends`, versus how many you may `implements`.
 
-4. Test everything in the `Diy5` class:
+4. Test everything in `Main.java`:
 <!-- no-compile -->
 ```java
-public class Diy5 {
+public class Main {
     public static void main(String[] args) {
         // Payment methods
         PaymentMethod card = new CreditCard();

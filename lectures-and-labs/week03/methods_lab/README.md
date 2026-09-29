@@ -23,7 +23,7 @@
 
 ## Getting started
 
-This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Then give **each exercise its own file** in this same package - `Diy1.java`, `Diy2.java`, ... - each with its own `main` method (the ▶ button appears above every `main`), so every exercise stays runnable on its own and finishing one never disturbs the last. Any extra class an exercise needs goes in its own file beside it, and every file starts with the package line you see in `Main.java`.
+This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1 and `TemperatureConverter.java` for DIY 4. Every new file starts with the package line you see in `Main.java`. DIY 9 is the one exception: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
 
 ---
 
@@ -89,7 +89,7 @@ flowchart TD
 1. Create a class named `Calculator`.
 2. Add a method `printHeader()` that prints the three-line header shown below.
 3. Add a method `printMenu()` that lists the four operations shown below.
-4. In `main`, create a `Calculator` object and call both methods.
+4. In `Main.java`'s `main` method, create a `Calculator` object and call both methods.
 
 **Expected output**
 
@@ -164,7 +164,7 @@ You are 25 years old.
    * `printSubtraction(int a, int b)` - prints `a - b = result`
    * `printMultiplication(int a, int b)` - prints `a × b = result`
    * `printDivision(double a, double b)` - prints `a ÷ b = result` (use `double` for division)
-2. In `main`, test each method with different values.
+2. In `Main.java`'s `main`, test each method with different values.
 
 These methods only print - they don't return anything. The next section fixes that.
 
@@ -228,7 +228,7 @@ Average: 85.0
    * `int multiply(int a, int b)` - returns the product
    * `double divide(double a, double b)` - returns the quotient
 2. Add error handling to `divide()`: if `b` is 0, print an error message and return 0.
-3. In `main`, call each method, store each result in a variable, and print the results in a formatted way.
+3. In `Main.java`'s `main`, replace your DIY 2 calls (those print methods no longer exist) with calls to each new method: store each result in a variable, and print the results in a formatted way.
 
 **Expected output**
 
@@ -307,7 +307,7 @@ Passing: true
    * `boolean isFreezingCelsius(double celsius)` - true at or below 0°C
    * `boolean isBoilingCelsius(double celsius)` - true at or above 100°C
 2. Formulas: Fahrenheit = (Celsius × 9/5) + 32 and Celsius = (Fahrenheit − 32) × 5/9.
-3. Test all five methods in `main`.
+3. Test all five methods from `Main.java`'s `main`.
 
 **Expected output**
 
@@ -395,7 +395,7 @@ A bank card PIN is four digits, and not every four-digit number is acceptable: `
    * `isNotAscendingRun` - the digits do not each climb by one (`1234` fails)
    * `isNotDescendingRun` - the digits do not each drop by one (`5432` fails)
 4. `isValidPin()` must call all four helpers - it does no digit arithmetic of its own.
-5. Test three PINs in `main`: two rejected for different reasons, one accepted.
+5. Test three PINs from `Main.java`'s `main`: two rejected for different reasons, one accepted.
 
 **Expected output**
 
@@ -516,7 +516,7 @@ Build a small library of `static` maths helpers - the kind of thing `Math` itsel
    * `int gcd(int a, int b)` - the greatest common divisor of two positive numbers
    * `int lcm(int a, int b)` - the lowest common multiple; **call `gcd`**
    * `boolean isPrime(int n)` - true when `n` is 2 or more and divides evenly by nothing but 1 and itself
-2. Call every one of them from `main` and print the results - **without creating a single object**.
+2. Call every one of them from `Main.java`'s `main` and print the results - **without creating a single object**.
 
 **Expected output**
 
@@ -614,7 +614,7 @@ sequenceDiagram
    * `methodA()` - prints `A start`, calls `methodB()`, prints `A end`
    * `methodB()` - prints `B start`, calls `methodC()`, prints `B end`
    * `methodC()` - prints `C start`, then `C end`
-3. Call `methodA()` from `main`.
+3. Call `ExecutionTracer.methodA()` from `Main.java`'s `main`.
 4. Before running, predict the output on paper by drawing the stack at each step - then run and check yourself.
 
 **Expected output**
@@ -630,7 +630,7 @@ A end
 
 <details><summary>Hint</summary>
 
-All three methods are `static`, so `main` calls them by name with no object involved. The order is not three tidy pairs: `methodA` cannot reach its `A end` line until `methodB` has completely finished, and `methodB` cannot finish until `methodC` has. Draw the stack growing downward as each call is pushed, then unwinding from the bottom as each returns - the printed order is the shape of that drawing.
+All three methods are `static`, so `main` calls them through the class name, `ExecutionTracer.methodA()`, with no object involved. The order is not three tidy pairs: `methodA` cannot reach its `A end` line until `methodB` has completely finished, and `methodB` cannot finish until `methodC` has. Draw the stack growing downward as each call is pushed, then unwinding from the bottom as each returns - the printed order is the shape of that drawing.
 
 </details>
 
@@ -654,7 +654,7 @@ public static int factorial(int n) {
    * `int countdown(int n)` - prints n down to 1, then returns 0
    * `int sumToN(int n)` - returns 1 + 2 + … + n, printing each call
    * `int power(int base, int exponent)` - returns base^exponent, printing each call
-2. Test each with small values (n ≤ 5) so you can follow the stack in the output.
+2. Test each from `Main.java`'s `main` with small values (n ≤ 5) so you can follow the stack in the output.
 
 **Expected output**
 
@@ -832,7 +832,7 @@ public class BuggyCalculator {
 }
 ```
 
-1. Copy the class into your package.
+1. Copy the class into a new file, `BuggyCalculator.java`, in your package. It has a `main` of its own, so this is the one exercise that does not use `Main.java`: run it with the ▶ above its own `main`.
 2. Fix the eight compile errors first. Faults 1-5 are in the declarations, 6-8 in how `main` calls them - repair the declarations and most of the calls fall into place.
 3. Expect `javac` to report **far fewer than eight at a time**. Fault 1 is a *parse* error, so on the first run it is the only message you get - and the missing-return check does not run at all until the type errors above it are gone. Fix, recompile, repeat until the class builds.
 4. Now hunt faults 9 and 10 by **reading**, not compiling: the build is already green and stays green with both still in place. For each, say what the code does and what it was clearly meant to do.

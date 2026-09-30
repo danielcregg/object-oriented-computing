@@ -479,6 +479,102 @@
           "expected": "Square has area 0"
         }
       ]
+    },
+    {
+      "id": "coding-introduction-001",
+      "topic": "introduction",
+      "difficulty": "easy",
+      "kind": "program",
+      "show": 2,
+      "title": "Greet someone by name",
+      "question": "The program reads a name from the keyboard into the variable `name`. Print the word `Hello`, a comma, a space, the name and an exclamation mark, all on one line. For the name `Ada` the output is `Hello, Ada!`.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String name = sc.nextLine();\n\n        // your code here\n    }\n}",
+      "tests": [
+        {
+          "stdin": "Ada\n",
+          "expected": "Hello, Ada!"
+        },
+        {
+          "stdin": "Java\n",
+          "expected": "Hello, Java!"
+        },
+        {
+          "stdin": "Mary Jane\n",
+          "expected": "Hello, Mary Jane!"
+        }
+      ]
+    },
+    {
+      "id": "coding-introduction-002",
+      "topic": "introduction",
+      "difficulty": "easy",
+      "kind": "program",
+      "show": 2,
+      "title": "Repeat a greeting",
+      "question": "The program reads a whole number `n` from the keyboard. Use a `for` loop to print `Hello, World!` on its own line, `n` times. For `n` equal to `2`, the program prints `Hello, World!` on two separate lines.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n\n        // your code here\n    }\n}",
+      "tests": [
+        {
+          "stdin": "3\n",
+          "expected": "Hello, World!\nHello, World!\nHello, World!"
+        },
+        {
+          "stdin": "1\n",
+          "expected": "Hello, World!"
+        },
+        {
+          "stdin": "5\n",
+          "expected": "Hello, World!\nHello, World!\nHello, World!\nHello, World!\nHello, World!"
+        }
+      ]
+    },
+    {
+      "id": "coding-introduction-003",
+      "topic": "introduction",
+      "difficulty": "easy",
+      "kind": "program",
+      "show": 2,
+      "title": "Count up to n",
+      "question": "The program reads a whole number `n` from the keyboard. Use a `for` loop to print the numbers from `1` up to and including `n`, one number per line. For `n` equal to `3`, the program prints `1`, `2` and `3` on three separate lines.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n\n        // your code here\n    }\n}",
+      "tests": [
+        {
+          "stdin": "5\n",
+          "expected": "1\n2\n3\n4\n5"
+        },
+        {
+          "stdin": "1\n",
+          "expected": "1"
+        },
+        {
+          "stdin": "8\n",
+          "expected": "1\n2\n3\n4\n5\n6\n7\n8"
+        }
+      ]
+    },
+    {
+      "id": "coding-introduction-004",
+      "topic": "introduction",
+      "difficulty": "medium",
+      "kind": "program",
+      "show": 2,
+      "title": "Count down and lift off",
+      "question": "The program reads a whole number `n` from the keyboard. Count down from `n` to `1`, one number per line, and then print `Liftoff!` on its own line. A `for` loop can count down: start the counter at `n`, keep going while it is at least `1`, and use `i--` to take one off each time round.\n\nFor `n` equal to `3`, the program prints `3`, `2`, `1` and then `Liftoff!`, each on its own line.",
+      "starter": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n\n        // your code here\n    }\n}",
+      "tests": [
+        {
+          "stdin": "3\n",
+          "expected": "3\n2\n1\nLiftoff!"
+        },
+        {
+          "stdin": "1\n",
+          "expected": "1\nLiftoff!"
+        },
+        {
+          "stdin": "5\n",
+          "expected": "5\n4\n3\n2\n1\nLiftoff!"
+        }
+      ]
     }
   ]
 }

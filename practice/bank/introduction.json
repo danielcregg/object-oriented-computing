@@ -391,6 +391,66 @@
       ],
       "answer": 3,
       "explanation": "Reserved means reserved whether or not the word does anything: goto and const are held back so that no program can ever claim them, and the compiler rejects both as names. Where you declare the variable makes no difference, and no compiler will accept the name with a warning."
+    },
+    {
+      "id": "introduction-027",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "How many times does this program print Hi?",
+      "code": "public class Repeater {\n    public static void main(String[] args) {\n        for (int i = 0; i < 3; i++) {\n            System.out.println(\"Hi\");\n        }\n    }\n}",
+      "options": [
+        "Twice, because the loop stops as soon as i reaches 2",
+        "Four times, because i takes the values 0, 1, 2 and 3",
+        "Three times, once for each of i equal to 0, 1 and 2",
+        "Once, because the condition is only checked before the first pass"
+      ],
+      "answer": 2,
+      "explanation": "i starts at 0 and the condition i < 3 is checked before every pass. It is true for 0, 1 and 2, so the body runs three times. When i reaches 3 the condition is false and the loop ends, so 3 is reached but never gets a pass of its own."
+    },
+    {
+      "id": "introduction-028",
+      "difficulty": "medium",
+      "type": "code",
+      "question": "Which part of the for header runs after every pass through the loop body?",
+      "code": "public class Counter {\n    public static void main(String[] args) {\n        for (int i = 0; i < 3; i++) {\n            System.out.println(i);\n        }\n    }\n}",
+      "options": [
+        "int i = 0, which sets the counter back to 0 after each pass",
+        "i < 3, which is only checked after each pass and never before the first",
+        "None of them: all three parts run once, before the first pass",
+        "i++, which adds 1 to i after each pass"
+      ],
+      "answer": 3,
+      "explanation": "The three parts of a for header do different jobs at different times. int i = 0 runs once, before the first pass. i < 3 is checked before every pass, including the first. i++ runs after every pass, adding 1 to i so the loop moves towards its end."
+    },
+    {
+      "id": "introduction-029",
+      "difficulty": "easy",
+      "type": "code",
+      "question": "What does this program print?",
+      "code": "public class Counter {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 3; i++) {\n            System.out.println(i);\n        }\n    }\n}",
+      "options": [
+        "0, 1 and 2, each on its own line",
+        "1, 2, 3 and 4, each on its own line",
+        "1, 2 and 3, each on its own line",
+        "Just 3, the last value of i"
+      ],
+      "answer": 2,
+      "explanation": "i starts at 1 and i <= 3 is true for 1, 2 and 3, so the body runs three times and each println ends its own line. When i becomes 4 the test fails and the loop ends, so 4 is never printed; 0 is never printed either, because the loop starts at 1."
+    },
+    {
+      "id": "introduction-030",
+      "difficulty": "medium",
+      "type": "concept",
+      "question": "What happens when the condition of a loop never becomes false?",
+      "code": null,
+      "options": [
+        "The compiler rejects the program, because a loop must always finish",
+        "Java stops the loop after a fixed number of passes to protect the computer",
+        "The body runs once and the program carries on with the next statement",
+        "The loop never ends: it keeps repeating until the program is stopped"
+      ],
+      "answer": 3,
+      "explanation": "A loop keeps repeating for as long as its condition is true, and Java sets no limit on the number of passes. The compiler does not reject a loop that might never finish either, because it cannot tell in general whether a condition will ever become false. The program simply keeps going until it is stopped from outside."
     }
   ]
 }

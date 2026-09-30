@@ -83,6 +83,16 @@
   .banner.pass { border-color:var(--good); background:var(--goodbg); color:var(--good); font-weight:600; }
   .banner.fail { border-color:var(--bad); background:var(--badbg); color:var(--bad); font-weight:600; }
   pre.err { background:var(--badbg); border:1px solid #E5B8B2; border-radius:10px; padding:12px 16px; font-family:var(--mono); font-size:13.5px; white-space:pre-wrap; color:#7A2119; }
+  .marks { border:1.5px solid var(--rule); background:#fff; border-radius:10px; padding:12px 16px; margin:10px 0 4px; }
+  .marks .head { font-family:var(--mono); font-size:14px; color:var(--slate); display:flex; flex-wrap:wrap; gap:4px 14px; align-items:baseline; }
+  .marks .now { font-size:24px; font-weight:700; color:var(--good); }
+  .marks .now.low { color:var(--orange); } .marks .now.zero { color:var(--bad); }
+  .steps { display:flex; gap:6px; margin:10px 0 2px; }
+  .step { flex:1; min-width:0; text-align:center; border:1.5px solid var(--rule); border-radius:8px; padding:5px 2px; font-family:var(--mono); font-size:12.5px; color:var(--muted); background:var(--paper); }
+  .step b { display:block; font-size:15px; color:var(--ink); }
+  .step.used { opacity:0.55; } .step.used b { text-decoration:line-through; }
+  .step.next { border-color:var(--orange); background:#FFF8EE; color:var(--ink); }
+  .step.won { border-color:var(--good); background:var(--goodbg); color:var(--good); } .step.won b { color:var(--good); }
   .timer { font-family:var(--mono); font-size:19px; font-weight:700; color:var(--blue); padding:4px 14px; border:1.5px solid var(--blue); border-radius:999px; margin-left:auto; }
   .timer.warn { color:var(--orange); border-color:var(--orange); }
   .timer.crit { color:var(--bad); border-color:var(--bad); animation:pulse 1s infinite; }
@@ -102,7 +112,7 @@
   <section id="view-list">
     <h1>Coding Practice</h1>
     <p class="standfirst">Write the Java, press <strong>Check</strong>, and see each test pass or fail —
-    the same shape as the coding questions in the MCQs. Your code is compiled and run on a
+    the same shape and the same marking as the coding questions in the MCQs. Your code is compiled and run on a
     remote Java sandbox; nothing to install.</p>
 
     <h2>Topics</h2>
@@ -138,9 +148,12 @@
     <div class="toolbar">
       <button class="btn" id="check">Check</button>
       <button class="btn ghost small" id="reset">reset code</button>
+      <button class="btn ghost small" id="newtry">new attempt</button>
       <button class="btn ghost small hidden" id="next">next question →</button>
       <span class="status" id="status"></span>
     </div>
+    <div class="marks" id="marks"></div>
+    <p class="small-note">Marked like the real coding questions: your first two Checks can earn full marks, then each Check costs 0.25 (0.75, 0.50, 0.25, then nothing). A compile error counts as a Check; unchanged code is not counted.</p>
     <p class="small-note"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> checks · <kbd>Tab</kbd> indents</p>
     <div id="result" aria-live="polite"></div>
   </section>
@@ -165,7 +178,7 @@
 const JOBE_DEFAULT = { url: 'https://jobe2.cosc.canterbury.ac.nz/jobe/index.php/restapi/runs/',
                        key: '2AAA7A5415B4A9B394B54BF1D2E9D' };
 const SEP = '#|#TEST#|#';
-const S_DONE = 'ooccode.v1.done', S_CODE = 'ooccode.v1.code';
+const S_DONE = 'ooccode.v1.done', S_CODE = 'ooccode.v1.code', S_ATT = 'ooccode.v1.attempts';
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\n\n/g, '<br><br>');
@@ -221,6 +234,31 @@ function javaHTML(src) {
 }
 
 let QS = [], TOPICS = [], TITLES = {}, PRESETS = [], current = null, set = null, tick = null;
+
+/* ── marking ──────────────────────────────────────────────
+   The regime of the real coding questions, "0, 25, 50, ...": your first two
+   Checks can earn full marks, then each Check lowers the most you can earn by
+   25%, and from the sixth Check on nothing. All or nothing: a Check that passes
+   every test earns whatever is still available. Every Check that ran counts,
+   compile errors included; identical code is not counted. */
+const penaltyPct = n => n <= 2 ? 0 : Math.min(100, (n - 2) * 25);      /* n = the number of this Check */
+const available = n => (100 - penaltyPct(n)) / 100;
+const mark2 = x => x.toFixed(2);
+const FRESH = () => ({ checks: 0, mark: null, last: null });
+const attemptOf = q => load(S_ATT, {})[q.id] || FRESH();
+function saveAttempt(q, a) { const all = load(S_ATT, {}); all[q.id] = a; save(S_ATT, all); }
+function renderMarks(q) {
+  const a = attemptOf(q), next = a.checks + 1;
+  const steps = [1, 2, 3, 4, 5, 6].map(n => {
+    const won = a.mark != null && n === a.checks, used = n <= a.checks && !won, isNext = a.mark == null && n === next;
+    return '<div class="step' + (won ? ' won' : used ? ' used' : isNext ? ' next' : '') + '"><b>' + mark2(available(n)) + '</b>Check ' + n + (n === 6 ? '+' : '') + '</div>';
+  }).join('');
+  const now = a.mark != null ? a.mark : available(next);
+  $('marks').innerHTML = '<div class="head"><span class="now' + (now === 0 ? ' zero' : now < 1 ? ' low' : '') + '">' + mark2(now) + ' / 1.00</span><span>'
+    + (a.mark != null ? 'Passed on Check ' + a.checks + '. Press new attempt to try again for full marks.'
+       : a.checks === 0 ? 'available on your first Check' : 'the most your next Check (number ' + next + ') can earn')
+    + '</span></div><div class="steps">' + steps + '</div>';
+}
 
 function jobe() { const o = load('ooccode.jobe', null); return (o && o.url) ? o : JOBE_DEFAULT; }
 
@@ -290,7 +328,7 @@ function renderList() {
   $('qlist').innerHTML = show.map(q =>
     '<li><span class="t"><a href="#" data-id="' + esc(q.id) + '">' + esc(q.title) + '</a></span>'
     + '<span class="meta">' + esc(TITLES[q.topic] || q.topic) + ' · ' + esc(q.kind) + ' · ' + esc(q.difficulty) + '</span>'
-    + '<span class="done">' + (done[q.id] ? '✔ passed' : '') + '</span></li>').join('')
+    + '<span class="done">' + (q.id in done ? '✔ ' + (typeof done[q.id] === 'number' ? mark2(done[q.id]) : 'passed') : '') + '</span></li>').join('')
     || '<li><span class="meta">no questions for that selection</span></li>';
   $('qlist').querySelectorAll('a[data-id]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openQ(QS.find(q => q.id === a.dataset.id)); }));
   $('start-set').disabled = show.length < 3;
@@ -320,12 +358,17 @@ function openQ(q) {
   $('tests').innerHTML = testsTable(q, null);
   $('editor').value = load(S_CODE, {})[q.id] || q.starter; paintEditor();
   $('result').innerHTML = ''; $('status').textContent = '';
+  renderMarks(q); $('newtry').classList.toggle('hidden', !!set);
   $('next').classList.toggle('hidden', !set);
   $('setpos').textContent = set ? 'question ' + (set.idx + 1) + ' of ' + set.qs.length : '';
   window.scrollTo(0, 0); $('editor').focus();
 }
 $('back').addEventListener('click', () => { if (set && !confirm('Leave the timed set? It will not be scored.')) return; endSet(); $('view-q').classList.add('hidden'); $('view-list').classList.remove('hidden'); renderList(); });
 $('reset').addEventListener('click', () => { if (confirm('Replace your code with the starter?')) { $('editor').value = current.starter; saveCode(); paintEditor(); } });
+$('newtry').addEventListener('click', () => {
+  if (attemptOf(current).checks && !confirm('Start a new attempt? Your Checks and mark for this question are cleared.')) return;
+  saveAttempt(current, FRESH()); renderMarks(current); $('result').innerHTML = '';
+});
 $('editor').addEventListener('input', saveCode);
 $('editor').addEventListener('keydown', e => {
   if (e.key === 'Tab') { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + '    ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 4; saveCode(); paintEditor(); }
@@ -388,20 +431,30 @@ async function check(q, code) {
 }
 
 $('check').addEventListener('click', async () => {
-  const q = current, code = $('editor').value;
+  const q = current, code = $('editor').value, a = attemptOf(q);
   if (!code.trim()) return;
+  if (a.mark != null) { $('result').innerHTML = '<div class="banner">You have already passed this question with ' + mark2(a.mark) + ' / 1.00. Press <strong>new attempt</strong> to try again.</div>'; return; }
+  if (code === a.last) { $('result').innerHTML = '<div class="banner">Same code as your last Check, so it was not run and not counted. Change something first.</div>'; return; }
   $('check').disabled = true; $('status').textContent = 'compiling and running…'; $('result').innerHTML = '';
   try {
     const out = await check(q, code);
+    a.checks++; a.last = code;                     /* a Check that ran counts, whatever its result */
+    const next = 'Your next Check can earn at most ' + mark2(available(a.checks + 1)) + ' / 1.00.';
     if (out.compile !== undefined) {
-      $('result').innerHTML = '<div class="banner fail">Compile error — nothing was run.</div><pre class="err">' + esc(out.compile.trim() || 'no compiler message') + '</pre>';
+      $('result').innerHTML = '<div class="banner fail">Compile error — nothing was run. This Check earned 0.00. ' + next + '</div><pre class="err">' + esc(out.compile.trim() || 'no compiler message') + '</pre>';
     } else {
       const passed = out.results.filter(r => r.pass).length, all = passed === out.results.length;
-      if (all) { const d = load(S_DONE, {}); d[q.id] = true; save(S_DONE, d); }
+      if (all) {
+        a.mark = available(a.checks);
+        const d = load(S_DONE, {}), old = typeof d[q.id] === 'number' ? d[q.id] : -1; d[q.id] = Math.max(old, a.mark); save(S_DONE, d);
+      }
       if (set) set.passed += all ? 1 : 0;
-      $('result').innerHTML = '<div class="banner ' + (all ? 'pass' : 'fail') + '">' + (all ? 'Passed all tests! ✔' : 'Some tests failed: ' + passed + ' of ' + out.results.length + ' passed.') + '</div>' + testsTable(q, out.results);
+      $('result').innerHTML = '<div class="banner ' + (all ? 'pass' : 'fail') + '">' + (all
+        ? 'Passed all tests! ✔ Marks for this Check: 1.00 / 1.00. Accounting for previous Checks, this gives ' + mark2(a.mark) + ' / 1.00.'
+        : 'Some tests failed: ' + passed + ' of ' + out.results.length + ' passed. This Check earned 0.00. ' + next) + '</div>' + testsTable(q, out.results);
       $('tests').innerHTML = testsTable(q, null);
     }
+    saveAttempt(q, a); renderMarks(q);
   } catch (e) {
     $('result').innerHTML = '<div class="banner fail">Could not reach the sandbox (' + esc(e.name === 'AbortError' ? 'timed out' : e.message) + '). Try again in a moment, or run your code in your Codespace.</div>';
   } finally { $('check').disabled = false; $('status').textContent = ''; }
@@ -411,6 +464,7 @@ $('check').addEventListener('click', async () => {
 $('start-set').addEventListener('click', () => {
   const pool = QS.filter(q => selected.size === 0 || selected.has(q.topic));
   set = { qs: shuffle([...pool]).slice(0, 3), idx: 0, passed: 0, end: Date.now() + 20 * 60 * 1000 };
+  set.qs.forEach(q => saveAttempt(q, FRESH()));                 /* a timed set is a fresh attempt */
   $('timer').classList.remove('hidden'); tick = setInterval(tickTimer, 500); tickTimer();
   openQ(set.qs[0]);
 });
@@ -426,7 +480,8 @@ function endSet() { clearInterval(tick); $('timer').classList.add('hidden'); set
 function finishSet(timedOut) {
   const s = set; endSet();
   $('view-q').classList.add('hidden'); $('view-set').classList.remove('hidden');
-  $('setsum').textContent = (timedOut ? 'Time up. ' : '') + 'You passed ' + s.passed + ' of ' + s.qs.length + ' questions' + (s.passed === s.qs.length ? ' — all of them.' : '.');
+  const total = s.qs.reduce((sum, q) => sum + (attemptOf(q).mark || 0), 0);
+  $('setsum').textContent = (timedOut ? 'Time up. ' : '') + 'You passed ' + s.passed + ' of ' + s.qs.length + ' questions' + (s.passed === s.qs.length ? ' — all of them' : '') + ' and scored ' + mark2(total) + ' out of ' + mark2(s.qs.length) + '.';
   window.scrollTo(0, 0);
 }
 $('again').addEventListener('click', () => { $('view-set').classList.add('hidden'); $('view-list').classList.remove('hidden'); renderList(); });

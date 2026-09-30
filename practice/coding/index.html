@@ -56,10 +56,27 @@
   .tests tr.fail td { background:var(--badbg); }
   .tests td.res { font-family:var(--mono); font-weight:700; white-space:nowrap; }
   .tests tr.pass .res { color:var(--good); } .tests tr.fail .res { color:var(--bad); }
-  textarea.editor { width:100%; min-height:260px; font-family:var(--mono); font-size:14.5px; line-height:1.5;
-                    color:#E8ECF1; background:var(--codebg); border:1.5px solid #2B3A4A; border-radius:10px;
-                    padding:14px 18px; tab-size:4; resize:vertical; }
+  /* The editor is a transparent textarea laid over a <pre> holding the coloured copy of its text.
+     Both layers must lay text out identically, so they share one rule. */
+  .editor-box { position:relative; }
+  textarea.editor, pre.editor-hl { display:block; width:100%; min-height:260px; margin:0; padding:14px 18px;
+                    font-family:var(--mono); font-size:14.5px; line-height:1.5; font-variant-ligatures:none; letter-spacing:normal;
+                    -webkit-text-size-adjust:100%; text-size-adjust:100%; tab-size:4; text-align:left;
+                    white-space:pre; overflow-wrap:normal; border:1.5px solid #2B3A4A; border-radius:10px; }
+  pre.editor-hl { position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; pointer-events:none;
+                  color:#E8ECF1; background:var(--codebg); }
+  pre.editor-hl code { display:inline-block; min-width:100%; padding:0 40px 40px 0; font:inherit; } /* spare room, so this layer can always scroll as far as the textarea */
+  textarea.editor { position:relative; resize:vertical; overflow:auto; color:transparent; background:transparent;
+                    border-color:transparent; caret-color:#E8ECF1; }
+  textarea.editor::selection { color:transparent; background:rgba(127,180,216,.35); }
   textarea.editor:focus { outline:2px solid var(--orange); outline-offset:2px; }
+  @media (forced-colors:active) { pre.editor-hl { display:none; } textarea.editor { color:FieldText; } }
+  /* Java token colours. The dark set is the decks' (themes/ooc.css) plus numbers and annotations;
+     the light set is for the test code on the paper-coloured table. Every pair is at least 4.5:1. */
+  :root { --j-kw:#33698C; --j-ty:#0B6B74; --j-st:#9A4200; --j-nm:#1E7A34; --j-cm:#5B6470; --j-an:#7B3FA0; }
+  pre.editor-hl { --j-kw:#7FB4D8; --j-ty:#A8D3EE; --j-st:#F0B26B; --j-nm:#B5CEA8; --j-cm:#7C8B99; --j-an:#C9A6E4; }
+  .j-kw { color:var(--j-kw); } .j-ty { color:var(--j-ty); } .j-st { color:var(--j-st); }
+  .j-nm { color:var(--j-nm); } .j-cm { color:var(--j-cm); } .j-an { color:var(--j-an); }
   .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0; }
   .status { font-family:var(--mono); font-size:14px; color:var(--muted); }
   .banner { border-left:4px solid var(--orange); background:var(--tint); padding:10px 16px; margin:14px 0; font-size:15px; }
@@ -114,7 +131,10 @@
     <h3>Tests</h3>
     <div id="tests"></div>
     <h3>Your answer</h3>
-    <textarea class="editor" id="editor" spellcheck="false" aria-label="Your Java code"></textarea>
+    <div class="editor-box">
+      <pre class="editor-hl" id="editor-hl" aria-hidden="true"><code id="editor-code"></code></pre>
+      <textarea class="editor" id="editor" spellcheck="false" wrap="off" aria-label="Your Java code"></textarea>
+    </div>
     <div class="toolbar">
       <button class="btn" id="check">Check</button>
       <button class="btn ghost small" id="reset">reset code</button>
@@ -153,6 +173,52 @@ const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; 
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* not saved */ } };
 const norm = s => String(s).replace(/\r/g, '').split('\n').map(l => l.replace(/\s+$/, '')).join('\n').replace(/\n+$/, '');
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ── Java syntax colours ──────────────────────────────────
+   One pass, no library. Comments and string/char/text-block literals are cut out
+   first, so a // inside a string or a quote inside a comment cannot start anything;
+   then numbers, annotations and words (reserved words, primitive types, Capitalised
+   names). Every piece goes through esc() before it is wrapped, and the spans only
+   add colour: strip the tags and unescape and you get the source back. */
+const J_KW = new Set(('abstract assert break case catch class const continue default do else enum extends final finally for goto if '
+  + 'implements import instanceof interface native new package private protected public return static strictfp super switch '
+  + 'synchronized this throw throws transient try volatile while true false null').split(' '));
+const J_TY = new Set('boolean byte char short int long float double void var'.split(' '));
+const J_NUM = /(?:0[xX][\da-fA-F_]+|0[bB][01_]+|(?:\d[\d_]*(?:\.[\d_]*)?|\.\d[\d_]*)(?:[eE][+-]?\d+)?)[lLfFdD]?/y;
+const J_WORD = /[A-Za-z_$][\w$]*/y;
+/* Where the literal starting at s[i] ends; close is '"""' or a single quote character. */
+function javaEnd(s, i, close) {
+  let j = i + close.length;
+  while (j < s.length) {
+    if (s[j] === '\\' && (close.length === 3 || s[j + 1] !== '\n')) j += 2;
+    else if (s.startsWith(close, j)) return j + close.length;
+    else if (s[j] === '\n' && close.length === 1) return j;   /* a plain string or char never runs past its line */
+    else j++;
+  }
+  return s.length;
+}
+function javaHTML(src) {
+  src = String(src);
+  let out = '', p = 0, i = 0, m;
+  const n = src.length;
+  const tok = (cls, end) => { out += esc(src.slice(p, i)) + '<span class="j-' + cls + '">' + esc(src.slice(i, end)) + '</span>'; i = p = end; };
+  while (i < n) {
+    const c = src[i], d = src[i + 1] || '';
+    if (c === '/' && d === '/') tok('cm', (m = src.indexOf('\n', i)) < 0 ? n : m);
+    else if (c === '/' && d === '*') tok('cm', (m = src.indexOf('*/', i + 2)) < 0 ? n : m + 2);
+    else if (src.startsWith('"""', i)) tok('st', javaEnd(src, i, '"""'));
+    else if (c === '"' || c === "'") tok('st', javaEnd(src, i, c));
+    else if (c === '@' && /[A-Za-z_$]/.test(d)) { J_WORD.lastIndex = i + 1; J_WORD.test(src); tok('an', J_WORD.lastIndex); }
+    else if (/\d/.test(c) || (c === '.' && /\d/.test(d))) { J_NUM.lastIndex = i; J_NUM.test(src); tok('nm', J_NUM.lastIndex); }
+    else if (/[A-Za-z_$]/.test(c)) {
+      J_WORD.lastIndex = i; J_WORD.test(src);
+      const end = J_WORD.lastIndex, w = src.slice(i, end);
+      const cls = J_KW.has(w) ? 'kw' : J_TY.has(w) || /^[A-Z]/.test(w) ? 'ty' : '';
+      if (cls) tok(cls, end); else i = end;
+    } else i++;
+  }
+  return out + esc(src.slice(p));
+}
 
 let QS = [], TOPICS = [], TITLES = {}, PRESETS = [], current = null, set = null, tick = null;
 
@@ -239,7 +305,7 @@ function testsTable(q, results) {
     + tests.map((t, i) => {
       const r = results && results[i];
       const cls = r ? (r.pass ? 'pass' : 'fail') : '';
-      return '<tr class="' + cls + '"><td><pre>' + esc(q.kind === 'program' ? (t.stdin ? 'input:\n' + t.stdin : '(no input)') : t.code) + '</pre></td>'
+      return '<tr class="' + cls + '"><td><pre>' + (q.kind === 'program' ? esc(t.stdin ? 'input:\n' + t.stdin : '(no input)') : javaHTML(t.code)) + '</pre></td>'
         + '<td><pre>' + esc(t.expected) + '</pre></td>'
         + (r ? '<td><pre>' + esc(r.got) + '</pre></td><td class="res">' + (r.pass ? '✔' : '✘') + '</td>' : '') + '</tr>';
     }).join('') + '</table>'
@@ -252,20 +318,33 @@ function openQ(q) {
   $('qtitle').textContent = q.title;
   $('qtext').innerHTML = fmt(q.question) + (q.kind === 'class' ? '<p class="small-note">Write the class without <code>public</code>: the test harness supplies the public class.</p>' : '');
   $('tests').innerHTML = testsTable(q, null);
-  $('editor').value = load(S_CODE, {})[q.id] || q.starter;
+  $('editor').value = load(S_CODE, {})[q.id] || q.starter; paintEditor();
   $('result').innerHTML = ''; $('status').textContent = '';
   $('next').classList.toggle('hidden', !set);
   $('setpos').textContent = set ? 'question ' + (set.idx + 1) + ' of ' + set.qs.length : '';
   window.scrollTo(0, 0); $('editor').focus();
 }
 $('back').addEventListener('click', () => { if (set && !confirm('Leave the timed set? It will not be scored.')) return; endSet(); $('view-q').classList.add('hidden'); $('view-list').classList.remove('hidden'); renderList(); });
-$('reset').addEventListener('click', () => { if (confirm('Replace your code with the starter?')) { $('editor').value = current.starter; saveCode(); } });
+$('reset').addEventListener('click', () => { if (confirm('Replace your code with the starter?')) { $('editor').value = current.starter; saveCode(); paintEditor(); } });
 $('editor').addEventListener('input', saveCode);
 $('editor').addEventListener('keydown', e => {
-  if (e.key === 'Tab') { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + '    ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 4; saveCode(); }
+  if (e.key === 'Tab') { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + '    ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 4; saveCode(); paintEditor(); }
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); $('check').click(); }
 });
 function saveCode() { const c = load(S_CODE, {}); c[current.id] = $('editor').value; save(S_CODE, c); }
+
+/* The coloured copy behind the editor is repainted after every change to the text (typing, Tab,
+   reset, a new question) and follows the textarea's scroll. The textarea stays the only thing
+   typed into, saved and sent to the sandbox. */
+function scrollEditorCopy() { const ed = $('editor'), hl = $('editor-hl'); hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; }
+function paintEditor() {
+  const v = $('editor').value;
+  $('editor-code').innerHTML = javaHTML(v) + (v.endsWith('\n') ? ' ' : '');   /* a final newline only shows as a line if a character follows it */
+  scrollEditorCopy();
+}
+$('editor').addEventListener('input', paintEditor);
+$('editor').addEventListener('scroll', scrollEditorCopy);
+if (window.ResizeObserver) new ResizeObserver(scrollEditorCopy).observe($('editor')); else window.addEventListener('resize', scrollEditorCopy);
 
 /* ── running code ─────────────────────────────────────── */
 async function runJobe(source, stdin) {

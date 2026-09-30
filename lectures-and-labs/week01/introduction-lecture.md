@@ -169,7 +169,7 @@ public class December {
 - **Act 2 - Java fast-start**
   - why Java, and where it came from
   - compiler vs interpreter · bytecode · the JVM · the JDK
-  - your first program - and the errors everyone makes
+  - your first program and a first loop - and the errors everyone makes
 
 ---
 
@@ -463,6 +463,28 @@ public class HelloPrinter {
 
 ---
 
+<!-- Speaker notes: ~0:49. One or two minutes: the skeleton does not change, only the statements inside main do. Read the header aloud as three questions - where do I start, do I keep going, how do I count on. The misconception to expect: that i < 3 gives four passes because 0, 1, 2 and 3 all "count", or that i++ runs before the first pass; trace i = 0, 1, 2, then 3 fails the test and the loop ends. Weight: recognise the shape now; reading a loop like this is fair game in the MCQs. -->
+
+## A first loop
+
+```java
+public class Repeater {
+    public static void main(String[] args) {
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Hello, World!");
+        }
+    }
+}
+```
+
+* A **`for` loop** repeats the statements inside its braces. The brackets after `for` hold three parts:
+* `int i = 0` - **where to start**: runs once, before the first pass.
+* `i < 3` - **keep going?**: checked before every pass; the moment it is false, the loop ends.
+* `i++` - **how to count on**: runs after every pass and adds 1 to `i`.
+* So `i` is `0`, `1`, `2`: **three passes**, three greetings. Inside the braces `i` is an ordinary variable you can use.
+
+---
+
 ## The hard way - a text editor and a console
 
 - No IDE required: type the code into a simple text editor such as **Notepad** and save it as `HelloPrinter.java`.
@@ -481,7 +503,7 @@ Hello, World!
 
 ---
 
-<!-- Speaker notes: ~0:51. The mock window is the payoff: name the two panes, because "where the program speaks back" is the thing beginners lose first. -->
+<!-- Speaker notes: ~0:53. The mock window is the payoff: name the two panes, because "where the program speaks back" is the thing beginners lose first. -->
 
 ## The IDE - a toolkit around your code
 
@@ -498,7 +520,7 @@ Hello, World!
 
 ---
 
-<!-- Speaker notes: ~0:53. Final predict beat. Three innocent-looking lines; none survive. Reveal one at a time and name each failure. -->
+<!-- Speaker notes: ~0:55. Final predict beat. Three innocent-looking lines; none survive. Reveal one at a time and name each failure. -->
 
 ## Predict: which of these compile?
 
@@ -538,7 +560,7 @@ System.out.println("Hello") System.out.println("World!");
 
 ---
 
-<!-- Speaker notes: ~0:58. Close the loop: point back at the December slide, then leave the three tasks on screen as they pack up. -->
+<!-- Speaker notes: ~1:00. Close the loop: point back at the December slide, then leave the three tasks on screen as they pack up. -->
 
 ## Summary
 

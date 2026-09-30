@@ -26,8 +26,8 @@ timetable, the assessment matrix (three MCQs), the lab coding environment,
 Moodle enrolment, and tasks for the week. Second, a Java fast-start: why
 Java and where it came from, keywords, compiler vs interpreter and the
 advantages of the JVM, the JDK, writing and running a first program in a
-text editor vs an IDE (VS Code), the anatomy of a Java program, and the
-common syntax errors beginners hit.
+text editor vs an IDE (VS Code), the anatomy of a Java program, a first
+`for` loop, and the common syntax errors beginners hit.
 
 ## Classes and Objects
 

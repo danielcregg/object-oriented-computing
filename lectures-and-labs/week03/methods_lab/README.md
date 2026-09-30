@@ -23,7 +23,7 @@
 
 ## Getting started
 
-This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1, `TemperatureConverter.java` for DIY 4, and so on. Every new file starts with the package line you see in `Main.java`. DIY 9 is the one exception: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
+This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1, `TemperatureConverter.java` for DIY 4, and so on. Every new file starts with the package line you see in `Main.java`. DIY 1 to 7 are the lab; DIY 8 and 9 are extensions for when you finish early. DIY 9 is the one exercise that does not use `Main.java`: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
 
 ---
 
@@ -88,7 +88,7 @@ flowchart TD
 
 1. Create a class named `Calculator`.
 2. Add a method `printHeader()` that prints the three-line header shown below.
-3. Add a method `printMenu()` that lists the four operations shown below.
+3. Add a method `printMenu()` that lists the two operations shown below.
 4. In `Main.java`'s `main` method, create a `Calculator` object and call both methods.
 
 **Expected output**
@@ -99,9 +99,7 @@ flowchart TD
 ================================
 Choose an operation:
 1. Addition
-2. Subtraction
-3. Multiplication
-4. Division
+2. Division
 ```
 
 <details><summary>Hint</summary>
@@ -159,10 +157,8 @@ You are 25 years old.
 
 ### DIY 2: Calculator print methods
 
-1. In `Calculator`, add four methods:
+1. In `Calculator`, add two methods:
    * `printAddition(int a, int b)` - prints `a + b = result`
-   * `printSubtraction(int a, int b)` - prints `a - b = result`
-   * `printMultiplication(int a, int b)` - prints `a × b = result`
    * `printDivision(double a, double b)` - prints `a ÷ b = result` (use `double` for division)
 2. In `Main.java`'s `main`, test each method with different values.
 
@@ -172,14 +168,12 @@ These methods only print - they don't return anything. The next section fixes th
 
 ```text
 5 + 3 = 8
-10 - 4 = 6
-6 × 7 = 42
 15.0 ÷ 3.0 = 5.0
 ```
 
 <details><summary>Hint</summary>
 
-Four `void` methods again, but this time each one declares its two values as parameters. Two details decide whether your output matches: the last method takes `double`, not `int`, because `15 / 3` on ints prints `5` rather than `5.0`; and the symbols in the expected output are `×` and `÷`, not `*` and `/` - copy them from the block above rather than typing them.
+Two `void` methods again, but this time each one declares its two values as parameters. Two details decide whether your output matches: `printDivision` takes `double`, not `int`, because `15 / 3` on ints prints `5` rather than `5.0`; and the symbol in the expected output is `÷`, not `/` - copy it from the block above rather than typing it.
 
 </details>
 
@@ -224,8 +218,6 @@ Average: 85.0
 
 1. In `Calculator`, replace the print methods with value-returning versions:
    * `int add(int a, int b)` - returns the sum
-   * `int subtract(int a, int b)` - returns the difference
-   * `int multiply(int a, int b)` - returns the product
    * `double divide(double a, double b)` - returns the quotient
 2. Add error handling to `divide()`: if `b` is 0, print an error message and return 0.
 3. In `Main.java`'s `main`, replace your DIY 2 calls (those print methods no longer exist) with calls to each new method: store each result in a variable, and print the results in a formatted way.
@@ -234,8 +226,6 @@ Average: 85.0
 
 ```text
 Addition: 5 + 3 = 8
-Subtraction: 10 - 4 = 6
-Multiplication: 6 × 7 = 42
 Division: 15.0 ÷ 3.0 = 5.0
 Error: Cannot divide by zero!
 Division: 10.0 ÷ 0.0 = 0.0
@@ -302,18 +292,15 @@ Passing: true
 
 1. Create a class named `TemperatureConverter` with these methods:
    * `double celsiusToFahrenheit(double celsius)`
-   * `double fahrenheitToCelsius(double fahrenheit)`
    * `void printConversionTable(int startCelsius, int endCelsius)` - prints a table in steps of 10 (void: it only displays)
    * `boolean isFreezingCelsius(double celsius)` - true at or below 0°C
-   * `boolean isBoilingCelsius(double celsius)` - true at or above 100°C
-2. Formulas: Fahrenheit = (Celsius × 9/5) + 32 and Celsius = (Fahrenheit − 32) × 5/9.
-3. Test all five methods from `Main.java`'s `main`.
+2. Formula: Fahrenheit = (Celsius × 9/5) + 32.
+3. Test all three methods from `Main.java`'s `main`.
 
 **Expected output**
 
 ```text
 25.0°C = 77.0°F
-77.0°F = 25.0°C
 
 Celsius to Fahrenheit Conversion Table:
 0°C = 32.0°F
@@ -322,13 +309,12 @@ Celsius to Fahrenheit Conversion Table:
 30°C = 86.0°F
 
 Is 0°C freezing? true
-Is 100°C boiling? true
 Is 25°C freezing? false
 ```
 
 <details><summary>Hint</summary>
 
-Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer division and equals `1`, which silently wrecks the formula.
+Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer division and equals `1`, which silently wrecks the formula. Inside `printConversionTable`, call `celsiusToFahrenheit` for each row rather than repeating the formula.
 
 </details>
 
@@ -387,14 +373,13 @@ A bank card PIN is four digits, and not every four-digit number is acceptable: `
 
 1. Create a class named `PinValidator`.
 2. Add two **public** methods:
-   * `boolean isValidPin(int pin)` - true only if all four checks below pass
+   * `boolean isValidPin(int pin)` - true only if all three checks below pass
    * `void printValidationReport(int pin)` - prints whether the PIN is valid, then the result of each individual check
-3. Add four **private** helper methods, each returning `boolean`:
+3. Add three **private** helper methods, each returning `boolean`:
    * `hasFourDigits` - the PIN is between 1000 and 9999
-   * `hasMixedDigits` - the four digits are not all the same (`7777` fails)
-   * `isNotAscendingRun` - the digits do not each climb by one (`1234` fails)
-   * `isNotDescendingRun` - the digits do not each drop by one (`5432` fails)
-4. `isValidPin()` must call all four helpers - it does no digit arithmetic of its own.
+   * `isNotRepeated` - the four digits are not all the same (`7777` fails)
+   * `isNotCommon` - the PIN is not `1234`
+4. `isValidPin()` must call all three helpers - it does no checking of its own.
 5. Test three PINs from `Main.java`'s `main`: two rejected for different reasons, one accepted.
 
 **Expected output**
@@ -404,27 +389,24 @@ Testing PIN: 1234
 Valid: false
 - Four digits (1000-9999): true
 - Not all the same digit: true
-- Not an ascending run: false
-- Not a descending run: true
+- Not a common PIN: false
 
 Testing PIN: 7777
 Valid: false
 - Four digits (1000-9999): true
 - Not all the same digit: false
-- Not an ascending run: true
-- Not a descending run: true
+- Not a common PIN: true
 
 Testing PIN: 4830
 Valid: true
 - Four digits (1000-9999): true
 - Not all the same digit: true
-- Not an ascending run: true
-- Not a descending run: true
+- Not a common PIN: true
 ```
 
 <details><summary>Hint</summary>
 
-Pull the digits apart with arithmetic - `/` and `%` are the only tools you need. For a four-digit `pin`: `pin / 1000` is the first digit, `(pin / 100) % 10` the second, `(pin / 10) % 10` the third, and `pin % 10` the last. Each helper is then a single `return` of a boolean expression, and a `!` in front of a bracketed condition flips "is a run" into "is not a run". `isValidPin` joins the four helper calls with `&&`.
+Each helper is a single `return` of a boolean expression: `hasFourDigits` is `pin >= 1000 && pin <= 9999`, and `isNotCommon` is `pin != 1234`. For `isNotRepeated`, a four-digit number made of one repeated digit (1111, 2222, ... 9999) is always a multiple of 1111, so `pin % 1111 != 0` says the digits are not all the same. `isValidPin` joins the three helper calls with `&&`, and `printValidationReport` prints the verdict and then each helper's result.
 
 </details>
 
@@ -513,9 +495,6 @@ Build a small library of `static` maths helpers - the kind of thing `Math` itsel
    * `int digitSum(int n)` - adds the digits: `digitSum(4821)` is 15
    * `int reverseDigits(int n)` - `reverseDigits(4821)` is 1284
    * `boolean isNumberPalindrome(int n)` - reads the same both ways; **call `reverseDigits` rather than repeating its loop**
-   * `int gcd(int a, int b)` - the greatest common divisor of two positive numbers
-   * `int lcm(int a, int b)` - the lowest common multiple; **call `gcd`**
-   * `boolean isPrime(int n)` - true when `n` is 2 or more and divides evenly by nothing but 1 and itself
 2. Call every one of them from `Main.java`'s `main` and print the results - **without creating a single object**.
 
 **Expected output**
@@ -528,15 +507,11 @@ Digit sum of 4821: 15
 Reverse of 4821: 1284
 Is 1221 a palindrome? true
 Is 1234 a palindrome? false
-GCD of 48 and 18: 6
-LCM of 4 and 6: 12
-Is 29 prime? true
-Is 27 prime? false
 ```
 
 <details><summary>Hint</summary>
 
-`%` and `/` do all the work here. To walk the digits of `n`, loop while `n > 0`, taking `n % 10` as the last digit and then shrinking `n` with `n = n / 10`. For `gcd`, keep replacing the pair `(a, b)` with `(b, a % b)` until `b` is 0 - the answer is whatever `a` holds then. Then `lcm(a, b)` is `a / gcd(a, b) * b`. For `isPrime`, reject anything below 2, then try divisors from 2 upward while `i * i <= n`.
+`%` and `/` do all the work here. To walk the digits of `n`, loop while `n > 0`, taking `n % 10` as the last digit and then shrinking `n` with `n = n / 10`. For `digitSum`, add each digit to a running total as you take it; for `reverseDigits`, build the answer with `reversed = reversed * 10 + digit`. Then `isNumberPalindrome` is a single line: compare `n` with `reverseDigits(n)`.
 
 </details>
 
@@ -649,6 +624,8 @@ public static int factorial(int n) {
 ```
 
 ### DIY 8: Simple recursion
+
+*Extension: do this one once DIY 1 to 7 are finished.*
 
 1. Create a class named `RecursiveMethods` with these **static** recursive methods:
    * `int countdown(int n)` - prints n down to 1, then returns 0
@@ -765,6 +742,8 @@ Notice which of these the compiler can catch. Mistakes **1, 2, 4 and 5 stop the 
 **Debugging tips:** print on entry (`"Entering divide with " + a + ", " + b`), print every return value before using it, and learn your IDE's debugger - stepping through line by line beats guessing.
 
 ### DIY 9: Fix the buggy calculator
+
+*Extension: do this one once DIY 1 to 7 are finished.*
 
 The class below carries **10 labelled faults: 8 compile errors and 2 design faults.** The compiler finds the first eight for you. The last two are legal Java - the class builds and runs with them still in place, so only reading will catch them.
 

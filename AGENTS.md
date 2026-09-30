@@ -196,7 +196,14 @@ instructions, scripts, workflows and the practice bank alone.
   supplied lines to type) while teaching the least. Supplying a class is
   fine as *starting material* an exercise then builds on; it is not fine
   as the exercise. When a lab runs long, cut transcription before you cut
-  exercises.
+  exercises. The second measure is TYPED LINES: a reference solution's class
+  file plus the body of `main` (the starter already has `main`'s header),
+  summed over the DIYs students must do. As a planning estimate, not yet
+  measured on a cohort, first-years manage about one such line every 30 to
+  40 seconds all in (reading, typing, fixing, checking the output), so
+  roughly 150 typed lines is what a two-hour lab holds for most of a class.
+  The methods lab was cut from 221 to 151 on that basis, with DIY 8 and 9
+  kept as extensions; recalibrate the number from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–13, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /

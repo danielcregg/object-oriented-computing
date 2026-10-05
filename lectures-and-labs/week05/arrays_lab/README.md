@@ -5,29 +5,27 @@
 - Declare, initialize, and iterate over arrays using indexed and enhanced `for` loops
 - Predict the default values Java assigns to uninitialized array elements
 - Modify array elements and build arrays of objects
-- Copy, clone, sort, search, and compare arrays with `System.arraycopy`, `clone()`, and the `java.util.Arrays` utility class
+- Copy, clone, sort, and compare arrays with `System.arraycopy`, `clone()`, and the `java.util.Arrays` utility class
+- Find the highest value in an array, and the position of a value, with the champion and search patterns
 - Work with 2D arrays and pass arrays to and from methods
 
 ## Table of Contents
 
 * [Introduction](#introduction)
-1. [Default Values in Arrays](#1-default-values-in-arrays)
-2. [Declaring and Assigning Arrays](#2-declaring-and-assigning-arrays)
-3. [Accessing and Iterating Over Array Elements](#3-accessing-and-iterating-over-array-elements)
-4. [Array Length](#4-array-length)
-5. [Modifying Arrays](#5-modifying-arrays)
-6. [Arrays of Objects](#6-arrays-of-objects)
-7. [Copying and Sorting Arrays](#7-copying-and-sorting-arrays)
-8. [The Arrays Utility Class](#8-the-arrays-utility-class)
-9. [Cloning Arrays](#9-cloning-arrays)
-10. [2D Arrays](#10-2d-arrays)
-11. [Passing Arrays to Methods](#11-passing-arrays-to-methods)
-12. [The Champion Pattern](#12-the-champion-pattern)
-13. [The Search Pattern](#13-the-search-pattern)
+1. [Default Values and Declaring Arrays](#1-default-values-and-declaring-arrays)
+2. [Accessing and Iterating Over Array Elements](#2-accessing-and-iterating-over-array-elements)
+3. [Array Length and Modifying Arrays](#3-array-length-and-modifying-arrays)
+4. [Arrays of Objects](#4-arrays-of-objects)
+5. [Copying and Sorting Arrays](#5-copying-and-sorting-arrays)
+6. [The Arrays Utility Class and Cloning](#6-the-arrays-utility-class-and-cloning)
+7. [2D Arrays](#7-2d-arrays)
+8. [Passing Arrays to Methods](#8-passing-arrays-to-methods)
+9. [The Champion Pattern](#9-the-champion-pattern)
+10. [The Search Pattern](#10-the-search-pattern)
 
 ## Getting started
 
-This lab lives in the package `week05.arrays_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Write each exercise in the `main` method of this one `Main.java`, replacing the previous exercise's code as you go (commit each exercise when you finish it, and it stays in your history). When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Book.java` for DIY 6. Every new file starts with the package line you see in `Main.java`.
+This lab lives in the package `week05.arrays_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Write each exercise in the `main` method of this one `Main.java`. Before you replace an exercise's code with the next one's, keep it safe: commit it (Source Control panel), or comment it out (select the lines, then Ctrl+/). When an exercise gives you a class to use, put that class in its own file beside `Main.java`: `Book.java` for DIY 4. Every new file starts with the package line you see in `Main.java`.
 
 ## Introduction
 
@@ -50,7 +48,7 @@ D --> E[...]
 E --> F[Element at index N-1]
 ```
 
-## 1. Default Values in Arrays
+## 1. Default Values and Declaring Arrays
 
 Before we delve deeper into arrays, it's important to understand the default values assigned to array elements when they are not explicitly initialized.
 
@@ -59,7 +57,7 @@ Before we delve deeper into arrays, it's important to understand the default val
 - **`boolean`**: Defaults to `false`.
 - **Reference Types**: Defaults to `null`.
 
-### Code Example
+### Code Example: Default Values
 
 ```java
 public class DefaultValues {
@@ -100,27 +98,7 @@ null null null
 
 </details>
 
-### DIY 1: Default char values
-
-1. Declare an array of `char` with a size of 4.
-2. Using a loop, print each element on a single line, separated by spaces.
-
-**Expected output**
-
-```text
-    
-```
-
-*(The line looks blank: each `char` element defaults to `'\u0000'`, the invisible NUL character, so you are printing four characters that have no visible glyph - only their separating spaces show.)*
-
-<details>
-<summary>Hint</summary>
-
-Do not initialize the array elements; simply print them using a loop.
-
-</details>
-
-## 2. Declaring and Assigning Arrays
+### Ways to Declare an Array
 
 There are several ways to declare and initialize arrays in Java.
 
@@ -148,7 +126,7 @@ int[] numbers = {1, 2, 3, 4, 5}; // Declares and initializes the array with valu
 int[] numbers = new int[]{1, 2, 3, 4, 5};
 ```
 
-### Code Example
+### Code Example: Declaring Arrays
 
 ```java
 public class ArrayDeclaration {
@@ -183,25 +161,28 @@ public class ArrayDeclaration {
 
 </details>
 
-### DIY 2: Inline initialization
+### DIY 1: Defaults and inline initialization
 
-1. Declare an array of `double` containing the values `1.5`, `2.5`, `3.5` and `4.5`.
-2. Print each element on one line, separated by spaces.
+1. Declare an array `char[] letters` with a size of 4 and give it no values. Using a loop, print each element as a number (cast it with `(int)`) on a single line, separated by spaces, then end the line with `System.out.println();`.
+2. Declare an array `double[] values` containing the values `1.5`, `2.5`, `3.5` and `4.5`. Print each element on one line, separated by spaces, and end that line too.
 
 **Expected output**
 
 ```text
+0 0 0 0 
 1.5 2.5 3.5 4.5 
 ```
+
+*(Each `char` element defaults to `'\u0000'`, the invisible NUL character, whose numeric value is 0. That is why step 1 prints the number: printing the character itself would show nothing at all.)*
 
 <details>
 <summary>Hint</summary>
 
-Use inline initialization similar to the examples above.
+For step 1, leave the elements alone and loop over the array with `System.out.print((int) letters[i] + " ");` inside it. For step 2, use inline initialization similar to the examples above.
 
 </details>
 
-## 3. Accessing and Iterating Over Array Elements
+## 2. Accessing and Iterating Over Array Elements
 
 After declaring and initializing an array, you can access its elements using indices and iterate over them using loops.
 
@@ -281,7 +262,7 @@ Using enhanced for loop:
 
 </details>
 
-### DIY 3: Reverse order
+### DIY 2: Reverse order
 
 1. Create the array `int[] numbers = {5, 10, 15, 20};`.
 2. Print all elements in reverse order, one per line.
@@ -302,7 +283,9 @@ Use a `for` loop starting from the last index.
 
 </details>
 
-## 4. Array Length
+## 3. Array Length and Modifying Arrays
+
+### Array Length
 
 The length of an array refers to the number of elements it can hold. In Java, you can access the length using the `.length` property.
 
@@ -324,25 +307,7 @@ The length of the array is: 5
 
 </details>
 
-### DIY 4: Rainbow colors
-
-1. Create a `String` array containing the seven colors of the rainbow.
-2. Calculate the length of the array and print it in the form `Number of colors: <length>`.
-
-**Expected output**
-
-```text
-Number of colors: 7
-```
-
-<details>
-<summary>Hint</summary>
-
-Create an array and use the `.length` property to get its size.
-
-</details>
-
-## 5. Modifying Arrays
+### Modifying Arrays
 
 You can modify array elements by accessing them via their index and assigning new values.
 
@@ -369,26 +334,27 @@ Apple Blueberry Cherry
 
 </details>
 
-### DIY 5: Update an element
+### DIY 3: Length and update
 
-1. Create the array `int[] nums = {10, 20, 30, 40};`.
+1. Create the array `int[] nums = {10, 20, 30, 40};` and print its length in the form `Length: <length>`.
 2. Change the third element to `35`.
 3. Print all elements on one line, separated by spaces.
 
 **Expected output**
 
 ```text
+Length: 4
 10 20 35 40 
 ```
 
 <details>
 <summary>Hint</summary>
 
-Access the element at index 2 and assign a new value.
+Use the `.length` property for the first line. For the update, access the element at index 2 and assign a new value.
 
 </details>
 
-## 6. Arrays of Objects
+## 4. Arrays of Objects
 
 Arrays in Java can store objects, not just primitive data types. Below we have a Student class. In the ArrayOfObjects class we will create a students array which will hold Student objects.
 
@@ -445,11 +411,34 @@ Eva is 22 years old.
 
 </details>
 
-### DIY 6: Array of Book objects
+### DIY 4: Array of Book objects
 
-1. In its own file, `Book.java`, define a `Book` class with `title` and `author` fields, a constructor, and getter methods (model it on the `Student` class above).
-2. Create a `Book[]` array holding `new Book("Dracula", "Bram Stoker")` and `new Book("Emma", "Jane Austen")`.
-3. Loop over the array and print each book's details in the form `<title> by <author>`.
+First copy this `Book` class into its own file, `Book.java`, beside `Main.java`. It has the same shape as the `Student` class above, so there is nothing to design here:
+
+```java
+package week05.arrays_lab;
+
+public class Book {
+    private String title;
+    private String author;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+}
+```
+
+1. In `Main.java`'s `main`, create a `Book[]` array named `library` holding `new Book("Dracula", "Bram Stoker")` and `new Book("Emma", "Jane Austen")`.
+2. Loop over the array and print each book's details in the form `<title> by <author>`.
 
 **Expected output**
 
@@ -461,13 +450,13 @@ Emma by Jane Austen
 <details>
 <summary>Hint</summary>
 
-Define a `Book` class with appropriate attributes and methods.
+Every element of the array is a `Book`, so call its getters on it: `book.getTitle()` and `book.getAuthor()`. An enhanced `for (Book book : library)` loop reads well here.
 
 </details>
 
-## 7. Copying and Sorting Arrays
+## 5. Copying and Sorting Arrays
 
-Java gives you several ready-made ways to copy, sort, search, compare, and clone arrays. This section covers copying and sorting; the next two cover the `Arrays` utility class and cloning.
+Java gives you several ready-made ways to copy, sort, compare, and clone arrays. This section covers copying and sorting; the next covers the `Arrays` utility class and cloning.
 
 ### Copying Arrays
 
@@ -526,7 +515,7 @@ Sorted array: [1, 2, 3, 4, 5]
 
 </details>
 
-### DIY 7: Copy, then sort
+### DIY 5: Copy, then sort
 
 1. Start with `int[] original = {5, 3, 2, 4, 1};`.
 2. Copy it into a new array, then sort the copy - the original must stay unchanged.
@@ -546,7 +535,7 @@ Use `System.arraycopy` and `Arrays.sort`.
 
 </details>
 
-## 8. The Arrays Utility Class
+## 6. The Arrays Utility Class and Cloning
 
 The `java.util.Arrays` class provides utility methods for array manipulation.
 
@@ -572,16 +561,20 @@ public class ArraysToString {
 
 </details>
 
-### Searching Arrays
+### Comparing Arrays
+
+`==` on two arrays asks whether both variables refer to the *same* array. `Arrays.equals` compares the *contents* instead. Put brackets round `a == b` when you print it, because `+` is worked out before `==`:
 
 ```java
 import java.util.Arrays;
 
-public class ArraySearch {
+public class CompareArrays {
     public static void main(String[] args) {
-        int[] numbers = {1, 2, 3, 4, 5};
-        int index = Arrays.binarySearch(numbers, 3);
-        System.out.println("Index of 3: " + index);
+        int[] a = {1, 2, 3};
+        int[] b = {1, 2, 3};
+
+        System.out.println("a == b: " + (a == b));
+        System.out.println("Arrays.equals(a, b): " + Arrays.equals(a, b));
     }
 }
 ```
@@ -590,32 +583,13 @@ public class ArraySearch {
 <summary>Output</summary>
 
 ```
-Index of 3: 2
+a == b: false
+Arrays.equals(a, b): true
 ```
 
 </details>
 
-### DIY 8: Compare two arrays
-
-1. Create `int[] array1 = {1, 2, 3};`, `int[] array2 = {1, 2, 3};` and `int[] array3 = {3, 2, 1};`.
-2. Use the `Arrays` class to check whether `array1` equals `array2`, and whether `array1` equals `array3`.
-3. Print each result in the form shown below.
-
-**Expected output**
-
-```text
-array1 equals array2: true
-array1 equals array3: false
-```
-
-<details>
-<summary>Hint</summary>
-
-Use `Arrays.equals(array1, array2)`.
-
-</details>
-
-## 9. Cloning Arrays
+### Cloning Arrays
 
 You can also create a copy of an array using the `clone()` method.
 
@@ -645,27 +619,31 @@ Cloned array: [10, 2, 3]
 
 </details>
 
-### DIY 9: Clone independence
+### DIY 6: Compare and clone
 
-1. Create `String[] original = {"Apple", "Banana", "Cherry"};` and clone it.
-2. Change the first element of the clone to `"Avocado"`.
-3. Print both arrays using `Arrays.toString()`, labelled as shown below, to show the original is unaffected.
+1. Create `String[] original = {"Apple", "Banana", "Cherry"};` and clone it into `String[] cloned`.
+2. Print whether `original == cloned`, then whether `Arrays.equals(original, cloned)`, each in the form shown below.
+3. Change the first element of the clone to `"Avocado"`.
+4. Print both arrays using `Arrays.toString()`, labelled as shown below, then print `Arrays.equals(original, cloned)` again.
 
 **Expected output**
 
 ```text
+original == cloned: false
+Arrays.equals(original, cloned): true
 Original array: [Apple, Banana, Cherry]
 Cloned array: [Avocado, Banana, Cherry]
+Arrays.equals(original, cloned): false
 ```
 
 <details>
 <summary>Hint</summary>
 
-Verify the independence of the arrays after modification.
+Put brackets round the `==` comparison when you print it, as in the example above, because `+` is worked out before `==`. `==` between two arrays asks "the same array object?", and a clone is always a different object, so it is `false` even while the contents match. `Arrays.equals(a, b)` compares the contents instead, so it is `true` until one of the arrays changes. Changing the clone leaves the original untouched.
 
 </details>
 
-## 10. 2D Arrays
+## 7. 2D Arrays
 
 A 2D array is an array of arrays, useful for representing grids or tables.
 
@@ -721,7 +699,7 @@ Element at (1,2): 6
 
 </details>
 
-### DIY 10: Sum a 2D array
+### DIY 7: Sum a 2D array
 
 1. Create a 2D array representing the following table:
 
@@ -747,7 +725,7 @@ Use nested loops to traverse the 2D array and accumulate the sum.
 
 </details>
 
-## 11. Passing Arrays to Methods
+## 8. Passing Arrays to Methods
 
 Arrays can be passed to methods as parameters, and methods can return arrays.
 
@@ -792,7 +770,7 @@ Squared array: [1, 4, 9]
 
 </details>
 
-### DIY 11: Double the values
+### DIY 8: Double the values
 
 1. In `Main.java`, beside `main`, write a `static` method that takes an array of integers and returns a new array with each element doubled.
 2. In `main`, call your method with the array `{1, 2, 3}` and print the returned array using `Arrays.toString()`, labelled as shown below.
@@ -810,7 +788,7 @@ Iterate over the input array, double each element, and store it in a new array.
 
 </details>
 
-## 12. The Champion Pattern
+## 9. The Champion Pattern
 
 Two more loop shapes come up everywhere: finding the best value in an array, and checking whether a value is in there at all.
 
@@ -842,7 +820,7 @@ Highest temperature: 81
 
 </details>
 
-### DIY 12: Highest and lowest score
+### DIY 9: Highest and lowest score
 
 1. Create the array `int[] scores = {83, 91, 78, 65, 95};`.
 2. Using the champion pattern - start `highest` at `scores[0]`, then compare every later element against it - find the highest score.
@@ -863,7 +841,7 @@ Do not start `highest` (or `lowest`) at `0` - start it at `scores[0]`, then loop
 
 </details>
 
-## 13. The Search Pattern
+## 10. The Search Pattern
 
 Walk the array and return the moment you find what you are looking for - an early exit, not a scan that keeps going after the answer is known. If the loop finishes with no match, return `-1`: an index that can never be real.
 
@@ -897,7 +875,7 @@ Index of Alan: -1
 
 </details>
 
-### DIY 13: Search for a number
+### DIY 10: Search for a number
 
 1. In `Main.java`, beside `main`, write a `static` method `indexOf(int[] numbers, int target)` that searches `numbers` for `target`, `return`-ing its index the moment it finds a match.
 2. If the loop finishes without a match, `return -1` after it.
@@ -928,7 +906,7 @@ In this lab, we've covered:
 - Utilizing the array's length.
 - Modifying elements within an array.
 - Arrays of objects and how to work with them.
-- Common array operations like copying, sorting, and searching.
+- Common array operations like copying, sorting, and comparing.
 - Utilizing the `Arrays` utility class for array manipulation.
 - Cloning arrays to create independent copies.
 - Understanding and working with 2D arrays.

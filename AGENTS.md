@@ -186,26 +186,34 @@ instructions, scripts, workflows and the practice bank alone.
   number. Renumber sections if you must, never DIYs (that repo and the
   lectures' speaker notes name them), and grep the labs for prose pointers
   such as "section 4" when you do: `check_links.py` reads anchors, not prose.
+  The one time DIYs were renumbered was arrays, 13 to 10 on 2026-10-05, before
+  any student reached that week; the solutions repo and one speaker note
+  moved with it.
   **Every DIY has a hint** — six were missing and were written on
   2026-08-10; do not add an exercise without one.
 - **Size a lab to a two-hour slot, and judge it by COMPOSITION, not
   length.** The number that matters is the fraction of a DIY's numbered
   steps that ask the student to write their own code, rather than handing
-  them a fence to copy. Across the eight labs that ratio runs 64–92%,
-  except abstraction at 38% — which is why that lab feels full (163
-  supplied lines to type) while teaching the least. Supplying a class is
-  fine as *starting material* an exercise then builds on; it is not fine
-  as the exercise. When a lab runs long, cut transcription before you cut
+  them a fence to copy. Across the eight labs that ratio now runs 94–100%,
+  except abstraction at 70% (it was 38%, with 163 supplied lines to type,
+  until its exercises were rewritten as specifications). Supplying a class is
+  fine as *starting material* an exercise then builds on; it is not fine as
+  the exercise. When a lab runs long, cut transcription before you cut
   exercises. The second measure is TYPED LINES: a reference solution's class
   file plus the body of `main` (the starter already has `main`'s header),
   summed over the DIYs students must do. As a planning estimate, not yet
-  measured on a cohort, first-years manage about one such line every 30 to
-  40 seconds all in (reading, typing, fixing, checking the output), so
-  roughly 150 typed lines is what a two-hour lab holds for most of a class.
-  The methods lab was cut from 221 to 151 on that basis, with DIY 8 and 9
-  kept as extensions; recalibrate the number from a real lab session.
+  measured on a cohort, first-years manage about one such line every 30 to 40
+  seconds all in (reading, typing, fixing, checking the output), so roughly
+  150 typed lines is what a two-hour lab holds for most of a class. The
+  methods lab was cut from 221 to 151 on that basis, with DIY 8 and 9 kept as
+  extensions. The arrays lab was already under the budget (about 125 typed
+  lines) but had 13 exercises, and each exercise costs a few minutes of fixed
+  overhead (read, replace `main`'s code, run, compare), so many tiny ones cost
+  more than their lines suggest: it went to 10 exercises (about 100 typed
+  lines) by merging adjacent trivial pairs and handing the student the `Book`
+  class to copy. Recalibrate these numbers from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
-  tolerated rather than intended: section counts run 5–13, sub-heading
+  tolerated rather than intended: section counts run 5–10, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /
   `Explanation` / `Key Concepts`…), and two labs use no sub-headings at
   all. Match the lab you are editing; don't import another lab's style.

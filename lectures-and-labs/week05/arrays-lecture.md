@@ -464,7 +464,7 @@ System.out.println(crew[2].length());   // NullPointerException!
 
 ---
 
-<!-- Speaker notes: ~0:46. Grids - connect to the lab immediately. The chessboard here is a lecture illustration, NOT their exercise: the lab's 2D work is DIY 10, summing a 3x3 int grid with nested loops. Say "sum the grid", not "build a chessboard", or they will go looking for something that is not there. -->
+<!-- Speaker notes: ~0:46. Grids - connect to the lab immediately. The chessboard here is a lecture illustration, NOT their exercise: the lab's 2D work is DIY 7, summing a 3x3 int grid with nested loops. Say "sum the grid", not "build a chessboard", or they will go looking for something that is not there. -->
 
 ## Two dimensions - the grid
 

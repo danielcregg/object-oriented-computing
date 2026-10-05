@@ -100,33 +100,7 @@ null null null
 
 ### Ways to Declare an Array
 
-There are several ways to declare and initialize arrays in Java.
-
-### Declaration Without Initialization
-
-```java
-int[] numbers; // Declares an array of integers
-```
-
-### Declaration With Initialization
-
-```java
-int[] numbers = new int[5]; // Declares an array and allocates memory for 5 integers
-```
-
-### Inline Initialization
-
-```java
-int[] numbers = {1, 2, 3, 4, 5}; // Declares and initializes the array with values
-```
-
-### Using the `new` Keyword with Initialization
-
-```java
-int[] numbers = new int[]{1, 2, 3, 4, 5};
-```
-
-### Code Example: Declaring Arrays
+There are several ways to declare and initialize arrays in Java. You can declare the variable first and create the array later; declare and allocate in one step with a size (the elements get their default values); initialize inline with values; or use the `new` keyword together with values. The example shows all four:
 
 ```java
 public class ArrayDeclaration {
@@ -184,37 +158,7 @@ For step 1, leave the elements alone and loop over the array with `System.out.pr
 
 ## 2. Accessing and Iterating Over Array Elements
 
-After declaring and initializing an array, you can access its elements using indices and iterate over them using loops.
-
-### Accessing Elements by Index
-
-```java
-int[] numbers = {10, 20, 30, 40, 50};
-int firstNumber = numbers[0]; // Accessing the first element
-System.out.println("First number: " + firstNumber);
-```
-
-### Iterating Using Loops
-
-#### Using a Traditional `for` Loop
-
-<!-- no-compile -->
-```java
-for (int i = 0; i < numbers.length; i++) {
-    System.out.println("Element at index " + i + ": " + numbers[i]);
-}
-```
-
-#### Using an Enhanced `for` Loop (For-Each Loop)
-
-The enhanced `for` loop (also called a for-each loop) provides a simpler way to iterate over arrays. It automatically handles the indexing for you.
-
-<!-- no-compile -->
-```java
-for (int num : numbers) {
-    System.out.println(num);
-}
-```
+After declaring and initializing an array, you can access its elements using indices and iterate over them using loops. An element is read by its index: `numbers[0]` is the first and `numbers[numbers.length - 1]` the last. A traditional `for` loop counts through the indices; the enhanced `for` loop (also called a for-each loop) is simpler, because it hands you each element in turn and does the indexing for you.
 
 ### Code Example
 
@@ -285,36 +229,16 @@ Use a `for` loop starting from the last index.
 
 ## 3. Array Length and Modifying Arrays
 
-### Array Length
+The length of an array is the number of elements it can hold, and you read it with the `.length` property (no brackets). You modify an element by assigning a new value to it through its index.
 
-The length of an array refers to the number of elements it can hold. In Java, you can access the length using the `.length` property.
-
-```java
-public class ArrayLength {
-    public static void main(String[] args) {
-        int[] numbers = {10, 20, 30, 40, 50};
-        System.out.println("The length of the array is: " + numbers.length);
-    }
-}
-```
-
-<details>
-<summary>Output</summary>
-
-```
-The length of the array is: 5
-```
-
-</details>
-
-### Modifying Arrays
-
-You can modify array elements by accessing them via their index and assigning new values.
+### Code Example
 
 ```java
-public class ModifyArray {
+public class ArrayLengthAndModify {
     public static void main(String[] args) {
         String[] fruits = {"Apple", "Banana", "Cherry"};
+        System.out.println("The length of the array is: " + fruits.length);
+
         fruits[1] = "Blueberry"; // Modifies the second element
 
         // Displaying modified array
@@ -329,6 +253,7 @@ public class ModifyArray {
 <summary>Output</summary>
 
 ```
+The length of the array is: 3
 Apple Blueberry Cherry 
 ```
 
@@ -645,19 +570,7 @@ Put brackets round the `==` comparison when you print it, as in the example abov
 
 ## 7. 2D Arrays
 
-A 2D array is an array of arrays, useful for representing grids or tables.
-
-### Declaration and Initialization
-
-```java
-int[][] matrix = new int[3][3]; // 3x3 matrix with default values
-
-int[][] predefinedMatrix = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-```
+A 2D array is an array of arrays, useful for representing grids or tables. `new int[3][3]` makes a 3x3 grid of default values; a nested initializer makes one with values you choose, one inner `{ }` per row. An element is reached with two indices, `matrix[row][column]`.
 
 ### Code Example
 
@@ -900,17 +813,11 @@ Compare with `==`, not `.equals()` - these are `int` values, not objects. Loop w
 
 In this lab, we've covered:
 
-- Various methods to declare and initialize arrays.
-- Default values assigned to array elements.
-- Accessing and iterating over array elements using traditional and enhanced for loops.
-- Utilizing the array's length.
-- Modifying elements within an array.
-- Arrays of objects and how to work with them.
-- Common array operations like copying, sorting, and comparing.
-- Utilizing the `Arrays` utility class for array manipulation.
-- Cloning arrays to create independent copies.
-- Understanding and working with 2D arrays.
-- Passing arrays to methods.
-- Finding the highest and lowest values with the champion pattern, and searching an array for a value.
+- Declaring and initializing arrays, and the default values their elements get.
+- Accessing, modifying and looping over elements, and using the array's length.
+- Arrays of objects.
+- Copying, cloning, sorting and comparing arrays with `System.arraycopy`, `clone()` and the `Arrays` utility class.
+- 2D arrays.
+- Passing arrays to methods, finding the highest value with the champion pattern, and searching an array for a value.
 
 Arrays are a foundational aspect of Java programming, enabling efficient data storage and manipulation. Mastery of arrays will significantly aid in understanding more complex data structures and algorithms.

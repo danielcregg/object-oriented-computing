@@ -23,7 +23,7 @@
 
 ## Getting started
 
-This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1, `TemperatureConverter.java` for DIY 4, and so on. Every new file starts with the package line you see in `Main.java`. DIY 1 to 7 are the lab; DIY 8 and 9 are extensions for when you finish early. DIY 9 is the one exercise that does not use `Main.java`: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
+This lab lives in the package `week03.methods_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to call the methods you write; replace its test code as each exercise moves on. When an exercise asks you to define a class, give that class its own file beside `Main.java`: `Calculator.java` for DIY 1, `TemperatureConverter.java` for DIY 4, and so on. Every new file starts with the package line you see in `Main.java`. DIY 9 is the one exercise that does not use `Main.java`: its class comes with a `main` of its own, so it lives in its own file and you run it from there.
 
 ---
 
@@ -87,16 +87,14 @@ flowchart TD
 ### DIY 1: Calculator menu
 
 1. Create a class named `Calculator`.
-2. Add a method `printHeader()` that prints the three-line header shown below.
+2. Add a method `printHeader()` that prints the one-line header shown below.
 3. Add a method `printMenu()` that lists the two operations shown below.
 4. In `Main.java`'s `main` method, create a `Calculator` object and call both methods.
 
 **Expected output**
 
 ```text
-================================
-     SIMPLE CALCULATOR
-================================
+=== SIMPLE CALCULATOR ===
 Choose an operation:
 1. Addition
 2. Division
@@ -104,7 +102,7 @@ Choose an operation:
 
 <details><summary>Hint</summary>
 
-Both methods are `void`: they print and hand nothing back, so neither needs a `return`. Neither takes parameters either - everything they print is fixed text. Count the `=` characters in the expected output and match them exactly, or the two rules will not line up.
+Both methods are `void`: they print and hand nothing back, so neither needs a `return`. Neither takes parameters either - everything they print is fixed text. Copy the wording and the punctuation exactly, or the output will not match.
 
 </details>
 
@@ -292,7 +290,7 @@ Passing: true
 
 1. Create a class named `TemperatureConverter` with these methods:
    * `double celsiusToFahrenheit(double celsius)`
-   * `void printConversionTable(int startCelsius, int endCelsius)` - prints a table in steps of 10 (void: it only displays)
+   * `void printConversion(double celsius)` - prints one line such as `25.0°C = 77.0°F` (void: it only displays, and it calls `celsiusToFahrenheit` for the number)
    * `boolean isFreezingCelsius(double celsius)` - true at or below 0°C
 2. Formula: Fahrenheit = (Celsius × 9/5) + 32.
 3. Test all three methods from `Main.java`'s `main`.
@@ -301,20 +299,14 @@ Passing: true
 
 ```text
 25.0°C = 77.0°F
-
-Celsius to Fahrenheit Conversion Table:
-0°C = 32.0°F
-10°C = 50.0°F
-20°C = 68.0°F
-30°C = 86.0°F
-
+100.0°C = 212.0°F
 Is 0°C freezing? true
 Is 25°C freezing? false
 ```
 
 <details><summary>Hint</summary>
 
-Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer division and equals `1`, which silently wrecks the formula. Inside `printConversionTable`, call `celsiusToFahrenheit` for each row rather than repeating the formula.
+Write the fraction as `9.0 / 5.0`. With `int` literals, `9 / 5` is integer division and equals `1`, which silently wrecks the formula. Inside `printConversion`, call `celsiusToFahrenheit` rather than repeating the formula, then print the original value, the two unit symbols and the result on one line.
 
 </details>
 
@@ -372,9 +364,7 @@ public class BankAccount {
 A bank card PIN is four digits, and not every four-digit number is acceptable: `7777` and `1234` are the first two anyone guesses.
 
 1. Create a class named `PinValidator`.
-2. Add two **public** methods:
-   * `boolean isValidPin(int pin)` - true only if all three checks below pass
-   * `void printValidationReport(int pin)` - prints whether the PIN is valid, then the result of each individual check
+2. Add one **public** method, `boolean isValidPin(int pin)`, that is true only if all three checks below pass.
 3. Add three **private** helper methods, each returning `boolean`:
    * `hasFourDigits` - the PIN is between 1000 and 9999
    * `isNotRepeated` - the four digits are not all the same (`7777` fails)
@@ -385,28 +375,14 @@ A bank card PIN is four digits, and not every four-digit number is acceptable: `
 **Expected output**
 
 ```text
-Testing PIN: 1234
-Valid: false
-- Four digits (1000-9999): true
-- Not all the same digit: true
-- Not a common PIN: false
-
-Testing PIN: 7777
-Valid: false
-- Four digits (1000-9999): true
-- Not all the same digit: false
-- Not a common PIN: true
-
-Testing PIN: 4830
-Valid: true
-- Four digits (1000-9999): true
-- Not all the same digit: true
-- Not a common PIN: true
+1234 valid? false
+7777 valid? false
+4830 valid? true
 ```
 
 <details><summary>Hint</summary>
 
-Each helper is a single `return` of a boolean expression: `hasFourDigits` is `pin >= 1000 && pin <= 9999`, and `isNotCommon` is `pin != 1234`. For `isNotRepeated`, a four-digit number made of one repeated digit (1111, 2222, ... 9999) is always a multiple of 1111, so `pin % 1111 != 0` says the digits are not all the same. `isValidPin` joins the three helper calls with `&&`, and `printValidationReport` prints the verdict and then each helper's result.
+Each helper is a single `return` of a boolean expression: `hasFourDigits` is `pin >= 1000 && pin <= 9999`, and `isNotCommon` is `pin != 1234`. For `isNotRepeated`, a four-digit number made of one repeated digit (1111, 2222, ... 9999) is always a multiple of 1111, so `pin % 1111 != 0` says the digits are not all the same. `isValidPin` joins the three helper calls with `&&`. From `main` you can call only `isValidPin`: the `private` helpers are invisible outside the class, and that is the point.
 
 </details>
 
@@ -492,7 +468,6 @@ Build a small library of `static` maths helpers - the kind of thing `Math` itsel
 
 1. Create a class named `NumberUtils` with these **static** methods:
    * `boolean isEven(int n)` - true when `n` divides by 2 exactly
-   * `int digitSum(int n)` - adds the digits: `digitSum(4821)` is 15
    * `int reverseDigits(int n)` - `reverseDigits(4821)` is 1284
    * `boolean isNumberPalindrome(int n)` - reads the same both ways; **call `reverseDigits` rather than repeating its loop**
 2. Call every one of them from `Main.java`'s `main` and print the results - **without creating a single object**.
@@ -500,10 +475,8 @@ Build a small library of `static` maths helpers - the kind of thing `Math` itsel
 **Expected output**
 
 ```text
-Testing NumberUtils:
 Is 14 even? true
 Is 7 even? false
-Digit sum of 4821: 15
 Reverse of 4821: 1284
 Is 1221 a palindrome? true
 Is 1234 a palindrome? false
@@ -511,7 +484,7 @@ Is 1234 a palindrome? false
 
 <details><summary>Hint</summary>
 
-`%` and `/` do all the work here. To walk the digits of `n`, loop while `n > 0`, taking `n % 10` as the last digit and then shrinking `n` with `n = n / 10`. For `digitSum`, add each digit to a running total as you take it; for `reverseDigits`, build the answer with `reversed = reversed * 10 + digit`. Then `isNumberPalindrome` is a single line: compare `n` with `reverseDigits(n)`.
+`%` and `/` do all the work here. To walk the digits of `n`, loop while `n > 0`, taking `n % 10` as the last digit and then shrinking `n` with `n = n / 10`. For `reverseDigits`, build the answer with `reversed = reversed * 10 + digit`. Then `isNumberPalindrome` is a single line: compare `n` with `reverseDigits(n)`.
 
 </details>
 
@@ -584,13 +557,32 @@ sequenceDiagram
 
 ### DIY 7: Trace the call stack
 
-1. Create a class named `ExecutionTracer`.
-2. Add three **static** methods:
-   * `methodA()` - prints `A start`, calls `methodB()`, prints `A end`
-   * `methodB()` - prints `B start`, calls `methodC()`, prints `B end`
-   * `methodC()` - prints `C start`, then `C end`
-3. Call `ExecutionTracer.methodA()` from `Main.java`'s `main`.
-4. Before running, predict the output on paper by drawing the stack at each step - then run and check yourself.
+First copy this class into its own file, `ExecutionTracer.java`, beside `Main.java` (start it with the same `package` line). The exercise is the prediction, not the typing:
+
+```java
+public class ExecutionTracer {
+
+    public static void methodA() {
+        System.out.println("A start");
+        methodB();
+        System.out.println("A end");
+    }
+
+    public static void methodB() {
+        System.out.println("B start");
+        methodC();
+        System.out.println("B end");
+    }
+
+    public static void methodC() {
+        System.out.println("C start");
+        System.out.println("C end");
+    }
+}
+```
+
+1. Before running anything, predict the output on paper by drawing the stack at each step: which method is on top, and what has it printed so far?
+2. Call `ExecutionTracer.methodA()` from `Main.java`'s `main`, run it, and check your prediction against the output below.
 
 **Expected output**
 
@@ -625,44 +617,23 @@ public static int factorial(int n) {
 
 ### DIY 8: Simple recursion
 
-*Extension: do this one once DIY 1 to 7 are finished.*
-
-1. Create a class named `RecursiveMethods` with these **static** recursive methods:
-   * `int countdown(int n)` - prints n down to 1, then returns 0
-   * `int sumToN(int n)` - returns 1 + 2 + … + n, printing each call
-   * `int power(int base, int exponent)` - returns base^exponent, printing each call
-2. Test each from `Main.java`'s `main` with small values (n ≤ 5) so you can follow the stack in the output.
+1. In `Main.java`, beside `main`, write a `static` method `int sumToN(int n)` that uses recursion to return 1 + 2 + … + n, and prints `Calculating sum(n)` each time it is called.
+2. In `main`, call `sumToN(5)` and print the value it returns in the form shown below.
 
 **Expected output**
 
 ```text
-Countdown from 5:
-5
-4
-3
-2
-1
-
-Sum from 1 to 5:
 Calculating sum(5)
 Calculating sum(4)
 Calculating sum(3)
 Calculating sum(2)
 Calculating sum(1)
 Result: 15
-
-Power 2^4:
-Calculating 2^4
-Calculating 2^3
-Calculating 2^2
-Calculating 2^1
-Calculating 2^0
-Result: 16
 ```
 
 <details><summary>Hint</summary>
 
-Every recursive method needs the same two pieces as `factorial`: a base case that returns without recursing (`n <= 1` or `exponent == 0`), and a recursive step that calls itself with a *smaller* argument.
+A recursive method needs the same two pieces as `factorial`: a base case that returns without recursing (`n <= 1`), and a recursive step that calls itself with a *smaller* argument (`n + sumToN(n - 1)`). Print the `Calculating` line before the base-case check, so that every call, the last one included, announces itself.
 
 </details>
 
@@ -743,9 +714,7 @@ Notice which of these the compiler can catch. Mistakes **1, 2, 4 and 5 stop the 
 
 ### DIY 9: Fix the buggy calculator
 
-*Extension: do this one once DIY 1 to 7 are finished.*
-
-The class below carries **10 labelled faults: 8 compile errors and 2 design faults.** The compiler finds the first eight for you. The last two are legal Java - the class builds and runs with them still in place, so only reading will catch them.
+The class below carries **7 labelled faults: 5 compile errors and 2 design faults.** The compiler finds the first five for you. The last two are legal Java - the class builds and runs with them still in place, so only reading will catch them.
 
 <!-- no-compile -->
 ```java
@@ -770,18 +739,6 @@ public class BuggyCalculator {
         }
     }
 
-    private int multiplier = 10;
-
-    // Compile error 4: a static method reading an instance field
-    public static int scaleValue(int value) {
-        return value * multiplier;
-    }
-
-    // Compile error 5: a void method handing back a value
-    public static void printResult() {
-        return 42;
-    }
-
     // Not a fault - this declaration is fine. Watch how main calls it.
     public void displayMessage() {
         System.out.println("Hello!");
@@ -793,29 +750,26 @@ public class BuggyCalculator {
     }
 
     public static void main(String[] args) {
-        // Compile error 6: wrong argument type
+        // Compile error 4: wrong argument type
         int sum = calculateSum(5, "10");
 
-        // Compile error 7: an instance method called with no object
+        // Compile error 5: an instance method called with no object
         displayMessage();
 
-        // Compile error 8: wrong number of arguments
-        getProduct(5);
-
-        // Design fault 9: legal Java - the answer is computed, then thrown away
+        // Design fault 6: legal Java - the answer is computed, then thrown away
         subtract(10, 3);
 
-        // Design fault 10: legal Java - but read the label against the arguments
+        // Design fault 7: legal Java - but read the label against the arguments
         System.out.println("10 - 3 = " + subtract(3, 10));
     }
 }
 ```
 
 1. Copy the class into a new file, `BuggyCalculator.java`, in your package (start it with the same `package` line as `Main.java`). It has a `main` of its own, so this is the one exercise that does not use `Main.java`: run it with the ▶ above its own `main`.
-2. Fix the eight compile errors first. Faults 1-5 are in the declarations, 6-8 in how `main` calls them - repair the declarations and most of the calls fall into place.
-3. Expect `javac` to report **far fewer than eight at a time**. Fault 1 is a *parse* error, so on the first run it is the only message you get - and the missing-return check does not run at all until the type errors above it are gone. Fix, recompile, repeat until the class builds.
-4. Now hunt faults 9 and 10 by **reading**, not compiling: the build is already green and stays green with both still in place. For each, say what the code does and what it was clearly meant to do.
-5. Make `main` store and print every result, so each fix shows up in the output.
+2. Fix the five compile errors first. Faults 1-3 are in the declarations, 4-5 in how `main` calls them - repair the declarations and most of the calls fall into place.
+3. Expect `javac` to report **far fewer than five at a time**. Fault 1 is a *parse* error, so on the first run it is the only message you get - and the missing-return check does not run at all until the type errors above it are gone. Fix, recompile, repeat until the class builds.
+4. Now hunt faults 6 and 7 by **reading**, not compiling: the build is already green and stays green with both still in place. For each, say what the code does and what it was clearly meant to do.
+5. Make `main` print every result, and add calls to `getProduct` and `checkValue` so each fix shows up in the output.
 6. Compile and run.
 
 **Expected output**
@@ -825,16 +779,14 @@ Sum: 15
 Hello!
 Product: 20
 Check 0: 0
-Scaled: 70
 10 - 3 = 7
-Result: 42
 ```
 
 (Representative run - your exact fixes and wording may differ, as long as the class compiles and every call works.)
 
 <details><summary>Hint</summary>
 
-Work top-down. Faults 1-5 live in the method declarations: one has no return type, two hand a value back from a `void` method, one leaves a path with nothing to return, and one reads an instance field from a `static` method - make `multiplier` static, or pass it in as a parameter. Faults 6-8 live in `main`: check each call's argument types, its argument count, and whether the method it names needs an object first. For fault 9, ask where the answer goes - a call sitting alone on a line computes and then discards. For fault 10, compare the printed label with the parameter list of the method being called.
+Work top-down. Faults 1-3 live in the method declarations: one has no return type, one hands a value back from a `void` method, and one leaves a path with nothing to return. Faults 4-5 live in `main`: check the argument types in the first call, and whether the method named in the second needs an object first. For fault 6, ask where the answer goes - a call sitting alone on a line computes and then discards. For fault 7, compare the printed label with the parameter list of the method being called.
 
 </details>
 
@@ -852,5 +804,3 @@ You can now:
 * **Read the call stack** - LIFO push and pop, the key to tracing recursion and debugging.
 
 Habits worth keeping: give methods verb names that say what they do, keep each method focused on one task, prefer returning values over printing, and test edge cases (zero, negatives, empty strings).
-
-Want more practice? Build a student grade system (final grades, letter grades, GPA), a number toolkit (prime testing, digit sums, factors, base conversion), or a number guessing game (random number, guess checking, hints, score tracking) - methods everywhere.

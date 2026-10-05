@@ -177,7 +177,8 @@ instructions, scripts, workflows and the practice bank alone.
   sections → exercises as `### DIY k: <name>` with
   numbered steps + an `**Expected output**` ```text block + hints in
   `<details><summary>Hint</summary>` → Summary LAST. No Further Reading,
-  no week/module references (self-contained, like the decks).
+  no extension, bonus or "more practice" sections, no week/module references
+  (self-contained, like the decks).
   **Section k holds DIY k.** A section with no exercise (an Introduction, a
   Summary) carries no number, and a section that would hold two exercises is
   split where the teaching changes so each exercise follows the text it
@@ -199,19 +200,27 @@ instructions, scripts, workflows and the practice bank alone.
   until its exercises were rewritten as specifications). Supplying a class is
   fine as *starting material* an exercise then builds on; it is not fine as
   the exercise. When a lab runs long, cut transcription before you cut
-  exercises. The second measure is TYPED LINES: a reference solution's class
-  file plus the body of `main` (the starter already has `main`'s header),
-  summed over the DIYs students must do. As a planning estimate, not yet
-  measured on a cohort, first-years manage about one such line every 30 to 40
-  seconds all in (reading, typing, fixing, checking the output), so roughly
-  150 typed lines is what a two-hour lab holds for most of a class. The
-  methods lab was cut from 221 to 151 on that basis, with DIY 8 and 9 kept as
-  extensions. The arrays lab was already under the budget (about 125 typed
-  lines) but had 13 exercises, and each exercise costs a few minutes of fixed
-  overhead (read, replace `main`'s code, run, compare), so many tiny ones cost
-  more than their lines suggest: it went to 10 exercises (about 100 typed
-  lines) by merging adjacent trivial pairs and handing the student the `Book`
-  class to copy. Recalibrate these numbers from a real lab session.
+  exercises. **A lab has no extension, bonus or optional exercises or
+  sections** (no "want more practice" pointers either): every exercise is part
+  of the lab, so the whole lab has to fit the slot. The second measure is
+  TYPED LINES: a reference solution's class file plus the body of `main` (the
+  starter already has `main`'s header), summed over ALL the DIYs. A class the
+  lab hands over to copy is not counted, and for an exercise that repairs a
+  supplied class only the lines the student changes are. As a planning
+  estimate, not yet measured on a cohort, first-years manage about one such
+  line every 30 to 40 seconds all in (reading, typing, fixing, checking the
+  output), so roughly 150 typed lines is what a two-hour lab holds for most of
+  a class. Each exercise also costs a few minutes of fixed overhead (read,
+  replace `main`'s code, run, compare), so many tiny ones cost more than their
+  lines suggest. A workable bound: 25 minutes of reading and setup, plus 4 per
+  exercise, plus 0.4 per typed line, kept under about 110. The methods lab was
+  cut from 221 typed lines (DIY 1-7) to 151, then, once its two extension
+  exercises became part of the lab, to 128 for all nine: smaller exercises,
+  the call-stack class supplied, one recursive method, and every DIY number
+  kept. The arrays lab was already under the budget (about 125 typed lines)
+  but had 13 exercises: it went to 10 (about 100 typed lines) by merging
+  adjacent trivial pairs and handing the student the `Book` class to copy.
+  Recalibrate these numbers from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–10, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /

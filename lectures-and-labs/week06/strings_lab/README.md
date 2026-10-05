@@ -456,10 +456,6 @@ of the length, a builder grows in step with it.
 - It shows the growth, not one point on it: quadratic for `+`, linear for a builder. A stopwatch only ever reports one size on one machine.
 - The exact speed-up you measure will differ from a classmate's, and from your own next run. The shape will not.
 
-### Extension Challenge (Optional)
-
-Add a line to your step 5 code that prints the two durations in milliseconds (divide the nanosecond difference by `1_000_000`), then run it at 10,000, 25,000 and 50,000 rounds and write the figures down. Compare them with someone else's: the numbers will not match - they depend on the machine, the JDK and even the run - but on every list the `+` version will have grown far faster than the loop count did. That growth is the point; the number never was, which is why it is not in the expected output above.
-
 ---
 
 ## 7. Common String Methods

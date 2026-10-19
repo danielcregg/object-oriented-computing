@@ -40,7 +40,7 @@ editing rules live in
 ## Module schedule
 
 <!-- current-week:start -->
-> 🗓️ **Current teaching week: 5 — Arrays** (week beginning 12 Oct 2026).
+> 🗓️ **Current teaching week: 6 — Strings** (week beginning 19 Oct 2026).
 <!-- current-week:end -->
 
 The schedule is defined once, in [`module/schedule.json`](module/schedule.json);
@@ -54,8 +54,8 @@ generated from it.
 | 2 | Classes and Objects | [lecture](lectures-and-labs/week02/classes-and-objects-lecture.md) | [lab](lectures-and-labs/week02/classes_and_objects_lab/README.md) |
 | 3 | Methods | [lecture](lectures-and-labs/week03/methods-lecture.md) | [lab](lectures-and-labs/week03/methods_lab/README.md) |
 | 4 | **MCQ 1** · held during lab slot | [details](lectures-and-labs/week04/README.md) · [brief](mcq/README.md) | — |
-| **➡️ 5** | Arrays | [lecture](lectures-and-labs/week05/arrays-lecture.md) | [lab](lectures-and-labs/week05/arrays_lab/README.md) |
-| 6 | Strings | [lecture](lectures-and-labs/week06/strings-lecture.md) | [lab](lectures-and-labs/week06/strings_lab/README.md) |
+| 5 | Arrays | [lecture](lectures-and-labs/week05/arrays-lecture.md) | [lab](lectures-and-labs/week05/arrays_lab/README.md) |
+| **➡️ 6** | Strings | [lecture](lectures-and-labs/week06/strings-lecture.md) | [lab](lectures-and-labs/week06/strings_lab/README.md) |
 | — | Reading week | [details](lectures-and-labs/week06b-reading-week/README.md) | — |
 | 7 | Encapsulation | [lecture](lectures-and-labs/week07/encapsulation-lecture.md) | [lab](lectures-and-labs/week07/encapsulation_lab/README.md) |
 | 8 | **MCQ 2** · held during lab slot | [details](lectures-and-labs/week08/README.md) · [brief](mcq/README.md) | — |

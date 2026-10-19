@@ -1,0 +1,118 @@
+{
+  "id": "task-diy-10",
+  "task": 10,
+  "title": "DIY 10, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Stop at the first match",
+      "steps": [
+        {
+          "caption": "Five numbers to search.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        },
+        {
+          "caption": "First search: look for 48.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        },
+        {
+          "caption": "Look at each box in order. Is 12 equal to 48? No, keep looking.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [0], "badges": {"0": "magnifier"}}]
+        },
+        {
+          "caption": "27? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [1], "badges": {"1": "magnifier"}}]
+        },
+        {
+          "caption": "33? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [2], "badges": {"2": "magnifier"}}]
+        },
+        {
+          "caption": "48 matches, at index 3! Stop right here: the box after it is never checked.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["12", "27", "33", "48", "9"],
+              "match": [3],
+              "dim": [4],
+              "badges": {"3": "magnifier"}
+            }
+          ]
+        },
+        {
+          "caption": "The answer is the index, 3, not the value 48.",
+          "print": "Index of 48: 3\n",
+          "from": {"var": "result"},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "48"}, {"name": "result", "value": "3"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "match": [3], "dim": [4]}]
+        },
+        {
+          "caption": "Second search: look for 100.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        },
+        {
+          "caption": "Is 12 equal to 100? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [0], "badges": {"0": "magnifier"}}]
+        },
+        {
+          "caption": "27? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [1], "badges": {"1": "magnifier"}}]
+        },
+        {
+          "caption": "33? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [2], "badges": {"2": "magnifier"}}]
+        },
+        {
+          "caption": "48? No.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [3], "badges": {"3": "magnifier"}}]
+        },
+        {
+          "caption": "9? No. That was the last box.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "target", "value": "100"}],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"], "highlight": [4], "badges": {"4": "magnifier"}}]
+        },
+        {
+          "caption": "The search ran past the last box without a match. Only after checking every box is the answer -1, an index that can never be real.",
+          "vars": [
+            {"name": "numbers", "ref": "A"},
+            {"name": "target", "value": "100"},
+            {"name": "result", "value": "-1"}
+          ],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        },
+        {
+          "caption": "Print the result, labelled as shown.",
+          "print": "Index of 100: -1\n",
+          "from": {"var": "result"},
+          "vars": [
+            {"name": "numbers", "ref": "A"},
+            {"name": "target", "value": "100"},
+            {"name": "result", "value": "-1"}
+          ],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [
+            {"name": "numbers", "ref": "A"},
+            {"name": "target", "value": "100"},
+            {"name": "result", "value": "-1"}
+          ],
+          "arrays": [{"id": "A", "values": ["12", "27", "33", "48", "9"]}]
+        }
+      ]
+    }
+  ]
+}

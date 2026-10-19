@@ -1,0 +1,57 @@
+{
+  "id": "task-diy-2",
+  "task": 2,
+  "title": "DIY 2, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "From the last index back to the first",
+      "steps": [
+        {
+          "caption": "The array to print backwards: 5, 10, 15, 20.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        },
+        {
+          "caption": "Which index holds the last element? The length is 4 and indexes start at 0, so the last index is 3: one less than the length.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"3": "last"}, "ruler": "length 4"}]
+        },
+        {
+          "caption": "Start at the last index. Its value prints on a line of its own.",
+          "print": "20\n",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [3], "marks": {"3": "last"}}]
+        },
+        {
+          "caption": "Then move one box towards the front.",
+          "print": "15\n",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [2], "marks": {"3": "last"}}]
+        },
+        {
+          "caption": "Keep going towards the front.",
+          "print": "10\n",
+          "from": {"array": "A", "index": 1},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [1], "marks": {"3": "last"}}]
+        },
+        {
+          "caption": "Index 0 is the front of the array: the last value to print.",
+          "print": "5\n",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [0], "marks": {"3": "last"}}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"3": "last"}}]
+        }
+      ]
+    }
+  ]
+}

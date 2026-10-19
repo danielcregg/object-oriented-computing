@@ -1,0 +1,67 @@
+{
+  "id": "play-4",
+  "section": 4,
+  "type": "wire",
+  "title": "Wire the references",
+  "intro": "An array of objects holds references, not objects: each box is an arrow to an object that lives somewhere else. Run the code by wiring every box to its object.",
+  "class": {"name": "Planet", "fields": ["name", "moons"]},
+  "objects": [
+    {"var": "mercury", "fields": {"name": "Mercury", "moons": 0}},
+    {"var": "venus", "fields": {"name": "Venus", "moons": 0}},
+    {"var": "earth", "fields": {"name": "Earth", "moons": 1}},
+    {"var": "mars", "fields": {"name": "Mars", "moons": 2}}
+  ],
+  "pick": 3,
+  "rounds": [
+    {
+      "array": {"name": "planets", "size": 3},
+      "assign": "all",
+      "prompt": "Run the code: click a box of `{name}`, then the object the code puts in it.",
+      "right": "Every box now holds an arrow. Each one is a copy of the arrow in a variable: two references, one object.",
+      "why": {
+        "wrong": "`{name}[{box}] = {expected};` copies the arrow in `{expected}`, so box {box} points at the object `{expected}` points at, not at `{chosen}`'s.",
+        "unassigned": "No line writes to `{name}[{box}]`, so it keeps its default and points at nothing."
+      }
+    },
+    {
+      "ask": "getName",
+      "right": "Follow the arrow out of `{name}[{box}]`: it reaches the object whose name is `\"{who}\"`, and that's what `getName()` returns.",
+      "why": {
+        "getName": "Follow the arrow out of `{name}[{box}]`: `getName()` runs on whichever object the arrow reaches."
+      }
+    },
+    {
+      "array": {"name": "visited", "size": 3},
+      "assign": 2,
+      "ask": "unwired",
+      "prompt": "A new array, and only two lines this time. Wire them up.",
+      "options": [
+        {"key": "null", "text": "null", "mono": true},
+        {"key": "empty", "text": "\"\"", "mono": true},
+        {"key": "zero", "text": "0", "mono": true},
+        {"key": "object", "text": "a Planet with no name"}
+      ],
+      "right": "A box for references starts as `null`: no arrow, no object. `new Planet[3]` made three boxes and not a single Planet.",
+      "why": {
+        "wrong": "`{name}[{box}] = {expected};` copies the arrow in `{expected}`, so box {box} points at the object `{expected}` points at, not at `{chosen}`'s.",
+        "unassigned": "No line writes to `{name}[{box}]`, so it keeps its default and points at nothing.",
+        "empty": "`\"\"` would be a String object, and this box is for `Planet` references. Nothing was put in it, so it holds the default for a reference: no arrow at all.",
+        "zero": "`0` is the default for number boxes. This box holds a reference to a `Planet`, and a reference starts out pointing at nothing.",
+        "object": "`new Planet[3]` builds three boxes and no Planet objects: an object only exists once `new Planet(…)` runs. This box points at nothing."
+      }
+    },
+    {
+      "ask": "callOnNull",
+      "options": [
+        {"key": "null", "text": "it returns `null`"},
+        {"key": "empty", "text": "it returns `\"\"`"},
+        {"key": "npe", "text": "it throws a `NullPointerException`"}
+      ],
+      "right": "There is no object at the end of a `null` reference, so there is nothing to call `getName()` on: Java stops with a `NullPointerException`.",
+      "why": {
+        "null": "`getName()` can only run on an object, and `null` is no object: there is no `name` to hand back, not even a missing one.",
+        "empty": "There's no `Planet` at the end of a `null` reference, so there is no `name` to return, not even an empty one."
+      }
+    }
+  ]
+}

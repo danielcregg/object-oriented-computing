@@ -1,0 +1,90 @@
+{
+  "id": "task-diy-7",
+  "task": 7,
+  "title": "DIY 7, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Every cell, row by row, into one total",
+      "steps": [
+        {
+          "caption": "A 2D array: 3 rows of 3 numbers, the table from the exercise.",
+          "vars": [{"name": "table", "ref": "M"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]}]
+        },
+        {
+          "caption": "Keep a running total. Before anything is added, it is 0.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "0"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]}]
+        },
+        {
+          "caption": "Visit the cells row by row. Row 0, column 0 holds 1: the total becomes 1.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "1"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[0, 0]]}],
+          "flow": [{"from": {"array": "M", "row": 0, "col": 0}, "to": {"var": "total"}, "text": "+1"}]
+        },
+        {
+          "caption": "Row 0, column 1: add 2. The total is 3.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "3"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[0, 1]]}],
+          "flow": [{"from": {"array": "M", "row": 0, "col": 1}, "to": {"var": "total"}, "text": "+2"}]
+        },
+        {
+          "caption": "Row 0, column 2: add 3. The total is 6, and row 0 is done.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "6"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[0, 2]]}],
+          "flow": [{"from": {"array": "M", "row": 0, "col": 2}, "to": {"var": "total"}, "text": "+3"}]
+        },
+        {
+          "caption": "On to row 1, starting again at column 0: add 4. The total is 10.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "10"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[1, 0]]}],
+          "flow": [{"from": {"array": "M", "row": 1, "col": 0}, "to": {"var": "total"}, "text": "+4"}]
+        },
+        {
+          "caption": "Add 5. The total is 15.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "15"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[1, 1]]}],
+          "flow": [{"from": {"array": "M", "row": 1, "col": 1}, "to": {"var": "total"}, "text": "+5"}]
+        },
+        {
+          "caption": "Add 6. The total is 21, and row 1 is done.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "21"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[1, 2]]}],
+          "flow": [{"from": {"array": "M", "row": 1, "col": 2}, "to": {"var": "total"}, "text": "+6"}]
+        },
+        {
+          "caption": "Row 2, the last row: add 7. The total is 28.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "28"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[2, 0]]}],
+          "flow": [{"from": {"array": "M", "row": 2, "col": 0}, "to": {"var": "total"}, "text": "+7"}]
+        },
+        {
+          "caption": "Add 8. The total is 36.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "36"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[2, 1]]}],
+          "flow": [{"from": {"array": "M", "row": 2, "col": 1}, "to": {"var": "total"}, "text": "+8"}]
+        },
+        {
+          "caption": "Add 9. The total is 45: every cell has been added exactly once.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "45"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]], "highlight": [[2, 2]]}],
+          "flow": [{"from": {"array": "M", "row": 2, "col": 2}, "to": {"var": "total"}, "text": "+9"}]
+        },
+        {
+          "caption": "Print the total, labelled as shown.",
+          "print": "Sum of all elements: 45\n",
+          "from": {"var": "total"},
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "45"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "table", "ref": "M"}, {"name": "total", "value": "45"}],
+          "arrays": [{"id": "M", "rows": [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]}]
+        }
+      ]
+    }
+  ]
+}

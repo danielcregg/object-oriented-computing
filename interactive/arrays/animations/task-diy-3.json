@@ -1,0 +1,76 @@
+{
+  "id": "task-diy-3",
+  "task": 3,
+  "title": "DIY 3, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Length, then one change",
+      "steps": [
+        {
+          "caption": "Four numbers in an array.",
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "30", "40"]}]
+        },
+        {
+          "caption": "Every array knows how many elements it holds. This one holds 4, so the first line reads Length: 4.",
+          "print": "Length: 4\n",
+          "from": {"array": "A"},
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "30", "40"], "ruler": "length 4"}]
+        },
+        {
+          "caption": "Which box holds the third element? Counting starts at index 0, so the third element sits at index 2, not 3.",
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["10", "20", "30", "40"],
+              "highlight": [2],
+              "marks": {"0": "1st", "1": "2nd", "2": "3rd", "3": "4th"}
+            }
+          ]
+        },
+        {
+          "caption": "Put 35 in that box. The 30 is replaced, and nothing else changes.",
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"], "highlight": [2], "marks": {"2": "3rd"}}]
+        },
+        {
+          "caption": "Now print every element on one line, each followed by a space.",
+          "print": "10 ",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"], "highlight": [0]}]
+        },
+        {
+          "caption": "The next one, on the same line.",
+          "print": "20 ",
+          "from": {"array": "A", "index": 1},
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"], "highlight": [1]}]
+        },
+        {
+          "caption": "The new value prints in its place.",
+          "print": "35 ",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"], "highlight": [2]}]
+        },
+        {
+          "caption": "And the last one.",
+          "print": "40 ",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"], "highlight": [3]}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "nums", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["10", "20", "35", "40"]}]
+        }
+      ]
+    }
+  ]
+}

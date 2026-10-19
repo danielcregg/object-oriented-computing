@@ -1,0 +1,64 @@
+{
+  "id": "play-5",
+  "section": 5,
+  "type": "swap",
+  "title": "Sort by swapping",
+  "intro": "`Arrays.sort` puts an array's values in ascending order, smallest first. Do its job by hand: click two boxes to swap them, until no value is bigger than the one after it.",
+  "rounds": [
+    {
+      "arrays": [
+        {"name": "ages", "elem": "int", "values": [17, 4, 42, 8, 23]},
+        {"name": "ages", "elem": "int", "values": [31, 9, 14, 26, 3]},
+        {"name": "ages", "elem": "int", "values": [60, 15, 45, 30, 75]}
+      ],
+      "prompt": "Sort `{name}` into ascending order: click two boxes to swap them.",
+      "right": "Sorted in {verdict}",
+      "why": {
+        "wasted": "Neither value landed in its final place. Find the smallest value that isn't home yet: it belongs in the lowest box that isn't sorted."
+      }
+    },
+    {
+      "arrays": [
+        {"name": "deltas", "elem": "int", "values": [-3, 8, 0, 12, -7, 5]},
+        {"name": "deltas", "elem": "int", "values": [4, -6, 11, -1, 7, 2]}
+      ],
+      "minSwaps": 3,
+      "prompt": "Six values this time, some below zero. Sort `{name}` into ascending order.",
+      "right": "Sorted in {verdict} The negative values come first: ascending means smallest first.",
+      "why": {
+        "wasted": "Neither value landed in its final place. A negative number is smaller than 0, so the most negative value goes in box 0."
+      }
+    },
+    {
+      "type": "refs",
+      "make": "alias",
+      "ask": ["sortChangesA"],
+      "arrays": [
+        {"name": "a", "elem": "int", "values": [9, 2, 7, 4]},
+        {"name": "a", "elem": "int", "values": [13, 6, 10, 1]},
+        {"name": "a", "elem": "int", "values": [8, 3, 11, 5]}
+      ],
+      "prompt": "`b = a`, then `b` is sorted. Has `a` changed?",
+      "right": "One array, two names: `b = a` copies the arrow, not the boxes, so sorting through `b` sorts what `a` sees too.",
+      "why": {
+        "sortChangesA": "`int[] b = a;` copies the arrow, not the boxes: `a` and `b` point at one array. Sorting it through `b` sorts the only array there is."
+      }
+    },
+    {
+      "type": "refs",
+      "make": "copy",
+      "ask": ["sortChangesA"],
+      "arrays": [
+        {"name": "a", "elem": "int", "values": [9, 2, 7, 4]},
+        {"name": "a", "elem": "int", "values": [13, 6, 10, 1]},
+        {"name": "a", "elem": "int", "values": [8, 3, 11, 5]}
+      ],
+      "prompt": "This time `b` is a copy of `a`, and then `b` is sorted. Has `a` changed?",
+      "aside": "`b` is a copy of `a`: new boxes, holding the same values. (Making a copy like this is up to you in DIY 5.)",
+      "right": "Two arrays: sorting the copy rearranges its own boxes and leaves the original exactly as it was.",
+      "why": {
+        "sortChangesA": "`b` points at its own boxes. `Arrays.sort(b)` rearranges those, and `a`'s array is a different object, so it keeps its order."
+      }
+    }
+  ]
+}

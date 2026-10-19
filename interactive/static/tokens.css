@@ -1,0 +1,10 @@
+/* Colours and motion shared by the animations, puzzles and journey. The lab pages'
+   own palette (--paper, --ink, --blue, --orange, ...) comes from the page; these are the
+   accents the interactive parts add. */
+:root {
+  --pass: #2E7D4F;
+  --accent-teal: #0E7C86; --accent-purple: #7B4FBF; --accent-pink: #C2366E;
+  --accent-gold: #E2A200; --accent-gold-ink: #7A5600; --accent-green: #2E7D4F;
+  --accent-red: #C62D37;
+  --spring: cubic-bezier(.34, 1.56, .64, 1); --glide: cubic-bezier(.45, 0, .25, 1);
+}

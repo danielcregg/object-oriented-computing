@@ -1,0 +1,114 @@
+{
+  "id": "play-8",
+  "section": 8,
+  "type": "method",
+  "title": "Inside the method",
+  "intro": "Passing an array to a method passes a copy of the arrow, not a copy of the boxes. Predict what the caller's array holds once each method has run.",
+  "arrays": [
+    {
+      "name": "counts",
+      "elem": "int",
+      "values": [
+        3,
+        5,
+        8
+      ]
+    },
+    {
+      "name": "counts",
+      "elem": "int",
+      "values": [
+        2,
+        7,
+        4
+      ]
+    },
+    {
+      "name": "counts",
+      "elem": "int",
+      "values": [
+        6,
+        1,
+        9
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "method": {
+        "name": "addOne",
+        "kind": "mutate",
+        "op": "add",
+        "by": 1,
+        "code": [
+          "static void addOne(int[] arr) {",
+          "    for (int i = 0; i < arr.length; i++) {",
+          "        arr[i] = arr[i] + 1;",
+          "    }",
+          "}"
+        ]
+      },
+      "call": "addOne(counts);",
+      "right": "`arr` and `{name}` are two arrows to one array, so the caller sees the change: `{name}` is now `{result}`.",
+      "why": "`arr` holds a copy of the arrow in `{name}`, so both point at the same array. `arr[i] = arr[i] + 1` writes into those boxes, and `{name}` sees every change."
+    },
+    {
+      "method": {
+        "name": "squares",
+        "kind": "fresh",
+        "op": "square",
+        "code": [
+          "static int[] squares(int[] arr) {",
+          "    int[] result = new int[arr.length];",
+          "    for (int i = 0; i < arr.length; i++) {",
+          "        result[i] = arr[i] * arr[i];",
+          "    }",
+          "    return result;",
+          "}"
+        ]
+      },
+      "call": "int[] sq = squares(counts);",
+      "right": "`{name}` is still `{result}`. The squares went into a new array, which came back as the return value and now sits in `sq`.",
+      "why": "`squares` writes only into `result`, a new array made with `new int[arr.length]`. It reads `arr`'s boxes but never writes to them, so `{name}` is untouched."
+    },
+    {
+      "method": {
+        "name": "zeroFirst",
+        "kind": "mutate",
+        "op": "setFirst",
+        "value": 0,
+        "code": [
+          "static void zeroFirst(int[] arr) {",
+          "    arr[0] = 0;",
+          "}"
+        ]
+      },
+      "call": "zeroFirst(counts);",
+      "right": "Even one write through `arr` changes the caller's array: `{name}` is now `{result}`.",
+      "why": "One assignment through the parameter is enough: `arr[0] = 0` writes into the box that `{name}[0]` names too, because `arr` and `{name}` point at the same array."
+    },
+    {
+      "method": {
+        "name": "replace",
+        "kind": "reassign",
+        "op": "setFirst",
+        "value": 99,
+        "code": [
+          "static void replace(int[] arr) {",
+          "    arr = new int[arr.length];",
+          "    arr[0] = 99;",
+          "}"
+        ]
+      },
+      "call": "replace(counts);",
+      "options": [
+        "before",
+        "after",
+        "fresh"
+      ],
+      "prompt": "The twist: this method points its parameter somewhere new. What does `{name}` hold after the call?",
+      "right": "Moving the parameter's arrow never moves the caller's: `{name}` is still `{result}`, and the new array is thrown away when the method ends.",
+      "why": "`arr = new int[arr.length]` points the parameter at a brand-new array, so `arr[0] = 99` writes into that one. `{name}` still points at the original."
+    }
+  ]
+}

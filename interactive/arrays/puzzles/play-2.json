@@ -1,0 +1,143 @@
+{
+  "id": "play-2",
+  "section": 2,
+  "type": "loop",
+  "title": "Be the loop",
+  "intro": "You are the counting loop. Before every pass you check the loop's condition: keep going while it is true, and stop the moment it is false.",
+  "rounds": [
+    {
+      "arrays": [
+        {
+          "name": "laps",
+          "elem": "int",
+          "values": [
+            7,
+            3,
+            9,
+            4,
+            6
+          ]
+        },
+        {
+          "name": "steps",
+          "elem": "int",
+          "values": [
+            12,
+            5,
+            8,
+            21,
+            3
+          ]
+        },
+        {
+          "name": "goals",
+          "elem": "int",
+          "values": [
+            2,
+            0,
+            4,
+            1,
+            3
+          ]
+        }
+      ],
+      "prompt": "Run the loop over `{name}`: check the condition, let the body run, then press `i++`.",
+      "right": "`{length} < {length}` is false, so the loop ends. Every index from 0 to {last} was visited exactly once.",
+      "why": {
+        "early": "`{i} < {length}` is still true, so the loop isn't finished: stopping here would skip {missed}.",
+        "late": "`{i} < {length}` is false. Run the body now and it reads `{name}[{i}]`, a box that doesn't exist: an `ArrayIndexOutOfBoundsException`. A length-{length} array has indexes 0 to {last}."
+      }
+    },
+    {
+      "arrays": [
+        {
+          "name": "notes",
+          "elem": "String",
+          "values": [
+            "do",
+            "re",
+            "mi",
+            "fa",
+            "sol",
+            "la"
+          ]
+        },
+        {
+          "name": "sizes",
+          "elem": "String",
+          "values": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "XXL"
+          ]
+        }
+      ],
+      "start": 3,
+      "prompt": "The first {start} passes have run. Take over at `i = {start}` and finish the loop over `{name}`.",
+      "right": "The loop stops at `i = {length}` without running the body, so it only ever reads indexes 0 to {last}: `<` keeps every read inside the array.",
+      "why": {
+        "early": "`{i} < {length}` is still true: the loop goes on, and stopping here would skip {missed}.",
+        "late": "`{i} < {length}` is false. One more pass would read `{name}[{i}]`, one box past the end, and the program would crash with an `ArrayIndexOutOfBoundsException`."
+      }
+    },
+    {
+      "type": "pick",
+      "arrays": [
+        {
+          "name": "codes",
+          "elem": "int",
+          "values": [
+            41,
+            17,
+            88,
+            23,
+            65,
+            30
+          ]
+        },
+        {
+          "name": "floors",
+          "elem": "int",
+          "values": [
+            3,
+            11,
+            7,
+            14,
+            2,
+            9
+          ]
+        },
+        {
+          "name": "pins",
+          "elem": "int",
+          "values": [
+            52,
+            8,
+            36,
+            71,
+            19
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "index": 0
+        },
+        {
+          "index": "last"
+        },
+        {
+          "index": 2
+        }
+      ],
+      "right": "`{name}[0]` is the first box and `{name}[{name}.length - 1]` the last: the indexes run from 0 to {last}.",
+      "why": {
+        "click": "That one is `{clicked}`. Indexes count from 0 at the first box, so `{expr}` is the box {index} steps along from the start.",
+        "last": "That one is `{clicked}`. `{name}.length` is {length}, so `{name}.length - 1` is {last}: the last box, because the first one is index 0."
+      }
+    }
+  ]
+}

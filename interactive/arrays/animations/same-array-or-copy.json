@@ -1,0 +1,184 @@
+{
+  "id": "same-array-or-copy",
+  "title": "Same array or a copy?",
+  "segments": [
+    {
+      "example": "CompareArrays",
+      "extra": false,
+      "title": "Two arrays with the same values",
+      "code": [
+        "int[] a = {1, 2, 3};",
+        "int[] b = {1, 2, 3};",
+        "System.out.println(\"a == b: \" + (a == b));",
+        "System.out.println(\"Arrays.equals(a, b): \" + Arrays.equals(a, b));"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`a` holds an arrow to a new array {1, 2, 3}.",
+          "vars": [{"name": "a", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}]
+        },
+        {
+          "line": 2,
+          "caption": "`b` gets a second, separate array with the same values. Two arrows, two arrays.",
+          "vars": [{"name": "a", "ref": "A"}, {"name": "b", "ref": "B"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}, {"id": "B", "values": ["1", "2", "3"]}]
+        },
+        {
+          "line": 3,
+          "caption": "`==` compares identity: do both arrows point at the same array? They point at two different arrays, so `a == b` is `false`.",
+          "print": "a == b: false\n",
+          "vars": [{"name": "a", "ref": "A"}, {"name": "b", "ref": "B"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}, {"id": "B", "values": ["1", "2", "3"]}],
+          "compare": [{"a": {"var": "a"}, "b": {"var": "b"}, "same": false}]
+        },
+        {
+          "line": 4,
+          "caption": "`Arrays.equals` compares contents instead: same length, then box by box. Box 0: 1 and 1.",
+          "vars": [{"name": "a", "ref": "A"}, {"name": "b", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["1", "2", "3"], "highlight": [0]},
+            {"id": "B", "values": ["1", "2", "3"], "highlight": [0]}
+          ],
+          "compare": [{"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true}]
+        },
+        {
+          "line": 4,
+          "caption": "Box 1: 2 and 2.",
+          "vars": [{"name": "a", "ref": "A"}, {"name": "b", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["1", "2", "3"], "highlight": [1]},
+            {"id": "B", "values": ["1", "2", "3"], "highlight": [1]}
+          ],
+          "compare": [
+            {"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true},
+            {"a": {"array": "A", "index": 1}, "b": {"array": "B", "index": 1}, "same": true}
+          ]
+        },
+        {
+          "line": 4,
+          "caption": "Box 2: 3 and 3. Every box matches, so `Arrays.equals(a, b)` is `true`.",
+          "print": "Arrays.equals(a, b): true\n",
+          "vars": [{"name": "a", "ref": "A"}, {"name": "b", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["1", "2", "3"], "highlight": [2]},
+            {"id": "B", "values": ["1", "2", "3"], "highlight": [2]}
+          ],
+          "compare": [
+            {"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true},
+            {"a": {"array": "A", "index": 1}, "b": {"array": "B", "index": 1}, "same": true},
+            {"a": {"array": "A", "index": 2}, "b": {"array": "B", "index": 2}, "same": true}
+          ]
+        }
+      ]
+    },
+    {
+      "example": "CloneArray",
+      "extra": false,
+      "title": "clone() makes a second array",
+      "code": [
+        "int[] original = {1, 2, 3};",
+        "int[] clone = original.clone();",
+        "clone[0] = 10;",
+        "System.out.println(\"Original array: \" + java.util.Arrays.toString(original));",
+        "System.out.println(\"Cloned array: \" + java.util.Arrays.toString(clone));"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`original` points at a new array {1, 2, 3}.",
+          "vars": [{"name": "original", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}]
+        },
+        {
+          "line": 2,
+          "caption": "`clone()` builds a brand-new array and copies the values into it. `clone` points at the new one.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "clone", "ref": "B"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}, {"id": "B", "values": ["1", "2", "3"]}],
+          "flow": [
+            {"from": {"array": "A", "index": 0}, "to": {"array": "B", "index": 0}, "text": "1"},
+            {"from": {"array": "A", "index": 1}, "to": {"array": "B", "index": 1}, "text": "2"},
+            {"from": {"array": "A", "index": 2}, "to": {"array": "B", "index": 2}, "text": "3"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "`clone[0] = 10` follows `clone`'s arrow and changes box 0 of the copy. `original`'s array is not touched.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "clone", "ref": "B"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}, {"id": "B", "values": ["10", "2", "3"], "highlight": [0]}]
+        },
+        {
+          "line": 4,
+          "caption": "`Arrays.toString` lists the boxes of `original`'s array: still 1, 2, 3.",
+          "print": "Original array: [1, 2, 3]\n",
+          "from": {"array": "A"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "clone", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["1", "2", "3"], "highlight": [0, 1, 2]},
+            {"id": "B", "values": ["10", "2", "3"]}
+          ]
+        },
+        {
+          "line": 5,
+          "caption": "The copy has the change. Two arrays, so changing one leaves the other alone.",
+          "print": "Cloned array: [10, 2, 3]\n",
+          "from": {"array": "B"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "clone", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["1", "2", "3"]},
+            {"id": "B", "values": ["10", "2", "3"], "highlight": [0, 1, 2]}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if you copy the variable instead? The aliasing trap",
+      "code": [
+        "int[] mine = {1, 2, 3};",
+        "int[] yours = mine;",
+        "yours[0] = 99;",
+        "System.out.println(mine[0]);",
+        "System.out.println(mine == yours);"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`mine` points at a new array {1, 2, 3}.",
+          "vars": [{"name": "mine", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}]
+        },
+        {
+          "line": 2,
+          "caption": "`yours = mine` copies the arrow, not the boxes. Two names, two arrows, ONE array.",
+          "vars": [{"name": "mine", "ref": "A"}, {"name": "yours", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["1", "2", "3"]}]
+        },
+        {
+          "line": 3,
+          "caption": "`yours[0] = 99` follows `yours`'s arrow into the only array there is.",
+          "vars": [{"name": "mine", "ref": "A"}, {"name": "yours", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["99", "2", "3"], "highlight": [0]}]
+        },
+        {
+          "line": 4,
+          "caption": "`mine[0]` follows `mine`'s arrow to that same box, so it prints 99, not 1.",
+          "print": "99\n",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "mine", "ref": "A"}, {"name": "yours", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["99", "2", "3"], "highlight": [0]}]
+        },
+        {
+          "line": 5,
+          "caption": "`==` compares the arrows. Both point at the same array, so `mine == yours` is `true`.",
+          "print": "true\n",
+          "vars": [{"name": "mine", "ref": "A"}, {"name": "yours", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["99", "2", "3"]}],
+          "compare": [{"a": {"var": "mine"}, "b": {"var": "yours"}, "same": true}]
+        }
+      ]
+    }
+  ]
+}

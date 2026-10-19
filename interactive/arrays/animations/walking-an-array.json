@@ -1,0 +1,301 @@
+{
+  "id": "walking-an-array",
+  "title": "Walking an array",
+  "segments": [
+    {
+      "example": "ArrayIteration",
+      "extra": false,
+      "title": "First and last by index, then two loops",
+      "code": [
+        "int[] numbers = {5, 10, 15, 20};",
+        "System.out.println(\"First element: \" + numbers[0]);",
+        "System.out.println(\"Last element: \" + numbers[numbers.length - 1]);",
+        "System.out.println(\"Using traditional for loop:\");",
+        "for (int i = 0; i < numbers.length; i++) {",
+        "    System.out.println(\"Element at index \" + i + \": \" + numbers[i]);",
+        "}",
+        "System.out.println(\"Using enhanced for loop:\");",
+        "for (int num : numbers) {",
+        "    System.out.println(num);",
+        "}"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`numbers` holds a reference: an arrow to a new array of four boxes. Its indexes run from 0 to 3.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        },
+        {
+          "line": 2,
+          "caption": "`numbers[0]` follows the arrow to box 0, the first element: 5.",
+          "print": "First element: 5\n",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [0]}]
+        },
+        {
+          "line": 3,
+          "caption": "`numbers.length` is 4, so `numbers.length - 1` is 3: the index of the last box, which holds 20.",
+          "print": "Last element: 20\n",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [3], "ruler": "length 4"}]
+        },
+        {
+          "line": 4,
+          "caption": "A heading line, then the counting loop.",
+          "print": "Using traditional for loop:\n",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        },
+        {
+          "line": 5,
+          "caption": "`int i = 0` starts the counter at the first box. The condition `i < numbers.length` is `0 < 4`: true, so the body runs.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "0"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"0": "i"}}]
+        },
+        {
+          "line": 6,
+          "caption": "`numbers[i]` is `numbers[0]`, which holds 5.",
+          "print": "Element at index 0: 5\n",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "0"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [0], "marks": {"0": "i"}}]
+        },
+        {
+          "line": 5,
+          "caption": "`i++` makes `i` 1. Check again: `1 < 4` is true.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "1"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"1": "i"}}]
+        },
+        {
+          "line": 6,
+          "caption": "Now `numbers[i]` is `numbers[1]`: 10. The same line of code reads a different box each time.",
+          "print": "Element at index 1: 10\n",
+          "from": {"array": "A", "index": 1},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "1"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [1], "marks": {"1": "i"}}]
+        },
+        {
+          "line": 5,
+          "caption": "`i` is 2. `2 < 4` is true.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "2"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"2": "i"}}]
+        },
+        {
+          "line": 6,
+          "caption": "`numbers[2]` holds 15.",
+          "print": "Element at index 2: 15\n",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "2"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [2], "marks": {"2": "i"}}]
+        },
+        {
+          "line": 5,
+          "caption": "`i` is 3. `3 < 4` is true: 3 is the last index.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "3"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"3": "i"}}]
+        },
+        {
+          "line": 6,
+          "caption": "`numbers[3]` holds 20.",
+          "print": "Element at index 3: 20\n",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "3"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [3], "marks": {"3": "i"}}]
+        },
+        {
+          "line": 5,
+          "caption": "`i` is 4. `4 < 4` is false, so the loop ends without ever touching index 4, a box that does not exist.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "4"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        },
+        {
+          "line": 8,
+          "caption": "The loop is over and `i` is gone: it only existed inside the loop.",
+          "print": "Using enhanced for loop:\n",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        },
+        {
+          "line": 9,
+          "caption": "The enhanced for loop copies each element into `num`, front to back. First `num` is 5.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "5"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [0]}],
+          "flow": [{"from": {"array": "A", "index": 0}, "to": {"var": "num"}, "text": "5"}]
+        },
+        {
+          "line": 10,
+          "caption": "Prints `num`. No index to write, and none to get wrong.",
+          "print": "5\n",
+          "from": {"var": "num"},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "5"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [0]}]
+        },
+        {
+          "line": 9,
+          "caption": "Next element: `num` is now 10.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "10"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [1]}],
+          "flow": [{"from": {"array": "A", "index": 1}, "to": {"var": "num"}, "text": "10"}]
+        },
+        {
+          "line": 10,
+          "caption": "Prints 10.",
+          "print": "10\n",
+          "from": {"var": "num"},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "10"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [1]}]
+        },
+        {
+          "line": 9,
+          "caption": "`num` is 15.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "15"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [2]}],
+          "flow": [{"from": {"array": "A", "index": 2}, "to": {"var": "num"}, "text": "15"}]
+        },
+        {
+          "line": 10,
+          "caption": "Prints 15.",
+          "print": "15\n",
+          "from": {"var": "num"},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "15"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [2]}]
+        },
+        {
+          "line": 9,
+          "caption": "`num` is 20, the last element.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "20"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [3]}],
+          "flow": [{"from": {"array": "A", "index": 3}, "to": {"var": "num"}, "text": "20"}]
+        },
+        {
+          "line": 10,
+          "caption": "Prints 20.",
+          "print": "20\n",
+          "from": {"var": "num"},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "num", "value": "20"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "highlight": [3]}]
+        },
+        {
+          "line": 9,
+          "caption": "No elements left, so the loop ends: the same values as the counting loop, without an index.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"]}]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if the condition were i <= numbers.length?",
+      "code": [
+        "int[] numbers = {5, 10, 15, 20};",
+        "for (int i = 0; i <= numbers.length; i++) {",
+        "    System.out.println(\"Element at index \" + i + \": \" + numbers[i]);",
+        "}"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "The same four boxes, so the last index is still `numbers.length - 1`, which is 3.",
+          "vars": [{"name": "numbers", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "ruler": "length 4"}]
+        },
+        {
+          "line": 2,
+          "caption": "This time the condition is `i <= numbers.length`. `0 <= 4` is true.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "0"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"0": "i"}, "ruler": "length 4"}]
+        },
+        {
+          "line": 3,
+          "caption": "Index 0 prints as before.",
+          "print": "Element at index 0: 5\n",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "0"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["5", "10", "15", "20"],
+              "highlight": [0],
+              "marks": {"0": "i"},
+              "ruler": "length 4"
+            }
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "`i++`, and `1 <= 4` is true: index 1 prints.",
+          "print": "Element at index 1: 10\n",
+          "from": {"array": "A", "index": 1},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "1"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["5", "10", "15", "20"],
+              "highlight": [1],
+              "marks": {"1": "i"},
+              "ruler": "length 4"
+            }
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "`2 <= 4` is true: index 2 prints.",
+          "print": "Element at index 2: 15\n",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "2"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["5", "10", "15", "20"],
+              "highlight": [2],
+              "marks": {"2": "i"},
+              "ruler": "length 4"
+            }
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "`3 <= 4` is true: index 3 prints. So far, exactly like the real loop.",
+          "print": "Element at index 3: 20\n",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "3"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["5", "10", "15", "20"],
+              "highlight": [3],
+              "marks": {"3": "i"},
+              "ruler": "length 4"
+            }
+          ]
+        },
+        {
+          "line": 2,
+          "caption": "`i` is 4, and `4 <= 4` is true! The `<=` lets `i` reach `numbers.length`, one past the last box.",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "4"}],
+          "arrays": [{"id": "A", "values": ["5", "10", "15", "20"], "marks": {"4": "i"}, "ghost": 4, "ruler": "length 4"}]
+        },
+        {
+          "line": 3,
+          "caption": "`numbers[4]` asks for a box that does not exist: the last index is `numbers.length - 1`, which is 3. Java stops the program with an exception.",
+          "error": "ArrayIndexOutOfBoundsException: Index 4 out of bounds for length 4",
+          "vars": [{"name": "numbers", "ref": "A"}, {"name": "i", "value": "4"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["5", "10", "15", "20"],
+              "highlight": [4],
+              "marks": {"4": "i"},
+              "ghost": 4,
+              "ruler": "length 4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

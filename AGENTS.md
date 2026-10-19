@@ -284,7 +284,24 @@ instructions, scripts, workflows and the practice bank alone.
 - `scripts/build_lab_pages.py` — renders each week's lab README as a
   read-only styled page at `/labs/<labUrl folder>/` (CI runs it; needs
   `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and
-  FAILS if it is missing.
+  FAILS if it is missing. A lab with an `interactive/<labUrl folder>/`
+  folder also gets that layer on its page (below).
+- `interactive/` — the optional interactive layer of a lab PAGE:
+  step-through animations, puzzles and a progress journey (a ring per
+  section going red to green, badges), drawn by the plain-JS engines in
+  `interactive/static/` from per-lab JSON. Site only: it is not course
+  content, so the sync never ships it, and the README a student follows is
+  unchanged. A task animation shows DIY K's RESULT and never its code (no
+  code panel, captions in words), so it cannot hand over a solution; a
+  section animation replays an example the README already shows; a puzzle
+  drills the section's idea, never a DIY answer. Progress lives only in
+  the student's browser. Layout, format and preview: `interactive/README.md`.
+- `scripts/check_interactive.py` — CI gate for that layer: every placement
+  names a real README heading, every file is used, journey labels match the
+  DIYs, a task animation shows no code and ends on exactly its DIY's
+  **Expected output**, and a section animation prints exactly its
+  example's Output. So editing an expected output or renaming a heading in
+  a lab README fails the build until the animation is updated too.
 - `scripts/verify_snippets.py` — compiles every ```java fence in every
   lecture AND every lab README with javac, wrapping bare declarations or statements
   as needed. A fence
@@ -457,6 +474,7 @@ Before any push, the same gates CI runs (all must print nothing / exit 0):
     python scripts/check_practice_bank.py # practice bank is well-formed
     python scripts/check_coding_bank.py   # coding bank is well-formed
     python scripts/check_schedule.py      # week folders agree with the schedule
+    python scripts/check_interactive.py   # lab-page animations match the READMEs
     find lectures-and-labs -name '*.java' -print0 | xargs -0 javac -d /tmp/labs-classes   # labs compile
 
 Local preview of a deck while editing: `npm run preview` (see above).

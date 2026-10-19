@@ -1,0 +1,47 @@
+{
+  "id": "play-7",
+  "section": 7,
+  "type": "pick",
+  "title": "Grid navigator",
+  "intro": "A 2D array is an array of rows. `grid[r][c]` means row `r` first, then column `c`, both counted from 0.",
+  "arrays": [
+    {"name": "grid", "elem": "int", "rows": [[3, 8, 1, 6], [7, 2, 9, 4], [5, 0, 6, 2]]},
+    {"name": "seats", "elem": "int", "rows": [[12, 40, 7, 25], [31, 9, 18, 3], [6, 27, 14, 50]]}
+  ],
+  "rounds": [
+    {
+      "tasks": [{"random": true}, {"random": true}, {"random": true}, {"random": true}],
+      "right": "Row first, then column: `{name}[r][c]` goes down to row `r`, then along to column `c`.",
+      "why": {
+        "click": "That's `{clicked}`: row {cr}, column {cc}. The first index picks the row (count down from 0), the second picks the column (count across from 0).",
+        "swap": "That's `{clicked}`: row {cr}, column {cc}, so row and column are swapped. The first index is always the row."
+      }
+    },
+    {
+      "tasks": [{"row": "last", "col": 0}, {"row": 0, "col": "last"}, {"ask": "rows"}],
+      "right": "`{name}.length` counts the rows and `{name}[0].length` the columns in row 0. Subtract 1 from either for its last index.",
+      "why": {
+        "click": "That's `{clicked}`: row {cr}, column {cc}. The first index picks the row, the second the column.",
+        "swap": "That's `{clicked}`: row and column are swapped. The first index is always the row.",
+        "last": "That's `{clicked}`. `{name}.length` is the number of rows and `{name}[0].length` the number of columns: subtract 1 from either to get the last index.",
+        "rows": "`{name}` is an array of rows, so `{name}.length` counts the rows. Each row is a separate array, with its own `.length`."
+      }
+    },
+    {
+      "trace": true,
+      "arrays": [
+        {"name": "tiles", "elem": "char", "rows": [["A", "R", "R"], ["A", "Y", "S"]]},
+        {"name": "tiles", "elem": "char", "rows": [["N", "E", "S"], ["T", "E", "D"]]},
+        {"name": "tiles", "elem": "char", "rows": [["C", "O", "L"], ["U", "M", "N"]]},
+        {"name": "tiles", "elem": "char", "rows": [["M", "A", "T"], ["R", "I", "X"]]}
+      ],
+      "right": "Row by row, left to right: the nested loops read `{name}` like a page, and the {cells} letters spell {word}.",
+      "why": {
+        "visited": "`{clicked}` has had its turn already: the loops never go back.",
+        "skip": "Not that one yet: `c++` moves one column at a time along row {r}.",
+        "column": "The inner loop changes `c`, not `r`: it runs along the row first, and `r` only moves on when `c` reaches the end of the row.",
+        "jump": "The outer loop hands out one row at a time, and the inner loop walks `c` along that row from 0. Which row is `r` on, and where is `c`?"
+      }
+    }
+  ]
+}

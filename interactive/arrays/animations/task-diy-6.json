@@ -1,0 +1,123 @@
+{
+  "id": "task-diy-6",
+  "task": 6,
+  "title": "DIY 6, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Same array, or the same contents?",
+      "steps": [
+        {
+          "caption": "An array of three strings.",
+          "vars": [{"name": "original", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]}]
+        },
+        {
+          "caption": "Cloning builds a second array with the same values, and cloned gets its own arrow to the new array.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]}
+          ],
+          "flow": [
+            {"from": {"array": "A", "index": 0}, "to": {"array": "B", "index": 0}, "text": "\"Apple\""},
+            {"from": {"array": "A", "index": 1}, "to": {"array": "B", "index": 1}, "text": "\"Banana\""},
+            {"from": {"array": "A", "index": 2}, "to": {"array": "B", "index": 2}, "text": "\"Cherry\""}
+          ]
+        },
+        {
+          "caption": "Do both arrows point at the same array? No: there are two arrays, so this line ends in false.",
+          "print": "original == cloned: false\n",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]}
+          ],
+          "compare": [{"a": {"var": "original"}, "b": {"var": "cloned"}, "same": false}]
+        },
+        {
+          "caption": "Comparing contents goes box by box instead. \"Apple\" and \"Apple\": the same.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [0]},
+            {"id": "B", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [0]}
+          ],
+          "compare": [{"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true}]
+        },
+        {
+          "caption": "\"Banana\" matches too.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [1]},
+            {"id": "B", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [1]}
+          ],
+          "compare": [
+            {"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true},
+            {"a": {"array": "A", "index": 1}, "b": {"array": "B", "index": 1}, "same": true}
+          ]
+        },
+        {
+          "caption": "Every box matches, so the contents check comes out true.",
+          "print": "Arrays.equals(original, cloned): true\n",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [2]},
+            {"id": "B", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [2]}
+          ],
+          "compare": [
+            {"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": true},
+            {"a": {"array": "A", "index": 1}, "b": {"array": "B", "index": 1}, "same": true},
+            {"a": {"array": "A", "index": 2}, "b": {"array": "B", "index": 2}, "same": true}
+          ]
+        },
+        {
+          "caption": "Change the first element of the clone to \"Avocado\". Only the clone changes: the original still starts with \"Apple\".",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Avocado\"", "\"Banana\"", "\"Cherry\""], "highlight": [0]}
+          ]
+        },
+        {
+          "caption": "Print both arrays as lists, labelled as shown.",
+          "print": "Original array: [Apple, Banana, Cherry]\n",
+          "from": {"array": "A"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Avocado\"", "\"Banana\"", "\"Cherry\""]}
+          ]
+        },
+        {
+          "caption": "The clone's list shows the new first element.",
+          "print": "Cloned array: [Avocado, Banana, Cherry]\n",
+          "from": {"array": "B"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Avocado\"", "\"Banana\"", "\"Cherry\""]}
+          ]
+        },
+        {
+          "caption": "Compare the contents again: the first boxes now differ, so this time the answer is false.",
+          "print": "Arrays.equals(original, cloned): false\n",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""], "highlight": [0]},
+            {"id": "B", "values": ["\"Avocado\"", "\"Banana\"", "\"Cherry\""], "highlight": [0]}
+          ],
+          "compare": [{"a": {"array": "A", "index": 0}, "b": {"array": "B", "index": 0}, "same": false}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "cloned", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["\"Apple\"", "\"Banana\"", "\"Cherry\""]},
+            {"id": "B", "values": ["\"Avocado\"", "\"Banana\"", "\"Cherry\""]}
+          ]
+        }
+      ]
+    }
+  ]
+}

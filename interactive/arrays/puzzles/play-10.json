@@ -1,0 +1,55 @@
+{
+  "id": "play-10",
+  "section": 10,
+  "type": "search",
+  "title": "Stop the search",
+  "intro": "The search pattern walks the array and returns the moment it finds its target. It returns -1 only once every box has said no. You are the search.",
+  "rounds": [
+    {
+      "find": "present",
+      "arrays": [
+        {"name": "rivers", "elem": "String", "values": ["Lee", "Moy", "Suir", "Nore", "Erne"]},
+        {"name": "rivers", "elem": "String", "values": ["Bann", "Inny", "Deel", "Fane", "Dee"]},
+        {"name": "rivers", "elem": "String", "values": ["Suir", "Erne", "Lee", "Bann", "Moy"]}
+      ],
+      "right": "Found at index {result} after {comparisons} comparisons: `return` ended the loop the moment it matched, so the boxes after it were never looked at.",
+      "why": {
+        "notMatch": "`{value}.equals({target})` is `false`: not this one, so the loop keeps walking.",
+        "missed": "`{value}.equals({target})` is `true`, so the search returns `i` right here, without looking any further.",
+        "early": "`-1` means every box said no, but the boxes from index {i} to {last} haven't been checked yet.",
+        "end": "`i` is {length}, and `{length} < {length}` is false: the loop is over."
+      }
+    },
+    {
+      "find": "absent",
+      "arrays": [
+        {"name": "rivers", "elem": "String", "values": ["Nore", "Fane", "Lee", "Inny", "Erne"]},
+        {"name": "rivers", "elem": "String", "values": ["Moy", "Dee", "Bann", "Suir", "Deel"]}
+      ],
+      "decoys": ["Boyne", "Corrib", "Shannon", "Liffey", "Barrow"],
+      "right": "All {length} boxes said no: {comparisons} comparisons, and only then `return -1`. No index is ever -1, which is why it can mean \"not found\".",
+      "why": {
+        "notMatch": "`{value}.equals({target})` is `false`: not this one, so the loop keeps walking.",
+        "missed": "`{value}.equals({target})` is `true`, so the search returns `i` right here.",
+        "early": "Not yet: `-1` means every box said no, and the boxes from index {i} to {last} haven't been checked.",
+        "end": "`i` is {length}, and `{length} < {length}` is false: the loop is over and nothing matched. Only one line is left to run."
+      }
+    },
+    {
+      "find": "first",
+      "arrays": [
+        {"name": "rivers", "elem": "String", "values": ["Lee", "Inny", "Fane", "Inny", "Moy"]},
+        {"name": "rivers", "elem": "String", "values": ["Bann", "Suir", "Deel", "Suir", "Nore"]},
+        {"name": "rivers", "elem": "String", "values": ["Erne", "Dee", "Moy", "Bann", "Moy"]}
+      ],
+      "prompt": "This time {target} is in `{name}` twice. You are `find({name}, {target})`: stop at the right moment.",
+      "right": "`return {result}`: the first match wins, because `return` ends the loop right there. The second {target} further along is never looked at.",
+      "why": {
+        "notMatch": "`{value}.equals({target})` is `false`: not this one, so the loop keeps walking.",
+        "missed": "`{value}.equals({target})` is `true`, so the search returns `i` right here. It never gets as far as the second one.",
+        "early": "`-1` means every box said no, but the boxes from index {i} to {last} haven't been checked yet.",
+        "end": "`i` is {length}, and `{length} < {length}` is false: the loop is over."
+      }
+    }
+  ]
+}

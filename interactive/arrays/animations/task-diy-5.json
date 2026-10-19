@@ -1,0 +1,78 @@
+{
+  "id": "task-diy-5",
+  "task": 5,
+  "title": "DIY 5, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Copy first, then sort only the copy",
+      "steps": [
+        {
+          "caption": "The original array: 5, 3, 2, 4, 1.",
+          "vars": [{"name": "original", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["5", "3", "2", "4", "1"]}]
+        },
+        {
+          "caption": "Make a new array of the same length. A new int array starts with 0 in every box.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"]},
+            {"id": "B", "values": ["0", "0", "0", "0", "0"], "keys": ["k5", "k3", "k2", "k4", "k1"]}
+          ]
+        },
+        {
+          "caption": "Copy every value across, box for box. Now two arrays hold the same values.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"]},
+            {"id": "B", "values": ["5", "3", "2", "4", "1"], "keys": ["k5", "k3", "k2", "k4", "k1"]}
+          ],
+          "flow": [
+            {"from": {"array": "A", "index": 0}, "to": {"array": "B", "index": 0}, "text": "5"},
+            {"from": {"array": "A", "index": 1}, "to": {"array": "B", "index": 1}, "text": "3"},
+            {"from": {"array": "A", "index": 2}, "to": {"array": "B", "index": 2}, "text": "2"},
+            {"from": {"array": "A", "index": 3}, "to": {"array": "B", "index": 3}, "text": "4"},
+            {"from": {"array": "A", "index": 4}, "to": {"array": "B", "index": 4}, "text": "1"}
+          ]
+        },
+        {
+          "caption": "Sort the copy: its values slide into ascending order. The original does not move at all.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"], "note": "unchanged"},
+            {"id": "B", "values": ["1", "2", "3", "4", "5"], "keys": ["k1", "k2", "k3", "k4", "k5"]}
+          ]
+        },
+        {
+          "caption": "Print both arrays as lists, labelled as in the expected output.",
+          "print": "Original array: [5, 3, 2, 4, 1]\n",
+          "from": {"array": "A"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"], "note": "unchanged"},
+            {"id": "B", "values": ["1", "2", "3", "4", "5"], "keys": ["k1", "k2", "k3", "k4", "k5"]}
+          ]
+        },
+        {
+          "caption": "The sorted copy goes on the second line.",
+          "print": "Sorted copy: [1, 2, 3, 4, 5]\n",
+          "from": {"array": "B"},
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"], "note": "unchanged"},
+            {"id": "B", "values": ["1", "2", "3", "4", "5"], "keys": ["k1", "k2", "k3", "k4", "k5"]}
+          ]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "original", "ref": "A"}, {"name": "copy", "ref": "B"}],
+          "arrays": [
+            {"id": "A", "values": ["5", "3", "2", "4", "1"], "note": "unchanged"},
+            {"id": "B", "values": ["1", "2", "3", "4", "5"], "keys": ["k1", "k2", "k3", "k4", "k5"]}
+          ]
+        }
+      ]
+    }
+  ]
+}

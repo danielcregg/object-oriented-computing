@@ -1,0 +1,127 @@
+{
+  "id": "play-1",
+  "section": 1,
+  "type": "fill",
+  "title": "Fill the empty boxes",
+  "intro": "`new` builds the boxes, and Java never leaves one empty: every box starts at its type's default value. Pick the value each new array starts with.",
+  "shuffle": true,
+  "chips": [
+    {
+      "text": "0"
+    },
+    {
+      "text": "0.0"
+    },
+    {
+      "text": "false"
+    },
+    {
+      "text": "null"
+    },
+    {
+      "text": "\"\"",
+      "label": "\"\", an empty String"
+    },
+    {
+      "text": "' '",
+      "label": "' ', a space character"
+    },
+    {
+      "text": "'\\u0000'",
+      "label": "'\\u0000', the NUL character"
+    }
+  ],
+  "rounds": [
+    {
+      "elem": "int",
+      "names": [
+        "goals",
+        "votes",
+        "laps"
+      ],
+      "sizes": [
+        3,
+        5
+      ],
+      "right": "Numbers start at zero: every box of a new `int[]` holds `0`.",
+      "why": {
+        "0.0": "`0.0` is a `double`. An `int` box holds whole numbers, so its zero is plain `0`.",
+        "null": "`null` means \"no object\", and only a reference can hold it. `int` is a primitive type: its boxes hold numbers, and a number starts at zero.",
+        "*": "Only the primitive types get a zero-like default, and `int` is one of them: its boxes start at zero."
+      }
+    },
+    {
+      "elem": "boolean",
+      "names": [
+        "flags",
+        "seen",
+        "switches"
+      ],
+      "sizes": [
+        2,
+        3
+      ],
+      "right": "A new `boolean[]` is all `false`: nothing has been switched on yet.",
+      "why": {
+        "0": "Java's booleans are not numbers, so a `boolean` box can't hold `0`. Its zero-like default is one of the two values a boolean can hold.",
+        "null": "`null` is only for references, and `boolean` is a primitive type: its boxes hold `true` or `false`, and a new one starts as the one that means \"not yet\".",
+        "*": "A `boolean` box can only hold `true` or `false`, and a new one starts as `false`."
+      }
+    },
+    {
+      "elem": "String",
+      "names": [
+        "guests",
+        "titles",
+        "words"
+      ],
+      "sizes": [
+        2,
+        3
+      ],
+      "right": "`String` is an object type, so each box holds a reference, and a reference to nothing is `null`.",
+      "why": {
+        "\"\"": "An empty String is still an object, and `new String[{size}]` makes no objects at all: just {size} boxes for references. A reference to nothing is `null`.",
+        "*": "Only the primitive types get a zero-like default. `String` is an object type, so its boxes hold references (arrows), and every reference starts as `null`."
+      }
+    },
+    {
+      "elem": "double",
+      "names": [
+        "prices",
+        "times",
+        "weights"
+      ],
+      "sizes": [
+        2,
+        3
+      ],
+      "right": "A `double` starts at zero too, written `0.0`: that's how Java prints a double's zero.",
+      "why": {
+        "0": "Nearly: it is zero, but the box holds a `double`, and Java writes a double's zero with a decimal point.",
+        "null": "`null` is only for references, and `double` is a primitive type: its boxes hold numbers, and they start at zero.",
+        "*": "`double` is a primitive number type, so its boxes start at zero, written as a double."
+      }
+    },
+    {
+      "elem": "char",
+      "names": [
+        "initials",
+        "grades",
+        "keys"
+      ],
+      "sizes": [
+        2,
+        3
+      ],
+      "right": "A new `char` box holds `'\\u0000'`, the invisible NUL character. Print it and you see nothing at all; its number is 0.",
+      "why": {
+        "' '": "A space is a real character you can type (its number is 32). A new `char` box holds something less: the invisible character whose number is 0.",
+        "0": "Close: its number is 0, but the box holds a `char`, so its value is written as a character literal in single quotes.",
+        "\"\"": "`\"\"` is an empty String, an object. A `char` box holds one primitive character, and a new one holds the character whose number is 0.",
+        "null": "`null` is only for references, and `char` is a primitive type. Its default is a character: the one whose number is 0.",
+        "*": "A `char` box holds one character, and a new one starts as the invisible NUL character, `'\\u0000'`."
+      }
+    }
+  ]
+}

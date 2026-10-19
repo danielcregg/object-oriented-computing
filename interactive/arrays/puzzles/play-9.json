@@ -1,0 +1,116 @@
+{
+  "id": "play-9",
+  "section": 9,
+  "type": "champion",
+  "title": "Keep the crown",
+  "intro": "In the champion pattern the first value starts with the crown, and every later value challenges it: only a bigger one takes the crown. Today's values are Irish mountains, in metres.",
+  "unit": "m",
+  "items": [
+    [
+      "Carrauntoohil",
+      1039
+    ],
+    [
+      "Mount Brandon",
+      952
+    ],
+    [
+      "Lugnaquilla",
+      925
+    ],
+    [
+      "Slieve Donard",
+      850
+    ],
+    [
+      "Mweelrea",
+      814
+    ],
+    [
+      "Nephin",
+      806
+    ],
+    [
+      "Croagh Patrick",
+      764
+    ],
+    [
+      "Errigal",
+      751
+    ],
+    [
+      "Benbaun",
+      729
+    ],
+    [
+      "Ben Bulben",
+      526
+    ],
+    [
+      "Diamond Hill",
+      442
+    ],
+    [
+      "Knocknarea",
+      327
+    ]
+  ],
+  "rounds": [
+    {
+      "name": "heights",
+      "count": 5,
+      "right": "`highest` ends as {best}: {who} saw off every challenge after it took the crown.",
+      "why": {
+        "yes": "`{value} > {champ}` is false: {who} isn't higher, so the crown stays with {champName}. Only a bigger value takes it.",
+        "no": "`{value} > {champ}` is true: {who} is higher than {champName}, so it takes the crown."
+      }
+    },
+    {
+      "name": "heights",
+      "count": 6,
+      "right": "Six values, one champion: {who}, {best} {unit}. Each challenger only had to beat the champion so far, never the whole array.",
+      "why": {
+        "yes": "`{value} > {champ}` is false: {who} isn't higher, so the crown stays with {champName}.",
+        "no": "`{value} > {champ}` is true: {who} beats {champName}, so it takes the crown."
+      }
+    },
+    {
+      "start": "zero",
+      "arrays": [
+        {
+          "name": "temps",
+          "elem": "int",
+          "values": [
+            -4,
+            -9,
+            -2,
+            -7
+          ]
+        },
+        {
+          "name": "temps",
+          "elem": "int",
+          "values": [
+            -6,
+            -3,
+            -11,
+            -5
+          ]
+        },
+        {
+          "name": "temps",
+          "elem": "int",
+          "values": [
+            -8,
+            -12,
+            -1,
+            -6
+          ]
+        }
+      ],
+      "prompt": "The twist: winter on the summit, every temperature below zero, and this version starts `highest` at 0. What does it print?",
+      "right": "It prints 0, a temperature that isn't even in the array. Start the champion at `{name}[0]` and it would print {max}, the real highest.",
+      "why": "`highest` starts at `0`, and no temperature here beats 0, so the crown never moves. What is `highest` still holding at the end?"
+    }
+  ]
+}

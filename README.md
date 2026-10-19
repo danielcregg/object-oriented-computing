@@ -31,7 +31,9 @@ the markdown, push, and CI re-renders the HTML slides and a PDF, then
 publishes the site straight from the workflow, where each lecture keeps a
 topic address (`/arrays/`) whatever week it moves to. Labs are plain Java
 in the week's `<topic>_lab/` folder: a `README.md` with the instructions
-and a `Main.java` starter in `package weekNN.<topic>_lab`. Conventions and
+and a `Main.java` starter in `package weekNN.<topic>_lab`. A lab's page on
+the site can also carry animations, puzzles and a progress journey, built
+from [`interactive/`](interactive/README.md). Conventions and
 editing rules live in
 [`AGENTS.md`](AGENTS.md).
 

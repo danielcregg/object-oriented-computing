@@ -1,0 +1,101 @@
+{
+  "id": "task-diy-4",
+  "task": 4,
+  "title": "DIY 4, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Boxes that hold arrows to books",
+      "steps": [
+        {
+          "caption": "Two Book objects. Each one holds a title and an author.",
+          "vars": [],
+          "arrays": [],
+          "objects": [
+            {"id": "b1", "class": "Book", "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]]},
+            {"id": "b2", "class": "Book", "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]]}
+          ]
+        },
+        {
+          "caption": "The library array has 2 boxes. Each box holds an arrow to a Book, not the book itself.",
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}]}],
+          "objects": [
+            {"id": "b1", "class": "Book", "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]]},
+            {"id": "b2", "class": "Book", "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]]}
+          ]
+        },
+        {
+          "caption": "Visit box 0 and follow its arrow. Which two parts of this book do you need?",
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}], "highlight": [0]}],
+          "objects": [
+            {
+              "id": "b1",
+              "class": "Book",
+              "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]],
+              "highlight": true
+            },
+            {"id": "b2", "class": "Book", "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]]}
+          ]
+        },
+        {
+          "caption": "Ask the book for its title and its author, and print them with \" by \" in between.",
+          "print": "Dracula by Bram Stoker\n",
+          "from": {"object": "b1"},
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}], "highlight": [0]}],
+          "objects": [
+            {
+              "id": "b1",
+              "class": "Book",
+              "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]],
+              "highlight": true
+            },
+            {"id": "b2", "class": "Book", "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]]}
+          ]
+        },
+        {
+          "caption": "Next box, next arrow: the second book.",
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}], "highlight": [1]}],
+          "objects": [
+            {"id": "b1", "class": "Book", "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]]},
+            {
+              "id": "b2",
+              "class": "Book",
+              "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]],
+              "highlight": true
+            }
+          ]
+        },
+        {
+          "caption": "The same format for every book in the array.",
+          "print": "Emma by Jane Austen\n",
+          "from": {"object": "b2"},
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}], "highlight": [1]}],
+          "objects": [
+            {"id": "b1", "class": "Book", "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]]},
+            {
+              "id": "b2",
+              "class": "Book",
+              "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]],
+              "highlight": true
+            }
+          ]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "library", "ref": "L"}],
+          "arrays": [{"id": "L", "values": [{"ref": "b1"}, {"ref": "b2"}]}],
+          "objects": [
+            {"id": "b1", "class": "Book", "fields": [["title", "\"Dracula\""], ["author", "\"Bram Stoker\""]]},
+            {"id": "b2", "class": "Book", "fields": [["title", "\"Emma\""], ["author", "\"Jane Austen\""]]}
+          ]
+        }
+      ]
+    }
+  ]
+}

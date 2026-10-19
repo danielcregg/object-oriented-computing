@@ -1,0 +1,254 @@
+{
+  "id": "task-diy-1",
+  "task": 1,
+  "title": "DIY 1, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Defaults first, then values you choose",
+      "steps": [
+        {
+          "caption": "A char array of length 4, given no values. Java still fills every box: with the invisible NUL character.",
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            }
+          ]
+        },
+        {
+          "caption": "Printed as a character, NUL shows nothing at all. Its number is 0, the tag in each corner, and the number is what this exercise prints.",
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ],
+              "highlight": [0, 1, 2, 3]
+            }
+          ]
+        },
+        {
+          "caption": "Visit the boxes in order. Box 0 prints its number, 0, followed by a space.",
+          "print": "0 ",
+          "from": {"array": "A", "index": 0},
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ],
+              "highlight": [0]
+            }
+          ]
+        },
+        {
+          "caption": "Next box, same line: another 0 and a space.",
+          "print": "0 ",
+          "from": {"array": "A", "index": 1},
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ],
+              "highlight": [1]
+            }
+          ]
+        },
+        {
+          "caption": "Box 2: the same again.",
+          "print": "0 ",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ],
+              "highlight": [2]
+            }
+          ]
+        },
+        {
+          "caption": "Box 3, the last one: four zeros on one line.",
+          "print": "0 ",
+          "from": {"array": "A", "index": 3},
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ],
+              "highlight": [3]
+            }
+          ]
+        },
+        {
+          "caption": "Then end the line, so the next output starts on a fresh one.",
+          "print": "\n",
+          "vars": [{"name": "letters", "ref": "A"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            }
+          ]
+        },
+        {
+          "caption": "Next, a double array, created with its four values already in place.",
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"]}
+          ]
+        },
+        {
+          "caption": "Same pattern: each value, followed by a space.",
+          "print": "1.5 ",
+          "from": {"array": "B", "index": 0},
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"], "highlight": [0]}
+          ]
+        },
+        {
+          "caption": "The next value on the same line.",
+          "print": "2.5 ",
+          "from": {"array": "B", "index": 1},
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"], "highlight": [1]}
+          ]
+        },
+        {
+          "caption": "And the next.",
+          "print": "3.5 ",
+          "from": {"array": "B", "index": 2},
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"], "highlight": [2]}
+          ]
+        },
+        {
+          "caption": "The last value.",
+          "print": "4.5 ",
+          "from": {"array": "B", "index": 3},
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"], "highlight": [3]}
+          ]
+        },
+        {
+          "caption": "End this line too.",
+          "print": "\n",
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"]}
+          ]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "letters", "ref": "A"}, {"name": "values", "ref": "B"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": [
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"},
+                {"text": "NUL", "faint": true, "num": "0"}
+              ]
+            },
+            {"id": "B", "values": ["1.5", "2.5", "3.5", "4.5"]}
+          ]
+        }
+      ]
+    }
+  ]
+}

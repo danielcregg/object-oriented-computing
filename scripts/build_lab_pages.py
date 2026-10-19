@@ -16,13 +16,20 @@ exactly like deck code. ```text fences (Expected output) stay flat.
 mcq/README.md (the MCQ brief students read before each MCQ) is rendered
 the same way to OUTPUT_DIR/mcq/index.html, minus the copy banner: it is
 a page to read, not a lab to do.
+Labs with an `interactive/<labUrl folder>/lab.json` also get the interactive
+layer: a step-through animation of each section example it names and of every
+DIY task, a puzzle per section, and the journey (a progress map at the top).
+The engines (interactive/static/) and that lab's data are copied beside its
+page; labs without the folder are rendered exactly as before.
 Requires the `markdown` package (pip install markdown).
 
 Usage:
     python scripts/build_lab_pages.py [OUTPUT_DIR]     # default: build
 """
 import html
+import json
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -32,6 +39,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from schedule import load  # noqa: E402
 
 BRIEF = Path("mcq/README.md")
+INTERACTIVE = Path("interactive")
+DIY_RE = re.compile(r"^\s*### DIY (\d+):\s*(.+?)\s*$")
 # GitHub's "new repository" form, prefilled: this template, the student's own
 # account, Private already chosen. (The repo's own /generate link opens the
 # same form with no visibility chosen.)
@@ -164,8 +173,71 @@ def preprocess(md_text: str) -> str:
     return "\n".join(out)
 
 
+def add_task_animation_slots(md_text: str, tasks: list[dict]) -> str:
+    """Each DIY's task animation goes just before that DIY's `**Expected output**`."""
+    lines = md_text.split("\n")
+    for task in tasks:
+        heading = next((i for i, line in enumerate(lines)
+                        if (m := DIY_RE.match(line)) and int(m.group(1)) == task["diy"]), None)
+        if heading is None:
+            raise SystemExit(f"build_lab_pages: task animation {task['id']}: no DIY {task['diy']}")
+        end = next((i for i in range(heading + 1, len(lines))
+                    if DIY_RE.match(lines[i]) or lines[i].startswith("## ")), len(lines))
+        where = next((i for i in range(heading, end) if "**Expected output**" in lines[i]), None)
+        if where is None:
+            raise SystemExit(f"build_lab_pages: task animation {task['id']}: DIY {task['diy']} "
+                             f"has no **Expected output**")
+        lines[where:where] = [f'<div class="lab-anim lab-task" data-anim="{html.escape(task["id"])}"></div>', ""]
+    return "\n".join(lines)
+
+
+def add_slots_before(md_text: str, items: list[dict], html_for) -> str:
+    """Put a slot just before the heading line each item's `before` prefix names."""
+    lines = md_text.split("\n")
+    for item in items:
+        where = next((i for i, line in enumerate(lines) if line.startswith(item["before"])), None)
+        if where is None:
+            raise SystemExit(f"build_lab_pages: {item['id']}: no heading starts with {item['before']!r}")
+        lines[where:where] = [html_for(item), ""]
+    return "\n".join(lines)
+
+
+def interactive_layer(slug: str, text: str, dest: Path, static_out: Path):
+    """For a lab with interactive/<slug>/lab.json: the README with its slots, plus the
+    extra head, body attributes and scripts its page needs. Copies the data and engines.
+    Returns (text, head, attrs, tail); a lab without the folder gets them unchanged."""
+    overlay = INTERACTIVE / slug / "lab.json"
+    if not overlay.is_file():
+        return text, "", "", ""
+    lab = json.loads(overlay.read_text(encoding="utf-8"))
+    text = add_task_animation_slots(text, lab.get("taskAnimations", []))
+    text = add_slots_before(text, lab.get("animations", []),
+                            lambda a: f'<div class="lab-anim" data-anim="{html.escape(a["id"])}"></div>')
+    text = add_slots_before(text, lab.get("puzzles", []),
+                            lambda p: f'<div class="lab-play" data-play="{html.escape(p["id"])}"></div>')
+    for kind in ("animations", "puzzles"):
+        src = INTERACTIVE / slug / kind
+        if src.is_dir():
+            (dest / kind).mkdir(parents=True, exist_ok=True)
+            for data in sorted(src.glob("*.json")):
+                shutil.copy(data, dest / kind / data.name)
+    static_out.mkdir(parents=True, exist_ok=True)
+    for asset in sorted((INTERACTIVE / "static").iterdir()):
+        shutil.copy(asset, static_out / asset.name)
+    head = "".join(f'<link rel="stylesheet" href="../static/{css}">\n'
+                   for css in ("tokens.css", "stepper.css", "play.css", "journey.css"))
+    journey = lab.get("journey", {})
+    meta = json.dumps({"labels": journey.get("labels", {}),
+                       "masterBadge": journey.get("masterBadge", "")}).replace("</", "<\\/")
+    tail = (f'<script type="application/json" id="lab-meta">{meta}</script>\n'
+            + "".join(f'<script src="../static/{js}" defer></script>\n'
+                      for js in ("stepper.js", "play.js", "journey.js")))
+    return text, head, f' data-lab="{html.escape(slug)}"', tail
+
+
 def page(title: str, kicker_html: str, body_html: str, needs_mermaid: bool,
-         banner_html: str = "", needs_hljs: bool = False) -> str:
+         banner_html: str = "", needs_hljs: bool = False, head_extra: str = "",
+         body_attrs: str = "", tail_extra: str = "") -> str:
     mermaid = (f'<script src="{MERMAID_JS}" integrity="{MERMAID_SRI}"'
                ' crossorigin="anonymous"></script>'
                '<script>mermaid.initialize({startOnLoad:true,theme:"neutral"});</script>'
@@ -181,10 +253,10 @@ def page(title: str, kicker_html: str, body_html: str, needs_mermaid: bool,
             if needs_hljs else "")
     return (f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-            f'<title>{title}</title>\n<link rel="icon" href="{FAVICON}">\n{STYLE}\n'
-            f"</head>\n<body>\n<div class=\"wrap\">\n"
+            f'<title>{title}</title>\n<link rel="icon" href="{FAVICON}">\n{STYLE}\n{head_extra}'
+            f"</head>\n<body{body_attrs}>\n<div class=\"wrap\">\n"
             f'<p class="kicker">{kicker_html}</p>\n{banner_html}{body_html}\n'
-            f"</div>\n{hljs}{mermaid}</body>\n</html>\n")
+            f"</div>\n{hljs}{mermaid}{tail_extra}</body>\n</html>\n")
 
 
 def render_brief(out_dir: Path) -> None:
@@ -243,10 +315,12 @@ def main() -> None:
         title = heading.group(1).strip()
         labs.append((slug, title))
 
+        dest = out_root / slug
+        page_text, head, attrs, tail = interactive_layer(slug, text, dest, out_root / "static")
         md = markdown.Markdown(
             extensions=["fenced_code", "tables", "md_in_html", "toc"],
             extension_configs={"toc": {"slugify": lambda v, s: gh_slugify(v)}})
-        body = md.convert(preprocess(text))
+        body = md.convert(preprocess(page_text))
 
         banner = (f'<div class="copy-banner">Read-only preview. To <strong>do</strong> '
                   f'this lab: <a href="{COPY_URL}">make your own private copy of the '
@@ -255,12 +329,12 @@ def main() -> None:
         deck = sched.deck_for_lab(slug)
         lecture = f' · <a href="../../{deck}/index.html">lecture</a>' if deck else ''
         kicker = f'<a href="./..">labs</a>{lecture} · object-oriented computing'
-        dest = out_root / slug
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(
             page(html.escape(title), kicker, body, "```mermaid" in text or
                  'class="mermaid"' in body, banner,
-                 needs_hljs='language-java' in body),
+                 needs_hljs='language-java' in body, head_extra=head,
+                 body_attrs=attrs, tail_extra=tail),
             encoding="utf-8", newline="\n")
 
     rows = "".join(

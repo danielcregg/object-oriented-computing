@@ -1,0 +1,56 @@
+{
+  "id": "play-6",
+  "section": 6,
+  "type": "refs",
+  "title": "== or equals?",
+  "intro": "`a == b` asks whether two variables point at the same array. `Arrays.equals(a, b)` compares what's inside, box by box. Judge both, for four different pairs.",
+  "shuffle": true,
+  "arrays": [
+    {"name": "a", "elem": "int", "values": [4, 8, 15]},
+    {"name": "a", "elem": "int", "values": [7, 2, 9, 4]},
+    {"name": "a", "elem": "int", "values": [11, 6, 3]},
+    {"name": "a", "elem": "int", "values": [5, 12, 8]}
+  ],
+  "rounds": [
+    {
+      "make": "alias",
+      "ask": ["==", "equals"],
+      "rightEach": {"==": "Both arrows end at the same array, so `a == b` is `true`."},
+      "right": "`b = a` gives one array a second name: `==` is `true`, and so is `Arrays.equals`.",
+      "why": {
+        "==": "`int[] b = a;` copies the arrow, not the array: both variables point at the very same array, and `==` compares the arrows.",
+        "equals": "There is only one array here, and an array always matches itself, box for box."
+      }
+    },
+    {
+      "make": "clone",
+      "ask": ["==", "equals"],
+      "rightEach": {"==": "Two arrows, two different arrays: `a == b` is `false`."},
+      "right": "A clone is a different array with the same contents: `==` says `false`, `Arrays.equals` says `true`.",
+      "why": {
+        "==": "`clone()` builds a brand-new array with boxes of its own, so `a` and `b` point at two different objects.",
+        "equals": "The clone holds the same values in the same order, and that is all `Arrays.equals` looks at."
+      }
+    },
+    {
+      "make": "same",
+      "ask": ["==", "equals"],
+      "rightEach": {"==": "Two arrows, two different arrays: `a == b` is `false`."},
+      "right": "Two arrays that happen to hold the same values: different objects, equal contents.",
+      "why": {
+        "==": "Each `{…}` literal builds an array of its own, so `a` and `b` point at two different arrays, even though their values match.",
+        "equals": "Same length, same values, in the same order: compared box by box, everything matches."
+      }
+    },
+    {
+      "make": "different",
+      "ask": ["==", "equals"],
+      "rightEach": {"==": "Two arrows, two different arrays: `a == b` is `false`."},
+      "right": "Different arrays with different contents: both are `false`. Order counts too, because `Arrays.equals` compares box 0 with box 0, box 1 with box 1, and so on.",
+      "why": {
+        "==": "Two separate literals make two separate arrays: `==` compares the arrows, and they end in different places.",
+        "equals": "`Arrays.equals` compares box by box, and box {diff} differs: {av} in `a`, {bv} in `b`."
+      }
+    }
+  ]
+}

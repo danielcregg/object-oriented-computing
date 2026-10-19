@@ -1,0 +1,173 @@
+/* The lab journey: the map, the step chips, the sidebar rings, the top bar, toasts,
+   confetti and the finale. Colours come from guide.css (:root). --tone is set per
+   station/chip by journey.js: red (just started) -> amber -> green (done). */
+
+.j-icon { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8;
+          stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---- the map ------------------------------------------------------------------------ */
+.journey {
+  margin: 18px 0 30px; padding: 18px 20px 14px; border-radius: 16px; background: #FFFFFF;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 2px rgba(30, 40, 51, 0.05), 0 10px 28px rgba(30, 40, 51, 0.07);
+}
+.journey-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+.journey-title { margin: 0; font-family: var(--mono); font-weight: 700; font-size: 19px; }
+.journey-title::after { content: ';'; color: var(--orange); }
+.journey-summary { margin: 2px 0 0; color: var(--slate); font-size: 14.5px; }
+.journey-continue {
+  font-family: var(--mono); font-weight: 700; font-size: 14.5px; color: #FFFFFF;
+  background: var(--orange); border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(231, 111, 0, 0.25); transition: transform 0.2s var(--spring);
+}
+.journey-continue:hover { transform: translateY(-1px) scale(1.03); }
+.journey-continue:focus-visible, .station:focus-visible, .journey-chip:focus-visible {
+  outline: 3px solid var(--blue); outline-offset: 3px;
+}
+
+.journey-map { position: relative; margin: 16px 0 6px; }
+.journey-trail { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.trail-seg { fill: none; stroke: var(--rule); stroke-width: 3; stroke-dasharray: 2 6; stroke-linecap: round; }
+.trail-seg.trail-done { stroke: var(--accent-green); stroke-dasharray: none; opacity: 0.55; }
+.journey-stations {
+  position: relative; list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); row-gap: 14px;
+}
+.journey-station { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.station {
+  position: relative; width: 52px; height: 52px; padding: 0; border: none; border-radius: 50%;
+  background: transparent; cursor: pointer; transition: transform 0.25s var(--spring);
+}
+.station:hover { transform: scale(1.08); }
+.station-ring { width: 52px; height: 52px; display: block; }
+.station-track { fill: #FFFFFF; stroke: var(--rule); stroke-width: 5; }
+.journey-station[data-state="new"] .station-track { stroke-dasharray: 3 4; }
+.station-arc { fill: none; stroke: var(--tone, var(--rule)); stroke-width: 5; stroke-linecap: round;
+               transition: stroke-dasharray 0.9s var(--glide), stroke 0.6s ease; }
+.station-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-weight: 700; font-size: 16px; color: var(--ink);
+}
+.station-check { position: absolute; inset: 13px; width: 26px; height: 26px; stroke: #FFFFFF;
+                 stroke-width: 3; opacity: 0; }
+.journey-station[data-state="done"] .station-track { fill: var(--accent-green); stroke: var(--accent-green); }
+.journey-station[data-state="done"] .station-num { opacity: 0; }
+.journey-station[data-state="done"] .station-check { opacity: 1; }
+.station-label {
+  font-size: 12.5px; line-height: 1.2; color: var(--slate); text-align: center;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.journey-station[data-state="done"] .station-label { color: var(--accent-green); font-weight: 600; }
+.station-here .station { box-shadow: 0 0 0 5px rgba(51, 105, 140, 0.16); }
+@media (prefers-reduced-motion: no-preference) {
+  .station-here .station { animation: j-halo 2.4s ease-in-out infinite; }
+  .station-pop .station { animation: j-pop 0.7s var(--spring); }
+}
+@keyframes j-halo { 50% { box-shadow: 0 0 0 9px rgba(51, 105, 140, 0.08); } }
+@keyframes j-pop { 0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+.station-tip {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  z-index: 15; display: none; flex-direction: column; gap: 2px; min-width: 190px;
+  padding: 10px 12px; border-radius: 10px; background: var(--codebg); color: #E8ECF1;
+  font-family: var(--sans); font-size: 13px; text-align: left; line-height: 1.45;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); pointer-events: none;
+}
+.station-tip strong { font-family: var(--mono); color: #FFFFFF; margin-bottom: 2px; }
+.station-tip .tip-done { color: #8FD9A8; }
+.station:hover .station-tip, .station:focus-visible .station-tip { display: flex; }
+
+.journey-legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
+.journey-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+
+.journey-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 12px;
+                  border-top: 1px dashed var(--rule); }
+.journey-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px 4px 8px; border-radius: 999px;
+  font-size: 12.5px; color: var(--muted); border: 1px dashed var(--rule); background: var(--paper);
+}
+.journey-badge .j-icon { width: 15px; height: 15px; }
+.journey-badge[data-earned="yes"] {
+  color: var(--accent-gold-ink); background: #FFF4D6; border: 1px solid var(--accent-gold); font-weight: 600;
+}
+.journey-badge[data-earned="yes"] .j-icon { fill: var(--accent-gold); stroke: var(--accent-gold-ink); }
+
+/* ---- the step chips under each section heading ---------------------------------------- */
+.journey-steps { display: flex; flex-wrap: wrap; gap: 8px; margin: -2px 0 18px; }
+.journey-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 9px; border-radius: 999px;
+  font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--slate); cursor: pointer;
+  background: #FFFFFF; border: 1.5px solid var(--rule);
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+.journey-chip:hover { border-color: var(--blue); }
+.journey-chip .chip-check { display: none; stroke-width: 2.6; }
+.journey-chip[data-done="yes"] { background: var(--tone, var(--accent-green)); border-color: transparent; color: #FFFFFF; }
+.journey-chip[data-done="yes"] .chip-check { display: block; }
+@media (prefers-reduced-motion: no-preference) {
+  .journey-chip.chip-pop { animation: j-pop 0.6s var(--spring); }
+}
+
+/* ---- the sidebar rings ------------------------------------------------------------------ */
+body.journey-on .diy-dot { display: none; }
+.side-ring {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; position: relative;
+  background: conic-gradient(var(--tone, var(--rule)) calc(var(--f, 0) * 360deg), var(--rule) 0);
+  -webkit-mask: radial-gradient(circle, transparent 6px, #000 6.5px);
+          mask: radial-gradient(circle, transparent 6px, #000 6.5px);
+  transition: background 0.6s ease;
+}
+.side-ring[data-state="new"] { background: var(--rule); }
+.side-ring[data-state="done"] { -webkit-mask: none; mask: none; background: var(--accent-green); }
+.side-ring[data-state="done"]::after {
+  content: '\2713'; position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 700;
+}
+
+/* ---- the bar at the top ------------------------------------------------------------- */
+.journey-bar { position: fixed; top: 0; left: 0; right: 0; height: 5px; z-index: 40;
+               background: rgba(222, 216, 201, 0.6); }
+.journey-bar-fill { height: 100%; width: 0; border-radius: 0 3px 3px 0;
+                    transition: width 0.9s var(--glide), background 0.6s ease; }
+
+/* ---- toasts, confetti, finale ------------------------------------------------------------- */
+.j-toasts { position: fixed; left: 22px; bottom: 22px; z-index: 50; display: flex;
+            flex-direction: column; gap: 10px; max-width: min(360px, calc(100vw - 44px)); }
+.j-toast {
+  display: flex; gap: 12px; align-items: center; padding: 12px 16px; border-radius: 12px;
+  background: #FFFFFF; border: 1px solid var(--rule); border-left: 5px solid var(--accent-green);
+  box-shadow: 0 10px 28px rgba(30, 40, 51, 0.18); font-size: 14px;
+}
+.j-toast strong { display: block; font-family: var(--mono); }
+.j-toast span { color: var(--slate); }
+.j-toast.badge { border-left-color: var(--accent-gold); }
+.j-toast-icon { width: 26px; height: 26px; stroke: var(--accent-green); stroke-width: 2.4; }
+.j-toast.badge .j-toast-icon { fill: var(--accent-gold); stroke: var(--accent-gold-ink); stroke-width: 1.4; }
+@media (prefers-reduced-motion: no-preference) {
+  .j-toast { animation: j-toast-in 0.5s var(--spring); }
+  .j-toast.j-leaving { opacity: 0; transform: translateY(8px); transition: opacity 0.5s, transform 0.5s; }
+}
+@keyframes j-toast-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } }
+.j-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+
+.j-finale { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center;
+            justify-content: center; padding: 20px; background: rgba(22, 34, 46, 0.5); }
+.j-finale-box {
+  max-width: 440px; width: 100%; text-align: center; padding: 30px 28px 26px; border-radius: 20px;
+  background: #FFFFFF; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.j-finale-star { width: 72px; height: 72px; fill: var(--accent-gold); stroke: var(--accent-gold-ink); stroke-width: 1; }
+.j-finale-title { font-family: var(--mono); font-weight: 700; font-size: 24px; margin: 8px 0 6px; }
+.j-finale-text { color: var(--slate); margin: 0 0 18px; }
+@media (prefers-reduced-motion: no-preference) {
+  .j-finale-box { animation: j-toast-in 0.6s var(--spring); }
+}
+
+@media (max-width: 860px) {
+  /* on a phone the journey map is the navigation; the long exercise list goes */
+  body.journey-on .sidebar { display: none; }
+}
+@media (max-width: 760px) {
+  .journey { padding: 16px 14px 12px; }
+  .journey-stations { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}

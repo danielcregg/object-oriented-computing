@@ -1,0 +1,203 @@
+{
+  "id": "task-diy-9",
+  "task": 9,
+  "title": "DIY 9, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "A champion for the top, and one for the bottom",
+      "steps": [
+        {
+          "caption": "Five scores. Find the highest, then the lowest.",
+          "vars": [{"name": "scores", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"]}]
+        },
+        {
+          "caption": "Start the champion at the first score, not at 0. 83 takes the crown.",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "83"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [0], "badges": {"0": "crown"}}],
+          "flow": [{"from": {"array": "A", "index": 0}, "to": {"var": "highest"}, "text": "83"}]
+        },
+        {
+          "caption": "Challenge the champion with every later score. Is 91 bigger than 83?",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "83"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [1], "badges": {"0": "crown"}}]
+        },
+        {
+          "caption": "Yes, so 91 takes the crown.",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "91"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [1], "badges": {"1": "crown"}}],
+          "flow": [{"from": {"array": "A", "index": 1}, "to": {"var": "highest"}, "text": "91"}]
+        },
+        {
+          "caption": "Is 78 bigger than 91? No: the crown stays where it is.",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "91"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [2], "badges": {"1": "crown"}}]
+        },
+        {
+          "caption": "Is 65 bigger than 91? No.",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "91"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [3], "badges": {"1": "crown"}}]
+        },
+        {
+          "caption": "Is 95 bigger than 91?",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "91"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [4], "badges": {"1": "crown"}}]
+        },
+        {
+          "caption": "Yes: 95 is the highest score.",
+          "vars": [{"name": "scores", "ref": "A"}, {"name": "highest", "value": "95"}],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "highlight": [4], "badges": {"4": "crown"}}],
+          "flow": [{"from": {"array": "A", "index": 4}, "to": {"var": "highest"}, "text": "95"}]
+        },
+        {
+          "caption": "Now the same pattern with the comparison flipped. The lowest also starts at the first score, 83.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "83"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [0],
+              "badges": {"4": "crown", "0": "low"}
+            }
+          ],
+          "flow": [{"from": {"array": "A", "index": 0}, "to": {"var": "lowest"}, "text": "83"}]
+        },
+        {
+          "caption": "Is 91 smaller than 83? No.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "83"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [1],
+              "badges": {"4": "crown", "0": "low"}
+            }
+          ]
+        },
+        {
+          "caption": "Is 78 smaller than 83?",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "83"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [2],
+              "badges": {"4": "crown", "0": "low"}
+            }
+          ]
+        },
+        {
+          "caption": "Yes: 78 takes the low marker.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "78"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [2],
+              "badges": {"4": "crown", "2": "low"}
+            }
+          ],
+          "flow": [{"from": {"array": "A", "index": 2}, "to": {"var": "lowest"}, "text": "78"}]
+        },
+        {
+          "caption": "Is 65 smaller than 78?",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "78"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [3],
+              "badges": {"4": "crown", "2": "low"}
+            }
+          ]
+        },
+        {
+          "caption": "Yes: 65 is lower still.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "65"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [3],
+              "badges": {"4": "crown", "3": "low"}
+            }
+          ],
+          "flow": [{"from": {"array": "A", "index": 3}, "to": {"var": "lowest"}, "text": "65"}]
+        },
+        {
+          "caption": "Is 95 smaller than 65? No. Every score has been checked.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "65"}
+          ],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["83", "91", "78", "65", "95"],
+              "highlight": [4],
+              "badges": {"4": "crown", "3": "low"}
+            }
+          ]
+        },
+        {
+          "caption": "Print both results, labelled as shown.",
+          "print": "Highest score: 95\n",
+          "from": {"var": "highest"},
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "65"}
+          ],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "badges": {"4": "crown", "3": "low"}}]
+        },
+        {
+          "caption": "The lowest goes on the second line.",
+          "print": "Lowest score: 65\n",
+          "from": {"var": "lowest"},
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "65"}
+          ],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "badges": {"4": "crown", "3": "low"}}]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [
+            {"name": "scores", "ref": "A"},
+            {"name": "highest", "value": "95"},
+            {"name": "lowest", "value": "65"}
+          ],
+          "arrays": [{"id": "A", "values": ["83", "91", "78", "65", "95"], "badges": {"4": "crown", "3": "low"}}]
+        }
+      ]
+    }
+  ]
+}

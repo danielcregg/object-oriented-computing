@@ -1,0 +1,212 @@
+{
+  "id": "search",
+  "title": "The search",
+  "segments": [
+    {
+      "example": "FindName",
+      "extra": false,
+      "title": "Return the moment it matches",
+      "code": [
+        "public static void main(String[] args) {",
+        "    String[] names = {\"Ada\", \"Linus\", \"Grace\"};",
+        "    System.out.println(\"Index of Grace: \" + find(names, \"Grace\"));",
+        "    System.out.println(\"Index of Alan: \" + find(names, \"Alan\"));",
+        "}",
+        "",
+        "public static int find(String[] names, String target) {",
+        "    for (int i = 0; i < names.length; i++) {",
+        "        if (names[i].equals(target)) {",
+        "            return i;",
+        "        }",
+        "    }",
+        "    return -1;",
+        "}"
+      ],
+      "steps": [
+        {
+          "line": 2,
+          "caption": "`names` points at an array of three names, indexes 0 to 2.",
+          "vars": [{"name": "names", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 3,
+          "caption": "`main` calls `find(names, \"Grace\")` and waits for its answer before it can print.",
+          "vars": [{"name": "names", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 7,
+          "caption": "Inside `find`, the parameter `names` gets a copy of the arrow, so it points at the same array. `target` is \"Grace\".",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 8,
+          "caption": "`i` starts at 0. `0 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "0"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"0": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Ada\".equals(\"Grace\")` is false, so keep looking.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "0"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [0],
+              "marks": {"0": "i"},
+              "badges": {"0": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 8,
+          "caption": "`i++` makes `i` 1. `1 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "1"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"1": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Linus\".equals(\"Grace\")` is false.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "1"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [1],
+              "marks": {"1": "i"},
+              "badges": {"1": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 8,
+          "caption": "`i` is 2. `2 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "2"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"2": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Grace\".equals(\"Grace\")` is true: a match!",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "2"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [2],
+              "marks": {"2": "i"},
+              "badges": {"2": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 10,
+          "caption": "`return i` hands back 2 and leaves `find` at once, without finishing the loop: an early exit.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Grace\""}, {"name": "i", "value": "2"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "match": [2], "marks": {"2": "match"}}]
+        },
+        {
+          "line": 3,
+          "caption": "Back in `main`, the call's value is 2, so this prints `Index of Grace: 2`. `find`'s variables are gone.",
+          "print": "Index of Grace: 2\n",
+          "from": {"array": "A", "index": 2},
+          "vars": [{"name": "names", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "match": [2]}]
+        },
+        {
+          "line": 4,
+          "caption": "`main` calls `find(names, \"Alan\")`: a fresh call with fresh variables.",
+          "vars": [{"name": "names", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 7,
+          "caption": "`target` is \"Alan\" this time, and `names` points at the same array again.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 8,
+          "caption": "`i` starts at 0. `0 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "0"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"0": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Ada\".equals(\"Alan\")` is false, so keep looking.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "0"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [0],
+              "marks": {"0": "i"},
+              "badges": {"0": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 8,
+          "caption": "`i` is 1. `1 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "1"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"1": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Linus\".equals(\"Alan\")` is false.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "1"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [1],
+              "marks": {"1": "i"},
+              "badges": {"1": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 8,
+          "caption": "`i` is 2. `2 < 3` is true.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "2"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""], "marks": {"2": "i"}}]
+        },
+        {
+          "line": 9,
+          "caption": "`\"Grace\".equals(\"Alan\")` is false.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "2"}],
+          "arrays": [
+            {
+              "id": "A",
+              "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""],
+              "highlight": [2],
+              "marks": {"2": "i"},
+              "badges": {"2": "magnifier"}
+            }
+          ]
+        },
+        {
+          "line": 8,
+          "caption": "`i` is 3. `3 < 3` is false: every name has been checked, and none matched.",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}, {"name": "i", "value": "3"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 13,
+          "caption": "Only now, after the loop, does `find` reach `return -1`. -1 can never be a real index, so it means \"not found\".",
+          "vars": [{"name": "names", "ref": "A"}, {"name": "target", "value": "\"Alan\""}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        },
+        {
+          "line": 4,
+          "caption": "Back in `main`: this prints `Index of Alan: -1`.",
+          "print": "Index of Alan: -1\n",
+          "vars": [{"name": "names", "ref": "A"}],
+          "arrays": [{"id": "A", "values": ["\"Ada\"", "\"Linus\"", "\"Grace\""]}]
+        }
+      ]
+    }
+  ]
+}

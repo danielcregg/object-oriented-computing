@@ -16,9 +16,18 @@ the animation JSON the guide's stepper renders (interactive/static/stepper.js):
 Each step is a line of Main.java that has just run, with the picture after it (the
 current frame's variables, the arrays and objects they reach), what it printed, and a
 caption that says what changed. Calls into Main's own methods are stepped into; code in
-other files (Book.java) and the JDK runs inside one step. A compile error returns
-{"error": "compile", "message": ...}; other failures {"error": "no_code" | "run" |
-"tracer", "message": ...}.
+other files (Book.java) and the JDK runs inside one step.
+
+A String a variable holds is an object of its own: the variable is an arrow to a small
+String card, one card per String object, so two variables holding one pooled literal
+share a card and `new String("Hi")` gets its own. As in the Arrays lab, an array box or an
+object's field shows a String as its text, and so does a variable that took its String
+from an array box (a for-each variable) or holds one a field holds (a constructor's
+parameter). A StringBuilder (or StringBuffer) is a card with its text, length and
+capacity that changes in place. A char is shown as a Java char literal.
+
+A compile error returns {"error": "compile", "message": ...}; other failures
+{"error": "no_code" | "run" | "tracer", "message": ...}.
 
 CLI:
     python3 interactive/codespace/tracer/trace.py --lab-dir DIR --main week05.arrays_lab.Main
@@ -269,6 +278,8 @@ class Source:
                 elif ch == "}" and stack:
                     self.close[stack.pop()] = ln
         self._headers: dict[int, dict | None] = {}
+        # variables declared final: javac joins them with literals itself, as constants
+        self.finals = set(re.findall(rf"\bfinal\s+[\w$<>\[\]., ?]+?\s+({NAME})\s*=", "\n".join(self.clean)))
 
     def text(self, line: int | None) -> str:
         return self.lines[line - 1] if line and 0 < line <= len(self.lines) else ""
@@ -300,6 +311,7 @@ class Source:
                     else:
                         parts = inner.split(";")
                         info["cond"] = parts[1].strip() if len(parts) == 3 and parts[1].strip() else None
+                        info["step"] = parts[2].strip() if len(parts) == 3 else None
                         init = re.match(r"\s*(?:int|long|short|byte|var)\s+([A-Za-z_$][\w$]*)\s*=",
                                         inner_clean)
                         info["var"] = init.group(1) if init else None
@@ -368,6 +380,29 @@ class Source:
         if close_at < 0:
             return None
         return re.sub(r"\s+", " ", self.text(line)[start:close_at + 1])
+
+    def assigned(self, line: int | None, name: str) -> tuple[str, str, str] | None:
+        """What the line assigns to the variable `name`: (operator, the expression, the expression
+        with literals blanked), or None. `String b = new String("Hi");` gives
+        ("=", 'new String("Hi")', ...); `s += "!";` gives ("+=", '"!"', ...)."""
+        clean, text = self.clean_text(line), self.text(line)
+        found = list(re.finditer(rf"(?<![\w$.]){re.escape(name)}\s*(\+?=)(?!=)", clean))
+        if len(found) != 1:  # none, or two (a for loop's start and its step): which one ran?
+            return None
+        m = found[0]
+        end, depth = m.end(), 0
+        while end < len(clean):
+            ch = clean[end]
+            if ch in "([{":
+                depth += 1
+            elif ch in ")]}":
+                if depth == 0:
+                    break
+                depth -= 1
+            elif ch in ";," and depth == 0:
+                break
+            end += 1
+        return m.group(1), text[m.end():end].strip(), clean[m.end():end].strip()
 
     def accesses(self, line: int) -> list[tuple[str, list[str], str]]:
         """Array accesses on a line: (array variable, [index expressions], the text)."""
@@ -455,10 +490,43 @@ def _eval_index(expr: str, ints: dict[str, int], lengths: dict[str, int]) -> int
         return None
 
 
+def _eval_condition(cond: str, ints: dict[str, int], lengths: dict[str, int]) -> bool | None:
+    """A condition made of whole-number comparisons, joined by && or || (no brackets round them),
+    as Java works it out; None for anything else."""
+    cond = cond.strip()
+    for op in ("||", "&&"):  # || binds loosest
+        if op in cond:
+            if "(" in cond:
+                return None
+            parts = [_eval_condition(part, ints, lengths) for part in cond.split(op)]
+            if None in parts:
+                return None
+            return any(parts) if op == "||" else all(parts)
+    m = re.fullmatch(r"(.+?)\s*(<=|>=|==|!=|<|>)\s*(.+)", cond)
+    if not m:
+        return None
+    a, b = _eval_index(m.group(1), ints, lengths), _eval_index(m.group(3), ints, lengths)
+    if a is None or b is None or not all(-2**31 <= x < 2**31 for x in (a, b)):
+        return None  # past Java's int range the sum would have wrapped round
+    return {"<": a < b, "<=": a <= b, ">": a > b, ">=": a >= b, "==": a == b, "!=": a != b}[m.group(2)]
+
+
 # ---- turning the recording into steps ---------------------------------------------------------------
 
 INT_TYPES = {"int", "long", "short", "byte"}
 CONTROL_NAMES = {0: "NUL", 9: "\\t", 10: "\\n", 13: "\\r"}
+CARD_TEXT = 24  # characters of a String's text on its card: the cards stack in one column
+CHAR_ESCAPES = {"\0": "\\u0000", "\b": "\\b", "\t": "\\t", "\n": "\\n", "\f": "\\f", "\r": "\\r",
+                "'": "\\'", "\\": "\\\\"}
+JAVA_ESCAPES = {"n": "\n", "t": "\t", "r": "\r", "b": "\b", "f": "\f", "s": " ", "0": "\0"}  # \" \' \\ are themselves
+# String methods that hand back a String: called on a line of their own, the result is lost
+STRING_RESULTS = set("""concat formatted indent intern repeat replace replaceAll replaceFirst strip
+stripIndent stripLeading stripTrailing substring toLowerCase toUpperCase translateEscapes trim""".split())
+LITERAL_RE = re.compile(r'"(?:[^"\\]|\\.)*"(?:\s*\+\s*"(?:[^"\\]|\\.)*")*')  # "Hi", or "H" + "i"
+NAME = r"[A-Za-z_$][\w$]*"
+SAME_RE = re.compile(rf"(?<![\w$.])({NAME})\s*(==|!=)\s*({NAME})(?![\w$.(\[])")
+EQUALS_RE = re.compile(rf"(?<![\w$.])({NAME})\s*\.\s*(equals|equalsIgnoreCase)\s*\(\s*({NAME})\s*\)")
+CALL_LINE_RE = re.compile(rf"\s*({NAME})\s*\.\s*({NAME})\s*\(.*\)\s*;\s*")
 
 
 def _code(text: str) -> str:
@@ -480,6 +548,88 @@ def _java_string(text: str) -> str:
     return '"' + out + '"'
 
 
+def _invisible(code: int) -> bool:
+    """A char with no glyph of its own: a control character, or half of a surrogate pair."""
+    return code < 32 or code == 127 or 0xD800 <= code <= 0xDFFF
+
+
+def _java_char(ch: str) -> str:
+    """A char as a Java char literal: 'J', '\\n', '\\u0000'."""
+    if ch in CHAR_ESCAPES:
+        return f"'{CHAR_ESCAPES[ch]}'"
+    if len(ch) != 1 or _invisible(ord(ch)):
+        return "'" + "".join(f"\\u{ord(x):04x}" for x in ch) + "'"
+    return f"'{ch}'"
+
+
+def _decode(body: str) -> str:
+    """A string literal's text, from what is between its quotes: escapes decoded."""
+    return re.sub(r"\\u+([0-9a-fA-F]{4})|\\(.)", lambda e: chr(int(e.group(1), 16)) if e.group(1)
+                  else JAVA_ESCAPES.get(e.group(2), e.group(2)), body)
+
+
+def _literal_value(code: str) -> str | None:
+    """The text a string literal, or literals joined with +, stand for ("H" + "i" is "Hi"); else None."""
+    if not LITERAL_RE.fullmatch(code):
+        return None
+    return "".join(_decode(m.group(1)) for m in re.finditer(r'"((?:[^"\\]|\\.)*)"', code))
+
+
+def _constant(clean: str, finals: set[str]) -> bool:
+    """A join of constants only (literals blanked): literals, UPPER_CASE constants, final variables.
+    javac joins those itself, into one literal in the pool, so no new String is made when it runs."""
+    rest = re.sub(rf"\b(?:true|false)\b|\b\d[\w.]*|(?:{NAME}\s*\.\s*)*\b[A-Z][A-Z0-9_]*\b|[\"'+\-*/%()\s]",
+                  " ", clean)
+    return '"' in clean and set(re.findall(NAME, rest)) <= finals
+
+
+def _top_level(code: str) -> set[str]:
+    """The operators + and ? used outside any brackets in a piece of Java (literals blanked):
+    `a + b.trim()` has a +, `s.substring(i + 1)` has none. ++ and += do not count."""
+    found, depth = set(), 0
+    for i, ch in enumerate(code):
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif depth == 0 and ch == "?":
+            found.add("?")
+        elif depth == 0 and ch == "+" and code[i + 1:i + 2] not in ("+", "=") and code[i - 1:i] != "+":
+            found.add("+")
+    return found
+
+
+def _plain(value):
+    """A value as an array box or a field shows it: a String's text, without which object it is."""
+    return value["s"] if isinstance(value, dict) and "s" in value else value
+
+
+def _string_card(sid: str, value: dict) -> dict:
+    """A String a variable points to: a compact card with its text, beside the variables."""
+    return {"id": sid, "class": "String", "fields": [["text", _java_string(_clip(value["s"], CARD_TEXT))]],
+            "place": "right"}
+
+
+def _builder_card(ref: str, entry: dict) -> dict:
+    """A StringBuilder or StringBuffer: its text, its length, and its capacity (the room it has
+    before it must grow)."""
+    return {"id": ref, "class": entry.get("class") or "StringBuilder",
+            "fields": [["text", _java_string(_clip(entry.get("text") or "", CARD_TEXT))],
+                       ["length", str(entry.get("length", 0))], ["capacity", str(entry.get("capacity", 0))]],
+            "place": "right"}
+
+
+def _builder_state(entry: dict) -> tuple:
+    """What tells a builder's change: its text, a hash of its first 1000 characters, its sizes."""
+    return entry.get("text"), entry.get("hash"), entry.get("length"), entry.get("capacity")
+
+
+def _holds(entry: dict) -> str:
+    """What a StringBuilder holds, for a caption: its text, or its length when that is long."""
+    length = entry.get("length", 0)
+    return _java_string(entry.get("text") or "") if length <= 40 else f"{length} characters"
+
+
 class State:
     """One recorded event: a frame's variables and the arrays and objects they reach."""
 
@@ -492,7 +642,8 @@ class State:
         self.vars = event.get("vars") or []
         self.heap = event.get("heap") or {}
         self.var = {v["name"]: v for v in self.vars}
-        # who owns each array or object: "numbers", "table[1]", "library[0]", "b.tags"
+        # who owns each array or object, or String in a box or field: "numbers", "table[1]",
+        # "library[0]", "b.tags"
         self.names: dict[str, str] = {}
         for v in self.vars:
             ref = self.ref_of(v["v"])
@@ -504,18 +655,33 @@ class State:
                 continue
             if entry.get("kind") == "array":
                 for i, value in enumerate(entry.get("values") or []):
-                    inner = self.ref_of(value)
+                    inner = self.ref_of(value) or self.str_id(value)
                     if inner and inner not in self.names:
                         self.names[inner] = f"{owner}[{i}]"
             elif entry.get("kind") == "object":
                 for fname, value in entry.get("fields") or []:
-                    inner = self.ref_of(value)
+                    inner = self.ref_of(value) or self.str_id(value)
                     if inner and inner not in self.names:
                         self.names[inner] = f"{owner}.{fname}"
+        # every String this frame reaches, by id: in array boxes, in fields, and in variables
+        boxes = [value for entry in self.heap.values() for value in entry.get("values") or []]
+        fields = [value for entry in self.heap.values() for _, value in entry.get("fields") or []]
+        self.in_arrays = {sid for sid in map(self.str_id, boxes) if sid}
+        self.in_fields = {sid for sid in map(self.str_id, fields) if sid}
+        self.strings: dict[str, dict] = {}
+        for value in [v["v"] for v in self.vars] + boxes + fields:
+            sid = self.str_id(value)
+            if sid:
+                self.strings.setdefault(sid, value)
 
     @staticmethod
     def ref_of(value) -> str | None:
         return value.get("ref") if isinstance(value, dict) else None
+
+    @staticmethod
+    def str_id(value) -> str | None:
+        """Which String object a value is (its JDI uniqueID), or None for anything else."""
+        return value.get("id") if isinstance(value, dict) and "s" in value else None
 
     def array(self, name: str) -> dict | None:
         v = self.var.get(name)
@@ -530,8 +696,8 @@ class State:
                     found[v["name"]] = int(v["v"])
                 except ValueError:
                     pass
-            elif v.get("type") == "char" and isinstance(v["v"], str) and len(v["v"]) == 1:
-                found[v["name"]] = ord(v["v"])
+            elif v.get("type") == "char" and isinstance(v["v"], dict) and len(v["v"].get("c", "")) == 1:
+                found[v["name"]] = ord(v["v"]["c"])
         return found
 
     def lengths(self) -> dict[str, int]:
@@ -549,6 +715,8 @@ class State:
             return value
         if "s" in value:
             return _java_string(_clip(value["s"]))
+        if "c" in value:
+            return _java_char(value["c"])
         if "ref" in value:
             entry = self.heap.get(value["ref"]) or {}
             if entry.get("kind") == "array" or str(value.get("type", "")).endswith("]"):
@@ -573,13 +741,21 @@ class Animator:
         self.entered: State | None = None  # a frame just entered on its declaration line
         self.call_count: dict[tuple[int, int, str], int] = {}
         self.each: dict[int, int] = {}  # for-each header line -> index of the current element
-        self.returned: tuple[str | None, str] | None = None  # (array or object id, method) last returned
+        self.returned: tuple[str | None, str] | None = None  # (array, object or String id, method) last returned
         self.order: dict[str, int] = {}  # id -> first appearance, so boxes keep their places
+        self.seen: set[str] = set()      # Strings an earlier step could reach, by id
+        self.pooled: set[str] = set()    # Strings that came from a literal or intern(): the pool's
+        self.states: list[State] = []    # the state each step pictures
+        self.in_fields: set[str] = set()  # Strings a field of an object holds at some point
+        self.looks: dict[tuple, bool] = {}  # (depth, method, variable, String) -> drawn as text?
+        self.cards: set[str] = set()      # ids of the String and StringBuilder cards drawn
 
     # -- the walk --
 
     def run(self) -> dict:
         events = [State(e) for e in self.raw.get("events") or []]
+        for state in events:
+            self.in_fields |= state.in_fields
         lines = [s for s in events if s.event["kind"] == "line"]
         if not lines and not any(s.event["kind"] == "exception" for s in events):
             message = "".join((s.event.get("out") or "") + (s.event.get("err") or "") for s in events)
@@ -625,10 +801,13 @@ class Animator:
             self.on_end(pending, None)
         if len(self.steps) > self.max_steps:  # calls add steps of their own: cut, keeping the picture
             self.steps = self.steps[:self.max_steps - 1]
-            last = dict(self.steps[-1], caption=self.stop_caption("steps"))
+            last = dict(self.steps[-1], caption=self.stop_caption("steps", self.states[len(self.steps) - 1],
+                                                                  self.steps[-1].get("line")))
             for key in ("print", "error"):
                 last.pop(key, None)
             self.steps.append(last)
+        if any(step["arrays"] for step in self.steps):
+            self.cards_below()
         return {"id": "trace", "title": "Your code, step by step",
                 "segments": [{"example": None, "extra": False, "title": self.title,
                               "code": self.src.lines, "steps": self.steps}]}
@@ -636,6 +815,43 @@ class Animator:
     @staticmethod
     def _printed(state: State) -> str:
         return (state.event.get("out") or "") + (state.event.get("err") or "")
+
+    def cards_below(self) -> None:
+        """A trace that shows arrays: the String and StringBuilder cards go under the arrays (beside
+        them, the arrows to them would cross the arrays). An arrow to a card straight under its
+        variable runs down through the variables below that one, so the cards go from the last
+        variable's to the first's: the card under the variables is the bottom variable's. A card
+        keeps its variable's place; one a variable has just left stays beside the new one."""
+        before: dict[str, int] = {}
+        for step in self.steps:
+            objects = step.get("objects") or []
+            slots: dict[str, int] = {}
+            for i, v in enumerate(step["vars"]):
+                if "ref" in v:
+                    slots.setdefault(v["ref"], i)
+            cards = [item for item in objects if item["id"] in self.cards]
+            for item in cards:
+                item.pop("place", None)
+            cards.sort(key=lambda item: (-slots.get(item["id"], before.get(item["id"], -1)),
+                                         item["id"] not in slots))
+            if cards:
+                step["objects"] = [item for item in objects if item["id"] not in self.cards] + cards
+            before = slots
+
+    def card(self, state: State, name: str, value) -> str | None:
+        """The id of the String the variable `name` holds when it is drawn as an object card
+        with an arrow to it, else None: drawn as its text, as the Arrays lab draws Strings.
+        Text for a String a field holds at some point (a constructor's parameter that becomes
+        the object's title), and for one the variable took from an array box (a for-each
+        variable): no second copy of a box's text with an arrow across the array to it. The
+        look is chosen when the variable first holds that String, and then kept."""
+        sid = State.str_id(value)
+        if not sid:
+            return None
+        key = (state.depth, state.method, name, sid)
+        if key not in self.looks:
+            self.looks[key] = sid in self.in_fields or sid in state.in_arrays
+        return None if self.looks[key] else sid
 
     # -- transitions --
 
@@ -691,6 +907,8 @@ class Animator:
             if State.ref_of(value):
                 kind = "array" if str(value.get("type", "")).endswith("]") else value.get("type") or "object"
                 params.append(f"{_code(v['name'])} points to the {kind} passed in")
+            elif self.card(callee, v["name"], value):
+                params.append(f"{_code(v['name'])} points to {callee.say(value)}")
             else:
                 params.append(f"{_code(v['name'])} is {callee.say(value)}")
         starts = f"{_code(name)} starts" if callee.method != "<init>" else f"The {name} constructor starts"
@@ -716,7 +934,7 @@ class Animator:
         caption = self.take_prefix() + ((changes + " " + done).strip() if changes else done)
         self.add(exit_state, before.line, caption, before=before)
         call, caller = self.calls.pop() if self.calls else (name + "(...)", "main")
-        self.returned = (State.ref_of(ev.get("ret")), name)
+        self.returned = (State.ref_of(ev.get("ret")) or State.str_id(ev.get("ret")), name)
         if exit_state.method == "<init>":
             self.prefix = f"Back in {_code(caller)} with the new {name}. "
         elif ev.get("void"):
@@ -753,7 +971,8 @@ class Animator:
         stopped = self.raw.get("stopped") or ("fatal" if self.raw.get("fatal") else None)
         if stopped in ("steps", "time", "output", "fatal"):
             state = end if end is not None and end.line else before
-            self.add(state, state.line or before.line, self.stop_caption(stopped), before=before)
+            line = state.line or before.line
+            self.add(state, line, self.stop_caption(stopped, state, line), before=before)
             return
         text = self.src.clean_text(before.line)
         if before.event["kind"] == "exit":
@@ -770,14 +989,35 @@ class Animator:
             caption = self.printed(self.carry) + " " + caption
         self.add(before, before.line, self.take_prefix() + caption, before=None)
 
-    def stop_caption(self, why: str) -> str:
+    def stop_caption(self, why: str, state: State | None = None, line: int | None = None) -> str:
         if why == "fatal":
             return "The tracer could not follow the program any further, so it stopped here."
         if why == "time":
             return f"Stopped after {self.timeout:g} seconds: a loop that never ends?"
         if why == "output":
             return "Stopped: the program printed more than 64 KB. A loop that never ends?"
+        counting = self.counting(state, line) if state is not None and line else None
+        if counting:
+            var, value, bound = counting
+            return (f"Stopped after {self.max_steps} steps, with {_code(var)} at {value} of {bound}: "
+                    "too many steps to show them all.")
         return f"Stopped after {self.max_steps} steps: a loop that never ends?"
+
+    def counting(self, state: State, line: int) -> tuple[str, int, int] | None:
+        """A for loop round this line that counts up (i++) towards a bound it has not passed:
+        stopped there, the program is long rather than endless. (loop variable, value, bound)"""
+        ints, lengths = state.ints(), state.lengths()
+        for _, info in reversed(self.src.enclosing(line)):
+            var = info.get("var")
+            if info["kind"] != "for" or not var or var not in ints:
+                continue
+            m = re.fullmatch(rf"{re.escape(var)}\s*<=?\s*(.+)", info.get("cond") or "")
+            bound = _eval_index(m.group(1), ints, lengths) if m else None
+            step = re.sub(r"\s+", "", info.get("step") or "")
+            counts_up = step in (f"{var}++", f"++{var}") or re.fullmatch(rf"{re.escape(var)}\+=[1-9]\d*", step)
+            if bound is not None and counts_up and ints[var] <= bound:
+                return var, ints[var], bound
+        return None
 
     def take_prefix(self) -> str:
         prefix, self.prefix = self.prefix, ""
@@ -804,6 +1044,14 @@ class Animator:
         if error:
             step["error"] = error
         vars_, arrays, objects = self.picture(state) if not empty else ([], [], [])
+        here = before is not None and bool(line) and not empty
+        if here and before.depth == state.depth and before.method == state.method:
+            objects += self.left_behind(before, state, line, {item["id"] for item in objects})
+            for item in objects:  # a builder this line changed glows, like a box just written
+                old, new = before.heap.get(item["id"]) or {}, state.heap.get(item["id"]) or {}
+                if (new.get("kind") == "builder" and old.get("kind") == "builder"
+                        and _builder_state(old) != _builder_state(new)):
+                    item["highlight"] = True
         for item in arrays + objects:
             self.order.setdefault(item["id"], len(self.order))
         arrays.sort(key=lambda item: self.order[item["id"]])
@@ -812,10 +1060,28 @@ class Animator:
         step["arrays"] = arrays
         if objects:
             step["objects"] = objects
-        if before is not None and line and not empty:
+        if here:
             self.highlight(step, before, state, line)
+            compares = self.string_compares(before, state, line)
+            if compares:
+                step["compare"] = [{"a": {"var": a}, "b": {"var": b}, "same": same} for a, _, b, same in compares]
+        self.seen.update(state.strings)
+        self.states.append(state)
         self.steps.append(step)
         return step
+
+    def left_behind(self, before: State, after: State, line: int, shown: set[str]) -> list[dict]:
+        """The String a variable pointed to until this line pointed it somewhere else: drawn for
+        this one step without its arrow, to show it is still there, unchanged."""
+        cards = []
+        for v in before.vars:
+            sid, now = self.card(before, v["name"], v["v"]), after.var.get(v["name"])
+            if (sid and sid not in shown and now is not None and State.str_id(now["v"]) != sid
+                    and self.src.assigned(line, v["name"])):
+                cards.append(_string_card(sid, v["v"]))
+                shown.add(sid)
+                self.cards.add(sid)
+        return cards
 
     def picture(self, state: State) -> tuple[list, list, list]:
         heap = state.heap
@@ -830,19 +1096,21 @@ class Animator:
         for entry in heap.values():  # arrays held by objects' fields are shown on their own
             if entry.get("kind") == "object":
                 direct |= {State.ref_of(value) for _, value in entry.get("fields") or []} - {None}
-        shown = {ref for ref, e in heap.items() if e.get("kind") in ("array", "object")
+        shown = {ref for ref, e in heap.items() if e.get("kind") in ("array", "object", "builder")
                  and (ref not in rows_of or ref in direct)}
 
-        def cell(value, elem=None):
+        def cell(value):
             if value is None:
                 return "null"
             if isinstance(value, str):
-                if elem == "char" and len(value) == 1 and (ord(value) < 32 or ord(value) == 127):
-                    return {"text": CONTROL_NAMES.get(ord(value), f"\\u{ord(value):04x}"),
-                            "faint": True, "num": str(ord(value))}
                 return value
-            if "s" in value:
+            if "s" in value:  # in a box or a field a String is its text, as in the Arrays lab
                 return _java_string(_clip(value["s"], 30))
+            if "c" in value:
+                code = ord(value["c"]) if len(value["c"]) == 1 else 0
+                if _invisible(code):  # an empty-looking box: its name, faint, and its number
+                    return {"text": CONTROL_NAMES.get(code, f"\\u{code:04x}"), "faint": True, "num": str(code)}
+                return _java_char(value["c"])
             ref = value.get("ref")
             if ref:
                 if ref in shown:
@@ -854,13 +1122,16 @@ class Animator:
                 return value["obj"]
             return str(value)
 
-        vars_ = []
+        vars_, strings = [], {}
         for v in state.vars:
-            ref = State.ref_of(v["v"])
+            ref, sid = State.ref_of(v["v"]), self.card(state, v["name"], v["v"])
             if ref and ref in shown:
                 vars_.append({"name": v["name"], "ref": ref})
+            elif sid:  # a variable's String is an object: an arrow to its card, one card per object
+                vars_.append({"name": v["name"], "ref": sid})
+                strings.setdefault(sid, v["v"])
             else:
-                vars_.append({"name": v["name"], "value": cell(v["v"], v.get("type"))})
+                vars_.append({"name": v["name"], "value": cell(v["v"])})
         arrays, objects = [], []
         for ref, entry in heap.items():
             if ref not in shown:
@@ -874,11 +1145,10 @@ class Animator:
                         if value is None:
                             rows.append([])
                         else:
-                            elem = str(entry.get("elem", ""))[:-2]
-                            rows.append([cell(x, elem) for x in inner.get("values") or []])
+                            rows.append([cell(x) for x in inner.get("values") or []])
                     item["rows"] = rows
                 else:
-                    item["values"] = [cell(x, entry.get("elem")) for x in entry.get("values") or []]
+                    item["values"] = [cell(x) for x in entry.get("values") or []]
                 if entry.get("length", 0) > len(entry.get("values") or []):
                     item["note"] = f"showing {len(entry.get('values') or [])} of {entry['length']}"
                 if ref in rows_of:
@@ -889,6 +1159,11 @@ class Animator:
             elif entry["kind"] == "object":
                 fields = [[name, cell(value)] for name, value in entry.get("fields") or []]
                 objects.append({"id": ref, "class": entry.get("class", "Object"), "fields": fields})
+            elif entry["kind"] == "builder":
+                objects.append(_builder_card(ref, entry))
+                self.cards.add(ref)
+        objects += [_string_card(sid, value) for sid, value in strings.items()]
+        self.cards.update(strings)
         return vars_, arrays, objects
 
     def highlight(self, step: dict, before: State, after: State, line: int) -> None:
@@ -995,12 +1270,12 @@ class Animator:
         parts: list[str] = []
         covered: set[str] = set()
         info = self.src.header(line) if flow else None
-        if info:
-            sentence = self.flow(info, line, before, after)
-            if sentence:
-                parts.append(sentence)
-                if info.get("var"):
-                    covered.add(info["var"])
+        sentence = self.flow(info, line, before, after) if info else None
+        if sentence:
+            parts.append(sentence)
+            if info.get("var"):
+                covered.add(info["var"])
+        parts += self.compare_sentences(before, after, line, brief=bool(sentence))
         parts += self.element_changes(before, after, line)
         for v in after.vars:
             name = v["name"]
@@ -1011,6 +1286,7 @@ class Animator:
                 parts.append(self.new_var(name, v, before, after))
             elif old["v"] != v["v"]:
                 parts.append(self.changed_var(name, old, v, before, after))
+        parts += self.thrown_away(before, after, line)
         if printed:
             parts.append(self.printed(printed))
         if not parts:
@@ -1037,9 +1313,12 @@ class Animator:
                         return f"{_code(var)} now points to {held}."
                     return f"The loop starts: {_code(var)} points to {held}."
                 value = after.say(after.var[var]["v"])
+                held = self.card(after, var, after.var[var]["v"])  # a String card: an arrow to it
                 if came_back:
-                    return f"{_code(var)} is now {value}, the next element of {_code(source)}."
-                return f"The loop starts: {_code(var)} is {value}, the first element of {_code(source)}."
+                    verb = "now points to" if held else "is now"
+                    return f"{_code(var)} {verb} {value}, the next element of {_code(source)}."
+                verb = "points to" if held else "is"
+                return f"The loop starts: {_code(var)} {verb} {value}, the first element of {_code(source)}."
             if not inside:
                 self.each.pop(line, None)
                 return f"No elements left in {_code(source)}, so the loop ends."
@@ -1064,6 +1343,10 @@ class Animator:
                 return f"{_code(cond)} is true, so the loop body runs."
             return f"{_code(cond)} is false now, so the loop ends."
         if info["kind"] == "if":
+            if info["body"] == (line, line):  # if (cond) statement; all on one line: Java stays on it
+                inside = _eval_condition(cond or "", before.ints(), before.lengths())
+                if inside is None:
+                    return None
             if inside:
                 return f"{_code(cond)} is true."
             return f"{_code(cond)} is false, so that part is skipped."
@@ -1094,7 +1377,7 @@ class Animator:
             if entry["kind"] == "array" and not after.is_2d(ref):
                 new_values, old_values = entry.get("values") or [], old.get("values") or []
                 changed = [i for i in range(min(len(new_values), len(old_values)))
-                           if new_values[i] != old_values[i]]
+                           if _plain(new_values[i]) != _plain(old_values[i])]
                 if not changed:
                     continue
                 label = name or "an array"
@@ -1111,15 +1394,108 @@ class Animator:
             elif entry["kind"] == "object":
                 old_fields = dict((n, v) for n, v in old.get("fields") or [])
                 for fname, value in entry.get("fields") or []:
-                    if fname in old_fields and old_fields[fname] != value:
+                    if fname in old_fields and _plain(old_fields[fname]) != _plain(value):
                         label = f"{name}.{fname}" if name else fname
                         parts.append(f"{_code(label)} changed from {before.say(old_fields[fname])} "
                                      f"to {after.say(value)}.")
+            elif entry["kind"] == "builder":
+                was, now = old.get("capacity", 0), entry.get("capacity", 0)
+                if _builder_state(entry) == _builder_state(old):
+                    continue
+                clean = self.src.clean_text(line) if line else ""
+                said = [h for h in holders if re.search(rf"(?<![\w$.]){re.escape(h)}\s*\.", clean)]
+                label = (said or holders or [name])[0]
+                notes = ["same object"]
+                others = [h for h in holders if h != label]
+                if others:
+                    notes.append(f"{_code(others[0])} points to it too")
+                if now != was:
+                    notes.append(f"its capacity {'grew' if now > was else 'went'} from {was} to {now}")
+                who = _code(label) if label else f"The {entry.get('class', 'StringBuilder')}"
+                if entry.get("length") == old.get("length") and entry.get("length", 0) > 40:
+                    what = "changed in place"  # too long to quote, and as long as before
+                else:
+                    what = f"now holds {_holds(entry)}"
+                parts.append(f"{who} {what} ({'; '.join(notes)}).")
         return parts
+
+    def string_compares(self, before: State, after: State, line: int | None) -> list[tuple[str, str, str, bool]]:
+        """a == b, a != b, a.equals(b) and a.equalsIgnoreCase(b) between two String variables on
+        the line, in order: (a, operator, b, same). same: the two arrows meet (== and !=), or the
+        texts match (equals). A comparison whose answer cannot be known for sure is left out."""
+        clean = self.src.clean_text(line)
+        found = []
+
+        def texts(a: str, b: str):  # only if the line leaves both as they were: a = b; a == b
+            va, vb = before.var.get(a), before.var.get(b)
+            if not va or not vb or a not in after.var or b not in after.var:
+                return None
+            if after.var[a]["v"] != va["v"] or after.var[b]["v"] != vb["v"]:
+                return None
+            cards = self.card(before, a, va["v"]) and self.card(before, b, vb["v"])
+            return (va["v"], vb["v"]) if cards else None
+
+        for m in SAME_RE.finditer(clean):
+            ahead, behind = clean[:m.start()].rstrip(), clean[m.end():].lstrip()
+            if ahead and ahead[-1] not in "(,=!&|?:{" and not ahead.endswith("return"):
+                continue  # x + a == b compares x + a, not a
+            if behind and behind[0] not in ");,&|?:":
+                continue  # a == b + x compares b + x, not b
+            pair = texts(m.group(1), m.group(3))
+            if pair:
+                found.append((m.start(), (m.group(1), m.group(2), m.group(3), pair[0]["id"] == pair[1]["id"])))
+        for m in EQUALS_RE.finditer(clean):
+            pair = texts(m.group(1), m.group(3))
+            if not pair or pair[0].get("cut") or pair[1].get("cut"):
+                continue
+            a, b = pair[0]["s"], pair[1]["s"]
+            if m.group(2) == "equalsIgnoreCase":
+                if not (a.isascii() and b.isascii()):
+                    continue  # Java's rules for other letters are not Python's
+                a, b = a.lower(), b.lower()
+            found.append((m.start(), (m.group(1), m.group(2), m.group(3), a == b)))
+        return [item for _, item in sorted(found)]
+
+    def compare_sentences(self, before: State, after: State, line: int | None, brief: bool) -> list[str]:
+        """What the line's first String comparison looks at, arrows or text, and its answer
+        (brief: a loop or if already said whether the condition is true)."""
+        found = self.string_compares(before, after, line)
+        if not found:
+            return []
+        a, op, b, same = found[0]
+        va, vb = before.var[a]["v"], before.var[b]["v"]
+        if op in ("==", "!="):
+            seen = (f"{_code(a)} and {_code(b)} point to the same String" if same
+                    else f"{_code(a)} and {_code(b)} point to different Strings")
+            if brief:
+                return [f"`{op}` compares arrows: {seen}."]
+            twins = not same and va["s"] == vb["s"] and not va.get("cut") and not vb.get("cut")
+            even = f", even though both say {before.say(va)}" if twins else ""
+            return [f"`{op}` compares arrows: {seen}, so it is {str(same == (op == '==')).lower()}{even}."]
+        how = "the text" if op == "equals" else "the text, ignoring capitals"
+        if va["s"] == vb["s"]:
+            seen = f"{_code(a)} and {_code(b)} both say {before.say(va)}"
+        else:
+            seen = f"{before.say(va)} and {before.say(vb)} {'match' if same else 'differ'}"
+        return [f"`{op}` compares {how}: {seen}" + ("." if brief else f", so it is {str(same).lower()}.")]
+
+    def thrown_away(self, before: State, after: State, line: int | None) -> list[str]:
+        """s.toUpperCase(); on a line of its own: the String it gives back is lost, s is unchanged."""
+        m = CALL_LINE_RE.fullmatch(self.src.clean_text(line))
+        if not m or m.group(2) not in STRING_RESULTS:
+            return []
+        name = m.group(1)
+        old, now = before.var.get(name), after.var.get(name)
+        if not old or not now or not State.str_id(old["v"]) or now["v"] != old["v"]:
+            return []
+        return [f"{_code(m.group(2))} gives back a String, but nothing keeps it: "
+                f"{_code(name)} still says {after.say(now['v'])} (Strings never change)."]
 
     def new_var(self, name: str, v: dict, before: State, after: State) -> str:
         value = v["v"]
         ref = State.ref_of(value)
+        if self.card(after, name, value):
+            return self.string_var(name, value, before, after)
         if not ref:
             if value is None:
                 return f"{_code(name)} is null."
@@ -1129,11 +1505,93 @@ class Animator:
     def changed_var(self, name: str, old: dict, v: dict, before: State, after: State) -> str:
         value = v["v"]
         ref = State.ref_of(value)
+        if self.card(after, name, value):
+            return self.string_var(name, value, before, after, old=old["v"], existed=True)
         if not ref:
             if value is None:
                 return f"{_code(name)} is now null."
             return f"{_code(name)} is now {after.say(value)}."
         return f"{_code(name)} now points to {self.target(name, ref, before, after)}."
+
+    def string_var(self, name: str, value: dict, before: State, after: State, old=None,
+                   existed: bool = False) -> str:
+        """`name` points to a String card: which String. The same object as another variable's, a
+        literal from the pool, or a new String, and then the String it was made from, which is
+        unchanged: Strings never change. old: what the variable held before the line, if it existed."""
+        sid, text = value["id"], after.say(value)
+        lead = f"{_code(name)} {'now points to' if existed else 'points to'}"
+        line = before.line
+        op, rhs, rhs_clean = self.src.assigned(line, name) or ("", "", "")
+        literal = op == "=" and _literal_value(rhs) == value["s"]  # s += "?" joins: not a literal
+        asked = re.fullmatch(rf"({NAME})\s*\.\s*intern\s*\(\s*\)", rhs_clean)  # heap1.intern()
+        held = before.var.get(asked.group(1)) if asked else None
+        interned = op == "=" and held is not None and State.str_id(held["v"]) and held["v"]["s"] == value["s"]
+        if literal or interned:
+            self.pooled.add(sid)
+        others = [v["name"] for v in after.vars if v["name"] != name and State.str_id(v["v"]) == sid]
+        if others:
+            same = f"the same String as {_code(others[0])}"
+            if interned:
+                return f"`intern` hands back the pooled String: {lead} {same}."
+            if literal:
+                return f"{lead} {same}: equal literals share one String from the pool."
+            return f"{lead} {same}."
+        if literal:
+            return f"{lead} {text}, a literal from the string pool."
+        if interned:
+            return f"{lead} the pooled String {text}: `intern` hands it back."
+        if self.returned and self.returned[0] == sid:
+            return f"{lead} the String that {_code(self.returned[1])} returned, {text}."
+        if sid in self.seen or sid in before.strings or not self.makes_new(op, rhs, rhs_clean, value, before):
+            return f"{lead} {text}."
+        sentence = f"{lead} a new String, {text}"
+        twins = [v["name"] for v in after.vars if v["name"] != name and State.str_id(v["v"])
+                 and v["v"]["s"] == value["s"] and not v["v"].get("cut") and not value.get("cut")]
+        if twins:  # same text, another object: a non-pooled twin is the closer comparison
+            loose = [t for t in twins if after.var[t]["v"]["id"] not in self.pooled]
+            twin = loose[-1] if loose else twins[0]
+            pooled = "" if loose else "pooled "
+            sentence += f" (not the {pooled}one {_code(twin)} points to)"
+        if State.str_id(old):  # the variable moved to a new String; the old one did not change
+            still = [v["name"] for v in after.vars if State.str_id(v["v"]) == old["id"]]
+            if still:
+                return f"{sentence}; {_code(still[0])} still says {before.say(old)}."
+            return f"{sentence}: the old one, {before.say(old)}, is unchanged."
+        m = re.match(rf"({NAME})\s*(?:\.\s*({NAME})\s*\(|\+)", rhs_clean)  # s.trim(), s + "!"
+        source = before.var.get(m.group(1)) if m and m.group(1) != name else None
+        if source and State.str_id(source["v"]) and after.var.get(m.group(1), {}).get("v") == source["v"]:
+            return f"{sentence}. {_code(m.group(1))} still says {before.say(source['v'])} (Strings never change)."
+        if source and m.group(2) == "toString" and State.ref_of(source["v"]) in before.heap and (
+                before.heap[State.ref_of(source["v"])].get("kind") == "builder"):
+            return f"{sentence}, copied out of {_code(m.group(1))}."
+        return sentence + "."
+
+    def makes_new(self, op: str, rhs: str, clean: str, value: dict, before: State) -> bool:
+        """Did this assignment certainly make a new String? Yes for new, for a join with + (javac
+        builds it in a StringBuilder) unless all its parts are constants, for String.format and
+        String.join, and for a String method on a String, or on a literal when the text differs,
+        or a builder's toString(). Not for intern(), which hands back the pool's, nor for an
+        empty result (often the pooled "" itself), nor for a String from anywhere else: a list, or
+        a literal "JAVA".toUpperCase() hands back unchanged, may be older than this line."""
+        if re.search(r"\.\s*intern\s*\(", clean):
+            return False
+        if re.match(r"new\s", clean):
+            return True
+        if value["s"] == "":
+            return False
+        tops = _top_level(clean)
+        if op == "+=" or "+" in tops and "?" not in tops and not _constant(clean, self.src.finals):
+            return True
+        if re.match(r"String\s*\.\s*(?:format|join)\s*\(", clean):
+            return True
+        m = re.match(rf"({NAME})\s*\.\s*({NAME})\s*\(", clean)
+        held = (before.var.get(m.group(1)) or {}).get("v") if m else None
+        if State.str_id(held) and m.group(2) in STRING_RESULTS:
+            return True
+        if m and m.group(2) == "toString" and (before.heap.get(State.ref_of(held)) or {}).get("kind") == "builder":
+            return True
+        lit = re.match(rf'"((?:[^"\\]|\\.)*)"\s*\.\s*({NAME})\s*\(', rhs)
+        return bool(lit and lit.group(2) in STRING_RESULTS and _decode(lit.group(1)) != value["s"])
 
     def target(self, name: str, ref: str, before: State, after: State) -> str:
         """What a reference variable points at, in words: new, shared, or an element."""
@@ -1158,6 +1616,10 @@ class Animator:
                 return f"{'a new' if not known else 'a'} 2D array with {length} row{'s' if length != 1 else ''}"
             return (f"{'a new' if not known else 'an'} array with {length} "
                     f"element{'s' if length != 1 else ''}")
+        if entry.get("kind") == "builder":
+            if not entry.get("length"):
+                return f"a new, empty {what}" if not known else f"an empty {what}"
+            return f"{'a new' if not known else 'a'} {what} holding {_holds(entry)}"
         return f"a new {what}" if not known else _a(what)
 
     @staticmethod

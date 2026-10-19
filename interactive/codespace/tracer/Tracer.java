@@ -21,6 +21,11 @@
  * as one id), and the program's output since the last step. Also: return values of
  * Main's methods, and the first uncaught exception.
  *
+ * Strings carry their uniqueID too, so a literal from the pool and a new String with the
+ * same text are told apart. A StringBuilder or StringBuffer is recorded like an array,
+ * with its text, length and capacity. Both are read from the target's memory: recording
+ * them runs no code there.
+ *
  * Limits: --max-steps line steps, --timeout-ms, --output-cap bytes of output. The
  * target VM is killed on every way out.
  */
@@ -83,6 +88,7 @@ import java.io.PrintStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -105,9 +111,13 @@ public final class Tracer {
     static final int MAX_HEAP = 40;     // arrays and objects recorded per step
     static final int MAX_DEPTH = 3;     // local -> array -> row/object -> field
     static final int MAX_STRING = 80;   // characters kept of a String
+    static final int MAX_BUILDER = 1000; // characters of a StringBuilder read, to see what changes
     static final long CONNECT_MS = 10_000;
     static final Set<String> BOXES = Set.of("java.lang.Integer", "java.lang.Long", "java.lang.Short",
             "java.lang.Byte", "java.lang.Double", "java.lang.Float", "java.lang.Boolean", "java.lang.Character");
+    static final Set<String> BUILDERS = Set.of("java.lang.StringBuilder", "java.lang.StringBuffer");
+    // The target is a child process on this machine, so its UTF16 byte order is this one's.
+    static final boolean BIG_ENDIAN = ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
 
     // ---- options --------------------------------------------------------------------------
     final Path classes;
@@ -690,6 +700,8 @@ public final class Tracer {
                             encode(sb, values.get(i), this, depth + 1);
                         }
                         sb.append("]}");
+                    } else if (BUILDERS.contains(ref.referenceType().name())) {
+                        builder(sb, ref);
                     } else {
                         ReferenceType type = ref.referenceType();
                         sb.append("{\"kind\":\"object\",\"class\":");
@@ -772,22 +784,28 @@ public final class Tracer {
         heap.write(sb);
     }
 
-    /** A value as JSON: "5" for a primitive (as Java prints it), {"s":..} for a String,
-     *  {"ref":id,"type":..} for an array or an object of the lab's classes, {"obj":type}
-     *  for any other object, null for null. */
+    /** A value as JSON: "5" for a primitive (as Java prints it), {"c":..} for a char,
+     *  {"s":..,"id":..} for a String (its text, and its uniqueID: which object it is),
+     *  {"ref":id,"type":..} for an array, an object of the lab's classes or a
+     *  StringBuilder, {"obj":type} for any other object, null for null. */
     void encode(StringBuilder sb, Value v, Heap heap, int depth) {
         if (v == null) {
             sb.append("null");
         } else if (v instanceof StringReference s) {
             String text;
             try {
-                text = s.value();
+                text = s.value(); // read from the target's memory: no code runs there
             } catch (Exception e) {
                 text = "?";
             }
             sb.append("{\"s\":");
-            q(sb, text.length() > MAX_STRING ? text.substring(0, MAX_STRING) + "…" : text);
+            q(sb, clip(text));
+            if (text.length() > MAX_STRING) sb.append(",\"cut\":true");
+            sb.append(",\"id\":");
+            q(sb, Long.toString(s.uniqueID()));
             sb.append('}');
+        } else if (v instanceof CharValue c) {
+            character(sb, c.value());
         } else if (v instanceof ArrayReference a) {
             ref(sb, a, heap, depth);
         } else if (v instanceof ObjectReference o) {
@@ -800,13 +818,17 @@ public final class Tracer {
             }
             if (BOXES.contains(type)) {
                 Field f = o.referenceType().fieldByName("value");
-                q(sb, primitive(f == null ? null : o.getValue(f)));
+                Value boxed = f == null ? null : o.getValue(f);
+                if (boxed instanceof CharValue c) character(sb, c.value());
+                else q(sb, primitive(boxed));
             } else if (isLabClass(type) && !isEnum(o.referenceType())) {
                 ref(sb, o, heap, depth);
             } else if (isEnum(o.referenceType())) {
                 Field f = o.referenceType().fieldByName("name");
                 Value name = f == null ? null : o.getValue(f);
                 q(sb, name instanceof StringReference n ? n.value() : simpleName(type));
+            } else if (BUILDERS.contains(type) && builderFields(o.referenceType()) != null) {
+                ref(sb, o, heap, depth);
             } else {
                 sb.append("{\"obj\":");
                 q(sb, simpleName(type));
@@ -831,6 +853,71 @@ public final class Tracer {
         q(sb, type);
         if (!kept) sb.append(",\"cut\":true");
         sb.append('}');
+    }
+
+    static void character(StringBuilder sb, char c) {
+        sb.append("{\"c\":");
+        q(sb, String.valueOf(c));
+        sb.append('}');
+    }
+
+    /** At most MAX_STRING characters, then "…"; a surrogate pair is never cut in half. */
+    static String clip(String text) {
+        if (text.length() <= MAX_STRING) return text;
+        int end = Character.isHighSurrogate(text.charAt(MAX_STRING - 1)) ? MAX_STRING - 1 : MAX_STRING;
+        return text.substring(0, end) + "…";
+    }
+
+    final Map<String, Field[]> builderFields = new HashMap<>();
+
+    /** A StringBuilder's (or StringBuffer's) value, coder and count fields, as JDK 9 to 21 keep
+     *  them; null when this JDK keeps its text some other way. */
+    Field[] builderFields(ReferenceType type) {
+        if (!builderFields.containsKey(type.name())) {
+            Field value = type.fieldByName("value");
+            Field coder = type.fieldByName("coder");
+            Field count = type.fieldByName("count");
+            boolean ok = value != null && value.typeName().equals("byte[]") && coder != null
+                    && coder.typeName().equals("byte") && count != null && count.typeName().equals("int");
+            builderFields.put(type.name(), ok ? new Field[] {value, coder, count} : null);
+        }
+        return builderFields.get(type.name());
+    }
+
+    /**
+     * A StringBuilder or StringBuffer as JSON: its text, length and capacity, and a hash of its
+     * first MAX_BUILDER characters, read from its own fields (a hash computed here, in the
+     * tracer). That is safer than calling its toString() in the target, which runs code the
+     * program never ran: on a StringBuffer it takes the lock and fills toStringCache, so the
+     * program's own next toString() would hand back a different object. Reading changes nothing.
+     */
+    void builder(StringBuilder sb, ObjectReference ref) {
+        Field[] f = builderFields(ref.referenceType());
+        Map<Field, Value> values = ref.getValues(List.of(f));
+        ArrayReference bytes = values.get(f[0]) instanceof ArrayReference a ? a : null;
+        int coder = values.get(f[1]) instanceof ByteValue b ? b.value() : 0; // 0 LATIN1, 1 UTF16
+        int count = values.get(f[2]) instanceof IntegerValue n ? n.value() : 0;
+        int capacity = bytes == null ? 0 : bytes.length() >> coder;
+        // the first MAX_BUILDER characters: the text shown, and a hash that tells a change past it
+        int read = Math.max(0, Math.min(Math.min(count, capacity), MAX_BUILDER));
+        List<Value> raw = read == 0 ? List.of() : bytes.getValues(0, read << coder);
+        StringBuilder text = new StringBuilder(read);
+        for (int i = 0; i < read; i++) {
+            if (coder == 0) { // one byte a character
+                text.append((char) (((ByteValue) raw.get(i)).value() & 0xFF));
+            } else {          // two bytes a character, in the machine's byte order
+                int first = ((ByteValue) raw.get(2 * i)).value() & 0xFF;
+                int second = ((ByteValue) raw.get(2 * i + 1)).value() & 0xFF;
+                text.append((char) (BIG_ENDIAN ? first << 8 | second : second << 8 | first));
+            }
+        }
+        sb.append("{\"kind\":\"builder\",\"class\":");
+        q(sb, simpleName(ref.referenceType().name()));
+        sb.append(",\"text\":");
+        q(sb, clip(text.toString()));
+        sb.append(",\"hash\":").append(text.toString().hashCode());
+        sb.append(",\"length\":").append(count);
+        sb.append(",\"capacity\":").append(capacity).append('}');
     }
 
     boolean isLabClass(String name) {

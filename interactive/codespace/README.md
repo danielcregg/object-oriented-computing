@@ -19,7 +19,11 @@ puzzles, the progress journey), and adds to **every** lab:
   plain words, with a note for the common first-year mistakes.
 - **Watch my code run**: the student's own `Main.java`, stepped line by line
   under the Java debugger and drawn by the same engine as the lab's
-  animations: variables, arrays and objects as boxes and arrows.
+  animations: variables, arrays and objects as boxes and arrows. A String is
+  an object with an arrow from its variable, so `a == b` being false shows as
+  two arrows to two objects, and a StringBuilder changes in place. To show a
+  StringBuilder the tracer reads its memory instead of calling its methods,
+  so tracing never changes what the program does.
 - A progress journey (Read and Do steps) on the labs that have no interactive
   layer of their own.
 

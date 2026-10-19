@@ -1,0 +1,238 @@
+{
+  "id": "task-diy-8",
+  "task": 8,
+  "title": "DIY 8, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "What the fixed program prints, and why the bugs misbehave",
+      "steps": [
+        {
+          "caption": "input is made with new, so it points at an object of its own. The literal YES it is compared with is a different object, in the pool.",
+          "vars": [{"name": "input", "ref": "N"}],
+          "arrays": [{"id": "P", "text": "YES", "pool": true}, {"id": "N", "text": "YES"}]
+        },
+        {
+          "caption": "Comparing with == compares arrows, and these lead to two different objects: false, even though the text matches. That is error 1.",
+          "print": "== comparison: false\n",
+          "vars": [{"name": "input", "ref": "N"}],
+          "arrays": [{"id": "P", "text": "YES", "pool": true}, {"id": "N", "text": "YES"}],
+          "compare": [{"a": {"array": "P"}, "b": {"array": "N"}, "same": false}]
+        },
+        {
+          "caption": "equals compares the characters instead: Y, E and S all match, so true.",
+          "print": "equals() comparison: true\n",
+          "vars": [{"name": "input", "ref": "N"}],
+          "arrays": [
+            {"id": "P", "text": "YES", "pool": true, "match": [0, 1, 2]},
+            {"id": "N", "text": "YES", "match": [0, 1, 2]}
+          ],
+          "compare": [
+            {"a": {"array": "P", "index": 0}, "b": {"array": "N", "index": 0}, "same": true},
+            {"a": {"array": "P", "index": 1}, "b": {"array": "N", "index": 1}, "same": true},
+            {"a": {"array": "P", "index": 2}, "b": {"array": "N", "index": 2}, "same": true}
+          ]
+        },
+        {
+          "caption": "text holds null: there is no object, so calling contains through it would crash the program, as error 2 can. Check for null first, and skip the call.",
+          "print": "text is null - skipping contains()\n",
+          "vars": [{"name": "text", "value": "null"}],
+          "arrays": []
+        },
+        {
+          "caption": "Joining 100 numbers with + in a loop builds a whole new String every round, copying everything so far, then drops the old one. That is error 3.",
+          "vars": [{"name": "numbers", "ref": "X4"}],
+          "arrays": [
+            {"id": "X1", "text": "0,", "class": "String", "dead": true},
+            {"id": "X2", "text": "0,1,", "class": "String", "dead": true},
+            {"id": "X3", "text": "0,1,2,", "class": "String", "dead": true},
+            {"id": "X4", "text": "0,1,2,3,", "class": "String", "note": "96 rounds to go"}
+          ]
+        },
+        {
+          "caption": "A StringBuilder appends every number to one object instead. Your line shows each number from 0 to 99, but the expected output shows only the two ends, with ... between them.",
+          "print": "Joined with StringBuilder: 0,1,2,3, ... ,98,99,\n",
+          "from": {"array": "Bd"},
+          "vars": [{"name": "builder", "ref": "Bd"}],
+          "arrays": [
+            {"id": "Bd", "text": "0,1,2,3,4,5,6,7,8,9,10,11,12,…,97,98,99,", "class": "StringBuilder", "solid": true}
+          ]
+        },
+        {
+          "caption": "str holds Java, indexes 0 to 3. A substring's end index is not included, so from 0 up to 4 takes all four characters. Error 4 adds 1 to its end index, and takes one too many.",
+          "print": "First four characters: Java\n",
+          "from": {"array": "J"},
+          "vars": [{"name": "str", "ref": "J"}],
+          "arrays": [
+            {
+              "id": "J",
+              "text": "Java",
+              "class": "String",
+              "pool": true,
+              "highlight": [0, 1, 2, 3],
+              "marks": {"0": "begin"},
+              "ruler": "length 4"
+            }
+          ]
+        },
+        {
+          "caption": "replaceAll reads its first argument as a pattern, and in a pattern a dot means any character. So all five characters are replaced: five dashes. Error 5 falls into the same trap.",
+          "print": "replaceAll(\".\", \"-\"): -----\n",
+          "from": {"array": "D1"},
+          "vars": [{"name": "version", "ref": "V"}],
+          "arrays": [
+            {"id": "V", "text": "1.2.3", "class": "String", "pool": true, "highlight": [0, 1, 2, 3, 4]},
+            {"id": "D1", "text": "-----", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "V", "index": 0}, "to": {"array": "D1", "index": 0}, "text": "-"},
+            {"from": {"array": "V", "index": 1}, "to": {"array": "D1", "index": 1}, "text": "-"},
+            {"from": {"array": "V", "index": 2}, "to": {"array": "D1", "index": 2}, "text": "-"},
+            {"from": {"array": "V", "index": 3}, "to": {"array": "D1", "index": 3}, "text": "-"},
+            {"from": {"array": "V", "index": 4}, "to": {"array": "D1", "index": 4}, "text": "-"}
+          ]
+        },
+        {
+          "caption": "replace treats the dot as a plain dot: only the two dots become dashes.",
+          "print": "replace(\".\", \"-\"): 1-2-3\n",
+          "from": {"array": "D2"},
+          "vars": [{"name": "version", "ref": "V"}],
+          "arrays": [
+            {"id": "V", "text": "1.2.3", "class": "String", "pool": true, "match": [1, 3]},
+            {"id": "D1", "text": "-----", "class": "String"},
+            {"id": "D2", "text": "1-2-3", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "V", "index": 0}, "to": {"array": "D2", "index": 0}, "text": "1"},
+            {"from": {"array": "V", "index": 1}, "to": {"array": "D2", "index": 1}, "text": "-"},
+            {"from": {"array": "V", "index": 2}, "to": {"array": "D2", "index": 2}, "text": "2"},
+            {"from": {"array": "V", "index": 3}, "to": {"array": "D2", "index": 3}, "text": "-"},
+            {"from": {"array": "V", "index": 4}, "to": {"array": "D2", "index": 4}, "text": "3"}
+          ]
+        },
+        {
+          "caption": "Fix all ten labelled errors in BuggyStrings. Then write the code that makes this happen in main, run it with ▶, then press Check my output.",
+          "vars": [{"name": "version", "ref": "V"}],
+          "arrays": [
+            {"id": "V", "text": "1.2.3", "class": "String", "pool": true},
+            {"id": "D1", "text": "-----", "class": "String"},
+            {"id": "D2", "text": "1-2-3", "class": "String"}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if the end index is 5?",
+      "steps": [
+        {
+          "caption": "Java has 4 characters, indexes 0 to 3. An end index can be at most 4, the length.",
+          "vars": [{"name": "str", "ref": "J"}],
+          "arrays": [{"id": "J", "text": "Java", "class": "String", "pool": true, "ruler": "length 4"}]
+        },
+        {
+          "caption": "An end index of 5 would need a character at index 4, which does not exist: the program crashes.",
+          "error": "StringIndexOutOfBoundsException: Range [0, 5) out of bounds for length 4",
+          "vars": [{"name": "str", "ref": "J"}],
+          "arrays": [
+            {
+              "id": "J",
+              "text": "Java",
+              "class": "String",
+              "pool": true,
+              "highlight": [0, 1, 2, 3, 4],
+              "ghost": 4,
+              "ruler": "length 4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "Results nobody catches: errors 10, 7 and 6",
+      "steps": [
+        {
+          "caption": "shout gets hello. toUpperCase builds a new String, HELLO, and hands it back, but nothing catches it.",
+          "vars": [{"name": "text", "ref": "H"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "U", "text": "HELLO", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "H", "index": 0}, "to": {"array": "U", "index": 0}, "text": "H"},
+            {"from": {"array": "H", "index": 1}, "to": {"array": "U", "index": 1}, "text": "E"},
+            {"from": {"array": "H", "index": 2}, "to": {"array": "U", "index": 2}, "text": "L"},
+            {"from": {"array": "H", "index": 3}, "to": {"array": "U", "index": 3}, "text": "L"},
+            {"from": {"array": "H", "index": 4}, "to": {"array": "U", "index": 4}, "text": "O"}
+          ]
+        },
+        {
+          "caption": "So text still points at hello, and that is what shout returns. The capitals are garbage: error 10.",
+          "vars": [{"name": "text", "ref": "H"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "U", "text": "HELLO", "class": "String", "dead": true}
+          ]
+        },
+        {
+          "caption": "Error 7 is the same trap: concat builds hello! and nothing catches it, so input comes back without the !.",
+          "vars": [{"name": "input", "ref": "H"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "X", "text": "hello!", "class": "String", "dead": true}
+          ]
+        },
+        {
+          "caption": "And error 6: trimming the builder's text makes a new String, then drops it. The builder keeps its spaces.",
+          "vars": [{"name": "builder", "ref": "Bu"}],
+          "arrays": [
+            {"id": "Bu", "text": "  hi  ", "class": "StringBuilder", "note": "unchanged"},
+            {"id": "Tr", "text": "hi", "class": "String", "dead": true}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if the String is empty? Error 8",
+      "steps": [
+        {
+          "caption": "firstLetter gets an empty String: no characters, so no box 0.",
+          "vars": [{"name": "text", "ref": "E"}],
+          "arrays": [{"id": "E", "text": "", "class": "String", "pool": true}]
+        },
+        {
+          "caption": "Asking for the character at index 0 crashes the program: error 8. Check that the String is not null and not empty before reading from it.",
+          "error": "StringIndexOutOfBoundsException: Index 0 out of bounds for length 0",
+          "vars": [{"name": "text", "ref": "E"}],
+          "arrays": [{"id": "E", "text": "", "class": "String", "pool": true, "highlight": [0], "ghost": 0}]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "An empty field at the end: error 9",
+      "steps": [
+        {
+          "caption": "A line with three fields: a, b, and an empty one after the last comma.",
+          "vars": [{"name": "csv", "ref": "C"}],
+          "arrays": [{"id": "C", "text": "a,b,", "class": "String", "pool": true, "highlight": [1, 3]}]
+        },
+        {
+          "caption": "Splitting at each comma quietly drops empty fields at the end: two parts, not three. That is error 9, and the hint shows how to keep them.",
+          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "Pt"}],
+          "arrays": [
+            {"id": "C", "text": "a,b,", "class": "String", "pool": true},
+            {"id": "Pt", "values": ["\"a\"", "\"b\""], "class": "String[]", "ghost": 2}
+          ]
+        }
+      ]
+    }
+  ]
+}

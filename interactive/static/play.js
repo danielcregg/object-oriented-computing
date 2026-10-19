@@ -71,7 +71,14 @@
       'stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>',
     swap: '<path d="M6 8.5h12m-3.5-3.5L18 8.5 14.5 12M18 15.5H6m3.5-3.5L6 15.5 9.5 19" fill="none" ' +
       'stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>',
+    join: '<path d="M4.5 12h5M14.5 12h5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>' +
+      '<path d="M9.5 7.5a4.5 4.5 0 0 1 0 9M14.5 7.5a4.5 4.5 0 0 0 0 9" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.4" stroke-linecap="round"/>',
+    bug: '<ellipse cx="12" cy="13.5" rx="5" ry="6.3" fill="currentColor"/><path d="M12 7.2v12.6" stroke="#FFFFFF" ' +
+      'stroke-width="1.4"/><path d="M9.2 7.6 7.4 5.2M14.8 7.6l1.8-2.4M7 12H3.6M17 12h3.4M7.4 16.4l-3 1.8M16.6 16.4l3 1.8" ' +
+      'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
   };
+  const SHOW_CHAR = { ' ': '␣', '\n': '⏎', '\t': '⇥' }; // ␣ ⏎ ⇥: whitespace you can see
 
   // ---- small helpers ----------------------------------------------------------------
 
@@ -153,7 +160,12 @@
       else if (KEYWORDS.has(word)) kind = 'play-tok-kw';
       if (!kind) continue;
       if (match.index > last) node.appendChild(document.createTextNode(text.slice(last, match.index)));
-      node.appendChild(make('span', kind, word));
+      const tok = make('span', kind, word);
+      if (word[0] === '"' && word.includes('\\')) { // an escape inside a literal stands out: \n is one character
+        tok.textContent = '';
+        word.split(/(\\.)/).forEach((bit, k) => { if (bit) tok.appendChild(k % 2 ? make('span', 'play-tok-esc', bit) : document.createTextNode(bit)); });
+      }
+      node.appendChild(tok);
       last = match.index + word.length;
     }
     if (last < text.length) node.appendChild(document.createTextNode(text.slice(last)));
@@ -204,8 +216,15 @@
   // ---- pieces of a picture ---------------------------------------------------------------
 
   // What a box shows: a literal, "null", "?" when empty, or the NUL character's faint name and number.
+  // A String's characters (elem "text") show bare, with a space, a tab and a new line made visible.
   function paint(box, elem, v) {
     box.querySelectorAll(':scope > .play-val, :scope > .play-num').forEach((n) => n.remove());
+    if (elem === 'text') {
+      box.classList.toggle('play-space', has(SHOW_CHAR, v));
+      const val = make('span', 'play-val', has(SHOW_CHAR, v) ? SHOW_CHAR[v] : v);
+      box.appendChild(val);
+      return val;
+    }
     const empty = v === EMPTY;
     const nul = elem === 'char' && v === NUL;
     box.classList.toggle('play-empty', empty);
@@ -354,7 +373,7 @@
     const chars = Math.max(1, ...o.values.map((v) => widthOf(o.elem, v)), o.chars || 1);
     el.style.setProperty('--play-chars', chars);
     if (chars * o.values.length > 22) el.classList.add('play-long'); // compact on a narrow card
-    const label = (i) => `${o.name}[${i}], holding ${spoken(o.elem, row.values[i])}`;
+    const label = o.label ? (i) => o.label(i, row.values[i]) : (i) => `${o.name}[${i}], holding ${spoken(o.elem, row.values[i])}`;
     o.values.forEach((v, i) => {
       const cell = make('div', 'play-cell');
       const box = make(o.clickable ? 'button' : 'div', 'play-box');
@@ -1022,7 +1041,7 @@
     holder.classList.add('play-choices');
     let done = false;
     options.forEach((opt) => {
-      const b = btn(opt.text, { label: opt.label, cls: `play-choice${opt.mono ? ' play-mono' : ''}`, onClick: () => {
+      const b = btn(opt.text, { label: opt.label, cls: `play-choice${opt.mono ? ' play-mono' : ''}${opt.cls ? ` ${opt.cls}` : ''}`, onClick: () => {
         if (done) return;
         if (opt.key === answer) {
           done = true;
@@ -1784,9 +1803,12 @@
     return values.every((v, i) => i === 0 || values[i - 1] <= v);
   }
 
+  // Ascending order as Arrays.sort sees it: numbers by value, Strings by compareTo (one char code at a time).
+  const ascending = (a, b) => (typeof a === 'string' ? compareTo(a, String(b)) : a - b);
+
   // The fewest swaps that sort distinct values: n minus the number of cycles.
   function minSwaps(values) {
-    const sorted = values.slice().sort((a, b) => a - b);
+    const sorted = values.slice().sort(ascending);
     const target = values.map((v) => sorted.indexOf(v));
     const seen = Array(values.length).fill(false);
     let cycles = 0;
@@ -1811,7 +1833,7 @@
       values = shuffle(arr.values);
     }
     const n = values.length;
-    const sorted = values.slice().sort((a, b) => a - b);
+    const sorted = values.slice().sort(ascending);
     const par = minSwaps(values);
     ctx.expose({ type: 'swap', name, elem, values: values.slice() });
     const vars = { name, par };
@@ -2583,6 +2605,1549 @@
     }
 
     window.requestAnimationFrame(() => look(true));
+  };
+
+  // ======================================================================================================
+  // Strings. A String is drawn the way the lecture draws one: its characters in a row of boxes over index
+  // pills (the array inside the object), and a String variable holds an arrow to the object.
+  // ======================================================================================================
+
+  // ---- what String methods return, worked out as Java works them out (the puzzles' text is ASCII) -----
+
+  const isWhite = (c) => c === ' ' || c === '\t' || c === '\n' || c === '\r' || c === '\f' || c === '\u000B';
+  const javaEscape = (s) => String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')
+    .replace(/\t/g, '\\t');
+  const jlit = (s) => (s === null ? 'null' : `"${javaEscape(s)}"`);
+  const charLit = (c) => `'${({ '\n': '\\n', '\t': '\\t', "'": "\\'", '\\': '\\\\' })[c] || c}'`;
+  const asciiUpper = (s) => s.replace(/[a-z]/g, (c) => c.toUpperCase());
+  const asciiLower = (s) => s.replace(/[A-Z]/g, (c) => c.toLowerCase());
+  const jtrim = (s) => s.replace(/^[\u0000- ]+/, '').replace(/[\u0000- ]+$/, '');
+  const signWord = (n) => (n < 0 ? 'negative' : n > 0 ? 'positive' : 'zero');
+
+  // A literal as typed between its quotes, in the pieces that each make one character: `\n` is one.
+  function literalPieces(body) {
+    return (String(body).match(/\\[\s\S]|[\s\S]/g) || []).map((src) => ({
+      src, esc: src.length === 2, ch: src.length === 2 ? ({ n: '\n', t: '\t' })[src[1]] || src[1] : src }));
+  }
+  const unescapeJava = (body) => literalPieces(body).map((p) => p.ch).join('');
+
+  // compareTo: the first pair of characters that differ decides (their char codes subtracted); if one
+  // String runs out first, the lengths do.
+  function compareTo(a, b) {
+    const n = Math.min(a.length, b.length);
+    for (let k = 0; k < n; k += 1) if (a[k] !== b[k]) return a.charCodeAt(k) - b.charCodeAt(k);
+    return a.length - b.length;
+  }
+  function firstDiff(a, b) {
+    const n = Math.min(a.length, b.length);
+    for (let k = 0; k < n; k += 1) if (a[k] !== b[k]) return k;
+    return n;
+  }
+
+  // split with a separator that holds no regex characters: empty parts at the end are dropped.
+  function splitJ(s, sep) {
+    if (!s.includes(sep)) return [s];
+    const parts = s.split(sep);
+    while (parts.length && parts[parts.length - 1] === '') parts.pop();
+    return parts;
+  }
+
+  // String.format with %s, %d, %.Nf and %%: the pieces of the result, each knowing the argument it shows.
+  function formatPieces(template, args) {
+    const out = [];
+    let next = 0;
+    let last = 0;
+    for (const m of template.matchAll(/%(?:\.(\d+))?([sdf%])/g)) {
+      if (m.index > last) out.push({ text: template.slice(last, m.index) });
+      if (m[2] === '%') out.push({ text: '%' });
+      else {
+        const v = args[next];
+        const text = m[2] === 'f' ? Number(v).toFixed(m[1] === undefined ? 6 : Number(m[1])) : String(v);
+        out.push({ text, arg: next, spec: m[0], value: v });
+        next += 1;
+      }
+      last = m.index + m[0].length;
+    }
+    if (last < template.length) out.push({ text: template.slice(last) });
+    return out;
+  }
+
+  const thrown = (name, message) => ({ thrown: name, message: message || '' });
+  const isThrown = (v) => Boolean(v && typeof v === 'object' && !Array.isArray(v) && v.thrown);
+  const exceptionLine = (t) => `Exception in thread "main" java.lang.${t.thrown}${t.message ? `: ${t.message}` : ''}`;
+  const NPE_SIG = { equals: 'equals(Object)', equalsIgnoreCase: 'equalsIgnoreCase(String)', isEmpty: 'isEmpty()',
+    isBlank: 'isBlank()', length: 'length()', compareTo: 'compareTo(String)', trim: 'trim()',
+    toUpperCase: 'toUpperCase()', contains: 'contains(java.lang.CharSequence)' };
+
+  // One call from a puzzle file: {on, call, args, then}. on and each argument name a variable, or are
+  // {"lit": text} for a String literal, {"chr": c} for a char literal, or a number.
+  function callParts(spec, env) {
+    const term = (a) => {
+      if (has(a, 'lit')) return { src: jlit(a.lit), value: a.lit, lit: true };
+      if (has(a, 'chr')) return { src: charLit(a.chr), value: a.chr, lit: true };
+      if (typeof a === 'number') return { src: String(a), value: a, lit: true };
+      return { src: String(a), value: has(env, a) ? env[a] : undefined, name: String(a) };
+    };
+    const on = spec.on === undefined ? null : term(spec.on);
+    const args = (spec.args || []).map(term);
+    let src = `${on ? `${on.src}.` : ''}${spec.call}(${args.map((a) => a.src).join(', ')})`;
+    if (spec.then === 'length') src += '.length';
+    else if (typeof spec.then === 'number') src += `[${spec.then}]`;
+    return { on, args, src };
+  }
+
+  function evalCall(spec, env) {
+    const { on, args } = callParts(spec, env);
+    const a = args.map((x) => x.value);
+    const s = on ? on.value : null;
+    if (on && s === null) {
+      return thrown('NullPointerException',
+        `Cannot invoke "String.${NPE_SIG[spec.call] || `${spec.call}()`}" because "${on.name}" is null`);
+    }
+    let v;
+    switch (spec.call) {
+      case 'length': v = s.length; break;
+      case 'isEmpty': v = s.length === 0; break;
+      case 'isBlank': v = Array.from(s).every(isWhite); break;
+      case 'equals': v = a[0] !== null && s === a[0]; break;
+      case 'equalsIgnoreCase': v = a[0] !== null && s.length === a[0].length && asciiUpper(s) === asciiUpper(a[0]); break;
+      case 'compareTo': v = compareTo(s, a[0]); break;
+      case 'toUpperCase': v = asciiUpper(s); break;
+      case 'toLowerCase': v = asciiLower(s); break;
+      case 'trim': v = jtrim(s); break;
+      case 'replace': v = s.split(a[0]).join(a[1]); break;
+      case 'contains': v = s.includes(a[0]); break;
+      case 'indexOf': v = s.indexOf(a[0]); break;
+      case 'split': v = splitJ(s, a[0]); break;
+      case 'String.format': v = formatPieces(a[0], a.slice(1)).map((p) => p.text).join(''); break;
+      case 'String.join': v = a.slice(1).join(a[0]); break;
+      default: throw new Error(`unknown String call ${spec.call}`);
+    }
+    if (spec.then === 'length') v = v.length;
+    else if (typeof spec.then === 'number') v = v[spec.then];
+    return v;
+  }
+
+  const BOOLEAN_CALLS = new Set(['isEmpty', 'isBlank', 'equals', 'equalsIgnoreCase', 'contains']);
+  const answerKind = (spec) => (spec.call === 'compareTo' ? 'sign'
+    : (BOOLEAN_CALLS.has(spec.call) && spec.then === undefined ? 'boolean' : 'value'));
+
+  // The wrong answers worth offering for a call that returns a value, each named for its mistake.
+  function decoys(spec, env, right) {
+    const { on, args } = callParts(spec, env);
+    const s = on ? on.value : null;
+    const a = args.map((x) => x.value);
+    const out = [];
+    const add = (kind, v) => { if (v !== undefined && v !== null && v !== right && !out.some((d) => d.value === v)) out.push({ kind, value: v }); };
+    if (spec.call === 'trim') {
+      add('all', s.replace(/ /g, ''));
+      add('front', s.replace(/^ +/, ''));
+      add('same', s);
+    } else if (spec.call === 'replace') {
+      add('first', s.replace(a[0], a[1]));
+      add('same', s);
+    } else if (spec.call === 'toUpperCase') {
+      add('same', s);
+      add('first', s ? s[0].toUpperCase() + s.slice(1) : s);
+    } else if (spec.call === 'String.format') {
+      const pieces = formatPieces(a[0], a.slice(1));
+      const variant = (fn) => pieces.map((p) => (p.spec && p.spec.endsWith('f') ? fn(p) : p.text)).join('');
+      add('unrounded', variant((p) => String(p.value)));
+      add('cut', variant((p) => {
+        const d = Number((p.spec.match(/\.(\d+)/) || [0, 6])[1]);
+        return (Math.trunc(p.value * 10 ** d) / 10 ** d).toFixed(d);
+      }));
+    } else if (spec.call === 'String.join') {
+      const parts = a.slice(1);
+      add('after', parts.join(a[0]) + a[0]);
+      add('around', a[0] + parts.join(a[0]) + a[0]);
+      add('none', parts.join(''));
+    } else if (spec.call === 'split' && spec.then === 'length') {
+      add('commas', right - 1);
+      add('plus', right + 1);
+    } else if (spec.call === 'split') {
+      const parts = splitJ(s, a[0]);
+      add('before', parts[spec.then - 1]);
+      add('after', parts[spec.then + 1]);
+    } else if (spec.call === 'indexOf') {
+      add('count', right + 1);
+      add('absent', -1);
+    }
+    return out;
+  }
+
+  // ---- pieces of a String picture ---------------------------------------------------------------------
+
+  // A String's characters as a row of boxes over index pills: charAt(i) is box i.
+  function textRow(o) {
+    const text = String(o.text);
+    const row = arrayRow({ name: o.name, elem: 'text', values: Array.from(text), hue: o.hue || 'teal',
+      showName: o.showName, clickable: o.clickable, onClick: o.onClick, ghost: o.ghost,
+      label: (i, v) => `${o.name}.charAt(${i}), holding ${v === ' ' ? 'a space' : charLit(v)}` });
+    row.el.classList.add('play-string');
+    row.el.style.setProperty('--play-n', Math.max(text.length, 1)); // on a narrow card, long Strings get smaller boxes
+    row.text = text;
+    if (!text.length) {
+      const none = make('span', 'play-no-chars');
+      rich(none, 'no characters: `length()` is 0');
+      row.track.appendChild(none);
+    }
+    return row;
+  }
+
+  // The gap just before box i (i = length: just after the last box), in the row's own coordinates.
+  function gapX(row, i) {
+    const cells = row.cells;
+    if (!cells.length) return 0;
+    const gap = parseFloat(window.getComputedStyle(row.track).columnGap) || 6;
+    if (i < cells.length) return cells[i].offsetLeft - gap / 2;
+    const end = cells[cells.length - 1];
+    return end.offsetLeft + end.offsetWidth + gap / 2;
+  }
+
+  // Scissors at the gaps where substring cuts: begin before box b, end before box e.
+  function cutAt(row, i, word) {
+    row.track.classList.add('play-has-cuts');
+    const cut = make('span', 'play-cut');
+    const tag = make('span', 'play-cut-tag', `${word} ${i}`);
+    cut.appendChild(tag);
+    cut.style.left = `${gapX(row, i)}px`;
+    row.track.appendChild(cut);
+    animate(cut, [{ opacity: 0, transform: 'scaleY(.2)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: SPRING });
+    return cut;
+  }
+
+  // A new String, returned by a call: a row of its characters with a tag.
+  function resultRow(host, text, tagText, hue) {
+    const wrap = make('div', 'play-result');
+    const row = textRow({ name: 'result', text, showName: false, hue: hue || 'purple' });
+    const tag = make('span', 'play-tag play-tag-new');
+    rich(tag, tagText || 'a new String');
+    wrap.append(row.el, tag);
+    host.appendChild(wrap);
+    row.boxes.forEach((box, k) => pop(box, k * 45));
+    pop(tag, 120);
+    return row;
+  }
+
+  function cornerMark(box, ok) {
+    if (!box || box.querySelector('.play-corner-mark')) return;
+    box.classList.add(ok ? 'play-match' : 'play-nomatch');
+    const m = make('span', `play-corner-mark ${ok ? 'play-same' : 'play-differ'}`);
+    m.appendChild(icon(ok ? 'check' : 'cross'));
+    box.appendChild(m);
+    pop(m);
+  }
+
+  // The first of several keys the round's why has text for (its "*" text when it has none of them).
+  function whyAny(ctx, keys, vars) {
+    const w = ctx.round.why;
+    const key = keys.find((k) => w && typeof w === 'object' && has(w, k));
+    return ctx.why(key === undefined ? keys[keys.length - 1] : key, vars);
+  }
+
+  // Answer buttons that look like the console: one line each, as println would show the text.
+  function consoleOption(text) {
+    const box = make('span', 'play-mini-console');
+    String(text).split('\n').forEach((line) => box.appendChild(make('span', 'play-mini-line', line)));
+    return box;
+  }
+  const printsLabel = (text) => `prints ${String(text).split('\n').map((l) => `[${l}]`).join(' then ')}`;
+
+  // A row of question lines, asked one at a time (as the == or equals? puzzle does).
+  function askOne(ctx, host, spec, onRight) {
+    const line = make('div', 'play-question');
+    const label = make('p', 'play-q-label');
+    rich(label, spec.text);
+    const opts = make('div', 'play-q-opts');
+    opts.setAttribute('role', 'group');
+    opts.setAttribute('aria-label', spec.label);
+    line.append(label, opts);
+    host.appendChild(line);
+    animate(line, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 240 });
+    choices(ctx, opts, spec.opts, spec.answer, (opt) => {
+      line.classList.add('play-q-done');
+      onRight(opt);
+    }, spec.whyOf);
+    return line;
+  }
+
+  // ---- 10. escape: what a literal prints ------------------------------------------------------------
+
+  TYPES.escape = (ctx) => {
+    const { round } = ctx;
+    const source = round.ask === 'source';
+    const drawn = pick(source ? round.texts : round.literals);
+    const body = source ? javaEscape(drawn) : drawn; // between the quotes, as typed
+    const text = source ? drawn : unescapeJava(drawn); // what the String holds
+    const pieces = literalPieces(body);
+    const traps = round.traps || [];
+    ctx.expose({ type: 'escape', ask: source ? 'source' : 'prints', body, text, traps });
+    const vars = { length: text.length, typed: body.length };
+    ctx.task(round.prompt || (source ? 'Which literal makes this line print exactly the text below?'
+      : 'What does this line print?'), vars);
+
+    const brd = board(ctx, 'play-split play-board-escape');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const code = codeView([source
+      ? [{ text: 'System.out.println(' }, { text: '?', part: 'blank' }, { text: ');' }]
+      : `System.out.println("${body}");`]);
+    const out = consoleView();
+    left.append(code.el, out.el);
+    const pic = make('div', 'play-pic play-escape-pic');
+    right.appendChild(pic);
+    if (source) {
+      const want = make('div', 'play-want');
+      want.append(make('span', 'play-want-head', 'it must print'), consoleOption(text));
+      pic.appendChild(want);
+    } else pic.appendChild(tilesView(pieces));
+
+    const candidates = source ? {
+      right: jlit(text),
+      naive: `"${text}"`,
+      double: `"${javaEscape(javaEscape(text))}"`,
+      single: `'${text}'`,
+    } : {
+      right: text,
+      raw: body,
+      quotes: `"${text}"`,
+      dropped: body.replace(/\\(.)/g, '$1'),
+      space: text.replace(/\n/g, ' '),
+    };
+    const seen = new Set();
+    const opts = ['right', ...traps].filter((k) => {
+      if (!has(candidates, k) || seen.has(candidates[k])) return false;
+      seen.add(candidates[k]);
+      return true;
+    }).map((k) => (source
+      ? { key: k, text: candidates[k], mono: true, cls: 'play-lit' }
+      : { key: k, text: '', node: consoleOption(candidates[k]), label: printsLabel(candidates[k]) }));
+    const ctl = controls(ctx, source ? 'Which literal?' : 'What it prints', 'play-chips play-options');
+    choices(ctx, ctl, shuffle(opts), 'right', () => reveal(), (opt) => ctx.why(opt.key, vars));
+
+    async function reveal() {
+      if (source) {
+        code.set([`System.out.println(${jlit(text)});`]);
+        pic.appendChild(tilesView(pieces));
+      }
+      code.tick(0);
+      const tiles = pic.querySelector('.play-tiles');
+      const row = textRow({ name: 'the String', text, hue: 'purple' });
+      row.el.classList.add('play-string-made');
+      pieces.forEach((p, k) => { if (p.esc) row.boxes[k].classList.add('play-esc'); });
+      pic.appendChild(row.el);
+      if (tiles) tiles.classList.add('play-tiles-done');
+      row.boxes.forEach((box, k) => pop(box, k * 40));
+      for (const ch of text) { // the console types it out, character by character
+        await wait(34);
+        if (!ctx.alive()) return;
+        if (ch === '\n') out.println('');
+        else out.print(ch);
+      }
+      out.println('');
+      ctx.solved(round.right, vars);
+    }
+  };
+
+  // What was typed between the quotes, a tile per character; an escape is one tile of two keys.
+  function tilesView(pieces) {
+    const el = make('div', 'play-tiles');
+    el.appendChild(make('span', 'play-tiles-head', 'typed between the quotes'));
+    const row = make('div', 'play-tiles-row');
+    pieces.forEach((p) => {
+      const t = make('span', `play-tile${p.esc ? ' play-tile-esc' : ''}`, p.src === ' ' ? SHOW_CHAR[' '] : p.src);
+      row.appendChild(t);
+    });
+    el.appendChild(row);
+    return el;
+  }
+
+  // ---- 11. chars: a String's characters, by index ---------------------------------------------------------
+
+  TYPES.chars = (ctx) => {
+    const { round, data } = ctx;
+    const word = clone(pick(round.words || data.words));
+    const { name, text } = word;
+    const n = text.length;
+    const tasks = round.tasks.map((t) => {
+      const spec = clone(t);
+      if (has(t, 'find')) { // the character to look for, drawn from this word
+        const counts = {};
+        Array.from(text).forEach((c) => { counts[c] = (counts[c] || 0) + 1; });
+        if (t.find === 'absent') spec.ch = pick((round.decoys || ['z']).filter((c) => !text.includes(c)));
+        else spec.ch = pick(Object.keys(counts).filter((c) => c !== ' ' && (t.find === 'repeat' ? counts[c] > 1 : counts[c] === 1)));
+      }
+      return spec;
+    });
+    ctx.expose({ type: 'chars', name, text, tasks });
+    const brd = board(ctx, 'play-board-chars');
+    const code = codeView([`String ${name} = ${jlit(text)};`, '']);
+    const row = textRow({ name, text, clickable: true, onClick: (i) => onBox(i),
+      ghost: tasks.some((t) => t.ask === 'pastEnd') });
+    const ruler = make('div', 'play-ruler');
+    const rulerLabel = make('span', 'play-ruler-label');
+    ruler.appendChild(rulerLabel);
+    if (tasks.some((t) => t.ask === 'length')) {
+      row.track.appendChild(ruler);
+      row.track.classList.add('play-has-ruler');
+    }
+    if (tasks.some((t) => has(t, 'slice') || has(t, 'sliceCall'))) {
+      row.track.classList.add('play-has-cuts');
+      row.el.classList.add('play-array-cut');
+    }
+    const glass = tasks.some((t) => has(t, 'find')) ? row.badge('magnifier') : null;
+    if (glass) glass.classList.add('play-hidden');
+    const help = make('p', 'play-test');
+    brd.append(code.el, row.el, help);
+    const ctl = controls(ctx, 'Answers', 'play-chips');
+    const notFound = btn('`-1`: not found', { cls: 'play-mono play-none', label: 'not found: -1', onClick: () => onNone() });
+    let k = 0;
+    let stepKind = null;
+    let selStart = null;
+    const base = { name, length: n, last: n - 1, text: jlit(text) };
+
+    function boxesOn(on) {
+      row.boxes.forEach((b) => b.setAttribute('aria-disabled', on ? 'false' : 'true'));
+      row.el.classList.toggle('play-clickable', on);
+    }
+
+    function clean() {
+      row.cells.forEach((c) => c.classList.remove('play-hit', 'play-here', 'play-checked', 'play-sel'));
+      row.track.querySelectorAll('.play-cut').forEach((c) => c.remove());
+      brd.querySelectorAll('.play-result').forEach((r) => r.remove());
+      if (row.ghost) row.ghost.classList.remove('play-boom', 'play-here');
+      if (glass) glass.classList.add('play-hidden');
+      help.textContent = '';
+      help.classList.remove('play-test-err');
+    }
+
+    function next() {
+      k += 1;
+      ctx.later(begin, MS.beat * 2.4);
+    }
+
+    function begin() {
+      ctl.textContent = '';
+      ctl.hidden = true;
+      clean();
+      selStart = null;
+      if (k >= tasks.length) {
+        boxesOn(false);
+        code.set([`String ${name} = ${jlit(text)};`]);
+        ctx.solved(round.right, base);
+        return;
+      }
+      const t = tasks[k];
+      if (has(t, 'ask')) {
+        stepKind = 'ask';
+        boxesOn(false);
+        ask(t);
+      } else if (has(t, 'click')) {
+        stepKind = 'click';
+        boxesOn(true);
+        const expr = t.click === 'last' ? `${name}.charAt(${name}.length() - 1)` : `${name}.charAt(${t.click})`;
+        code.set([`String ${name} = ${jlit(text)};`, expr]);
+        ctx.task(t.say || 'Click `{expr}`.', { ...base, expr });
+      } else if (has(t, 'slice')) {
+        stepKind = 'slice';
+        boxesOn(true);
+        const expr = sliceExpr(t.slice);
+        code.set([`String ${name} = ${jlit(text)};`, expr]);
+        ctx.task(t.say || 'Select what `{expr}` returns: click its first character, then its last.', { ...base, expr });
+      } else if (has(t, 'sliceCall')) {
+        stepKind = 'ask';
+        boxesOn(false);
+        sliceCall(t);
+      } else if (has(t, 'find')) {
+        stepKind = 'find';
+        boxesOn(true);
+        const expr = `${name}.indexOf(${charLit(t.ch)})`;
+        code.set([`String ${name} = ${jlit(text)};`, expr]);
+        ctx.task(t.say || 'Where does `{expr}` point? Click the box, or `-1` if there is none.', { ...base, expr });
+        ctl.hidden = false;
+        ctl.appendChild(notFound);
+        notFound.setAttribute('aria-disabled', 'false');
+        notFound.classList.remove('play-tried', 'play-right');
+        notFound.querySelectorAll('.play-tried-mark, .play-right-mark').forEach((m) => m.remove());
+      }
+    }
+
+    const sliceExpr = ([b, e]) => (e === undefined ? `${name}.substring(${b})` : `${name}.substring(${b}, ${e})`);
+
+    function ask(t) {
+      if (t.ask === 'length') {
+        code.set([`String ${name} = ${jlit(text)};`, `${name}.length()`]);
+        ctx.task(t.say || 'What is `{name}.length()`?', base);
+        ctl.hidden = false;
+        choices(ctx, ctl, [n - 1, n, n + 1].map((v) => ({ key: v, text: String(v), mono: true })), n, () => {
+          code.set([`String ${name} = ${jlit(text)};`, `${name}.length()   // ${n}`]);
+          code.tick(1);
+          rulerLabel.textContent = `length() ${n}`;
+          ruler.classList.add('play-on');
+          ctx.good('`{name}.length()` is {length}: it counts every character, spaces too. The indexes run from 0 to {last}.', base);
+          next();
+        }, () => ctx.why('length', base));
+      } else { // pastEnd: one past the last box
+        const expr = `${name}.charAt(${name}.length())`;
+        code.set([`String ${name} = ${jlit(text)};`, expr]);
+        ctx.task(t.say || 'What does `{expr}` do?', { ...base, expr });
+        ctl.hidden = false;
+        const opts = (round.options || []).map((o) => ({ key: o.key, text: o.text, mono: Boolean(o.mono) }));
+        choices(ctx, ctl, opts, 'throws', () => {
+          row.ghost.classList.add('play-boom', 'play-here');
+          shake(row.ghost);
+          help.textContent = '';
+          rich(help, `\`${exceptionLine(thrown('StringIndexOutOfBoundsException', `Index ${n} out of bounds for length ${n}`))}\``);
+          help.classList.add('play-test-err');
+          ctx.good('Index {length} is one past the last box: `charAt` throws, just as an array would.', base);
+          next();
+        }, (opt) => ctx.why(opt.key, base));
+      }
+    }
+
+    function sliceCall(t) {
+      const [b, e] = t.sliceCall;
+      const want = text.slice(b, e);
+      code.set([`String ${name} = ${jlit(text)};`, `${name}.substring(?, ?)`]);
+      ctx.task(t.say || 'Which call returns `{want}`?', { ...base, want: jlit(want) });
+      row.cells.forEach((c, i) => c.classList.toggle('play-sel', i >= b && i < e));
+      const ends = Array.from(new Set([e - 1, e, e + 1])).filter((x) => x > b && x <= n);
+      const opts = ends.map((x) => ({ key: x, text: `${name}.substring(${b}, ${x})`, mono: true }));
+      ctl.hidden = false;
+      choices(ctx, ctl, opts, e, () => {
+        sliced(b, e, `${name}.substring(${b}, ${e})`);
+        ctx.good('The end index is one past the last character you want: `{expr}` stops before index {e}.',
+          { ...base, expr: `${name}.substring(${b}, ${e})`, e });
+        next();
+      }, (opt) => ctx.why('call', { ...base, chosen: opt.text, got: jlit(text.slice(b, opt.key)), e }));
+    }
+
+    function sliced(b, e, expr) {
+      const part = text.slice(b, e);
+      code.set([`String ${name} = ${jlit(text)};`, `${expr}   // ${jlit(part)}`]);
+      code.tick(1);
+      row.cells.forEach((c, i) => {
+        c.classList.remove('play-sel');
+        c.classList.toggle('play-hit', i >= b && i < e);
+      });
+      cutAt(row, b, 'begin');
+      cutAt(row, e, 'end');
+      resultRow(brd, part);
+    }
+
+    function onBox(i) {
+      const t = tasks[k];
+      if (stepKind === 'click') {
+        const want = t.click === 'last' ? n - 1 : t.click;
+        const v = { ...base, clicked: `${name}.charAt(${i})`, clickedIndex: i, index: want,
+          expr: t.click === 'last' ? `${name}.charAt(${name}.length() - 1)` : `${name}.charAt(${want})` };
+        if (i !== want) {
+          shake(row.boxes[i]);
+          ctx.bad(ctx.why(t.click === 'last' ? 'last' : 'click', v));
+          return;
+        }
+        stepKind = null;
+        boxesOn(false);
+        row.cells[i].classList.add('play-hit');
+        pop(row.boxes[i]);
+        code.set([`String ${name} = ${jlit(text)};`, `${v.expr}   // ${charLit(text[i])}`]);
+        code.tick(1);
+        ctx.good(t.click === 'last' ? '`{name}.length()` is {length}, so the last character is at index {last}: `{ch}`.'
+          : '`{expr}` is box {index}, counting from 0: `{ch}`.', { ...v, ch: charLit(text[i]) });
+        next();
+      } else if (stepKind === 'slice') {
+        const [b, eRaw] = t.slice;
+        const e = eRaw === undefined ? n : eRaw;
+        const v = { ...base, b, e, lastIn: e - 1, expr: sliceExpr(t.slice), clicked: i };
+        if (selStart === null) {
+          if (i !== b) {
+            shake(row.boxes[i]);
+            ctx.bad(ctx.why('begin', v));
+            return;
+          }
+          selStart = i;
+          row.cells[i].classList.add('play-sel');
+          pop(row.boxes[i]);
+          ctx.quiet();
+          rich(help, 'Now click its last character.');
+          return;
+        }
+        if (i !== e - 1) {
+          shake(row.boxes[i]);
+          ctx.bad(ctx.why(i === e ? 'end' : 'span', v));
+          return;
+        }
+        stepKind = null;
+        boxesOn(false);
+        help.textContent = '';
+        sliced(b, e, v.expr);
+        ctx.good(eRaw === undefined ? 'With no end index, `substring` runs to the end of the String.'
+          : 'Boxes {b} to {lastIn}: `substring` includes the begin index and stops before the end index.', v);
+        next();
+      } else if (stepKind === 'find') {
+        const at = text.indexOf(t.ch);
+        const v = { ...base, ch: charLit(t.ch), index: at, clicked: i, clickedCh: charLit(text[i]),
+          expr: `${name}.indexOf(${charLit(t.ch)})` };
+        if (at < 0) {
+          shake(row.boxes[i]);
+          ctx.bad(ctx.why('absent', v));
+        } else if (i !== at) {
+          shake(row.boxes[i]);
+          ctx.bad(ctx.why(text[i] === t.ch ? 'later' : 'other', v));
+        } else found(at, v);
+      }
+    }
+
+    function onNone() {
+      if (stepKind !== 'find') return;
+      const t = tasks[k];
+      const at = text.indexOf(t.ch);
+      const v = { ...base, ch: charLit(t.ch), index: at, expr: `${name}.indexOf(${charLit(t.ch)})` };
+      if (at >= 0) {
+        tried(notFound);
+        ctx.bad(ctx.why('missing', v));
+        return;
+      }
+      found(-1, v);
+    }
+
+    async function found(at, v) {
+      stepKind = null;
+      boxesOn(false);
+      notFound.setAttribute('aria-disabled', 'true');
+      if (at < 0) {
+        notFound.classList.add('play-right');
+        notFound.appendChild(icon('check', 'play-right-mark'));
+      }
+      code.set([`String ${name} = ${jlit(text)};`, `${v.expr}   // ${at}`]);
+      code.tick(1);
+      ctx.good(at < 0 ? 'No box holds {ch}, so `indexOf` returns `-1`: an index no character can have.'
+        : 'The search starts at index 0 and stops at the first match: index {index}.', v);
+      glass.classList.remove('play-hidden');
+      const stop = at < 0 ? n : at;
+      for (let j = 0; j <= stop && j < n; j += 1) {
+        row.place(glass, j, j === 0);
+        row.cells.forEach((c, x) => c.classList.toggle('play-here', x === j));
+        await wait(260);
+        if (!ctx.alive()) return;
+        if (j !== at) row.cells[j].classList.add('play-checked');
+      }
+      row.cells.forEach((c) => c.classList.remove('play-here'));
+      if (at >= 0) {
+        row.cells[at].classList.add('play-hit');
+        pop(row.boxes[at]);
+      } else glass.classList.add('play-hidden');
+      next();
+    }
+
+    begin();
+  };
+
+  // ---- 12. judge: what a String call returns ---------------------------------------------------------
+
+  TYPES.judge = (ctx) => {
+    const { round, data } = ctx;
+    const decl = round.vars || data.vars;
+    const set = clone(pick(round.sets || data.sets));
+    const env = {};
+    decl.forEach((d, i) => { env[d.name] = set[i]; });
+    const asks = round.asks;
+    ctx.expose({ type: 'judge', env, asks });
+    const canThrow = asks.some((q) => isThrown(evalCall(q, env)));
+    ctx.task(round.prompt || 'What does each call return?', {});
+    const brd = board(ctx, canThrow ? 'play-split' : 'play-split play-solo');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const declLine = (d) => `${d.type} ${d.name} = ${d.type === 'String' ? jlit(env[d.name]) : lit(d.type, env[d.name])};`;
+    const code = codeView(decl.map(declLine));
+    left.appendChild(code.el);
+    const out = canThrow ? consoleView() : null;
+    if (out) left.appendChild(out.el);
+    const pic = make('div', 'play-pic play-judge-pic');
+    right.appendChild(pic);
+    const rows = {};
+    decl.forEach((d) => {
+      const v = env[d.name];
+      if (d.type === 'String' && v !== null) {
+        rows[d.name] = textRow({ name: d.name, text: v, hue: d.hue });
+        pic.appendChild(rows[d.name].el);
+      } else {
+        const cell = varCell(d.name, undefined, v === null ? 'null' : lit(d.type, v));
+        cell.el.classList.add('play-var-inline');
+        if (v === null) cell.cell.classList.add('play-null-cell');
+        pic.appendChild(cell.el);
+        rows[d.name] = cell;
+      }
+    });
+    const note = make('p', 'play-test');
+    pic.appendChild(note);
+    const qBox = make('div', 'play-questions');
+    ctx.stage.appendChild(qBox);
+    let q = 0;
+
+    function optionsFor(spec, result) {
+      const npe = isThrown(result) || asks.some((x) => isThrown(evalCall(x, env)));
+      const throwsOpt = { key: 'throws', text: 'throws `NullPointerException`' };
+      const kind = answerKind(spec);
+      let opts;
+      if (kind === 'boolean') opts = [{ key: true, text: 'true', mono: true }, { key: false, text: 'false', mono: true }];
+      else if (kind === 'sign') {
+        opts = [{ key: 'negative', text: 'negative' }, { key: 'zero', text: 'zero' }, { key: 'positive', text: 'positive' }];
+      } else {
+        const list = [{ kind: 'right', value: result }, ...decoys(spec, env, result)];
+        const asText = (v) => (typeof v === 'string' ? jlit(v) : String(v));
+        opts = list.map((d) => ({ key: asText(d.value), kind: d.kind, text: asText(d.value), mono: true, cls: 'play-lit' }));
+        opts = typeof result === 'number' ? opts.sort((x, y) => Number(x.key) - Number(y.key)) : shuffle(opts);
+      }
+      if (npe) opts.push(throwsOpt);
+      return opts;
+    }
+
+    function answerOf(spec, result) {
+      if (isThrown(result)) return 'throws';
+      const kind = answerKind(spec);
+      if (kind === 'sign') return signWord(result);
+      if (kind === 'value') return typeof result === 'string' ? jlit(result) : String(result);
+      return result;
+    }
+
+    function varsFor(spec, result) {
+      const { on, args, src } = callParts(spec, env);
+      const sv = on ? on.value : null;
+      const av = args[0] ? args[0].value : null;
+      const v = { expr: src, a: on ? on.src : '', b: args[0] ? args[0].src : '' };
+      if (typeof sv === 'string') {
+        v.s = jlit(sv);
+        v.length = sv.length;
+      }
+      if (typeof sv === 'string' && typeof av === 'string') {
+        const k = firstDiff(sv, av);
+        Object.assign(v, { k, ca: charLit(sv[k] || ''), cb: charLit(av[k] || ''), na: sv.charCodeAt(k), nb: av.charCodeAt(k),
+          la: sv.length, lb: av.length, diff: compareTo(sv, av), sv: jlit(sv), av: jlit(av) });
+      }
+      if (!isThrown(result)) v.result = typeof result === 'string' ? jlit(result) : String(result);
+      else v.message = exceptionLine(result);
+      return v;
+    }
+
+    function rowOf(term) { return typeof term === 'string' && rows[term] && rows[term].boxes ? rows[term] : null; }
+
+    function reveal(spec, result) {
+      note.textContent = '';
+      note.classList.remove('play-test-err');
+      pic.querySelectorAll('.play-match, .play-nomatch').forEach((b) => b.classList.remove('play-match', 'play-nomatch'));
+      pic.querySelectorAll('.play-corner-mark, .play-result').forEach((m) => m.remove());
+      pic.querySelectorAll('.play-here, .play-dropped, .play-hit').forEach((c) => c.classList.remove('play-here', 'play-dropped', 'play-hit'));
+      const v = varsFor(spec, result);
+      if (isThrown(result)) {
+        const cell = rows[spec.on];
+        if (cell && cell.cell) {
+          cell.cell.classList.add('play-boom-null');
+          shake(cell.cell);
+        }
+        if (out) out.println(exceptionLine(result), 'play-out-err');
+        return;
+      }
+      const ra = rowOf(spec.on);
+      const rb = rowOf((spec.args || [])[0]);
+      if (spec.call === 'equals' || spec.call === 'equalsIgnoreCase') {
+        if (ra && rb) {
+          const len = Math.max(ra.values.length, rb.values.length);
+          for (let k = 0; k < len; k += 1) {
+            ctx.later(() => {
+              const x = ra.values[k];
+              const y = rb.values[k];
+              const ok = x !== undefined && y !== undefined && (x === y || (spec.call === 'equalsIgnoreCase' && asciiUpper(x) === asciiUpper(y)));
+              if (x !== undefined) cornerMark(ra.boxes[k], ok);
+              if (y !== undefined) cornerMark(rb.boxes[k], ok);
+            }, k * MS.stagger);
+          }
+        } else {
+          const nul = Object.keys(rows).find((nm) => env[nm] === null);
+          if (nul && rows[nul].cell) cornerMark(rows[nul].cell, false);
+          rich(note, result ? '' : 'A literal is never `null`, so `equals` can always run: given `null`, it answers `false`.');
+        }
+      } else if (spec.call === 'compareTo' && ra && rb) {
+        const k = v.k;
+        for (let j = 0; j < k; j += 1) {
+          ctx.later(() => { cornerMark(ra.boxes[j], true); cornerMark(rb.boxes[j], true); }, j * MS.stagger);
+        }
+        ctx.later(() => {
+          if (k < ra.values.length && k < rb.values.length) {
+            ra.cells[k].classList.add('play-here');
+            rb.cells[k].classList.add('play-here');
+            rich(note, `First difference at index ${k}: \`${v.ca}\` is ${v.na} and \`${v.cb}\` is ${v.nb}, so the answer is \`${v.na} - ${v.nb}\` = \`${result}\`.`);
+          } else {
+            (ra.values.length > k ? ra : rb).cells.slice(k).forEach((c) => c.classList.add('play-here'));
+            rich(note, result === 0 ? 'Every character matches and the lengths match: `0`.'
+              : `No character differs before one String runs out, so the lengths decide: \`${v.la} - ${v.lb}\` = \`${result}\`.`);
+          }
+        }, k * MS.stagger + 120);
+      } else if (spec.call === 'isEmpty' || spec.call === 'isBlank') {
+        if (ra) {
+          if (!ra.values.length) {
+            const none = ra.track.querySelector('.play-no-chars');
+            if (none) none.classList.add('play-on');
+          }
+          ra.values.forEach((c, j) => ctx.later(() => cornerMark(ra.boxes[j],
+            spec.call === 'isBlank' ? isWhite(c) : false), j * MS.stagger));
+          rich(note, spec.call === 'isEmpty' ? `\`length()\` is ${ra.values.length}: ${ra.values.length ? 'not empty' : 'empty'}.`
+            : (result ? 'Every character is whitespace (or there are none): blank.' : 'At least one character is not whitespace: not blank.'));
+        }
+      } else if (spec.call === 'split') {
+        const parts = splitJ(ra.text, (spec.args[0] || {}).lit);
+        const wrap = make('div', 'play-result');
+        const arr = arrayRow({ name: 'parts', elem: 'String', values: parts, hue: 'purple' });
+        wrap.appendChild(arr.el);
+        pic.appendChild(wrap);
+        arr.boxes.forEach((box, j) => pop(box, j * 80));
+        if (typeof spec.then === 'number') arr.cells[spec.then].classList.add('play-hit');
+        ra.values.forEach((c, j) => { if (c === spec.args[0].lit) ra.cells[j].classList.add('play-here'); });
+      } else if (typeof result === 'string') {
+        const res = resultRow(pic, result);
+        if (spec.call === 'trim' && ra) {
+          const start = ra.values.findIndex((c) => c > ' ');
+          const lead = start < 0 ? ra.values.length : start;
+          const tail = ra.values.length - 1 - [...ra.values].reverse().findIndex((c) => c > ' ');
+          ra.cells.forEach((c, j) => c.classList.toggle('play-dropped', j < lead || j > tail));
+        } else if ((spec.call === 'replace' || spec.call === 'toUpperCase') && ra) {
+          res.values.forEach((c, j) => { if (c !== ra.values[j]) res.cells[j].classList.add('play-hit'); });
+        } else if (spec.call === 'String.format' || spec.call === 'String.join') {
+          let at = 0;
+          const pieces = spec.call === 'String.format'
+            ? formatPieces(callParts(spec, env).args[0].value, callParts(spec, env).args.slice(1).map((x) => x.value))
+            : callParts(spec, env).args.slice(1).flatMap((x, j) => (j ? [{ text: callParts(spec, env).args[0].value }, { text: x.value, arg: j }]
+              : [{ text: x.value, arg: j }]));
+          pieces.forEach((p) => {
+            for (let j = 0; j < p.text.length; j += 1) {
+              if (res.cells[at + j]) res.cells[at + j].classList.add(p.arg === undefined ? 'play-seg-fixed' : `play-seg-${p.arg % 4}`);
+            }
+            at += p.text.length;
+          });
+        }
+      }
+    }
+
+    function nextQuestion() {
+      if (q >= asks.length) {
+        ctx.solved(round.right, {});
+        return;
+      }
+      const spec = asks[q];
+      const result = evalCall(spec, env);
+      const { src } = callParts(spec, env);
+      const v = varsFor(spec, result);
+      code.set([...decl.map(declLine), src]);
+      code.on(decl.length, true);
+      const opts = optionsFor(spec, result);
+      const answer = answerOf(spec, result);
+      askOne(ctx, qBox, { text: `\`${src}\``, label: src, opts, answer, whyOf: (opt) => {
+        let keys = isThrown(result) ? [`${spec.call}.npe`, 'npe'] : (opt.key === 'throws' ? ['throws']
+          : [`${spec.call}.${opt.kind || String(opt.key)}`, spec.call]);
+        if (answerKind(spec) === 'sign' && !isThrown(result)) { // what decides: a differing pair, the lengths, or nothing
+          const sit = result === 0 ? 'same' : (v.k >= Math.min(v.la, v.lb) ? 'prefix' : 'differ');
+          keys = [`compareTo.${sit}`, 'compareTo'];
+        }
+        return whyAny(ctx, keys, { ...v, chosen: opt.text });
+      } }, () => {
+        code.tick(decl.length);
+        reveal(spec, result);
+        q += 1;
+        const say = round.rightEach && round.rightEach[spec.call];
+        if (q < asks.length) {
+          if (say) ctx.good(say, v);
+          else ctx.quiet();
+          ctx.later(nextQuestion, MS.beat * 3);
+        } else ctx.later(nextQuestion, MS.beat * 2);
+      });
+      const first = qBox.querySelector('.play-question:last-child button');
+      if (q > 0 && first) first.focus({ preventScroll: true });
+    }
+
+    nextQuestion();
+  };
+
+  // ---- 13. concat: be the + ---------------------------------------------------------------------------
+
+  // An expression of operands joined by +, as nested lists: [1, 2, "3"] is 1 + 2 + "3", and a list inside
+  // is a group in brackets. Java works left to right, a bracketed group first when it reaches it.
+  function plusTree(items, group) {
+    let node = null;
+    items.forEach((it) => {
+      const leaf = Array.isArray(it) ? plusTree(it, true) : { value: it };
+      node = node ? { left: node, right: leaf } : leaf;
+    });
+    if (group) node.group = true;
+    return node;
+  }
+  const plusSrc = (items) => items.map((it) => (Array.isArray(it) ? `(${plusSrc(it)})` : (typeof it === 'string' ? jlit(it) : String(it)))).join(' + ');
+  const plusOf = (l, r) => (typeof l === 'string' || typeof r === 'string' ? `${l}${r}` : l + r);
+  const typeName = (v) => (typeof v === 'string' ? 'String' : 'int');
+  const valueSrc = (v) => (typeof v === 'string' ? jlit(v) : String(v));
+
+  TYPES.concat = (ctx) => {
+    const { round } = ctx;
+    const items = clone(pick(round.exprs));
+    ctx.expose({ type: 'concat', expr: items });
+    const tree = plusTree(items, false);
+    const steps = [];
+    (function post(node) {
+      if (!node.left) return;
+      post(node.left);
+      post(node.right);
+      steps.push(node);
+    }(tree));
+    ctx.task(round.prompt || 'You are the `+`. Java works from left to right: at each `+`, add or join?', {});
+    const brd = board(ctx, 'play-split');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const code = codeView([`System.out.println(${plusSrc(items)});`]);
+    const out = consoleView();
+    left.append(code.el, out.el);
+    const pic = make('div', 'play-pic play-concat-pic');
+    const expr = make('div', 'play-expr');
+    pic.appendChild(expr);
+    right.appendChild(pic);
+
+    function chip(v) {
+      const el = make('span', `play-chip-v play-chip-${typeName(v) === 'String' ? 'str' : 'int'}`);
+      el.append(make('span', 'play-chip-text', valueSrc(v)), make('span', 'play-chip-type', typeName(v)));
+      return el;
+    }
+
+    (function draw(node) { // the expression's tokens, left to right
+      if (!node.left) {
+        node.chip = chip(node.value);
+        expr.appendChild(node.chip);
+        return;
+      }
+      if (node.group) {
+        node.open = make('span', 'play-paren', '(');
+        expr.appendChild(node.open);
+      }
+      draw(node.left);
+      node.plus = make('span', 'play-plus', '+');
+      expr.appendChild(node.plus);
+      draw(node.right);
+      if (node.group) {
+        node.close = make('span', 'play-paren', ')');
+        expr.appendChild(node.close);
+      }
+    }(tree));
+
+    const group = controls(ctx, 'Add or join?', 'play-decide');
+    const addBtn = btn('Add the numbers', { icon: 'plus', cls: 'play-add', onClick: () => decide('add') });
+    const joinBtn = btn('Join as text', { icon: 'join', cls: 'play-join', onClick: () => decide('join') });
+    group.append(addBtn, joinBtn);
+    let s = 0;
+    let busy = false;
+
+    function current() {
+      const node = steps[s];
+      [addBtn, joinBtn].forEach((b) => b.setAttribute('aria-disabled', 'false'));
+      expr.querySelectorAll('.play-active').forEach((x) => x.classList.remove('play-active'));
+      [node.left.chip, node.plus, node.right.chip].forEach((x) => x.classList.add('play-active'));
+      const v = { l: valueSrc(node.left.value), r: valueSrc(node.right.value), lt: typeName(node.left.value), rt: typeName(node.right.value) };
+      ctx.task(s === 0 ? (round.prompt || 'You are the `+`. Java works left to right: `{l} + {r}` first. Add or join?')
+        : 'Next: `{l} + {r}`. Add or join?', v);
+      return v;
+    }
+
+    async function decide(choice) {
+      if (busy || s >= steps.length) return;
+      const node = steps[s];
+      const l = node.left.value;
+      const r = node.right.value;
+      const join = typeof l === 'string' || typeof r === 'string';
+      const v = { l: valueSrc(l), r: valueSrc(r), lt: typeName(l), rt: typeName(r), res: valueSrc(plusOf(l, r)),
+        str: valueSrc(typeof l === 'string' ? l : r), num: valueSrc(typeof l === 'string' ? r : l) };
+      if ((choice === 'join') !== join) {
+        [node.left.chip, node.right.chip].forEach((x) => shake(x));
+        ctx.bad(ctx.why(choice, v));
+        return;
+      }
+      busy = true;
+      [addBtn, joinBtn].forEach((b) => b.setAttribute('aria-disabled', 'true'));
+      ctx.good(join ? '`{l} + {r}`: one side is a `String`, so `+` joins them into `{res}`.'
+        : '`{l} + {r}`: both sides are `int`s, so `+` adds them: `{res}`.', v);
+      const value = plusOf(l, r);
+      const merged = chip(value);
+      const parts = [node.left.chip, node.plus, node.right.chip];
+      if (node.group) {
+        parts.unshift(node.open);
+        parts.push(node.close);
+      }
+      if (!still()) {
+        const mid = node.plus.getBoundingClientRect();
+        await Promise.all(parts.map((x) => {
+          const b = x.getBoundingClientRect();
+          const dx = mid.left + mid.width / 2 - (b.left + b.width / 2);
+          return animate(x, [{ transform: 'none', opacity: 1 }, { transform: `translateX(${dx}px) scale(.7)`, opacity: 0 }],
+            { duration: 380, easing: GLIDE, fill: 'forwards' });
+        }));
+      }
+      if (!ctx.alive()) return;
+      parts[0].before(merged);
+      parts.forEach((x) => x.remove());
+      pop(merged);
+      delete node.left;
+      delete node.right;
+      node.value = value;
+      node.chip = merged;
+      s += 1;
+      busy = false;
+      if (s < steps.length) {
+        ctx.later(current, MS.beat);
+        return;
+      }
+      [addBtn, joinBtn].forEach((b) => { b.disabled = true; });
+      merged.classList.add('play-final');
+      code.tick(0);
+      out.println(String(value));
+      ctx.solved(round.right, { result: valueSrc(value), shown: String(value), type: typeName(value) });
+    }
+
+    current();
+  };
+
+  // ---- 14. pool: String objects, the pool, and arrows ------------------------------------------------------
+
+  TYPES.pool = (ctx) => {
+    const { round, data } = ctx;
+    const word = pick(round.words || data.words);
+    const suffix = round.suffixes ? pick(round.suffixes) : '';
+    const kind = round.kind;
+    ctx.expose({ type: 'pool', kind, word, suffix });
+    const upperW = asciiUpper(word);
+    const brd = board(ctx, kind === 'factory' || kind === 'alias' ? 'play-split' : 'play-split play-solo');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const L = (w) => jlit(w);
+    const lines = {
+      wire: [`String a = ${L(word)};`, `String b = ${L(word)};`, `String c = new String(${L(word)});`],
+      judge: [`String a = ${L(word)};`, `String b = ${L(word)};`, `String c = new String(${L(word)});`],
+      factory: [`String s = ${L(word)};`, 's.toUpperCase();', 'System.out.println(s);'],
+      alias: [`String a = ${L(word)};`, 'String b = a;', `a = a + ${L(suffix)};`, 'System.out.println(b);'],
+    }[kind];
+    const code = codeView(lines);
+    left.appendChild(code.el);
+    const out = kind === 'factory' || kind === 'alias' ? consoleView() : null;
+    if (out) left.appendChild(out.el);
+    const pic = make('div', 'play-pic play-pool-pic');
+    right.appendChild(pic);
+    const varsCol = make('div', 'play-vars');
+    const objsCol = make('div', 'play-objs');
+    const poolBox = make('div', 'play-pool');
+    poolBox.appendChild(make('span', 'play-pool-name', 'string pool'));
+    const heap = make('div', 'play-heap');
+    objsCol.append(poolBox, heap);
+    pic.append(varsCol, objsCol);
+    const wires = new Wires(pic, ctx);
+    const names = kind === 'factory' ? ['s'] : (kind === 'alias' ? ['a', 'b'] : ['a', 'b', 'c']);
+    const hues = { a: 'teal', b: 'purple', c: 'pink', s: 'teal' };
+    const cells = {};
+    names.forEach((nm) => {
+      cells[nm] = varCell(nm);
+      cells[nm].show('');
+      varsCol.appendChild(cells[nm].el);
+    });
+    const arrows = {};
+
+    function object(text, where, tagText) {
+      const el = make('div', 'play-sobj');
+      el.appendChild(make('span', 'play-sobj-text', jlit(text)));
+      if (tagText) {
+        const tag = make('span', 'play-sobj-tag');
+        rich(tag, tagText);
+        el.appendChild(tag);
+      }
+      (where === 'pool' ? poolBox : heap).appendChild(el);
+      pop(el);
+      wires.track(MS.pop);
+      return el;
+    }
+
+    function point(nm, target, animated) {
+      const dot = cells[nm].point(hues[nm]);
+      if (arrows[nm]) wires.remove(arrows[nm]);
+      arrows[nm] = wires.add(dot, target, hues[nm], { animate: animated });
+      wires.track(MS.draw);
+      return arrows[nm];
+    }
+
+    function bracket(x, y, same) { // a dashed bracket joining two variables, with its verdict
+      const base = pic.getBoundingClientRect();
+      const r1 = cells[x].cell.getBoundingClientRect();
+      const r2 = cells[y].cell.getBoundingClientRect();
+      const lx = Math.min(r1.left, r2.left) - base.left - 18;
+      const y1 = r1.top + r1.height / 2 - base.top;
+      const y2 = r2.top + r2.height / 2 - base.top;
+      const line = make('span', `play-bracket ${same ? 'play-same' : 'play-differ'}`);
+      Object.assign(line.style, { left: `${lx}px`, top: `${y1}px`, height: `${y2 - y1}px`, width: '18px' });
+      const badge = make('span', `play-verdict ${same ? 'play-same' : 'play-differ'}`);
+      badge.appendChild(icon(same ? 'check' : 'cross'));
+      Object.assign(badge.style, { left: `${lx}px`, top: `${(y1 + y2) / 2}px` });
+      overlay.append(line, badge);
+      pop(badge);
+    }
+    const overlay = make('div', 'play-overlay');
+    pic.appendChild(overlay);
+    const qBox = make('div', 'play-questions');
+    ctx.stage.appendChild(qBox);
+    const vars = { word: jlit(word), upper: jlit(upperW), suffix: jlit(suffix), joined: jlit(word + suffix) };
+    const tf = [{ key: true, text: 'true', mono: true }, { key: false, text: 'false', mono: true }];
+    const printOpts = (texts) => texts.map((t) => ({ key: t, text: t, mono: true, label: `prints ${t}` }));
+    const queue = [];
+    const ask = (spec, done) => queue.push({ spec, done });
+
+    function run() {
+      const item = queue.shift();
+      if (!item) {
+        ctx.solved(round.right, vars);
+        return;
+      }
+      if (item.spec.before) item.spec.before();
+      askOne(ctx, qBox, item.spec, () => {
+        item.done();
+        if (queue.length) ctx.later(run, MS.beat * 2.6);
+        else ctx.later(run, MS.beat * 2);
+      });
+      const first = qBox.querySelector('.play-question:last-child button');
+      if (qBox.children.length > 1 && first) first.focus({ preventScroll: true });
+    }
+
+    let pooled;
+    if (kind === 'wire' || kind === 'judge') {
+      pooled = object(word, 'pool');
+      point('a', pooled, false);
+      code.tick(0);
+      const where = [{ key: 'pool', text: `the pooled ${jlit(word)}, the one \`a\` points at` }, { key: 'new', text: `a new ${jlit(word)} object` }];
+      if (kind === 'wire') {
+        ctx.task(round.prompt || 'Run the code: where does each new variable point?', vars);
+        ask({ text: `\`String b = ${jlit(word)};\`: where does \`b\` point?`, label: 'Where does b point?', opts: where, answer: 'pool',
+          whyOf: () => ctx.why('b', vars) }, () => {
+          code.tick(1);
+          point('b', pooled, true);
+          ctx.good('The literal is in the pool already, so `b` gets an arrow to that very object.', vars);
+        });
+        ask({ text: `\`String c = new String(${jlit(word)});\`: where does \`c\` point?`, label: 'Where does c point?', opts: where,
+          answer: 'new', whyOf: () => ctx.why('c', vars) }, () => {
+          code.tick(2);
+          const fresh = object(word, 'heap', 'made by `new`');
+          point('c', fresh, true);
+          ctx.good('`new` always builds a fresh object, even when the pool already holds the same text.', vars);
+        });
+      } else {
+        point('b', pooled, false);
+        const fresh = object(word, 'heap', 'made by `new`');
+        point('c', fresh, false);
+        code.tick(1);
+        code.tick(2);
+        ctx.task(round.prompt || 'Judge each one: `true` or `false`?', vars);
+        const same = (x, y) => () => {
+          wires.hot(arrows[x], true);
+          wires.hot(arrows[y], true);
+          bracket(x, y, x !== 'c' && y !== 'c');
+        };
+        ask({ text: '`a == b`', label: 'a == b', opts: tf, answer: true, whyOf: () => ctx.why('a==b', vars) }, () => {
+          same('a', 'b')();
+          ctx.good('Both arrows end at the one pooled object: `a == b` is `true`.', vars);
+        });
+        ask({ text: '`a == c`', label: 'a == c', opts: tf, answer: false, whyOf: () => ctx.why('a==c', vars),
+          before: () => { overlay.textContent = ''; wires.list.forEach((w) => wires.hot(w, false)); } }, () => {
+          same('a', 'c')();
+          ctx.good('Same text, two objects: `==` compares the arrows, so it is `false`.', vars);
+        });
+        ask({ text: '`a.equals(c)`', label: 'a.equals(c)', opts: tf, answer: true, whyOf: () => ctx.why('equals', vars),
+          before: () => { overlay.textContent = ''; wires.list.forEach((w) => wires.hot(w, false)); } }, () => {
+          pic.querySelectorAll('.play-sobj').forEach((o) => o.classList.add('play-hit'));
+          ctx.good('`equals` reads the characters, and they match: `true`.', vars);
+        });
+      }
+    } else if (kind === 'factory') {
+      pooled = object(word, 'pool');
+      point('s', pooled, false);
+      code.tick(0);
+      ctx.task(round.prompt || 'Strings never change. What does this print?', vars);
+      ask({ text: 'What does `System.out.println(s)` print?', label: 'What does it print?', opts: shuffle(printOpts([word, upperW])),
+        answer: word, whyOf: () => ctx.why('uncaught', vars) }, () => {
+        code.tick(1);
+        const made = object(upperW, 'heap', 'returned to nobody');
+        made.classList.add('play-dead');
+        out.println(word);
+        code.tick(2);
+        ctx.good('`toUpperCase()` built a new String and returned it, but nothing caught it: `s` never moved.', vars);
+      });
+      ask({ text: 'Now line 2 is `s = s.toUpperCase();`. What prints?', label: 'What prints now?', opts: shuffle(printOpts([word, upperW])),
+        answer: upperW, whyOf: () => ctx.why('caught', vars),
+        before: () => {
+          code.set([lines[0], 's = s.toUpperCase();', lines[2]]);
+          code.on(1, true);
+          code.tick(0);
+          heap.textContent = '';
+          ctx.task('Catch the arrow: line 2 now assigns the result back to `s`.', vars);
+        } }, () => {
+        code.on(1, false);
+        code.tick(1);
+        const made = object(upperW, 'heap', 'caught by `s`');
+        point('s', made, true);
+        pooled.classList.add('play-dead');
+        out.println(upperW);
+        code.tick(2);
+      });
+    } else { // alias
+      pooled = object(word, 'pool');
+      point('a', pooled, false);
+      point('b', pooled, false);
+      code.tick(0);
+      code.tick(1);
+      ctx.task(round.prompt || '`b = a` copies the arrow. Then `a` changes. What about `b`?', vars);
+      ask({ text: 'What does `System.out.println(b)` print?', label: 'What does it print?',
+        opts: shuffle(printOpts([word, word + suffix])), answer: word, whyOf: () => ctx.why('alias', vars) }, () => {
+        code.tick(2);
+        const made = object(word + suffix, 'heap', 'made by `+`');
+        point('a', made, true);
+        out.println(word);
+        code.tick(3);
+        ctx.good('`+` built a new String and only `a`\'s arrow moved to it. `b` still points at the original, which cannot change.', vars);
+      });
+      ask({ text: 'And `a == b`?', label: 'a == b', opts: tf, answer: false, whyOf: () => ctx.why('a==b', vars) }, () => {
+        bracket('a', 'b', false);
+      });
+    }
+    run();
+  };
+
+  // ---- 15. builder: one StringBuilder, edited in place --------------------------------------------------
+
+  const builderSrc = (call) => `sb.${call[0]}(${call.slice(1).map((x) => (typeof x === 'string' ? jlit(x) : String(x))).join(', ')});`;
+
+  // What a call leaves in the buffer. Each character keeps its id, so the picture can glide it to its new box.
+  function applyBuilder(items, call, mint) {
+    const [op, x, y] = call;
+    const fresh = (s) => Array.from(String(s)).map((ch) => ({ id: mint(), ch }));
+    if (op === 'append') return [...items, ...fresh(x)];
+    if (op === 'insert') return [...items.slice(0, x), ...fresh(y), ...items.slice(x)];
+    if (op === 'delete') return [...items.slice(0, x), ...items.slice(Math.min(y, items.length))];
+    if (op === 'reverse') return items.slice().reverse();
+    if (op === 'setLength') return items.slice(0, x);
+    throw new Error(`unknown builder call ${op}`);
+  }
+  const builderText = (s, call) => {
+    let k = 0;
+    return applyBuilder(Array.from(s).map((ch) => ({ id: (k += 1), ch })), call, () => (k += 1)).map((it) => it.ch).join('');
+  };
+
+  // The tempting wrong buffers after a call, each named for its mistake.
+  function builderDecoys(s, call) {
+    const [op, x, y] = call;
+    const out = [];
+    const right = builderText(s, call);
+    const add = (kind, v) => { if (v !== right && !out.some((d) => d.value === v)) out.push({ kind, value: v }); };
+    if (op === 'append') { add('front', x + s); add('same', s); }
+    if (op === 'insert') { add('after', s.slice(0, x + 1) + y + s.slice(x + 1)); add('end', s + y); }
+    if (op === 'delete') { add('inclusive', s.slice(0, x) + s.slice(y + 1)); add('shifted', s.slice(0, x + 1) + s.slice(y + 1)); }
+    if (op === 'reverse') { add('same', s); }
+    if (op === 'setLength') { add('one', s.slice(0, x - 1)); add('tail', s.slice(s.length - x)); }
+    return out;
+  }
+
+  // Calls that do something close to a call, but not the same thing.
+  function nearCalls(s, call) {
+    const [op, x, y] = call;
+    const right = builderText(s, call);
+    const list = [];
+    const add = (kind, c) => {
+      const ok = (c[0] !== 'insert' || (c[1] >= 0 && c[1] <= s.length)) && (c[0] !== 'delete' || (c[1] >= 0 && c[1] < c[2] && c[2] <= s.length))
+        && (c[0] !== 'setLength' || (c[1] >= 0 && c[1] <= s.length));
+      if (ok && builderText(s, c) !== right && !list.some((d) => builderSrc(d.call) === builderSrc(c))) list.push({ kind, call: c });
+    };
+    if (op === 'insert') { add('after', ['insert', x + 1, y]); add('before', ['insert', x - 1, y]); add('append', ['append', y]); }
+    if (op === 'delete') { add('inclusive', ['delete', x, y + 1]); add('short', ['delete', x, y - 1]); add('shifted', ['delete', x + 1, y + 1]); }
+    if (op === 'append') { add('front', ['insert', 0, x]); }
+    if (op === 'setLength') { add('more', ['setLength', x + 1]); add('less', ['setLength', x - 1]); }
+    return list.slice(0, 2);
+  }
+
+  // A buffer of characters that edits itself in place: kept characters glide to their new boxes.
+  function bufferRow(items) {
+    const el = make('div', 'play-array play-string play-buffer play-hue-purple');
+    const track = make('div', 'play-cells');
+    el.appendChild(track);
+    const cells = new Map();
+    const view = { el, track, items: [] };
+    const cellFor = (it) => {
+      if (!cells.has(it.id)) {
+        const cell = make('div', 'play-cell');
+        const box = make('div', 'play-box');
+        paint(box, 'text', it.ch);
+        const idx = make('span', 'play-idx');
+        idx.appendChild(make('span'));
+        cell.append(box, idx);
+        cells.set(it.id, cell);
+      }
+      return cells.get(it.id);
+    };
+    view.set = async (next, opts) => {
+      const o = opts || {};
+      const before = new Map();
+      cells.forEach((cell, id) => before.set(id, cell.getBoundingClientRect().left));
+      const keep = new Set(next.map((it) => it.id));
+      const gone = [...cells.keys()].filter((id) => !keep.has(id));
+      if (!o.instant && !still() && gone.length) {
+        await Promise.all(gone.map((id) => animate(cells.get(id), [{ opacity: 1, transform: 'none' },
+          { opacity: 0, transform: 'translateY(-20px) scale(.75)' }], { duration: 320, easing: 'ease-in', fill: 'forwards' })));
+      }
+      gone.forEach((id) => {
+        cells.get(id).remove();
+        cells.delete(id);
+      });
+      next.forEach((it, i) => {
+        const cell = cellFor(it);
+        cell.querySelector('.play-idx > span').textContent = String(i);
+        track.appendChild(cell); // moves a kept cell: every cell ends up in its new order
+      });
+      view.items = next.slice();
+      el.style.setProperty('--play-n', Math.max(next.length, 1));
+      if (o.instant || still()) return;
+      next.forEach((it, i) => {
+        const cell = cells.get(it.id);
+        if (!before.has(it.id)) {
+          cell.classList.add('play-new-char');
+          pop(cell, 80 + i * 25);
+          return;
+        }
+        cell.classList.remove('play-new-char');
+        const dx = before.get(it.id) - cell.getBoundingClientRect().left;
+        if (Math.abs(dx) < 0.5) return;
+        const lift = o.arc ? (i % 2 ? 16 : -16) : -6;
+        animate(cell, [{ transform: `translateX(${dx}px)` }, { transform: `translate(${dx / 2}px, ${lift}px)`, offset: 0.5 },
+          { transform: 'none' }], { duration: MS.glide, easing: GLIDE });
+      });
+      await wait(MS.glide + 80);
+    };
+    view.set(items, { instant: true });
+    return view;
+  }
+
+  function miniChars(text) {
+    const mini = make('span', 'play-mini play-mini-chars');
+    Array.from(text).forEach((ch) => mini.appendChild(make('span', `play-mini-box${has(SHOW_CHAR, ch) ? ' play-space' : ''}`,
+      has(SHOW_CHAR, ch) ? SHOW_CHAR[ch] : ch)));
+    if (!text.length) mini.appendChild(make('span', 'play-mini-empty', '(empty)'));
+    return mini;
+  }
+
+  TYPES.builder = (ctx) => {
+    const { round } = ctx;
+    const start = pick(round.starts);
+    const calls = (round.calls || [round.call]).map((c) => c.map((arg) => (Array.isArray(arg) ? pick(arg) : arg)));
+    const target = round.kind === 'target';
+    ctx.expose({ type: 'builder', kind: target ? 'target' : 'predict', start, calls });
+    let mintN = 0;
+    const mint = () => (mintN += 1);
+    let items = Array.from(start).map((ch) => ({ id: mint(), ch }));
+    const brd = board(ctx, 'play-split');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const head = `StringBuilder sb = new StringBuilder(${jlit(start)});`;
+    const lines = [head, ...(target ? ['sb.?;'] : calls.map(builderSrc)), 'System.out.println(sb);'];
+    const code = codeView(target ? [head, [{ text: 'sb.' }, { text: '?', part: 'blank' }, { text: ';' }], 'System.out.println(sb);'] : lines);
+    code.tick(0);
+    const out = consoleView();
+    left.append(code.el, out.el);
+    const pic = make('div', 'play-pic play-builder-pic');
+    right.appendChild(pic);
+    const v = varCell('sb', 'purple');
+    const obj = make('div', 'play-sb');
+    obj.appendChild(make('span', 'play-obj-head', 'StringBuilder'));
+    const buffer = bufferRow(items);
+    const body = make('div', 'play-sb-body');
+    body.appendChild(buffer.el);
+    obj.appendChild(body);
+    const tag = make('span', 'play-tag play-tag-same play-sb-tag', 'one object, edited in place');
+    tag.hidden = true;
+    pic.append(v.el, obj);
+    if (target) {
+      const want = make('div', 'play-want play-want-chars');
+      want.append(make('span', 'play-want-head', 'target'), miniChars(builderText(start, calls[0])));
+      pic.appendChild(want);
+    }
+    pic.appendChild(tag);
+    const wires = new Wires(pic, ctx);
+    wires.add(v.dot, obj, 'purple');
+    const ctl = controls(ctx, target ? 'Which call?' : 'What sb holds', 'play-chips play-options');
+    let c = 0;
+    const text = () => items.map((it) => it.ch).join('');
+
+    async function apply(call) {
+      const before = text();
+      items = applyBuilder(items, call, mint);
+      await buffer.set(items, { arc: call[0] === 'reverse' });
+      wires.track(200);
+      if (!ctx.alive()) return;
+      tag.hidden = false;
+      return before;
+    }
+
+    function step() {
+      ctl.textContent = '';
+      if (c >= calls.length) {
+        code.on(lines.length - 2, false);
+        code.tick(lines.length - 1);
+        out.println(text());
+        ctx.solved(round.right, { result: jlit(text()), start: jlit(start) });
+        return;
+      }
+      const call = calls[c];
+      const s = text();
+      const vars = { call: builderSrc(call), s: jlit(s), result: jlit(builderText(s, call)), x: call[1], y: call[2] };
+      code.on(c, false);
+      code.on(c + 1, true);
+      ctx.task(c === 0 ? (round.prompt || 'Predict the buffer after each line: `{call}`') : 'Next line: `{call}`', vars);
+      const list = [{ kind: 'right', value: builderText(s, call) }, ...builderDecoys(s, call)];
+      const opts = shuffle(list).map((d) => ({ key: d.kind, text: '', node: miniChars(d.value), label: `sb holds ${d.value || '(empty)'}` }));
+      choices(ctx, ctl, opts, 'right', async () => {
+        await apply(call);
+        if (!ctx.alive()) return;
+        code.tick(c + 1);
+        ctx.good(round.rightEach && round.rightEach[call[0]] ? round.rightEach[call[0]] : '`{call}` edits the buffer itself: no new object, nothing to catch.', vars);
+        c += 1;
+        ctx.later(step, MS.beat * 1.6);
+      }, (opt) => whyAny(ctx, [`${call[0]}.${opt.key}`, call[0]], vars));
+    }
+
+    function chooseCall() {
+      const call = calls[0];
+      const s = text();
+      const vars = { call: builderSrc(call), s: jlit(s), result: jlit(builderText(s, call)) };
+      ctx.task(round.prompt || 'Which call turns `sb` into the target?', vars);
+      const list = [{ kind: 'right', call }, ...nearCalls(s, call)];
+      const opts = shuffle(list).map((d) => ({ key: d.kind, text: builderSrc(d.call), mono: true }));
+      choices(ctx, ctl, opts, 'right', async () => {
+        code.set([head, builderSrc(call), 'System.out.println(sb);']);
+        code.on(1, true);
+        await apply(call);
+        if (!ctx.alive()) return;
+        code.on(1, false);
+        code.tick(0);
+        code.tick(1);
+        code.tick(2);
+        pic.querySelector('.play-want').classList.add('play-want-done');
+        out.println(text());
+        ctx.solved(round.right, vars);
+      }, (opt) => {
+        const wrong = list.find((d) => d.kind === opt.key);
+        return whyAny(ctx, [`${call[0]}.${opt.key}`, call[0]], { ...vars, chosen: builderSrc(wrong.call),
+          got: jlit(builderText(s, wrong.call)) });
+      });
+    }
+
+    if (target) chooseCall();
+    else step();
+  };
+
+  // ---- 16. bug: spot the bug ------------------------------------------------------------------------------
+
+  TYPES.bug = (ctx) => {
+    const { round } = ctx;
+    const sn = clone(pick(round.snippets));
+    ctx.expose({ type: 'bug', code: sn.code, bug: sn.bug });
+    const want = sn.fixedOut;
+    const vars = { want: want.join(' / '), bugLine: sn.bug + 1 };
+    ctx.task(round.prompt || 'It should print what the green box shows, but it doesn\'t. Click the line with the bug.', vars);
+    const brd = board(ctx, 'play-split play-board-bug');
+    const left = make('div', 'play-col');
+    const right = make('div', 'play-col');
+    brd.append(left, right);
+    const codeEl = make('div', 'play-code play-code-bug');
+    codeEl.setAttribute('role', 'group');
+    codeEl.setAttribute('aria-label', 'The program: click a line');
+    const lineBtns = sn.code.map((line, i) => {
+      const b = make('button', 'play-line play-line-btn');
+      b.type = 'button';
+      const indent = line.length - line.trimStart().length;
+      b.style.setProperty('--play-indent', indent);
+      const num = make('span', 'play-line-no', String(i + 1));
+      num.setAttribute('aria-hidden', 'true');
+      b.appendChild(num);
+      const txt = make('span', 'play-line-text');
+      fillCode(txt, line.trimStart());
+      b.appendChild(txt);
+      b.setAttribute('aria-label', `line ${i + 1}: ${line.trim()}`);
+      b.addEventListener('click', safe(() => onLine(i)));
+      codeEl.appendChild(b);
+      return b;
+    });
+    left.appendChild(codeEl);
+    const out = consoleView();
+    const runOut = (lines) => lines.forEach((l) => (typeof l === 'string' ? out.println(l, 'play-out-plain')
+      : out.println(exceptionLine(thrown(l.throws, l.message)), 'play-out-err')));
+    runOut(sn.out);
+    const wantBox = make('div', 'play-want');
+    wantBox.append(make('span', 'play-want-head', 'it should print'), consoleOption(want.join('\n')));
+    left.append(out.el);
+    const pic = make('div', 'play-bug-aside');
+    pic.appendChild(wantBox);
+    right.appendChild(pic);
+    out.el.classList.add('play-console-bug');
+    const ctl = controls(ctx, 'What is wrong with that line?', 'play-chips play-options play-explain');
+    ctl.hidden = true;
+    let found = false;
+
+    function onLine(i) {
+      if (found || lineBtns[i].getAttribute('aria-disabled') === 'true') return;
+      if (i !== sn.bug) {
+        shake(lineBtns[i]);
+        const note = sn.notes && has(sn.notes, String(i)) ? sn.notes[String(i)] : null;
+        ctx.bad(note || ctx.why('line', { ...vars, n: i + 1, code: sn.code[i].trim() }));
+        return;
+      }
+      found = true;
+      lineBtns.forEach((b) => b.setAttribute('aria-disabled', 'true'));
+      const b = lineBtns[sn.bug];
+      b.classList.add('play-line-bug');
+      const mark = make('span', 'play-bug-mark');
+      mark.appendChild(icon('bug'));
+      b.appendChild(mark);
+      pop(mark);
+      ctx.good('Line {bugLine} is the one. Now say why.', vars);
+      ctx.task('Why is line {bugLine} wrong?', vars);
+      ctl.hidden = false;
+      const opts = shuffle(round.explain.map((o) => ({ key: o.key, text: o.text })));
+      choices(ctx, ctl, opts, round.answer, () => fix(), (opt) => ctx.why(opt.key, vars));
+    }
+
+    async function fix() {
+      const b = lineBtns[sn.bug];
+      const txt = b.querySelector('.play-line-text');
+      if (!still()) await animate(txt, [{ opacity: 1 }, { opacity: 0, transform: 'translateX(-8px)' }], { duration: 260, fill: 'forwards' });
+      if (!ctx.alive()) return;
+      txt.getAnimations().forEach((a) => a.cancel()); // the fade-out's last frame must not outlive it
+      txt.textContent = '';
+      fillCode(txt, sn.fix.trimStart());
+      b.classList.remove('play-line-bug');
+      b.classList.add('play-line-fixed');
+      b.setAttribute('aria-label', `line ${sn.bug + 1}: ${sn.fix.trim()}`);
+      animate(txt, [{ opacity: 0, transform: 'translateX(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'ease-out' });
+      const tick = make('span', 'play-line-tick');
+      tick.appendChild(icon('check'));
+      const old = b.querySelector('.play-bug-mark');
+      if (old) old.replaceWith(tick);
+      else b.appendChild(tick);
+      await wait(380);
+      if (!ctx.alive()) return;
+      out.el.querySelector('.play-console-out').textContent = '';
+      want.forEach((l) => out.println(l));
+      wantBox.classList.add('play-want-done');
+      ctx.solved(round.right, { ...vars, fix: sn.fix.trim() });
+    }
   };
 
   // ---- finding and loading the placeholders ----------------------------------------------------

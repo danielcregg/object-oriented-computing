@@ -1,0 +1,89 @@
+{
+  "id": "play-7",
+  "section": 7,
+  "type": "chars",
+  "title": "Slice and search",
+  "intro": "`substring(begin, end)` cuts in the gaps between characters: it includes `begin` and stops just before `end`. `indexOf` returns where something first appears, or `-1`. And every method that seems to change a String returns a new one.",
+  "rounds": [
+    {
+      "words": [
+        {"name": "town", "text": "Kilkenny"},
+        {"name": "town", "text": "Tramore"},
+        {"name": "town", "text": "Clifden"}
+      ],
+      "tasks": [{"slice": [1, 4]}, {"sliceCall": [3, 6]}, {"slice": [4]}],
+      "right": "`substring` cuts at two gaps: `begin` is the first index you keep, `end` the first you don't. Leave `end` out and it runs to the end.",
+      "why": {
+        "begin": "`{expr}` starts at index {b}: count from 0 at the first character.",
+        "end": "Nearly: `{expr}` stops before index {e}, so that box is left out. The last character you get is at index {lastIn}.",
+        "span": "`{expr}` returns the characters from index {b} up to, but not including, index {e}: the last one is at index {lastIn}.",
+        "call": "`{chosen}` returns {got}. The end index is left out, so it must be one past the last character you want."
+      }
+    },
+    {
+      "words": [
+        {"name": "town", "text": "Tralee"},
+        {"name": "town", "text": "Ballina"},
+        {"name": "town", "text": "Mallow"},
+        {"name": "town", "text": "Navan"}
+      ],
+      "tasks": [{"find": "repeat"}, {"find": "absent"}],
+      "decoys": ["z", "q", "x", "j"],
+      "right": "`indexOf` searches from index 0 and stops at the first match; when nothing matches, it returns `-1`, an index no character can have.",
+      "why": {
+        "later": "There is a {ch} there, but `indexOf` searches from index 0 and stops at the first one it meets.",
+        "other": "That box holds {clickedCh}, not {ch}.",
+        "absent": "There is no {ch} in `{name}`, so no box can be the answer.",
+        "missing": "`-1` means not found, but there is a {ch} in `{name}`: click the first box that holds one."
+      }
+    },
+    {
+      "type": "judge",
+      "vars": [
+        {"name": "line", "type": "String"},
+        {"name": "food", "type": "String"}
+      ],
+      "sets": [
+        ["  sea fog  ", "cheese"],
+        ["  low tide ", "pepper"],
+        [" west wind  ", "fennel"]
+      ],
+      "asks": [
+        {"on": "line", "call": "trim"},
+        {"on": "food", "call": "replace", "args": [{"chr": "e"}, {"chr": "o"}]}
+      ],
+      "prompt": "Each call returns a new String. What does it return?",
+      "right": "`trim` drops the whitespace at the two ends only, and `replace` swaps every match. Neither touched the original: each returned a new String.",
+      "why": {
+        "trim.all": "`trim()` only removes whitespace at the two ends. The space between the words is part of the text, so it stays.",
+        "trim.front": "`trim()` works on both ends, not just the start.",
+        "trim.same": "`trim()` returns a new String without the outer spaces. The String in `{a}` never changes, but this asks what the call returns.",
+        "replace.first": "`replace` swaps every match, not just the first one.",
+        "replace.same": "`replace` returns a new String with every `'e'` swapped. The String in `{a}` never changes, but the call's result is new."
+      }
+    },
+    {
+      "type": "judge",
+      "vars": [
+        {"name": "line", "type": "String"}
+      ],
+      "sets": [
+        ["red;green;blue"],
+        ["ash;oak;elm;yew"],
+        ["sun;rain;snow"]
+      ],
+      "asks": [
+        {"on": "line", "call": "split", "args": [{"lit": ";"}], "then": "length"},
+        {"on": "line", "call": "split", "args": [{"lit": ";"}], "then": 1}
+      ],
+      "prompt": "`split` cuts a String at every separator and returns the pieces as a `String[]`.",
+      "right": "`split` returned an array of the pieces between the separators, and array indexes count from 0 too.",
+      "why": {
+        "split.commas": "`split` cuts at every `;`: count the pieces between them, not the separators.",
+        "split.plus": "`split` makes one piece for each stretch of text between separators: there is no extra empty piece here.",
+        "split.before": "`[1]` is the second piece: array indexes count from 0.",
+        "split.after": "`[1]` is the second piece, counting from 0: `[0]` is the first."
+      }
+    }
+  ]
+}

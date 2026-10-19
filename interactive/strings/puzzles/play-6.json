@@ -1,0 +1,62 @@
+{
+  "id": "play-6",
+  "section": 6,
+  "type": "builder",
+  "title": "Edit in place",
+  "intro": "A `StringBuilder` is one object whose characters you edit in place: `append`, `insert`, `delete`, `reverse` and `setLength` change its buffer, and there is nothing to catch. Predict the buffer after each call.",
+  "rounds": [
+    {
+      "starts": ["moon", "lamp", "dock"],
+      "calls": [["append", ["!", "?"]], ["insert", 2, "-"], ["reverse"]],
+      "right": "Three calls, one object: `sb` never moved, its buffer just changed. It prints {result}.",
+      "rightEach": {
+        "append": "`append` adds to the end of the buffer.",
+        "insert": "`insert(2, ...)` slides everything from index 2 along to make room.",
+        "reverse": "`reverse()` turns the buffer itself back to front."
+      },
+      "why": {
+        "append.front": "`append` adds to the end; `insert(0, ...)` is the one that adds to the front.",
+        "append.same": "A `StringBuilder` changes itself: `append` edits the buffer, so there is no new object to catch.",
+        "insert.after": "`insert(2, ...)` puts the new text at index 2, so it lands in front of the character that was at index 2.",
+        "insert.end": "`insert` puts the text at the index you give it, not at the end.",
+        "reverse.same": "Unlike a String method, `reverse()` changes the builder itself: no catching needed."
+      }
+    },
+    {
+      "starts": ["harbour", "lantern", "seaside"],
+      "calls": [["delete", 1, 3], ["setLength", 3]],
+      "right": "`delete(start, end)` leaves out its end index, just like `substring`, and `setLength` keeps the first characters. It prints {result}.",
+      "rightEach": {
+        "delete": "`delete(1, 3)` removes indexes 1 and 2: the end index is left out.",
+        "setLength": "`setLength(3)` keeps the first three characters."
+      },
+      "why": {
+        "delete.inclusive": "The end index is left out: `delete(1, 3)` removes indexes 1 and 2, and the character at index 3 stays.",
+        "delete.shifted": "`delete(1, 3)` starts at index 1, the second character: indexes count from 0.",
+        "setLength.one": "`setLength(3)` keeps three characters, the ones at indexes 0, 1 and 2.",
+        "setLength.tail": "`setLength` keeps the start of the buffer and cuts off the end."
+      }
+    },
+    {
+      "kind": "target",
+      "starts": ["seal", "sing", "sack"],
+      "call": ["insert", 1, "t"],
+      "right": "`insert(1, \"t\")` puts the `t` at index 1, and everything from there slides one box along.",
+      "why": {
+        "insert.after": "`{chosen}` puts the `t` at index 2: it makes {got}.",
+        "insert.before": "`{chosen}` puts the `t` at index 0, in front of everything: it makes {got}.",
+        "insert.append": "`append` adds at the end: `{chosen}` makes {got}."
+      }
+    },
+    {
+      "kind": "target",
+      "starts": ["beard", "spine", "bathe"],
+      "call": ["setLength", 4],
+      "right": "`setLength(4)` keeps the first four characters and drops the rest.",
+      "why": {
+        "setLength.more": "`{chosen}` keeps five characters: all of them, so nothing changes.",
+        "setLength.less": "`{chosen}` keeps only three characters: it makes {got}."
+      }
+    }
+  ]
+}

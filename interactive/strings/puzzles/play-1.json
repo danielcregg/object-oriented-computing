@@ -1,0 +1,46 @@
+{
+  "id": "play-1",
+  "section": 1,
+  "type": "escape",
+  "title": "What the literal prints",
+  "intro": "A String literal is the text between double quotes. Inside it, a backslash starts an escape: `\\n` is one character (a new line), `\\\"` is a quote that doesn't end the literal, and `\\\\` is one backslash. Predict what each line prints.",
+  "rounds": [
+    {
+      "literals": ["Ready\\nSteady", "Ebb\\nFlow", "Top\\nBottom"],
+      "traps": ["raw", "quotes"],
+      "right": "`\\n` is one character, a new line, so the text breaks onto a second line. The String holds {length} characters, though {typed} were typed between the quotes.",
+      "why": {
+        "raw": "`\\n` is an escape: the backslash and the `n` together make one character, a new line. Java never prints the backslash.",
+        "quotes": "The quotes only mark where the literal starts and ends in your code. They are not part of the text, so `println` doesn't show them."
+      }
+    },
+    {
+      "literals": ["Press \\\"Go\\\"", "Tap \\\"Save\\\"", "Hit \\\"Enter\\\""],
+      "traps": ["raw", "quotes"],
+      "right": "Each `\\\"` became one quote character inside the text: the backslash only tells Java that this quote doesn't end the literal.",
+      "why": {
+        "raw": "`\\\"` is one character, a quote. The backslash only tells Java that this quote doesn't end the literal; it isn't printed.",
+        "quotes": "The outer quotes only mark where the literal starts and ends. The quotes that print are the escaped ones inside."
+      }
+    },
+    {
+      "literals": ["C:\\\\temp", "D:\\\\maps", "up\\\\down"],
+      "traps": ["raw", "quotes"],
+      "right": "Two backslashes in the code make one backslash in the String: `\\\\` is an escape like the others.",
+      "why": {
+        "raw": "`\\\\` is an escape too: two backslashes in the code make one backslash in the String, and only that one is printed.",
+        "quotes": "The quotes only mark where the literal starts and ends in your code; `println` shows the text between them."
+      }
+    },
+    {
+      "ask": "source",
+      "texts": ["say \"cheese\"", "the \"Go\" key", "a \"big\" deal"],
+      "traps": ["naive", "double"],
+      "right": "Escape each quote inside the text with a backslash, and the literal holds exactly what you want printed.",
+      "why": {
+        "naive": "The second `\"` ends the literal early, and Java can't make sense of what follows: this line doesn't even compile.",
+        "double": "Here each `\\\\` is an escaped backslash, so the backslashes would be printed along with the quotes."
+      }
+    }
+  ]
+}

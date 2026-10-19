@@ -1,0 +1,67 @@
+{
+  "id": "play-2",
+  "section": 2,
+  "type": "chars",
+  "title": "Characters by index",
+  "intro": "A String keeps its characters in order, like an array: `charAt(i)` reads the one at index `i`, counting from 0, and `length()` counts them all. Click the character each call reads.",
+  "words": [
+    {"name": "word", "text": "lantern"},
+    {"name": "word", "text": "harbour"},
+    {"name": "word", "text": "puffin"}
+  ],
+  "rounds": [
+    {
+      "tasks": [{"click": 0}, {"click": 3}, {"click": "last"}],
+      "right": "The first character is `{name}.charAt(0)` and the last is `{name}.charAt({name}.length() - 1)`: the indexes run from 0 to {last}.",
+      "why": {
+        "click": "That's `{clicked}`. Indexes count from 0 at the first character, so `{expr}` is {index} steps along from the start.",
+        "last": "That's `{clicked}`. `{name}.length()` is {length}, so the last index is {last}: one less, because the first is 0."
+      }
+    },
+    {
+      "words": [
+        {"name": "place", "text": "bus stop"},
+        {"name": "place", "text": "sea wall"},
+        {"name": "place", "text": "oak tree"}
+      ],
+      "tasks": [{"ask": "length"}, {"click": 3}, {"ask": "pastEnd"}],
+      "options": [
+        {"key": "last", "text": "returns the last character"},
+        {"key": "space", "text": "returns `' '`"},
+        {"key": "throws", "text": "throws a `StringIndexOutOfBoundsException`"}
+      ],
+      "right": "A space is a character like any other: it has an index and it counts in `length()`. One past the last index there is no character at all.",
+      "why": {
+        "length": "`length()` counts every character, and the space is one of them. It's the last index that is one less than the length.",
+        "click": "That's `{clicked}`. Count from 0: `{expr}` is box {index}, and the space has an index like any other character.",
+        "last": "`{name}.length()` is {length}, so index {length} is one past the last character, at index {last}.",
+        "space": "There is no box at index {length}: the indexes stop at {last}. Java doesn't make up a character for a box that doesn't exist."
+      }
+    },
+    {
+      "type": "judge",
+      "vars": [
+        {"name": "none", "type": "String"},
+        {"name": "gap", "type": "String"},
+        {"name": "pad", "type": "String"}
+      ],
+      "sets": [
+        ["", "  ", " on "],
+        ["", "    ", " up "],
+        ["", "  ", " ok"]
+      ],
+      "asks": [
+        {"on": "none", "call": "isEmpty"},
+        {"on": "gap", "call": "isEmpty"},
+        {"on": "gap", "call": "isBlank"},
+        {"on": "pad", "call": "isBlank"}
+      ],
+      "prompt": "Empty or blank? Judge each call.",
+      "right": "`isEmpty()` asks whether there are no characters at all; `isBlank()` asks whether every character is whitespace. A String of spaces is blank, but not empty.",
+      "why": {
+        "isEmpty": "`isEmpty()` is `true` only when `length()` is 0. `{a}` holds {length} characters: count the boxes.",
+        "isBlank": "`isBlank()` is `true` when every character is whitespace, or there are none. Look at each box of `{a}`."
+      }
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "id": "builder-in-place",
+  "title": "One builder, edited in place",
+  "layout": "wide",
+  "segments": [
+    {
+      "example": "section 6",
+      "extra": false,
+      "title": "append writes into the same object",
+      "code": [
+        "StringBuilder sb = new StringBuilder(\"Java\");",
+        "sb.append(\" \").append(\"Strings\");",
+        "String result = sb.toString();"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`sb` points at one StringBuilder object. It holds the four characters, then 16 empty slots: room to grow without building a new object.",
+          "vars": [{"name": "sb", "ref": "B"}],
+          "arrays": [{"id": "B", "text": "Java", "class": "StringBuilder", "capacity": 20}]
+        },
+        {
+          "line": 2,
+          "caption": "`append(\" \")` writes the space into the next empty slot. The same object, edited in place: `sb`'s arrow never moves.",
+          "vars": [{"name": "sb", "ref": "B"}],
+          "arrays": [
+            {"id": "Sp", "text": " ", "class": "String", "pool": true},
+            {"id": "B", "text": "Java ", "class": "StringBuilder", "capacity": 20}
+          ],
+          "flow": [{"from": {"array": "Sp", "index": 0}, "to": {"array": "B", "index": 4}, "text": "␣"}]
+        },
+        {
+          "line": 2,
+          "caption": "`append` hands back the same builder, so the second `append` carries on in the same object: seven more characters, and still room to spare.",
+          "vars": [{"name": "sb", "ref": "B"}],
+          "arrays": [
+            {"id": "Sp", "text": " ", "class": "String", "pool": true},
+            {"id": "St", "text": "Strings", "class": "String", "pool": true},
+            {"id": "B", "text": "Java Strings", "class": "StringBuilder", "capacity": 20}
+          ],
+          "flow": [
+            {"from": {"array": "St", "index": 0}, "to": {"array": "B", "index": 5}, "text": "S"},
+            {"from": {"array": "St", "index": 1}, "to": {"array": "B", "index": 6}, "text": "t"},
+            {"from": {"array": "St", "index": 2}, "to": {"array": "B", "index": 7}, "text": "r"},
+            {"from": {"array": "St", "index": 3}, "to": {"array": "B", "index": 8}, "text": "i"},
+            {"from": {"array": "St", "index": 4}, "to": {"array": "B", "index": 9}, "text": "n"},
+            {"from": {"array": "St", "index": 5}, "to": {"array": "B", "index": 10}, "text": "g"},
+            {"from": {"array": "St", "index": 6}, "to": {"array": "B", "index": 11}, "text": "s"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "`toString()` copies the characters into a new String, which can never change. The builder stays as it is, ready for more.",
+          "vars": [{"name": "sb", "ref": "B"}, {"name": "result", "ref": "Rs"}],
+          "arrays": [
+            {"id": "Sp", "text": " ", "class": "String", "pool": true},
+            {"id": "St", "text": "Strings", "class": "String", "pool": true},
+            {"id": "B", "text": "Java Strings", "class": "StringBuilder", "capacity": 20},
+            {"id": "Rs", "text": "Java Strings", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "B", "index": 0}, "to": {"array": "Rs", "index": 0}, "text": "J"},
+            {"from": {"array": "B", "index": 1}, "to": {"array": "Rs", "index": 1}, "text": "a"},
+            {"from": {"array": "B", "index": 2}, "to": {"array": "Rs", "index": 2}, "text": "v"},
+            {"from": {"array": "B", "index": 3}, "to": {"array": "Rs", "index": 3}, "text": "a"},
+            {"from": {"array": "B", "index": 4}, "to": {"array": "Rs", "index": 4}, "text": "␣"},
+            {"from": {"array": "B", "index": 5}, "to": {"array": "Rs", "index": 5}, "text": "S"},
+            {"from": {"array": "B", "index": 6}, "to": {"array": "Rs", "index": 6}, "text": "t"},
+            {"from": {"array": "B", "index": 7}, "to": {"array": "Rs", "index": 7}, "text": "r"},
+            {"from": {"array": "B", "index": 8}, "to": {"array": "Rs", "index": 8}, "text": "i"},
+            {"from": {"array": "B", "index": 9}, "to": {"array": "Rs", "index": 9}, "text": "n"},
+            {"from": {"array": "B", "index": 10}, "to": {"array": "Rs", "index": 10}, "text": "g"},
+            {"from": {"array": "B", "index": 11}, "to": {"array": "Rs", "index": 11}, "text": "s"}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if you used + in a loop instead?",
+      "code": [
+        "String result = \"\";",
+        "for (int i = 0; i < 4; i++) {",
+        "    result += \"ha\";",
+        "}",
+        "System.out.println(result);"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`result` starts as the empty String: no characters at all.",
+          "vars": [{"name": "result", "ref": "E0"}],
+          "arrays": [{"id": "E0", "text": "", "class": "String", "pool": true}]
+        },
+        {
+          "line": 3,
+          "caption": "Round 1: `+=` cannot add to a String. It builds a new one, `\"ha\"`, and moves the arrow to it.",
+          "vars": [{"name": "result", "ref": "R1"}, {"name": "i", "value": "0"}],
+          "arrays": [
+            {"id": "E0", "text": "", "class": "String", "pool": true},
+            {"id": "HA", "text": "ha", "class": "String", "pool": true},
+            {"id": "R1", "text": "ha", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "HA", "index": 0}, "to": {"array": "R1", "index": 0}, "text": "h"},
+            {"from": {"array": "HA", "index": 1}, "to": {"array": "R1", "index": 1}, "text": "a"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "Round 2 copies the 2 characters built so far into another new String, adds 2 more, and drops the old one.",
+          "vars": [{"name": "result", "ref": "R2"}, {"name": "i", "value": "1"}],
+          "arrays": [
+            {"id": "E0", "text": "", "class": "String", "pool": true},
+            {"id": "HA", "text": "ha", "class": "String", "pool": true},
+            {"id": "R1", "text": "ha", "class": "String", "dead": true},
+            {"id": "R2", "text": "haha", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "R1", "index": 0}, "to": {"array": "R2", "index": 0}, "text": "h"},
+            {"from": {"array": "R1", "index": 1}, "to": {"array": "R2", "index": 1}, "text": "a"},
+            {"from": {"array": "HA", "index": 0}, "to": {"array": "R2", "index": 2}, "text": "h"},
+            {"from": {"array": "HA", "index": 1}, "to": {"array": "R2", "index": 3}, "text": "a"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "Round 3 copies 4 characters to add 2.",
+          "vars": [{"name": "result", "ref": "R3"}, {"name": "i", "value": "2"}],
+          "arrays": [
+            {"id": "E0", "text": "", "class": "String", "pool": true},
+            {"id": "HA", "text": "ha", "class": "String", "pool": true},
+            {"id": "R1", "text": "ha", "class": "String", "dead": true},
+            {"id": "R2", "text": "haha", "class": "String", "dead": true},
+            {"id": "R3", "text": "hahaha", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "R2", "index": 0}, "to": {"array": "R3", "index": 0}, "text": "h"},
+            {"from": {"array": "R2", "index": 1}, "to": {"array": "R3", "index": 1}, "text": "a"},
+            {"from": {"array": "R2", "index": 2}, "to": {"array": "R3", "index": 2}, "text": "h"},
+            {"from": {"array": "R2", "index": 3}, "to": {"array": "R3", "index": 3}, "text": "a"},
+            {"from": {"array": "HA", "index": 0}, "to": {"array": "R3", "index": 4}, "text": "h"},
+            {"from": {"array": "HA", "index": 1}, "to": {"array": "R3", "index": 5}, "text": "a"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "Round 4 copies 6. Every round copies everything built so far, so the work grows with the square of the length.",
+          "vars": [{"name": "result", "ref": "R4"}, {"name": "i", "value": "3"}],
+          "arrays": [
+            {"id": "E0", "text": "", "class": "String", "pool": true},
+            {"id": "HA", "text": "ha", "class": "String", "pool": true},
+            {"id": "R1", "text": "ha", "class": "String", "dead": true},
+            {"id": "R2", "text": "haha", "class": "String", "dead": true},
+            {"id": "R3", "text": "hahaha", "class": "String", "dead": true},
+            {"id": "R4", "text": "hahahaha", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "R3", "index": 0}, "to": {"array": "R4", "index": 0}, "text": "h"},
+            {"from": {"array": "R3", "index": 1}, "to": {"array": "R4", "index": 1}, "text": "a"},
+            {"from": {"array": "R3", "index": 2}, "to": {"array": "R4", "index": 2}, "text": "h"},
+            {"from": {"array": "R3", "index": 3}, "to": {"array": "R4", "index": 3}, "text": "a"},
+            {"from": {"array": "R3", "index": 4}, "to": {"array": "R4", "index": 4}, "text": "h"},
+            {"from": {"array": "R3", "index": 5}, "to": {"array": "R4", "index": 5}, "text": "a"},
+            {"from": {"array": "HA", "index": 0}, "to": {"array": "R4", "index": 6}, "text": "h"},
+            {"from": {"array": "HA", "index": 1}, "to": {"array": "R4", "index": 7}, "text": "a"}
+          ]
+        },
+        {
+          "line": 5,
+          "caption": "Four Strings built to keep one. A `StringBuilder` would have written each character once, into one object.",
+          "print": "hahahaha\n",
+          "from": {"array": "R4"},
+          "vars": [{"name": "result", "ref": "R4"}],
+          "arrays": [
+            {"id": "E0", "text": "", "class": "String", "pool": true},
+            {"id": "HA", "text": "ha", "class": "String", "pool": true},
+            {"id": "R1", "text": "ha", "class": "String", "dead": true},
+            {"id": "R2", "text": "haha", "class": "String", "dead": true},
+            {"id": "R3", "text": "hahaha", "class": "String", "dead": true},
+            {"id": "R4", "text": "hahahaha", "class": "String"}
+          ]
+        }
+      ]
+    }
+  ]
+}

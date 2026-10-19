@@ -1,0 +1,129 @@
+{
+  "id": "task-diy-3",
+  "task": 3,
+  "title": "DIY 3, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Join, fill a template, join a list",
+      "steps": [
+        {
+          "caption": "Two Strings: Java and Strings.",
+          "vars": [{"name": "title", "ref": "T"}, {"name": "topic", "ref": "P"}],
+          "arrays": [
+            {"id": "T", "text": "Java", "class": "String", "pool": true},
+            {"id": "P", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Joining them with a space between builds a brand-new String. Neither original changes.",
+          "vars": [{"name": "title", "ref": "T"}, {"name": "topic", "ref": "P"}],
+          "arrays": [
+            {"id": "T", "text": "Java", "class": "String", "pool": true},
+            {"id": "P", "text": "Strings", "class": "String", "pool": true},
+            {"id": "J", "text": "Java Strings", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "T", "index": 0}, "to": {"array": "J", "index": 0}, "text": "J"},
+            {"from": {"array": "T", "index": 1}, "to": {"array": "J", "index": 1}, "text": "a"},
+            {"from": {"array": "T", "index": 2}, "to": {"array": "J", "index": 2}, "text": "v"},
+            {"from": {"array": "T", "index": 3}, "to": {"array": "J", "index": 3}, "text": "a"},
+            {"from": {"array": "P", "index": 0}, "to": {"array": "J", "index": 5}, "text": "S"},
+            {"from": {"array": "P", "index": 1}, "to": {"array": "J", "index": 6}, "text": "t"},
+            {"from": {"array": "P", "index": 2}, "to": {"array": "J", "index": 7}, "text": "r"},
+            {"from": {"array": "P", "index": 3}, "to": {"array": "J", "index": 8}, "text": "i"},
+            {"from": {"array": "P", "index": 4}, "to": {"array": "J", "index": 9}, "text": "n"},
+            {"from": {"array": "P", "index": 5}, "to": {"array": "J", "index": 10}, "text": "g"},
+            {"from": {"array": "P", "index": 6}, "to": {"array": "J", "index": 11}, "text": "s"}
+          ]
+        },
+        {
+          "caption": "Print it after the label Using + : exactly as in the expected output.",
+          "print": "Using + : Java Strings\n",
+          "from": {"array": "J"},
+          "vars": [{"name": "title", "ref": "T"}, {"name": "topic", "ref": "P"}],
+          "arrays": [
+            {"id": "T", "text": "Java", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "P", "text": "Strings", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "J", "text": "Java Strings", "class": "String"}
+          ]
+        },
+        {
+          "caption": "Next, three values. The age is an int: a plain number in its box, not an arrow.",
+          "vars": [{"name": "name", "ref": "Nm"}, {"name": "age", "value": "21"}, {"name": "course", "ref": "Co"}],
+          "arrays": [
+            {"id": "Nm", "text": "Ade", "class": "String", "pool": true},
+            {"id": "Co", "text": "OOP", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "A template with three placeholders: %s takes a String and %d an int. The values drop into them in order, and out comes a new String.",
+          "vars": [{"name": "name", "ref": "Nm"}, {"name": "age", "value": "21"}, {"name": "course", "ref": "Co"}],
+          "arrays": [
+            {"id": "Nm", "text": "Ade", "class": "String", "pool": true},
+            {"id": "Co", "text": "OOP", "class": "String", "pool": true},
+            {"id": "Tp", "text": "Name: %s, Age: %d, Course: %s", "class": "String", "pool": true, "solid": true},
+            {"id": "F", "text": "Name: Ade, Age: 21, Course: OOP", "class": "String", "solid": true}
+          ],
+          "flow": [
+            {"from": {"array": "Nm"}, "to": {"array": "F"}, "text": "Ade"},
+            {"from": {"var": "age"}, "to": {"array": "F"}, "text": "21"},
+            {"from": {"array": "Co"}, "to": {"array": "F"}, "text": "OOP"}
+          ]
+        },
+        {
+          "caption": "Print it with the label Formatted: in front.",
+          "print": "Formatted: Name: Ade, Age: 21, Course: OOP\n",
+          "from": {"array": "F"},
+          "vars": [{"name": "name", "ref": "Nm"}, {"name": "age", "value": "21"}, {"name": "course", "ref": "Co"}],
+          "arrays": [
+            {"id": "Nm", "text": "Ade", "class": "String", "pool": true},
+            {"id": "Co", "text": "OOP", "class": "String", "pool": true},
+            {"id": "Tp", "text": "Name: %s, Age: %d, Course: %s", "class": "String", "pool": true, "solid": true},
+            {"id": "F", "text": "Name: Ade, Age: 21, Course: OOP", "class": "String", "solid": true}
+          ]
+        },
+        {
+          "caption": "Last, an array of four words.",
+          "vars": [{"name": "words", "ref": "W"}],
+          "arrays": [
+            {"id": "W", "values": ["\"Java\"", "\"Strings\"", "\"are\"", "\"powerful\""], "class": "String[]"}
+          ]
+        },
+        {
+          "caption": "Join them with a space between each pair: one new String, and no loop needed.",
+          "vars": [{"name": "words", "ref": "W"}],
+          "arrays": [
+            {"id": "W", "values": ["\"Java\"", "\"Strings\"", "\"are\"", "\"powerful\""], "class": "String[]"},
+            {"id": "G", "text": "Java Strings are powerful", "class": "String", "solid": true}
+          ],
+          "flow": [
+            {"from": {"array": "W", "index": 0}, "to": {"array": "G"}, "text": "Java"},
+            {"from": {"array": "W", "index": 1}, "to": {"array": "G"}, "text": "Strings"},
+            {"from": {"array": "W", "index": 2}, "to": {"array": "G"}, "text": "are"},
+            {"from": {"array": "W", "index": 3}, "to": {"array": "G"}, "text": "powerful"}
+          ]
+        },
+        {
+          "caption": "Print it with the label Joined: in front.",
+          "print": "Joined: Java Strings are powerful\n",
+          "from": {"array": "G"},
+          "vars": [{"name": "words", "ref": "W"}],
+          "arrays": [
+            {"id": "W", "values": ["\"Java\"", "\"Strings\"", "\"are\"", "\"powerful\""], "class": "String[]"},
+            {"id": "G", "text": "Java Strings are powerful", "class": "String", "solid": true}
+          ]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "words", "ref": "W"}],
+          "arrays": [
+            {"id": "W", "values": ["\"Java\"", "\"Strings\"", "\"are\"", "\"powerful\""], "class": "String[]"},
+            {"id": "G", "text": "Java Strings are powerful", "class": "String", "solid": true}
+          ]
+        }
+      ]
+    }
+  ]
+}

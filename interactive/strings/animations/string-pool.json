@@ -1,0 +1,213 @@
+{
+  "id": "string-pool",
+  "title": "Immutable Strings and the pool",
+  "layout": "wide",
+  "segments": [
+    {
+      "example": "section 5",
+      "extra": false,
+      "title": "+ builds a new String; the original stays",
+      "code": ["String original = \"Java\";", "String modified = original + \" Strings\"; // original stays \"Java\""],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`original` points at the literal `\"Java\"`, which lives in the string pool.",
+          "vars": [{"name": "original", "ref": "P1"}],
+          "arrays": [{"id": "P1", "text": "Java", "class": "String", "pool": true}]
+        },
+        {
+          "line": 2,
+          "caption": "`\" Strings\"` is a literal too, so it sits in the pool as well. Its first character is a space.",
+          "vars": [{"name": "original", "ref": "P1"}],
+          "arrays": [
+            {"id": "P1", "text": "Java", "class": "String", "pool": true},
+            {"id": "P2", "text": " Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "line": 2,
+          "caption": "`+` cannot change either String. It builds a third, brand-new String and copies the characters of both into it.",
+          "vars": [{"name": "original", "ref": "P1"}],
+          "arrays": [
+            {"id": "P1", "text": "Java", "class": "String", "pool": true},
+            {"id": "P2", "text": " Strings", "class": "String", "pool": true},
+            {"id": "N", "text": "Java Strings", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "P1", "index": 0}, "to": {"array": "N", "index": 0}, "text": "J"},
+            {"from": {"array": "P1", "index": 1}, "to": {"array": "N", "index": 1}, "text": "a"},
+            {"from": {"array": "P1", "index": 2}, "to": {"array": "N", "index": 2}, "text": "v"},
+            {"from": {"array": "P1", "index": 3}, "to": {"array": "N", "index": 3}, "text": "a"},
+            {"from": {"array": "P2", "index": 0}, "to": {"array": "N", "index": 4}, "text": "␣"},
+            {"from": {"array": "P2", "index": 1}, "to": {"array": "N", "index": 5}, "text": "S"},
+            {"from": {"array": "P2", "index": 2}, "to": {"array": "N", "index": 6}, "text": "t"},
+            {"from": {"array": "P2", "index": 3}, "to": {"array": "N", "index": 7}, "text": "r"},
+            {"from": {"array": "P2", "index": 4}, "to": {"array": "N", "index": 8}, "text": "i"},
+            {"from": {"array": "P2", "index": 5}, "to": {"array": "N", "index": 9}, "text": "n"},
+            {"from": {"array": "P2", "index": 6}, "to": {"array": "N", "index": 10}, "text": "g"},
+            {"from": {"array": "P2", "index": 7}, "to": {"array": "N", "index": 11}, "text": "s"}
+          ]
+        },
+        {
+          "line": 2,
+          "caption": "`modified` catches the arrow to the new String. `original` still points at `\"Java\"`, untouched: Strings are immutable.",
+          "vars": [{"name": "original", "ref": "P1"}, {"name": "modified", "ref": "N"}],
+          "arrays": [
+            {"id": "P1", "text": "Java", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "P2", "text": " Strings", "class": "String", "pool": true},
+            {"id": "N", "text": "Java Strings", "class": "String"}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if nobody catches the new String?",
+      "code": [
+        "String s = \"hello\";",
+        "s.toUpperCase();",
+        "System.out.println(s);",
+        "s = s.toUpperCase();",
+        "System.out.println(s);"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`s` points at the pooled `\"hello\"`.",
+          "vars": [{"name": "s", "ref": "H"}],
+          "arrays": [{"id": "H", "text": "hello", "class": "String", "pool": true}]
+        },
+        {
+          "line": 2,
+          "caption": "`toUpperCase()` builds a new String, `\"HELLO\"`, and returns an arrow to it. Nothing catches that arrow.",
+          "vars": [{"name": "s", "ref": "H"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "U1", "text": "HELLO", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "H", "index": 0}, "to": {"array": "U1", "index": 0}, "text": "H"},
+            {"from": {"array": "H", "index": 1}, "to": {"array": "U1", "index": 1}, "text": "E"},
+            {"from": {"array": "H", "index": 2}, "to": {"array": "U1", "index": 2}, "text": "L"},
+            {"from": {"array": "H", "index": 3}, "to": {"array": "U1", "index": 3}, "text": "L"},
+            {"from": {"array": "H", "index": 4}, "to": {"array": "U1", "index": 4}, "text": "O"}
+          ]
+        },
+        {
+          "line": 3,
+          "caption": "So `s` still points at `\"hello\"`, and that is what prints. The capitals are already garbage.",
+          "print": "hello\n",
+          "from": {"array": "H"},
+          "vars": [{"name": "s", "ref": "H"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "U1", "text": "HELLO", "class": "String", "dead": true}
+          ]
+        },
+        {
+          "line": 4,
+          "caption": "This time the arrow is caught: `s` now points at the new String. `\"hello\"` itself never changed.",
+          "vars": [{"name": "s", "ref": "U2"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true, "note": "unchanged"},
+            {"id": "U2", "text": "HELLO", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "H", "index": 0}, "to": {"array": "U2", "index": 0}, "text": "H"},
+            {"from": {"array": "H", "index": 1}, "to": {"array": "U2", "index": 1}, "text": "E"},
+            {"from": {"array": "H", "index": 2}, "to": {"array": "U2", "index": 2}, "text": "L"},
+            {"from": {"array": "H", "index": 3}, "to": {"array": "U2", "index": 3}, "text": "L"},
+            {"from": {"array": "H", "index": 4}, "to": {"array": "U2", "index": 4}, "text": "O"}
+          ]
+        },
+        {
+          "line": 5,
+          "caption": "`HELLO`. Before any String call, ask: it returns a new String, am I catching it?",
+          "print": "HELLO\n",
+          "from": {"array": "U2"},
+          "vars": [{"name": "s", "ref": "U2"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "U2", "text": "HELLO", "class": "String"}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if two variables hold the same literal?",
+      "code": [
+        "String a = \"hello\";",
+        "String b = \"hello\";",
+        "String c = new String(\"hello\");",
+        "System.out.println(a == b);",
+        "System.out.println(a == c);",
+        "System.out.println(a.equals(c));"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`a` points at the pooled `\"hello\"`.",
+          "vars": [{"name": "a", "ref": "H"}],
+          "arrays": [{"id": "H", "text": "hello", "class": "String", "pool": true}]
+        },
+        {
+          "line": 2,
+          "caption": "The same literal again: the pool hands back the object it already holds. Two arrows, one object.",
+          "vars": [{"name": "a", "ref": "H"}, {"name": "b", "ref": "H"}],
+          "arrays": [{"id": "H", "text": "hello", "class": "String", "pool": true}]
+        },
+        {
+          "line": 3,
+          "caption": "`new` skips the pool and builds a fresh object with the same characters.",
+          "vars": [{"name": "a", "ref": "H"}, {"name": "b", "ref": "H"}, {"name": "c", "ref": "C"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "C", "text": "hello", "class": "String"}
+          ]
+        },
+        {
+          "line": 4,
+          "caption": "`==` compares arrows. `a` and `b` point at the same object: `true`.",
+          "print": "true\n",
+          "vars": [{"name": "a", "ref": "H"}, {"name": "b", "ref": "H"}, {"name": "c", "ref": "C"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "C", "text": "hello", "class": "String"}
+          ],
+          "compare": [{"a": {"var": "a"}, "b": {"var": "b"}, "same": true}]
+        },
+        {
+          "line": 5,
+          "caption": "`c` points at a different object: `false`, although the text is identical.",
+          "print": "false\n",
+          "vars": [{"name": "a", "ref": "H"}, {"name": "b", "ref": "H"}, {"name": "c", "ref": "C"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true},
+            {"id": "C", "text": "hello", "class": "String"}
+          ],
+          "compare": [{"a": {"var": "a"}, "b": {"var": "c"}, "same": false}]
+        },
+        {
+          "line": 6,
+          "caption": "`equals` compares the characters: `true`. That is the comparison you almost always want.",
+          "print": "true\n",
+          "vars": [{"name": "a", "ref": "H"}, {"name": "b", "ref": "H"}, {"name": "c", "ref": "C"}],
+          "arrays": [
+            {"id": "H", "text": "hello", "class": "String", "pool": true, "match": [0, 1, 2, 3, 4]},
+            {"id": "C", "text": "hello", "class": "String", "match": [0, 1, 2, 3, 4]}
+          ],
+          "compare": [
+            {"a": {"array": "H", "index": 0}, "b": {"array": "C", "index": 0}, "same": true},
+            {"a": {"array": "H", "index": 1}, "b": {"array": "C", "index": 1}, "same": true},
+            {"a": {"array": "H", "index": 2}, "b": {"array": "C", "index": 2}, "same": true},
+            {"a": {"array": "H", "index": 3}, "b": {"array": "C", "index": 3}, "same": true},
+            {"a": {"array": "H", "index": 4}, "b": {"array": "C", "index": 4}, "same": true}
+          ]
+        }
+      ]
+    }
+  ]
+}

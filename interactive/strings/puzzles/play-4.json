@@ -1,0 +1,83 @@
+{
+  "id": "play-4",
+  "section": 4,
+  "type": "judge",
+  "title": "Compare without ==",
+  "intro": "`equals` compares the text, case and all; `equalsIgnoreCase` lets upper and lower case match; `compareTo` says which comes first: negative, zero or positive. Judge each call.",
+  "rounds": [
+    {
+      "vars": [
+        {"name": "city", "type": "String"},
+        {"name": "sign", "type": "String"}
+      ],
+      "sets": [
+        ["Galway", "GALWAY"],
+        ["Sligo", "sligo"],
+        ["Clare", "CLARE"]
+      ],
+      "asks": [
+        {"on": "city", "call": "equals", "args": ["sign"]},
+        {"on": "city", "call": "equalsIgnoreCase", "args": ["sign"]}
+      ],
+      "rightEach": {"equals": "Case counts for `equals`: an upper-case letter is a different character from its lower-case twin."},
+      "right": "Same letters, different case: `equals` says `false`, `equalsIgnoreCase` says `true`.",
+      "why": {
+        "equals": "`equals` compares character by character, and case counts: at index {k}, {ca} and {cb} are different characters.",
+        "equalsIgnoreCase": "`equalsIgnoreCase` lets each upper-case letter match its lower-case twin, and every pair here matches that way."
+      }
+    },
+    {
+      "vars": [
+        {"name": "x", "type": "String"},
+        {"name": "y", "type": "String"}
+      ],
+      "sets": [
+        ["apple", "apricot"],
+        ["peach", "pear"],
+        ["car", "carpet"]
+      ],
+      "asks": [
+        {"on": "x", "call": "compareTo", "args": ["y"]},
+        {"on": "y", "call": "compareTo", "args": ["x"]},
+        {"on": "x", "call": "compareTo", "args": ["x"]}
+      ],
+      "prompt": "Negative means the first comes first. Judge the sign of each `compareTo`.",
+      "right": "Swap the two sides and the sign flips; compare a String with itself and you get 0.",
+      "why": {
+        "compareTo.differ": "Compare from the left: the first pair of characters that differ decides. At index {k}, {ca} is {na} and {cb} is {nb}, and the answer is their difference.",
+        "compareTo.prefix": "One String is the start of the other, so no character differs before the shorter one runs out: the lengths decide, {la} minus {lb}.",
+        "compareTo.same": "Every character matches and so do the lengths: a String compared with itself gives 0."
+      }
+    },
+    {
+      "type": "swap",
+      "arrays": [
+        {"name": "terms", "elem": "String", "values": ["pin", "pine", "ping", "pink", "pit"]},
+        {"name": "terms", "elem": "String", "values": ["cab", "car", "card", "care", "cart"]},
+        {"name": "terms", "elem": "String", "values": ["bar", "bark", "barn", "bat", "bay"]}
+      ],
+      "prompt": "Sort `{name}` the way `compareTo` orders Strings: click two boxes to swap them.",
+      "right": "Sorted in {verdict} A word that starts another comes first; otherwise the first different letter decides.",
+      "why": {
+        "wasted": "Neither word landed in its place. Compare from the first letter: the word `compareTo` puts first belongs in box 0."
+      }
+    },
+    {
+      "vars": [
+        {"name": "cmd", "type": "String"}
+      ],
+      "sets": [[null]],
+      "asks": [
+        {"on": {"lit": "pause"}, "call": "equals", "args": ["cmd"]},
+        {"on": "cmd", "call": "equals", "args": [{"lit": "pause"}]}
+      ],
+      "prompt": "`cmd` might be `null`. What does each call do?",
+      "right": "Put the literal first: `\"pause\".equals(cmd)` is safe, because a literal is never `null`. Called on `null`, `equals` can't run at all.",
+      "why": {
+        "throws": "`\"pause\"` is a literal, never `null`, so `equals` can run. Given `null` to compare with, it simply answers `false`.",
+        "equals": "`cmd` holds `null`: there is no text for `\"pause\"` to match, so the answer can't be `true`.",
+        "equals.npe": "`cmd` holds `null`: there is no object to call `equals` on, so Java throws a `NullPointerException` before comparing anything."
+      }
+    }
+  ]
+}

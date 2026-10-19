@@ -1,0 +1,204 @@
+{
+  "id": "task-diy-7",
+  "task": 7,
+  "title": "DIY 7, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Search, initials, a masked email, CSV parts",
+      "steps": [
+        {
+          "caption": "A sentence, and a keyword in capitals. Searched as they are, POWERFUL would never match powerful.",
+          "vars": [{"name": "text", "ref": "T"}, {"name": "keyword", "ref": "K"}],
+          "arrays": [
+            {"id": "T", "text": "Java is a powerful programming language", "class": "String", "pool": true},
+            {"id": "K", "text": "POWERFUL", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Make lower-case copies of both: two new Strings. The originals stay as they are.",
+          "vars": [{"name": "text", "ref": "T"}, {"name": "keyword", "ref": "K"}],
+          "arrays": [
+            {"id": "T", "text": "Java is a powerful programming language", "class": "String", "pool": true},
+            {"id": "K", "text": "POWERFUL", "class": "String", "pool": true},
+            {"id": "Tl", "text": "java is a powerful programming language", "class": "String"},
+            {"id": "Kl", "text": "powerful", "class": "String"}
+          ]
+        },
+        {
+          "caption": "Search the lower-case text for the lower-case keyword: there it is, at indexes 10 to 17. So the answer is true.",
+          "print": "Contains keyword? true\n",
+          "from": {"array": "Tl"},
+          "vars": [{"name": "text", "ref": "T"}, {"name": "keyword", "ref": "K"}],
+          "arrays": [
+            {"id": "T", "text": "Java is a powerful programming language", "class": "String", "pool": true},
+            {"id": "K", "text": "POWERFUL", "class": "String", "pool": true},
+            {
+              "id": "Tl",
+              "text": "java is a powerful programming language",
+              "class": "String",
+              "match": [10, 11, 12, 13, 14, 15, 16, 17]
+            },
+            {"id": "Kl", "text": "powerful", "class": "String"}
+          ]
+        },
+        {
+          "caption": "A full name. Split it at the space: an array of two names.",
+          "vars": [{"name": "fullName", "ref": "F"}, {"name": "names", "ref": "Nm"}],
+          "arrays": [
+            {"id": "F", "text": "John Doe", "class": "String", "pool": true},
+            {"id": "Nm", "values": ["\"John\"", "\"Doe\""], "class": "String[]"}
+          ]
+        },
+        {
+          "caption": "Take the first character of the first name, J, and add a dot.",
+          "vars": [{"name": "fullName", "ref": "F"}, {"name": "names", "ref": "Nm"}, {"name": "initials", "ref": "I"}],
+          "arrays": [
+            {"id": "F", "text": "John Doe", "class": "String", "pool": true},
+            {"id": "Nm", "values": ["\"John\"", "\"Doe\""], "class": "String[]", "highlight": [0]},
+            {"id": "I", "text": "J.", "class": "StringBuilder"}
+          ],
+          "flow": [{"from": {"array": "Nm", "index": 0}, "to": {"array": "I", "index": 0}, "text": "J"}]
+        },
+        {
+          "caption": "Then the first character of the second name, and another dot.",
+          "vars": [{"name": "fullName", "ref": "F"}, {"name": "names", "ref": "Nm"}, {"name": "initials", "ref": "I"}],
+          "arrays": [
+            {"id": "F", "text": "John Doe", "class": "String", "pool": true},
+            {"id": "Nm", "values": ["\"John\"", "\"Doe\""], "class": "String[]", "highlight": [1]},
+            {"id": "I", "text": "J.D.", "class": "StringBuilder"}
+          ],
+          "flow": [{"from": {"array": "Nm", "index": 1}, "to": {"array": "I", "index": 2}, "text": "D"}]
+        },
+        {
+          "caption": "Print them after Initials:.",
+          "print": "Initials: J.D.\n",
+          "from": {"array": "I"},
+          "vars": [{"name": "fullName", "ref": "F"}, {"name": "names", "ref": "Nm"}, {"name": "initials", "ref": "I"}],
+          "arrays": [
+            {"id": "F", "text": "John Doe", "class": "String", "pool": true},
+            {"id": "Nm", "values": ["\"John\"", "\"Doe\""], "class": "String[]"},
+            {"id": "I", "text": "J.D.", "class": "StringBuilder"}
+          ]
+        },
+        {
+          "caption": "An email address. Search it for the @ sign: it sits at index 4.",
+          "vars": [{"name": "email", "ref": "E"}, {"name": "atIndex", "value": "4"}],
+          "arrays": [
+            {
+              "id": "E",
+              "text": "john@example.com",
+              "class": "String",
+              "pool": true,
+              "match": [4],
+              "marks": {"4": "@ at 4"}
+            }
+          ],
+          "flow": [{"from": {"array": "E", "index": 4}, "to": {"var": "atIndex"}, "text": "4"}]
+        },
+        {
+          "caption": "The local part is everything before index 4: john. The domain is everything from index 4 to the end: @example.com. Both are new Strings.",
+          "vars": [{"name": "email", "ref": "E"}, {"name": "atIndex", "value": "4"}],
+          "arrays": [
+            {"id": "E", "text": "john@example.com", "class": "String", "pool": true, "highlight": [0, 1, 2, 3]},
+            {"id": "Lp", "text": "john", "class": "String"},
+            {"id": "Dm", "text": "@example.com", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "E", "index": 0}, "to": {"array": "Lp", "index": 0}, "text": "j"},
+            {"from": {"array": "E", "index": 1}, "to": {"array": "Lp", "index": 1}, "text": "o"},
+            {"from": {"array": "E", "index": 2}, "to": {"array": "Lp", "index": 2}, "text": "h"},
+            {"from": {"array": "E", "index": 3}, "to": {"array": "Lp", "index": 3}, "text": "n"},
+            {"from": {"array": "E", "index": 4}, "to": {"array": "Dm", "index": 0}, "text": "@"},
+            {"from": {"array": "E", "index": 5}, "to": {"array": "Dm", "index": 1}, "text": "e"},
+            {"from": {"array": "E", "index": 6}, "to": {"array": "Dm", "index": 2}, "text": "x"},
+            {"from": {"array": "E", "index": 7}, "to": {"array": "Dm", "index": 3}, "text": "a"},
+            {"from": {"array": "E", "index": 8}, "to": {"array": "Dm", "index": 4}, "text": "m"},
+            {"from": {"array": "E", "index": 9}, "to": {"array": "Dm", "index": 5}, "text": "p"},
+            {"from": {"array": "E", "index": 10}, "to": {"array": "Dm", "index": 6}, "text": "l"},
+            {"from": {"array": "E", "index": 11}, "to": {"array": "Dm", "index": 7}, "text": "e"},
+            {"from": {"array": "E", "index": 12}, "to": {"array": "Dm", "index": 8}, "text": "."},
+            {"from": {"array": "E", "index": 13}, "to": {"array": "Dm", "index": 9}, "text": "c"},
+            {"from": {"array": "E", "index": 14}, "to": {"array": "Dm", "index": 10}, "text": "o"},
+            {"from": {"array": "E", "index": 15}, "to": {"array": "Dm", "index": 11}, "text": "m"}
+          ]
+        },
+        {
+          "caption": "Keep the first character of the local part, put a star in place of each of the other three, then add the domain.",
+          "vars": [{"name": "email", "ref": "E"}, {"name": "atIndex", "value": "4"}],
+          "arrays": [
+            {"id": "E", "text": "john@example.com", "class": "String", "pool": true},
+            {"id": "Lp", "text": "john", "class": "String"},
+            {"id": "Dm", "text": "@example.com", "class": "String"},
+            {"id": "Ms", "text": "j***@example.com", "class": "String"}
+          ],
+          "flow": [
+            {"from": {"array": "Lp", "index": 0}, "to": {"array": "Ms", "index": 0}, "text": "j"},
+            {"from": {"array": "Lp", "index": 1}, "to": {"array": "Ms", "index": 1}, "text": "*"},
+            {"from": {"array": "Lp", "index": 2}, "to": {"array": "Ms", "index": 2}, "text": "*"},
+            {"from": {"array": "Lp", "index": 3}, "to": {"array": "Ms", "index": 3}, "text": "*"},
+            {"from": {"array": "Dm", "index": 0}, "to": {"array": "Ms", "index": 4}, "text": "@"},
+            {"from": {"array": "Dm", "index": 1}, "to": {"array": "Ms", "index": 5}, "text": "e"},
+            {"from": {"array": "Dm", "index": 2}, "to": {"array": "Ms", "index": 6}, "text": "x"},
+            {"from": {"array": "Dm", "index": 3}, "to": {"array": "Ms", "index": 7}, "text": "a"},
+            {"from": {"array": "Dm", "index": 4}, "to": {"array": "Ms", "index": 8}, "text": "m"},
+            {"from": {"array": "Dm", "index": 5}, "to": {"array": "Ms", "index": 9}, "text": "p"},
+            {"from": {"array": "Dm", "index": 6}, "to": {"array": "Ms", "index": 10}, "text": "l"},
+            {"from": {"array": "Dm", "index": 7}, "to": {"array": "Ms", "index": 11}, "text": "e"},
+            {"from": {"array": "Dm", "index": 8}, "to": {"array": "Ms", "index": 12}, "text": "."},
+            {"from": {"array": "Dm", "index": 9}, "to": {"array": "Ms", "index": 13}, "text": "c"},
+            {"from": {"array": "Dm", "index": 10}, "to": {"array": "Ms", "index": 14}, "text": "o"},
+            {"from": {"array": "Dm", "index": 11}, "to": {"array": "Ms", "index": 15}, "text": "m"}
+          ]
+        },
+        {
+          "caption": "Print it after Masked email:.",
+          "print": "Masked email: j***@example.com\n",
+          "from": {"array": "Ms"},
+          "vars": [{"name": "email", "ref": "E"}, {"name": "atIndex", "value": "4"}],
+          "arrays": [
+            {"id": "E", "text": "john@example.com", "class": "String", "pool": true},
+            {"id": "Lp", "text": "john", "class": "String"},
+            {"id": "Dm", "text": "@example.com", "class": "String"},
+            {"id": "Ms", "text": "j***@example.com", "class": "String"}
+          ]
+        },
+        {
+          "caption": "A line of values separated by commas. Split it at each comma: the space after each comma stays attached to the next part.",
+          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
+          "arrays": [
+            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true, "highlight": [4, 13]},
+            {"id": "P", "values": ["\"Java\"", "\" Strings\"", "\" Lab\""], "class": "String[]"}
+          ]
+        },
+        {
+          "caption": "Trim each part: the spaces at its ends go. Each trimmed part is a new String.",
+          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
+          "arrays": [
+            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
+            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]", "highlight": [1, 2]}
+          ]
+        },
+        {
+          "caption": "Print the parts inside square brackets, each in double quotes, with a comma and a space between them.",
+          "print": "CSV parts: [\"Java\", \"Strings\", \"Lab\"]\n",
+          "from": {"array": "P"},
+          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
+          "arrays": [
+            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
+            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]"}
+          ]
+        },
+        {
+          "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
+          "arrays": [
+            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
+            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]"}
+          ]
+        }
+      ]
+    }
+  ]
+}

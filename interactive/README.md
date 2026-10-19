@@ -51,7 +51,9 @@ Every other lab page is built exactly as before.
 placement, file and journey label matches the README; CI runs it with the
 other gates. After renaming a heading or changing an expected output in a
 lab README, run it: an animation still printing the old output fails the
-build.
+build. A section animation is checked against its example's Output block,
+so where a README shows none (the Strings lab), the gate cannot catch a
+changed example: after editing one, step through its animation.
 
 ## Preview
 

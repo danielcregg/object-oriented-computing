@@ -214,9 +214,11 @@
   // ---- Watch my code run -------------------------------------------------------------
   // The tracer runs the student's own program under the Java debugger; its steps play in a
   // full-screen viewer drawn by the page's animation engine (loaded here if the page has none).
+  var loading = null;                  // the engine is fetched once, however many traces open
   function stepper() {
     if (window.LabStepper) return Promise.resolve(window.LabStepper);
-    return new Promise(function (resolve, reject) {
+    if (loading) return loading;
+    loading = new Promise(function (resolve, reject) {
       var css = el("link");
       css.rel = "stylesheet";
       css.href = "/labs/static/stepper.css";
@@ -224,9 +226,10 @@
       var js = el("script");
       js.src = "/labs/static/stepper.js";
       js.onload = function () { window.LabStepper ? resolve(window.LabStepper) : reject(new Error("no engine")); };
-      js.onerror = reject;
+      js.onerror = function (e) { loading = null; reject(e); };
       document.head.appendChild(js);
     });
+    return loading;
   }
 
   function openTrace(diy, opener) {
@@ -249,16 +252,21 @@
     document.body.appendChild(overlay);
     closeBtn.focus();
     var mounted = null;
+    var closed = false;
+    if (opener) opener.disabled = true;  // one trace at a time from each button
     function close() {
+      if (closed) return;
+      closed = true;
       if (mounted && mounted.destroy) mounted.destroy();
       overlay.remove();
-      if (opener) opener.focus();
+      if (opener) { opener.disabled = false; opener.focus(); }
     }
     closeBtn.addEventListener("click", close);
     overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
     overlay.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
 
     Promise.all([post("trace/" + encodeURIComponent(lab)), stepper()]).then(function (both) {
+      if (closed) return;                // closed while the program ran: draw nothing
       var data = both[0];
       stage.textContent = "";
       if (data.error) {
@@ -269,6 +277,7 @@
       }
       mounted = both[1].mount(stage, data, { title: "DIY " + diy + ": your Main.java" });
     }).catch(function (problem) {
+      if (closed) return;
       stage.textContent = "";
       stage.appendChild(el("p", "", problem && problem.httpStatus
         ? "The guide couldn't trace your program (error " + problem.httpStatus + ")."

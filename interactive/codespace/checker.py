@@ -120,8 +120,14 @@ def _run(cmd: list[str], timeout: float, cap: int,
             break
         time.sleep(0.02)
     proc.wait()
+    try:                    # anything the program started dies with it, however it ended
+        os.killpg(proc.pid, signal.SIGKILL)
+    except (ProcessLookupError, PermissionError):
+        pass
     for reader in readers:
         reader.join(timeout=2)
+    if not stopped and overflow.is_set():   # it printed too much and finished before the loop saw
+        stopped = "output"
     decode = lambda b: bytes(b).decode("utf-8", errors="replace")  # noqa: E731
     return (None if stopped else proc.returncode), decode(out), decode(err), stopped
 

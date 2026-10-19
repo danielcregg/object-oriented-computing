@@ -7,7 +7,7 @@ Standard library only: the Codespace image has Python 3 but no pip. start.sh run
 when the Codespace starts, and VS Code opens the port beside the code.
 
     GET  /                       302 to this week's lab (module/schedule.json), else /labs/
-    GET  /api/health             {"ok": true}
+    GET  /api/health             {"ok": true, "service": "lab-guide"}
     GET  /api/trace/status       {"enabled": bool}: can "Watch my code run" work here?
     POST /api/check/<lab>/<k>    compile and run the student's lab folder, compare with DIY k
     POST /api/trace/<lab>        run the student's Main under the Java debugger, as animation data
@@ -29,12 +29,15 @@ Usage: python3 server.py --repo /workspaces/<repo> [--port 8081]
 """
 import argparse
 import datetime
+import hashlib
 import html
+import http.client
 import json
 import os
 import re
 import sys
 import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -80,6 +83,8 @@ TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
          ".pdf": "application/pdf", ".ico": "image/x-icon", ".txt": "text/plain; charset=utf-8"}
 OWN_FILES = {"guide.js", "guide.css"}
 FETCH_TIMEOUT = 8
+OFFLINE_PAUSE = 30           # after a failed fetch, the cache answers alone for this long
+CHECK_WAIT = 60              # a check waits this long for the one before it, then says busy
 FETCH_LIMIT = 64 * 1024 * 1024
 
 
@@ -174,15 +179,34 @@ class Module:
         return lab.folder.relative_to(self.repo).as_posix()
 
 
+class _SameSiteRedirects(urllib.request.HTTPRedirectHandler):
+    """Follow a redirect only within the site itself (GitHub Pages adds a missing "/")."""
+
+    def __init__(self, scheme: str, netloc: str):
+        super().__init__()
+        self.scheme, self.netloc = scheme, netloc
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        target = urllib.parse.urlsplit(newurl)
+        if (target.scheme, target.netloc) != (self.scheme, self.netloc):
+            raise urllib.error.HTTPError(newurl, code, "redirect off the site", headers, fp)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 class Site:
     """The published site, fetched once per run and cached on disk."""
 
     def __init__(self, base: str, cache: Path):
         self.base = base
-        self.cache = cache
+        # One cache per site, so a copy whose schedule moves to another site never shows
+        # the old one's pages offline.
+        self.cache = cache / hashlib.sha256(base.encode()).hexdigest()[:12]
         self.fresh: set[str] = set()
         self.locks: dict[str, threading.Lock] = {}
         self.guard = threading.Lock()
+        self.down_until = 0.0
+        origin = urllib.parse.urlsplit(base)
+        self.opener = urllib.request.build_opener(_SameSiteRedirects(origin.scheme, origin.netloc))
 
     def file_for(self, path: str) -> Path:
         rel = path.lstrip("/")
@@ -194,14 +218,17 @@ class Site:
         with self.guard:                  # one lock per cached file: /x/ and /x/index.html share one
             lock = self.locks.setdefault(str(target), threading.Lock())
         with lock:
-            if path not in self.fresh:
+            if path not in self.fresh and time.monotonic() >= self.down_until:
                 try:
                     request = urllib.request.Request(self.base + path.lstrip("/"),
                                                      headers={"User-Agent": "lab-guide"})
-                    with urllib.request.urlopen(request, timeout=FETCH_TIMEOUT) as response:
+                    with self.opener.open(request, timeout=FETCH_TIMEOUT) as response:
                         body = response.read(FETCH_LIMIT + 1)
+                        declared = response.headers.get("Content-Length")
                     if len(body) > FETCH_LIMIT:
                         return "missing", None
+                    if declared is not None and declared.isdigit() and int(declared) != len(body):
+                        raise http.client.IncompleteRead(body)   # never cache half a file
                     target.parent.mkdir(parents=True, exist_ok=True)
                     part = target.with_name(f".{target.name}.{threading.get_ident()}.part")
                     part.write_bytes(body)
@@ -211,8 +238,10 @@ class Site:
                 except urllib.error.HTTPError as err:
                     if err.code == 404:
                         return "missing", None
-                except (urllib.error.URLError, OSError, ValueError):
-                    pass           # offline or the site is down: the cache answers below
+                except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError):
+                    # Offline, the site is down, or the answer came back broken: the cache
+                    # answers, alone for a while, so a page's other files don't each wait.
+                    self.down_until = time.monotonic() + OFFLINE_PAUSE
             try:
                 return "ok", target.read_bytes()
             except OSError:
@@ -230,7 +259,9 @@ def add_guide(page: str, lab: Lab, display: str) -> str:
                 '<link rel="stylesheet" href="/labs/static/journey.css">\n' + head +
                 '<script src="/labs/static/journey.js" defer></script>\n')
         page = re.sub(r"<body\b", f'<body data-lab="{html.escape(lab.slug)}"', page, count=1)
-    return page.replace("</head>", head + "</head>", 1)
+    if re.search(r"</head\s*>", page, re.IGNORECASE):
+        return re.sub(r"</head\s*>", lambda m: head + m.group(0), page, count=1, flags=re.IGNORECASE)
+    return head + page
 
 
 class GuideServer(ThreadingHTTPServer):
@@ -250,8 +281,9 @@ class GuideServer(ThreadingHTTPServer):
         if name:
             self.hosts.add(f"{name}-{port}.{domain}")
         # This machine by name on any port (VS Code may forward the guide to another local
-        # port), and without CODESPACE_NAME any Codespace address for this port: those
-        # names are GitHub's, so no other site can point one at this machine.
+        # port), and any Codespace address for this port, so a forwarding name that differs
+        # from CODESPACE_NAME still works: those names are GitHub's, and no other site can
+        # point one at this machine.
         self.host_pattern = re.compile(rf"^(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$"
                                        rf"|^[a-z0-9-]+-{port}\.{re.escape(domain)}$")
 
@@ -260,6 +292,7 @@ class Handler(BaseHTTPRequestHandler):
     server: GuideServer
     server_version = "lab-guide"
     sys_version = ""
+    timeout = 30                         # a client that stops mid-request frees its thread
 
     def log_message(self, fmt, *args):   # quiet: only refusals and failures are logged
         pass
@@ -304,7 +337,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(403, b"Forbidden")
         path = urllib.parse.urlsplit(self.path).path
         if path == "/api/health":
-            return self.send_json(200, {"ok": True})
+            return self.send_json(200, {"ok": True, "service": "lab-guide"})
         if path == "/api/trace/status":
             return self.send_json(200, {"enabled": TRACER is not None})
         if path == "/":
@@ -316,7 +349,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(404, b"Not found")
             return self.send(200, (HERE / name).read_bytes(), TYPES[Path(name).suffix])
         if (path.startswith("/api/") or not SITE_PATH.match(path)
-                or any(part in (".", "..") for part in path.split("/"))):
+                or any(part.startswith(".") for part in path.split("/"))):
             return self.send(404, b"Not found")
         last = path.rsplit("/", 1)[1]
         if last and "." not in last:              # a folder: its pages link relative to "/"
@@ -340,17 +373,15 @@ class Handler(BaseHTTPRequestHandler):
     do_HEAD = do_GET
 
     def do_POST(self):
-        if not self.own_host():
+        self.close_connection = True         # one request per connection: no body is ever read
+        if not self.own_host() or self.headers.get("X-Lab-Check") != "1" or not self.same_origin():
             return self.send(403, b"Forbidden")
-        length = int(self.headers.get("Content-Length") or 0)
-        if length:
-            self.rfile.read(min(length, 65536))
+        if self.headers.get("Content-Length", "0").strip() != "0" or "Transfer-Encoding" in self.headers:
+            return self.send(400, b"These requests carry no body.")
         parts = urllib.parse.urlsplit(self.path).path.strip("/").split("/")
-        if self.headers.get("X-Lab-Check") != "1" or not self.same_origin():
-            return self.send(403, b"Forbidden")
         if len(parts) == 3 and parts[:2] == ["api", "trace"]:
             return self.trace_run(parts[2])
-        if len(parts) != 4 or parts[:2] != ["api", "check"] or not parts[3].isdigit():
+        if len(parts) != 4 or parts[:2] != ["api", "check"] or not re.fullmatch(r"[0-9]{1,3}", parts[3]):
             return self.send(404, b"Not found")
         lab = self.server.module.labs.get(parts[2])
         if lab is None:
@@ -363,10 +394,14 @@ class Handler(BaseHTTPRequestHandler):
         if found is None:
             return self.send(404, b"Not found")
         expected, loose = found
-        with self.server.check_lock:
+        if not self.server.check_lock.acquire(timeout=CHECK_WAIT):
+            return self.send(503, b"Another check is still running. Try again in a moment.")
+        try:
             result = checker.run_check(lab.folder, lab.main_class, expected,
                                        display_folder=self.server.module.display(lab),
                                        cwd=self.server.module.repo)
+        finally:
+            self.server.check_lock.release()
         if loose and result["status"] == "fail":
             result = loosen(result, expected)
         result["diy"] = int(parts[3])
@@ -378,13 +413,16 @@ class Handler(BaseHTTPRequestHandler):
         lab = self.server.module.labs.get(slug)
         if lab is None:
             return self.send(404, b"Not found")
-        with self.server.check_lock:          # one Java program at a time, as for checks
-            try:
-                data = TRACER.trace(lab.folder, lab.main_class, max_steps=400, timeout=12.0,
-                                    cwd=self.server.module.repo)
-            except Exception as err:   # noqa: BLE001
-                print(f"tracer: failed: {type(err).__name__}: {err}", file=sys.stderr)
-                data = {"error": "tracer", "message": "The tracer couldn't run your program."}
+        if not self.server.check_lock.acquire(timeout=CHECK_WAIT):   # one Java program at a time
+            return self.send(503, b"Another check is still running. Try again in a moment.")
+        try:
+            data = TRACER.trace(lab.folder, lab.main_class, max_steps=400, timeout=12.0,
+                                cwd=self.server.module.repo)
+        except Exception as err:   # noqa: BLE001
+            print(f"tracer: failed: {type(err).__name__}: {err}", file=sys.stderr)
+            data = {"error": "tracer", "message": "The tracer couldn't run your program."}
+        finally:
+            self.server.check_lock.release()
         self.send_json(200, data)
 
 

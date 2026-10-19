@@ -43,6 +43,28 @@ puzzles, the progress journey), and adds to **every** lab:
   Codespace's forwarded address), which shuts out DNS rebinding. A check or
   trace also needs the header `X-Lab-Check: 1` and a same-origin request, so
   another website cannot trigger one. The port stays private (GitHub sign-in).
+
+### Trust model
+
+A second review (Codex, 2026-10-19) confirmed the guards above and found
+robustness bugs, which are fixed: the cache never keeps a half-downloaded
+file, never follows a redirect off the site and is kept per site; a POST is
+refused before its body is read; a program's child processes die with it;
+an output flood is caught even when the program exits first; and two
+starts cannot race. What stays by design:
+
+- **The site is trusted.** Its pages run in the guide's own origin and could
+  call the API. That is the trust students already place in the module, whose
+  nightly sync ships code to their copies.
+- **The student's code runs as the student**, with their files, network and
+  permissions, exactly like pressing ▶ in VS Code. The checker bounds time
+  and output, not what the program may do.
+- **With VS Code desktop**, the port is forwarded to the student's own
+  machine, where another program or user of that machine could call it (to
+  run the student's own lab program, not new code).
+- The page is not protected against framing, because VS Code's preview shows
+  it in a frame; a framing site still cannot read anything, only invite a
+  click on a button that runs the student's own program.
 - There is no AI tutor in this version: Copilot Chat is already in the
   Codespace and follows the student section of `AGENTS.md`.
 

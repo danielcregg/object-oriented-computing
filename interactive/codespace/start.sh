@@ -11,6 +11,20 @@ mkdir -p "$(dirname "$log")" || exit 0
 if curl -fsS -m 2 "http://127.0.0.1:$port/api/health" >/dev/null 2>&1; then
   exit 0                                   # already running
 fi
+: >"$log"
+
+# The image's Python is Debian's python3-minimal, which has no json, http.server or
+# urllib.request; the rest of the standard library is one small package, installed on
+# the first start. `apt-get update` also reports an error for a third-party list the
+# image carries (an unsigned yarn repository); Debian's own lists still update, so that
+# status is ignored.
+if ! python3 -c 'import html, http.server, json, shutil, urllib.request' 2>/dev/null; then
+  {
+    sudo -n apt-get update -qq || true
+    sudo -n env DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends python3
+  } >>"$log" 2>&1
+fi
+
 # setsid + nohup: the server outlives the lifecycle command that started it.
-setsid nohup python3 "$here/server.py" --repo "$repo" --port "$port" >"$log" 2>&1 </dev/null &
+setsid nohup python3 "$here/server.py" --repo "$repo" --port "$port" >>"$log" 2>&1 </dev/null &
 exit 0

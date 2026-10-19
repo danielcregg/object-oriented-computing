@@ -191,8 +191,8 @@ class Site:
     def get(self, path: str) -> tuple[str, bytes | None]:
         """("ok", body) | ("missing", None) | ("offline", None)."""
         target = self.file_for(path)
-        with self.guard:
-            lock = self.locks.setdefault(path, threading.Lock())
+        with self.guard:                  # one lock per cached file: /x/ and /x/index.html share one
+            lock = self.locks.setdefault(str(target), threading.Lock())
         with lock:
             if path not in self.fresh:
                 try:
@@ -203,7 +203,7 @@ class Site:
                     if len(body) > FETCH_LIMIT:
                         return "missing", None
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    part = target.with_name(target.name + ".part")
+                    part = target.with_name(f".{target.name}.{threading.get_ident()}.part")
                     part.write_bytes(body)
                     part.replace(target)
                     self.fresh.add(path)

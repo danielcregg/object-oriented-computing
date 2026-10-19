@@ -114,17 +114,21 @@
   function render(panel, result) {
     panel.textContent = "";
     var box = el("div", "result " + (result.status === "pass" ? "pass" : "bad"));
-    box.appendChild(el("p", "result-title", TITLES[result.status] || "Check finished"));
-    if (result.status === "fail") {
+    // A loose exercise's expected output is only an example (the README says so): a run
+    // that prints every line passes, and the student compares the two themselves.
+    var example = result.loose && result.status === "pass";
+    box.appendChild(el("p", "result-title", example ? "\u2713 It runs: compare it with the example"
+      : TITLES[result.status] || "Check finished"));
+    if (result.status === "fail" || example) {
       box.appendChild(el("p", "", result.message));
       var expected = splitLines(result.expected);
       var actual = splitLines(result.actual);
-      var diff = (result.firstDiff || 1) - 1;
+      var diff = result.loose ? -1 : (result.firstDiff || 1) - 1;
       var start = actual.indexOf(expected[0]);
-      var actualDiff = (start >= 0 ? start : 0) + diff;
+      var actualDiff = diff < 0 ? -1 : (start >= 0 ? start : 0) + diff;
       var compare = el("div", "compare");
       var left = el("div");
-      left.appendChild(el("h4", "", "Expected output"));
+      left.appendChild(el("h4", "", result.loose ? "The example" : "Expected output"));
       left.appendChild(linesBlock(expected, diff));
       var right = el("div");
       right.appendChild(el("h4", "", "Your program printed"));

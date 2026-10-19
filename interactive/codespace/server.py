@@ -66,6 +66,12 @@ def _load_tracer():
 TRACER = _load_tracer()
 
 DIY_RE = re.compile(r"^\s*### DIY (\d+):\s*(.+?)\s*$")
+# A README marks an expected output as only an example on its **Expected output** line,
+# or in a note in brackets or italics straight after it ("A representative run - your
+# three strings can hold any values you like").
+# A plain "hash codes differ from run to run" is not such a mark: that README goes on to
+# say every printed line is the same on every run.
+LOOSE_RE = re.compile(r"representative|\b(?:may|will|can) (?:differ|vary)\b|any values", re.IGNORECASE)
 SITE_PATH = re.compile(r"^/(?:[A-Za-z0-9._~-]+/)*[A-Za-z0-9._~-]*$")
 LAB_PAGE = re.compile(r"^/labs/([a-z0-9-]+)/(?:index\.html)?$")
 TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
@@ -82,9 +88,10 @@ def _host(value: str) -> str:
     return re.sub(r":(?:443|80)$", "", value.strip().lower())
 
 
-def expected_output(readme: str, k: int) -> str | None:
+def expected_output(readme: str, k: int) -> tuple[str, bool] | None:
     """DIY k's expected output: the first ```text fence after its `**Expected output**`
-    line, as the solutions repo's checker reads it. None when there is no such DIY."""
+    line, as the solutions repo's checker reads it, and whether the README says that
+    output is only an example (see LOOSE_RE). None when there is no such DIY."""
     lines = readme.split("\n")
     marks = [(i, int(m.group(1))) for i, line in enumerate(lines) if (m := DIY_RE.match(line))]
     for idx, (i, number) in enumerate(marks):
@@ -92,16 +99,38 @@ def expected_output(readme: str, k: int) -> str | None:
             continue
         end = marks[idx + 1][0] if idx + 1 < len(marks) else len(lines)
         for j in range(i, end):
-            if "**Expected output**" in lines[j]:
-                body, n = [], j + 1
-                while n < end and not lines[n].strip().startswith("```text"):
-                    n += 1
-                for n in range(n + 1, end):
-                    if lines[n].strip().startswith("```"):
-                        return "\n".join(body)
-                    body.append(lines[n].rstrip())
+            if "**Expected output**" not in lines[j]:
+                continue
+            n = j + 1
+            while n < end and not lines[n].strip().startswith("```text"):
+                n += 1
+            body = []
+            for n in range(n + 1, end):
+                if lines[n].strip().startswith("```"):
+                    after = next((line.strip() for line in lines[n + 1:end] if line.strip()), "")
+                    note = after if after[:1] in "(*_" else ""
+                    loose = bool(LOOSE_RE.search(lines[j]) or LOOSE_RE.search(note))
+                    return "\n".join(body), loose
+                body.append(lines[n].rstrip())
         return None
     return None
+
+
+def loosen(result: dict, expected: str) -> dict:
+    """For an exercise whose expected output is only an example: a run that printed at
+    least as many lines passes, and says the comparison is the student's to make."""
+    want = len([line for line in expected.split("\n") if line.strip()])
+    got = len([line for line in (result.get("actual") or "").split("\n") if line.strip()])
+    result["loose"] = True
+    if got >= want:
+        result.update(status="pass", firstDiff=None, message=(
+            "Your program runs. This exercise's expected output is an example (your values "
+            "can differ), so compare yours with it line by line."))
+    else:
+        result["message"] = (f"Your program printed {got} line{'s' * (got != 1)}; the example "
+                             f"has {want}. Its values are only an example, but every line "
+                             "should be there.")
+    return result
 
 
 class Lab:
@@ -330,13 +359,16 @@ class Handler(BaseHTTPRequestHandler):
             readme = (lab.folder / "README.md").read_text(encoding="utf-8")
         except OSError:
             return self.send(404, b"Not found")
-        expected = expected_output(readme, int(parts[3]))
-        if expected is None:
+        found = expected_output(readme, int(parts[3]))
+        if found is None:
             return self.send(404, b"Not found")
+        expected, loose = found
         with self.server.check_lock:
             result = checker.run_check(lab.folder, lab.main_class, expected,
                                        display_folder=self.server.module.display(lab),
                                        cwd=self.server.module.repo)
+        if loose and result["status"] == "fail":
+            result = loosen(result, expected)
         result["diy"] = int(parts[3])
         self.send_json(200, result)
 

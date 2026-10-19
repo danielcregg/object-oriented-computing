@@ -565,6 +565,194 @@ button.play-obj[aria-disabled="true"] { cursor: default; transform: none; }
 
 .play-fail-msg { color: var(--slate, #46536B); font-style: italic; }
 
+/* ==== strings ====
+   A String is a row of character boxes over the same blue index pills as an array, narrower because each
+   box holds one character; whitespace shows as a faint symbol. Pink marks an escape, orange the operands
+   or the cut being worked on, purple a new String (what a call returns), green a match. */
+.play-string { --play-box-min: 34px; --play-gap: 5px; }
+.play-string .play-box { width: max(var(--play-box-min), calc(0.62em + 14px)); }
+.play-string .play-idx > span { min-width: 18px; padding: 1px 5px; }
+.play-box.play-space > .play-val { color: color-mix(in srgb, var(--slate, #46536B) 55%, transparent); font-weight: 600; }
+.play-box.play-esc { border-color: var(--play-pink); background: color-mix(in srgb, var(--play-pink) 12%, #FFFFFF); }
+.play-box.play-esc > .play-val { color: var(--play-pink); }
+.play-no-chars {
+  align-self: center; padding: 6px 14px; border-radius: 11px; white-space: nowrap;
+  font-size: 13.5px; color: var(--slate, #46536B); border: 2px dashed color-mix(in srgb, var(--slate, #46536B) 35%, #FFFFFF);
+  transition: border-color .3s ease, background-color .3s ease;
+}
+.play-no-chars.play-on { border-color: var(--play-green); background: color-mix(in srgb, var(--play-green) 10%, #FFFFFF); }
+.play-sel .play-box {
+  border-color: var(--orange, #E76F00); background: color-mix(in srgb, var(--orange, #E76F00) 13%, #FFFFFF);
+}
+.play-sel .play-idx > span { background: var(--play-orange-ink); }
+.play-dropped .play-box { opacity: .32; border-style: dashed; }
+.play-new-char .play-box { border-color: var(--orange, #E76F00); background: color-mix(in srgb, var(--orange, #E76F00) 11%, #FFFFFF); }
+.play-seg-fixed { --hue: var(--slate, #46536B); }
+.play-seg-0 { --hue: var(--play-teal); }
+.play-seg-1 { --hue: var(--play-pink); }
+.play-seg-2 { --hue: var(--play-gold); }
+.play-seg-3 { --hue: var(--blue, #33698C); }
+.play-badge.play-hidden { opacity: 0; }
+.play-test-err { color: var(--play-red); }
+.play-test-err code { color: var(--play-red); }
+.play-code .play-tok-esc { color: #FFB3D1; font-weight: 700; background: color-mix(in srgb, var(--play-pink) 38%, transparent); border-radius: 3px; }
+
+/* substring's cuts: begin and end sit in the gaps between boxes */
+.play-cells.play-has-cuts { padding-top: 30px; }
+.play-array-cut > .play-array-name { margin-top: calc(30px + (var(--play-box-h) - 22px) / 2); }
+.play-cut { position: absolute; top: 6px; bottom: 26px; width: 0; z-index: 2; border-left: 2.5px dashed var(--orange, #E76F00); transform: translateX(-1.25px); transform-origin: top; }
+.play-cut-tag {
+  position: absolute; left: 0; top: -6px; transform: translate(-50%, -100%); padding: 0 7px; border-radius: 999px; white-space: nowrap;
+  font-family: var(--mono, monospace); font-size: 11.5px; font-weight: 700; line-height: 18px; color: #FFFFFF; background: var(--play-orange-ink);
+}
+.play-result { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; }
+.play-result .play-tag { align-self: center; margin-top: 0; }
+.play-tag-new { border-color: var(--play-purple); color: var(--play-purple); background: color-mix(in srgb, var(--play-purple) 9%, #FFFFFF); }
+
+/* what was typed between the quotes, and the console as an answer */
+.play-tiles { display: flex; flex-direction: column; align-items: center; gap: 6px; transition: opacity .4s ease; }
+.play-tiles-head, .play-want-head { font-family: var(--mono, monospace); font-size: 12px; font-weight: 600; color: var(--muted, #8B8471); }
+.play-tiles-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; }
+.play-tile {
+  min-width: 22px; height: 30px; padding: 0 5px; display: grid; place-items: center; border-radius: 7px;
+  font-family: var(--mono, monospace); font-size: 15px; font-weight: 700; color: var(--ink, #1E2833);
+  background: #FFFFFF; border: 1.5px solid var(--rule, #DED8C9);
+}
+.play-tile-esc { color: var(--play-pink); border-color: var(--play-pink); background: color-mix(in srgb, var(--play-pink) 10%, #FFFFFF); }
+.play-tiles-done { opacity: .62; }
+.play-mini-console {
+  display: inline-flex; flex-direction: column; align-items: flex-start; min-width: 6.5em; padding: 6px 11px; border-radius: 8px;
+  font-family: var(--mono, monospace); font-size: 14px; font-weight: 600; line-height: 1.45; text-align: left;
+  color: var(--paper, #FBFAF7); background: var(--codebg, #16222E);
+}
+.play-mini-line { min-height: 1.45em; white-space: pre; }
+.play-options .play-btn:has(.play-mini-console) { padding: 7px 10px; }
+.play-want {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 12px;
+  background: #FFFFFF; border: 2px dashed color-mix(in srgb, var(--play-green) 50%, #FFFFFF);
+  transition: border-color .3s ease, background-color .3s ease;
+}
+.play-want-done { border-style: solid; border-color: var(--play-green); background: color-mix(in srgb, var(--play-green) 8%, #FFFFFF); }
+
+/* + as the evaluator: an int chip is blue, a String chip orange in its quotes */
+.play-expr { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 10px 8px; padding: 4px 0 2px; }
+.play-chip-v { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
+.play-chip-text {
+  padding: 8px 12px; border-radius: 11px; border: 2px solid; white-space: pre;
+  font-family: var(--mono, monospace); font-size: 19px; font-weight: 700; line-height: 1.15;
+  box-shadow: 0 3px 8px rgba(30, 40, 51, .07); transition: transform .25s var(--play-spring), box-shadow .25s ease;
+}
+.play-chip-int .play-chip-text { color: var(--blue, #33698C); background: color-mix(in srgb, var(--blue, #33698C) 8%, #FFFFFF); border-color: color-mix(in srgb, var(--blue, #33698C) 55%, #FFFFFF); }
+.play-chip-str .play-chip-text { color: var(--play-orange-ink); background: color-mix(in srgb, var(--orange, #E76F00) 9%, #FFFFFF); border-color: color-mix(in srgb, var(--orange, #E76F00) 55%, #FFFFFF); }
+.play-chip-type { font-family: var(--mono, monospace); font-size: 11.5px; font-weight: 700; color: var(--slate, #46536B); }
+.play-plus, .play-paren { margin-top: 7px; font-family: var(--mono, monospace); font-size: 22px; font-weight: 700; line-height: 1.2; color: var(--slate, #46536B); transition: transform .25s var(--play-spring), color .2s ease; }
+.play-plus.play-active { color: var(--orange, #E76F00); transform: scale(1.35); }
+.play-chip-v.play-active .play-chip-text { transform: translateY(-5px); box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange, #E76F00) 24%, transparent), 0 8px 16px rgba(30, 40, 51, .12); }
+.play-chip-v.play-final .play-chip-text { border-color: var(--play-green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--play-green) 20%, transparent); }
+.play-add .play-icon { color: var(--blue, #33698C); }
+.play-join .play-icon { color: var(--orange, #E76F00); }
+
+/* the pool and the heap: variables on the left, String objects on the right, arrows between */
+.play-pool-pic {
+  display: grid; grid-template-columns: auto auto; justify-content: safe center; align-items: start;
+  column-gap: 76px; padding-left: 42px; padding-right: 22px;
+}
+.play-pool-pic .play-vars { gap: 18px; padding-top: 22px; }
+.play-objs { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.play-pool {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 150px; min-height: 66px;
+  padding: 22px 16px 14px; border-radius: 16px;
+  border: 2px dashed color-mix(in srgb, var(--play-teal) 55%, #FFFFFF); background: color-mix(in srgb, var(--play-teal) 5%, #FFFFFF);
+}
+.play-pool-name {
+  position: absolute; left: 12px; top: -11px; padding: 0 9px; border-radius: 999px;
+  font-family: var(--mono, monospace); font-size: 12px; font-weight: 700; line-height: 20px; color: var(--play-teal);
+  background: #FFFFFF; border: 1.5px solid color-mix(in srgb, var(--play-teal) 55%, #FFFFFF);
+}
+.play-heap { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding-left: 18px; }
+.play-heap:empty { display: none; }
+.play-sobj {
+  position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 8px 14px;
+  border-radius: 12px; background: #FFFFFF; border: 2px solid color-mix(in srgb, var(--slate, #46536B) 40%, #FFFFFF);
+  box-shadow: 0 3px 10px rgba(30, 40, 51, .08); transition: opacity .4s ease, border-color .3s ease, background-color .3s ease;
+}
+.play-sobj-text { font-family: var(--mono, monospace); font-size: 17px; font-weight: 700; color: var(--ink, #1E2833); white-space: pre; }
+.play-sobj-tag { font-size: 12px; color: var(--slate, #46536B); white-space: nowrap; }
+.play-sobj-tag code { font-size: 11.5px; }
+.play-sobj.play-dead { opacity: .45; border-style: dashed; box-shadow: none; }
+.play-sobj.play-hit { border-color: var(--play-green); background: color-mix(in srgb, var(--play-green) 9%, #FFFFFF); }
+.play-pool-pic .play-overlay .play-bracket { border-width: 2.5px; }
+
+/* one StringBuilder: its buffer inside the object, edited in place */
+.play-builder-pic { display: grid; grid-template-columns: auto auto; justify-content: safe center; align-items: center; column-gap: 60px; row-gap: 14px; }
+.play-sb {
+  position: relative; display: flex; flex-direction: column; min-width: 140px; border-radius: 14px; background: #FFFFFF;
+  border: 2px solid color-mix(in srgb, var(--play-purple) 55%, #FFFFFF); box-shadow: 0 3px 10px rgba(30, 40, 51, .08);
+}
+.play-sb .play-obj-head { background: var(--play-purple); }
+.play-sb-body { padding: 12px 14px 8px; min-height: 76px; display: flex; align-items: flex-start; }
+.play-builder-pic > .play-want, .play-builder-pic > .play-sb-tag { grid-column: 1 / -1; justify-self: center; }
+.play-builder-pic > .play-sb-tag { margin-top: 0; }
+.play-want-chars .play-mini-box { min-width: 26px; }
+.play-mini-chars .play-mini-box { min-width: 24px; padding: 3px 5px; }
+.play-mini-box.play-space { color: color-mix(in srgb, var(--slate, #46536B) 60%, transparent); }
+.play-mini-empty { font-size: 13px; color: var(--slate, #46536B); font-style: italic; }
+
+/* judging calls */
+.play-judge-pic { gap: 12px; }
+.play-var-inline { flex-direction: row; align-items: center; gap: 10px; }
+.play-var-inline .play-var-name { margin: 0; }
+.play-judge-pic .play-var-cell { position: relative; }
+.play-null-cell .play-val { font-size: .8em; font-style: italic; font-weight: 600; color: var(--slate, #46536B); }
+.play-boom-null { border-color: var(--play-red) !important; background: color-mix(in srgb, var(--play-red) 10%, #FFFFFF); box-shadow: 0 0 0 4px color-mix(in srgb, var(--play-red) 18%, transparent); }
+
+/* spot the bug: every line of the program is a key */
+.play-split.play-board-bug { grid-template-areas: "code want" "code out"; grid-template-rows: auto 1fr; }
+.play-board-bug .play-bug-aside { grid-area: want; display: flex; flex-direction: column; justify-content: center; }
+.play-board-bug .play-console { grid-area: out; }
+.play-code-bug { padding: 8px 0; }
+.play-line-btn {
+  display: block; width: 100%; margin: 0; padding-left: calc(30px + (var(--play-indent, 0) + 2) * 1ch);
+  font: inherit; color: inherit; text-align: left; background: transparent; border: 0; border-left: 3px solid transparent;
+  cursor: pointer;
+}
+.play-line-btn:hover { background: rgba(255, 255, 255, .07); border-left-color: color-mix(in srgb, var(--orange, #E76F00) 60%, transparent); }
+.play-line-btn:focus-visible { outline: 3px solid var(--orange, #E76F00); outline-offset: -3px; }
+.play-line-btn[aria-disabled="true"] { cursor: default; }
+.play-line-btn[aria-disabled="true"]:hover { background: transparent; border-left-color: transparent; }
+.play-line-no {
+  position: absolute; left: 6px; width: 18px; text-indent: 0; text-align: right; font-size: 11px;
+  color: color-mix(in srgb, var(--paper, #FBFAF7) 42%, var(--codebg, #16222E));
+}
+.play-line-btn.play-line-bug, .play-line-btn.play-line-bug:hover { background: color-mix(in srgb, var(--play-red) 30%, transparent); border-left-color: var(--play-red-soft); }
+.play-line-btn.play-line-fixed, .play-line-btn.play-line-fixed:hover { background: color-mix(in srgb, var(--play-green) 30%, transparent); border-left-color: #7DD3A0; }
+.play-bug-mark { position: absolute; right: 8px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--play-red-soft); text-indent: 0; }
+.play-bug-mark .play-icon { width: 100%; height: 100%; }
+/* a String literal as an answer keeps every space you would type */
+.play-lit .play-btn-text { white-space: pre; }
+.play-explain { flex-direction: column; align-items: stretch; }
+.play-explain .play-btn { justify-content: flex-start; text-align: left; font-weight: 600; }
+.play-out-plain { }
+
+@container (max-width: 640px) {
+  .play-split.play-board-bug { grid-template-columns: minmax(0, 1fr); grid-template-areas: "code" "out" "want"; grid-template-rows: none; }
+}
+@container (max-width: 520px) {
+  /* boxes as wide as 27px, narrower when a long String would not fit the card (100cqw is the card's width) */
+  .play-string { --play-gap: 3px; --play-box-min: min(27px, calc((100cqw - 34px) / var(--play-n, 8) - 3px)); }
+  .play-string .play-box { width: var(--play-box-min); font-size: min(var(--play-val-size), calc(var(--play-box-min) * .62)); }
+  .play-string .play-idx > span { min-width: 0; padding: 1px 3px; font-size: min(10.5px, calc(var(--play-box-min) * .42)); }
+  .play-chip-text { padding: 6px 9px; font-size: 16px; }
+  .play-plus, .play-paren { font-size: 19px; margin-top: 5px; }
+  .play-pool-pic { column-gap: 44px; padding-left: 30px; padding-right: 6px; }
+  .play-pool { min-width: 0; padding: 20px 10px 10px; }
+  .play-heap { padding-left: 8px; }
+  .play-builder-pic { column-gap: 34px; }
+  .play-tile { min-width: 18px; height: 27px; padding: 0 4px; font-size: 13.5px; }
+  .play-cut-tag { font-size: 10.5px; padding: 0 5px; }
+  .play-array-cut > .play-array-name { margin-top: 0; }
+}
+
 /* ---- narrow cards ---- */
 @container (max-width: 640px) {
   .play-split, .play-split.play-solo { grid-template-columns: minmax(0, 1fr); grid-template-areas: "code" "out" "pic"; }

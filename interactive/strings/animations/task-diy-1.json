@@ -1,0 +1,74 @@
+{
+  "id": "task-diy-1",
+  "task": 1,
+  "title": "DIY 1, step by step",
+  "segments": [
+    {
+      "example": null,
+      "extra": false,
+      "title": "Three literals, three arrows",
+      "steps": [
+        {
+          "caption": "Three pieces of text in double quotes: Hello, Java and Strings. Each literal becomes a String object in the string pool.",
+          "vars": [],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Give each one a String variable. A variable holds an arrow to its object, not the text itself.",
+          "vars": [{"name": "a", "ref": "P1"}, {"name": "b", "ref": "P2"}, {"name": "c", "ref": "P3"}],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Print the first variable: its text appears on a line of its own.",
+          "print": "Hello\n",
+          "from": {"array": "P1"},
+          "vars": [{"name": "a", "ref": "P1"}, {"name": "b", "ref": "P2"}, {"name": "c", "ref": "P3"}],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Then the second.",
+          "print": "Java\n",
+          "from": {"array": "P2"},
+          "vars": [{"name": "a", "ref": "P1"}, {"name": "b", "ref": "P2"}, {"name": "c", "ref": "P3"}],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "And the third: three variables, three lines.",
+          "print": "Strings\n",
+          "from": {"array": "P3"},
+          "vars": [{"name": "a", "ref": "P1"}, {"name": "b", "ref": "P2"}, {"name": "c", "ref": "P3"}],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        },
+        {
+          "caption": "Your three strings can hold any text you like. Now write the code that makes this happen, run it with ▶, then press Check my output.",
+          "vars": [{"name": "a", "ref": "P1"}, {"name": "b", "ref": "P2"}, {"name": "c", "ref": "P3"}],
+          "arrays": [
+            {"id": "P1", "text": "Hello", "class": "String", "pool": true},
+            {"id": "P2", "text": "Java", "class": "String", "pool": true},
+            {"id": "P3", "text": "Strings", "class": "String", "pool": true}
+          ]
+        }
+      ]
+    }
+  ]
+}

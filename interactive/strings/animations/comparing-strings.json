@@ -1,0 +1,123 @@
+{
+  "id": "comparing-strings",
+  "title": "Comparing Strings",
+  "segments": [
+    {
+      "example": "section 4",
+      "extra": false,
+      "title": "Same characters, or the same letters?",
+      "code": [
+        "String expected = \"SUCCESS\";",
+        "String actual = \"success\";",
+        "System.out.println(expected.equals(actual));",
+        "System.out.println(expected.equalsIgnoreCase(actual));"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`expected` points at a String of seven capital letters.",
+          "vars": [{"name": "expected", "ref": "E"}],
+          "arrays": [{"id": "E", "text": "SUCCESS", "pool": true}]
+        },
+        {
+          "line": 2,
+          "caption": "`actual` points at another String: the same letters in lower case. Different text, so a different object.",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "actual", "ref": "A"}],
+          "arrays": [{"id": "E", "text": "SUCCESS", "pool": true}, {"id": "A", "text": "success", "pool": true}]
+        },
+        {
+          "line": 3,
+          "caption": "`equals` compares the characters exactly, box by box from index 0. `S` and `s` are different characters, so it stops right there: `false`.",
+          "print": "false\n",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "actual", "ref": "A"}],
+          "arrays": [
+            {"id": "E", "text": "SUCCESS", "pool": true, "highlight": [0]},
+            {"id": "A", "text": "success", "pool": true, "highlight": [0]}
+          ],
+          "compare": [{"a": {"array": "E", "index": 0}, "b": {"array": "A", "index": 0}, "same": false}]
+        },
+        {
+          "line": 4,
+          "caption": "`equalsIgnoreCase` also goes box by box, but counts a capital and a small letter as the same: `S` matches `s`.",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "actual", "ref": "A"}],
+          "arrays": [
+            {"id": "E", "text": "SUCCESS", "pool": true, "highlight": [0]},
+            {"id": "A", "text": "success", "pool": true, "highlight": [0]}
+          ],
+          "compare": [{"a": {"array": "E", "index": 0}, "b": {"array": "A", "index": 0}, "same": true}]
+        },
+        {
+          "line": 4,
+          "caption": "All seven pairs match when case is ignored, so `true`.",
+          "print": "true\n",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "actual", "ref": "A"}],
+          "arrays": [
+            {"id": "E", "text": "SUCCESS", "pool": true, "match": [0, 1, 2, 3, 4, 5, 6]},
+            {"id": "A", "text": "success", "pool": true, "match": [0, 1, 2, 3, 4, 5, 6]}
+          ],
+          "compare": [
+            {"a": {"array": "E", "index": 0}, "b": {"array": "A", "index": 0}, "same": true},
+            {"a": {"array": "E", "index": 1}, "b": {"array": "A", "index": 1}, "same": true},
+            {"a": {"array": "E", "index": 2}, "b": {"array": "A", "index": 2}, "same": true},
+            {"a": {"array": "E", "index": 3}, "b": {"array": "A", "index": 3}, "same": true},
+            {"a": {"array": "E", "index": 4}, "b": {"array": "A", "index": 4}, "same": true},
+            {"a": {"array": "E", "index": 5}, "b": {"array": "A", "index": 5}, "same": true},
+            {"a": {"array": "E", "index": 6}, "b": {"array": "A", "index": 6}, "same": true}
+          ]
+        }
+      ]
+    },
+    {
+      "example": null,
+      "extra": true,
+      "title": "What if you compared with ==?",
+      "code": [
+        "String expected = \"SUCCESS\";",
+        "String reply = new String(\"SUCCESS\");",
+        "System.out.println(expected == reply);",
+        "System.out.println(expected.equals(reply));"
+      ],
+      "steps": [
+        {
+          "line": 1,
+          "caption": "`expected` points at the pooled literal again.",
+          "vars": [{"name": "expected", "ref": "E"}],
+          "arrays": [{"id": "E", "text": "SUCCESS", "pool": true}]
+        },
+        {
+          "line": 2,
+          "caption": "`new String(...)` always builds a separate object outside the pool, even though the pool already holds the same text.",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "reply", "ref": "R"}],
+          "arrays": [{"id": "E", "text": "SUCCESS", "pool": true}, {"id": "R", "text": "SUCCESS"}]
+        },
+        {
+          "line": 3,
+          "caption": "`==` compares the arrows, not the text. They lead to two different objects, so `false`.",
+          "print": "false\n",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "reply", "ref": "R"}],
+          "arrays": [{"id": "E", "text": "SUCCESS", "pool": true}, {"id": "R", "text": "SUCCESS"}],
+          "compare": [{"a": {"var": "expected"}, "b": {"var": "reply"}, "same": false}]
+        },
+        {
+          "line": 4,
+          "caption": "`equals` walks the characters: all seven match, so `true`. To compare text, use `equals`.",
+          "print": "true\n",
+          "vars": [{"name": "expected", "ref": "E"}, {"name": "reply", "ref": "R"}],
+          "arrays": [
+            {"id": "E", "text": "SUCCESS", "pool": true, "match": [0, 1, 2, 3, 4, 5, 6]},
+            {"id": "R", "text": "SUCCESS", "match": [0, 1, 2, 3, 4, 5, 6]}
+          ],
+          "compare": [
+            {"a": {"array": "E", "index": 0}, "b": {"array": "R", "index": 0}, "same": true},
+            {"a": {"array": "E", "index": 1}, "b": {"array": "R", "index": 1}, "same": true},
+            {"a": {"array": "E", "index": 2}, "b": {"array": "R", "index": 2}, "same": true},
+            {"a": {"array": "E", "index": 3}, "b": {"array": "R", "index": 3}, "same": true},
+            {"a": {"array": "E", "index": 4}, "b": {"array": "R", "index": 4}, "same": true},
+            {"a": {"array": "E", "index": 5}, "b": {"array": "R", "index": 5}, "same": true},
+            {"a": {"array": "E", "index": 6}, "b": {"array": "R", "index": 6}, "same": true}
+          ]
+        }
+      ]
+    }
+  ]
+}

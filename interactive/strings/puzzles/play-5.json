@@ -1,0 +1,44 @@
+{
+  "id": "play-5",
+  "section": 5,
+  "type": "pool",
+  "title": "One object or two?",
+  "intro": "A String variable holds an arrow to a String object. Literals live in the string pool and are shared; `new` always builds a fresh object. And no String ever changes: a method that seems to change one builds a new one.",
+  "words": ["tide", "kelp", "reef", "gull", "cove"],
+  "rounds": [
+    {
+      "kind": "wire",
+      "right": "Three variables, two objects: the pool shares a literal, and `new` refuses to.",
+      "why": {
+        "b": "A literal that is already in the pool is reused: `b` gets an arrow to the very object `a` points at.",
+        "c": "`new String(...)` always builds a fresh object outside the pool, even though the pool already holds the same text."
+      }
+    },
+    {
+      "kind": "judge",
+      "right": "`==` compares arrows and `equals` compares text: same text in two objects is `equals`, but not `==`.",
+      "why": {
+        "a==b": "`a` and `b` were made from the same literal, so the pool gave them one object: `==` compares the arrows, and they end at the same place.",
+        "a==c": "`==` compares arrows, not text: `c` points at the object `new` built, a different one from `a`'s.",
+        "equals": "`equals` compares the text, character by character, and the text is the same in both objects."
+      }
+    },
+    {
+      "kind": "factory",
+      "right": "Catch the arrow: `s = s.toUpperCase();` keeps the new String. Without the `s =`, it is built and thrown away.",
+      "why": {
+        "uncaught": "`toUpperCase()` can't change the String `s` points at: Strings never change. It builds a new one and returns it, and this line throws the result away.",
+        "caught": "This time the result is caught: `s = ...` moves `s`'s arrow to the new upper-case String."
+      }
+    },
+    {
+      "kind": "alias",
+      "suffixes": ["s", "y", "!"],
+      "right": "Sharing a String is always safe: `a` moved to a new object, and the one `b` points at can never change.",
+      "why": {
+        "alias": "`a + {suffix}` builds a new String and only `a`'s arrow moves to it. `b` still points at the original, and nothing can change that object.",
+        "a==b": "After the `+`, `a` points at the new String and `b` at the old one: two arrows, two objects."
+      }
+    }
+  ]
+}

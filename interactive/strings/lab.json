@@ -1,0 +1,105 @@
+{
+  "animations": [
+    {
+      "id": "inspecting-a-string",
+      "before": "### DIY 2:"
+    },
+    {
+      "id": "comparing-strings",
+      "before": "### DIY 4:"
+    },
+    {
+      "id": "string-pool",
+      "before": "### DIY 5:"
+    },
+    {
+      "id": "builder-in-place",
+      "before": "### DIY 6:"
+    },
+    {
+      "id": "searching-and-slicing",
+      "before": "### DIY 7:"
+    }
+  ],
+  "taskAnimations": [
+    {
+      "id": "task-diy-1",
+      "diy": 1
+    },
+    {
+      "id": "task-diy-2",
+      "diy": 2
+    },
+    {
+      "id": "task-diy-3",
+      "diy": 3
+    },
+    {
+      "id": "task-diy-4",
+      "diy": 4
+    },
+    {
+      "id": "task-diy-5",
+      "diy": 5
+    },
+    {
+      "id": "task-diy-6",
+      "diy": 6
+    },
+    {
+      "id": "task-diy-7",
+      "diy": 7
+    },
+    {
+      "id": "task-diy-8",
+      "diy": 8
+    }
+  ],
+  "puzzles": [
+    {
+      "id": "play-1",
+      "before": "### DIY 1:"
+    },
+    {
+      "id": "play-2",
+      "before": "### DIY 2:"
+    },
+    {
+      "id": "play-3",
+      "before": "### DIY 3:"
+    },
+    {
+      "id": "play-4",
+      "before": "### DIY 4:"
+    },
+    {
+      "id": "play-5",
+      "before": "### DIY 5:"
+    },
+    {
+      "id": "play-6",
+      "before": "### DIY 6:"
+    },
+    {
+      "id": "play-7",
+      "before": "### DIY 7:"
+    },
+    {
+      "id": "play-8",
+      "before": "### DIY 8:"
+    }
+  ],
+  "journey": {
+    "labels": {
+      "1": "First strings",
+      "2": "Inspecting",
+      "3": "Joining",
+      "4": "Comparing",
+      "5": "Immutable",
+      "6": "Builder",
+      "7": "Methods",
+      "8": "Debugging"
+    },
+    "masterBadge": "String master"
+  }
+}

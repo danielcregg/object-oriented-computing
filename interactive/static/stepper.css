@@ -93,6 +93,29 @@
 .anim-task .anim-seg-tag.anim-extra { color: var(--anim-orange-ink); background: #FFFFFF; border-color: var(--orange); }
 .anim-seg-title { font-weight: 600; color: var(--slate); }
 
+/* Strings: character boxes, sized by the segment's longest String (stepper.js CHAR_SIZES).
+   Every box in such a segment, variables included, takes the character height. */
+.anim-root {
+  --anim-char-w: 34px; --anim-char-h: 42px; --anim-char-size: 20px; --anim-char-gap: 3px;
+  --anim-pill-size: 11px; --anim-pill-pad: 4px;
+}
+.anim-root.anim-chars-l { --anim-box-h: var(--anim-char-h); }
+.anim-root.anim-chars-m { --anim-char-w: 29px; --anim-char-h: 38px; --anim-char-size: 18px; --anim-box-h: 38px; }
+.anim-root.anim-chars-s {
+  --anim-char-w: 24px; --anim-char-h: 35px; --anim-char-size: 16px; --anim-char-gap: 2px; --anim-box-h: 35px;
+  --anim-pill-size: 10px; --anim-pill-pad: 2px;
+}
+.anim-root.anim-chars-xs {
+  --anim-char-w: 18px; --anim-char-h: 32px; --anim-char-size: 14px; --anim-char-gap: 1px; --anim-box-h: 32px;
+  --anim-pill-size: 9px; --anim-pill-pad: 1px;
+}
+/* long Strings need the room: the picture's columns sit closer */
+.anim-root.anim-nocode.anim-chars-s, .anim-root.anim-nocode.anim-chars-xs, .anim-root.anim-nocode.anim-chars-xxs { --anim-col-gap: 42px; }
+.anim-root.anim-chars-xxs {
+  --anim-char-w: 14px; --anim-char-h: 28px; --anim-char-size: 12px; --anim-char-gap: 1px; --anim-box-h: 28px;
+  --anim-pill-size: 9px; --anim-pill-pad: 1px;
+}
+
 /* ---- layout: code over console | picture over caption ---- */
 .anim-body {
   display: grid; gap: 14px 16px; align-items: start;
@@ -287,6 +310,75 @@
 }
 .anim-note:empty { display: none; }
 
+/* ---- Strings: one box per character, as in the lecture's "an array inside the object" ---- */
+.anim-array.anim-chars { --anim-gap: var(--anim-char-gap); }
+.anim-array.anim-chars .anim-box {
+  width: var(--anim-char-w); height: var(--anim-char-h); font-size: var(--anim-char-size);
+  border-width: 1.5px; border-radius: 7px; box-shadow: 0 2px 5px rgba(30, 40, 51, .06);
+}
+.anim-array.anim-chars .anim-idx { width: var(--anim-cell-px, var(--anim-char-w)); }
+.anim-array.anim-chars .anim-idx > span { min-width: 0; padding: 0 var(--anim-pill-pad); font-size: var(--anim-pill-size); line-height: 1.6; }
+.anim-array.anim-chars .anim-ring { border-radius: 10px; }
+/* a character you cannot see: a faint sign in the object's hue */
+.anim-box.anim-ws > .anim-val { font-weight: 400; color: color-mix(in srgb, var(--hue, var(--slate)) 60%, #FFFFFF); }
+.anim-nl { font-weight: 400; color: color-mix(in srgb, var(--hue, var(--slate)) 60%, #FFFFFF); }
+/* the whole text in one box (a long String, or a builder's lines) */
+.anim-array.anim-solid .anim-box {
+  width: auto; min-width: var(--anim-box-min); height: auto; min-height: var(--anim-box-h);
+  padding: 6px 12px; justify-content: flex-start; text-align: left;
+  font-size: calc(var(--anim-val-size) * .72); line-height: 1.4;
+}
+.anim-array.anim-solid .anim-idx-row { display: none; }
+/* a StringBuilder's spare room, and its empty slots in a big buffer drawn slim */
+.anim-box.anim-spare {
+  background: transparent; box-shadow: none; border-style: dashed;
+  border-color: color-mix(in srgb, var(--hue, var(--slate)) 38%, #FFFFFF);
+}
+.anim-array.anim-mini { --anim-gap: 2px; }
+.anim-array.anim-mini .anim-box { width: 6px; height: 30px; border-radius: 3px; border-width: 1.5px; }
+.anim-array.anim-mini .anim-box > .anim-val { display: none; }
+.anim-array.anim-mini .anim-box:not(.anim-spare) { background: color-mix(in srgb, var(--hue) 55%, #FFFFFF); }
+.anim-array.anim-mini .anim-idx-row { display: none; }
+/* the empty String: an outline with nothing inside */
+.anim-array.anim-chars .anim-box.anim-empty { width: calc(var(--anim-char-w) * 1.5); border-style: dashed; background: transparent; box-shadow: none; }
+.anim-box.anim-empty > .anim-val { font-weight: 400; color: color-mix(in srgb, var(--ink) 40%, transparent); }
+.anim-array.anim-hollow .anim-idx-row { padding-left: calc(var(--anim-char-w) * 1.5 + var(--anim-gap)); }
+/* no arrows left: garbage, waiting to be collected */
+.anim-array.anim-dead { --hue: var(--slate); }
+.anim-array.anim-dead .anim-box { opacity: .5; border-style: dashed; background: transparent; box-shadow: none; }
+.anim-array.anim-dead .anim-idx, .anim-array.anim-dead .anim-class-tag { opacity: .5; }
+.anim-array.anim-dead .anim-idx > span { background: var(--slate); }
+.anim-array.anim-dead .anim-note { border-color: var(--slate); color: var(--slate); background: #FFFFFF; }
+/* the class name over the boxes, level with the variable names, and any note beside it */
+.anim-tag-line { display: flex; align-items: center; gap: 10px; height: var(--anim-label-h); margin-bottom: 3px; }
+.anim-tag-line[hidden] { display: none; }
+.anim-class-tag {
+  white-space: nowrap; font-family: var(--mono); font-size: 12px; font-weight: 700; line-height: var(--anim-label-h);
+  color: color-mix(in srgb, var(--hue, var(--slate)) 80%, var(--ink));
+}
+.anim-tag-line .anim-note {
+  position: static; margin: 0; padding: 0 8px; border-width: 1.5px; font-size: 11px; line-height: 15px;
+}
+.anim-tags .anim-arrays { padding-top: 0; }
+/* the smallest boxes: an index pill every fifth box, and wherever the eye should go */
+.anim-root.anim-chars-xxs .anim-chars .anim-idx:not(:nth-child(5n+1)):not(.anim-hot):not(.anim-match):not(.anim-ghost-idx) > span {
+  visibility: hidden;
+}
+.anim-tags.anim-has-badges .anim-arrays { padding-top: 32px; }
+/* the string pool: literals live here, one object per text */
+.anim-pool {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start;
+  padding: 28px 16px 14px 14px; margin: -2px 0 0 -16px; border-radius: 14px;
+  border: 2px dashed color-mix(in srgb, var(--blue) 50%, #FFFFFF);
+  background: color-mix(in srgb, var(--blue) 6%, rgba(255, 255, 255, .75));
+}
+.anim-pool[hidden] { display: none; }
+.anim-pool-list { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.anim-pool-label {
+  position: absolute; left: 12px; top: 5px; white-space: nowrap;
+  font-family: var(--mono); font-size: 12px; font-weight: 700; line-height: 18px; color: var(--blue);
+}
+
 /* 2D arrays: a framed grid, column indexes above, row indexes on the left */
 .anim-2d {
   padding: 8px 12px 12px 8px; border-radius: 16px;
@@ -343,6 +435,8 @@
 .anim-verdict.anim-same { background: var(--anim-green); }
 .anim-verdict.anim-differ { background: var(--anim-red); }
 .anim-verdict svg { width: 16px; height: 16px; }
+.anim-verdict.anim-small { width: 18px; height: 18px; box-shadow: 0 0 0 2px #FFFFFF, 0 1px 5px rgba(30, 40, 51, .25); }
+.anim-verdict.anim-small svg { width: 12px; height: 12px; }
 .anim-leaving { position: absolute; margin: 0; pointer-events: none; }
 
 /* flying values */
@@ -365,6 +459,7 @@
 .anim-console-head { margin: 0 0 4px; font-size: 12px; color: color-mix(in srgb, var(--paper) 55%, var(--codebg)); }
 .anim-console-head::before { content: '// '; color: var(--orange); }
 .anim-console-out { max-height: 18em; overflow-y: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.anim-console-none { font-style: italic; color: color-mix(in srgb, var(--paper) 55%, var(--codebg)); }
 .anim-out-new { background: rgba(231, 111, 0, .3); border-radius: 3px; }
 .anim-pending { opacity: 0; }
 .anim-error { color: var(--anim-red-soft); font-weight: 700; }
@@ -391,6 +486,20 @@
 
 /* a jump (Back, Reset, reduced motion): no transitions at all */
 .anim-instant, .anim-instant * { transition: none !important; }
+
+/* ---- wide (long Strings): the picture across the card, the code beside the caption and console ---- */
+@container (min-width: 700px) {
+  .anim-root.anim-wide .anim-body {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-areas: "memory memory" "code caption" "code console";
+  }
+  .anim-root.anim-wide .anim-left, .anim-root.anim-wide .anim-right { display: contents; }
+  .anim-root.anim-wide .anim-code { grid-area: code; }
+  .anim-root.anim-wide .anim-memory { grid-area: memory; }
+  .anim-root.anim-wide .anim-console { grid-area: console; }
+  .anim-root.anim-wide .anim-caption { grid-area: caption; }
+  .anim-root.anim-wide .anim-stage { margin: 0 auto; }
+}
 
 /* ---- narrow: one column, the caption next to the buttons ---- */
 @container (max-width: 699px) {
@@ -434,6 +543,24 @@
   .anim-field { grid-template-columns: minmax(36px, auto) 1fr; gap: 6px; padding: 1px 8px; }
   .anim-var-links .anim-vars { padding-left: 26px; }
   .anim-caption { font-size: 15.5px; }
+  /* character boxes, smaller: short and medium Strings fit a phone, long ones scroll in their row */
+  .anim-root.anim-chars-l .anim-memory {
+    --anim-char-w: 22px; --anim-char-h: 32px; --anim-char-size: 15px; --anim-char-gap: 2px; --anim-box-h: 32px;
+    --anim-pill-size: 9.5px; --anim-pill-pad: 2px;
+  }
+  .anim-root.anim-chars-m .anim-memory {
+    --anim-char-w: 15px; --anim-char-h: 28px; --anim-char-size: 12.5px; --anim-char-gap: 1px; --anim-box-h: 28px;
+    --anim-pill-size: 8.5px; --anim-pill-pad: 0px;
+  }
+  .anim-root.anim-chars-s .anim-memory, .anim-root.anim-chars-xs .anim-memory, .anim-root.anim-chars-xxs .anim-memory {
+    --anim-char-w: 14px; --anim-char-h: 26px; --anim-char-size: 11px; --anim-char-gap: 1px; --anim-box-h: 26px;
+    --anim-pill-size: 7.5px; --anim-pill-pad: 0px;
+  }
+  .anim-array.anim-chars .anim-box { border-radius: 5px; }
+  .anim-array.anim-mini .anim-box { width: 5px; }
+  .anim-array.anim-mini { --anim-gap: 1px; }
+  .anim-pool { padding: 26px 10px 10px 8px; margin-left: -8px; }
+  .anim-class-tag { font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -31,8 +31,10 @@ ROOT = Path("interactive")
 KEYS = {"animations", "taskAnimations", "puzzles", "journey"}
 ID_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DIY_RE = re.compile(r"^\s*### DIY (\d+):\s*(.+?)\s*$")
-# a caption must not read like code: statements, calls, indexing or assignments
-CODE_LIKE = re.compile(r";|\b[A-Za-z_]\w*\s*\([^)]*\)|\b[A-Za-z_]\w*\s*\[[^\]]*\]|[^=!<>]=[^=]")
+# A caption must not read like code: a statement's end, a call, indexing or an assignment.
+# Prose may still use brackets with a space before them ("its length (13)") and semicolons.
+CODE_LIKE = re.compile(r"[)\]\"']\s*;|;\s*$|\b[A-Za-z_]\w*\([^)]*\)|\b[A-Za-z_]\w*\[[^\]]*\]"
+                       r"|[^=!<>]=[^=]")
 
 
 def normalise(text: str) -> str:

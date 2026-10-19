@@ -14,12 +14,18 @@
  * instant.
  *
  * Step data (interactive/<lab>/animations/*.json):
- *   {id, title, task?, segments: [{example, extra, title, code?: [lines], steps: [step]}]}
+ *   {id, title, task?, layout?: "wide", segments: [{example, extra, title, code?: [lines], steps: [step]}]}
+ *     layout "wide": the picture spans the card, with the code and console under it (long Strings)
  *   step: {line?, caption, print?, from?, error?, vars?, arrays?, objects?, compare?, flow?}
  *     vars:    [{name, value} | {name, ref}]            ref = an array or object id
- *     arrays:  [{id, values | rows, keys?, highlight?, match?, dim?, marks?, badges?,
- *                ghost?, ruler?, note?, color?}]
+ *     arrays:  [{id, values | rows | text, keys?, highlight?, match?, dim?, marks?, badges?,
+ *                ghost?, ruler?, note?, color?, class?, pool?, dead?, capacity?, solid?, mini?}]
  *              a value is "text", {"ref": id} or {"text", "faint"?, "num"?}
+ *              text: a String object, one character per box (a space shows as ␣, a line break as ↵);
+ *                solid: the whole text in one box instead; capacity: a StringBuilder's empty slots
+ *                after its characters; mini: slim slots without letters (a big buffer)
+ *              class: the class name over the boxes; pool: inside the string pool;
+ *                dead: no arrows left (garbage)
  *     objects: [{id, class, fields: [[name, value]], kind?: "method", place?: "right",
  *                highlight?, color?}]
  *     from / flow[].from / flow[].to / compare[].a / compare[].b are targets:
@@ -51,6 +57,10 @@
   const OBJECT_HUES = ['pink', 'teal', 'purple', 'blue'];
   const HUES = new Set(['teal', 'purple', 'pink', 'blue', 'green', 'gold', 'orange', 'red', 'slate']);
   const MARK_TONES = { champion: 'gold', match: 'green', found: 'green', last: 'blue', first: 'blue' };
+  // Characters a reader cannot see, drawn as a faint sign in their box.
+  const GLYPHS = { ' ': '␣', '\n': '↵', '\t': '⇥' };
+  // Character boxes shrink as the longest String in a scene grows: [most characters, size] (see charSizes).
+  const CHAR_SIZES = [[10, 'l'], [16, 'm'], [22, 's'], [32, 'xs'], [Infinity, 'xxs']];
   const KEYWORDS = new Set((
     'abstract boolean break byte case catch char class continue default do double else enum extends final ' +
     'finally float for if implements import instanceof int interface long new package private protected ' +
@@ -152,6 +162,13 @@
     if (!tail || tail.nodeType !== 3) return;
     const match = /^(.*?)(\S*[)\];,}]+)$/.exec(tail.textContent);
     if (!match) return;
+    if (!match[1] && !tail.previousSibling && match[2].length > 28) {
+      // a whole line that is one long chain of calls: too long to keep together, so it may
+      // break after a dot or an opening bracket instead of running out of the panel
+      const parts = match[2].split(/(?<=[.(])/);
+      tail.replaceWith(...parts.flatMap((part, i) => (i ? [document.createElement('wbr'), part] : [part])));
+      return;
+    }
     const glue = make('span', 'anim-glue');
     const before = match[1];
     let head = match[2];
@@ -183,6 +200,15 @@
     return isObj(v) && v.faint ? Math.ceil(n * 0.6) : n; // a faint glyph is drawn small
   };
   const varValue = (v) => (has(v, 'ref') ? { ref: v.ref } : v.value);
+  const isText = (a) => isObj(a) && typeof a.text === 'string'; // a String drawn from its text
+  const charValue = (ch) => (GLYPHS[ch] ? { text: GLYPHS[ch], ws: true } : ch);
+  const textLength = (a) => Array.from(a.text).length;
+  // A 1D array's box values: a String has one box per character, or one for its whole text (solid).
+  const boxValues = (a) => {
+    if (!isText(a)) return Array.isArray(a.values) ? a.values : [];
+    if (a.solid) return [{ text: a.text, solid: true }];
+    return Array.from(a.text).map(charValue);
+  };
   const lerp = (a, b, t) => a + (b - a) * t;
   const setHue = (el, hue) => {
     Array.from(el.classList).forEach((name) => {
@@ -213,6 +239,7 @@
   }
 
   function literal(arr) {
+    if (isText(arr)) return JSON.stringify(arr.text);
     const show = (v) => (isRef(v) ? `an arrow to ${v.ref}` : valueText(v));
     if (Array.isArray(arr.rows)) return `{${arr.rows.map((row) => `{${row.map(show).join(', ')}}`).join(', ')}}`;
     return `{${(arr.values || []).map(show).join(', ')}}`;
@@ -227,7 +254,12 @@
       if (!has(v, 'ref')) return `${v.name} is ${v.value}`;
       if (named.has(v.ref)) return `${v.name} points to the same thing as ${named.get(v.ref)}`;
       named.set(v.ref, v.name);
-      if (arrays.has(v.ref)) return `${v.name} points to the array ${literal(arrays.get(v.ref))}`;
+      const arr = arrays.get(v.ref);
+      if (arr && isText(arr)) {
+        const where = arr.pool ? ', in the string pool' : '';
+        return `${v.name} points to a ${String(arr.class || 'String').split(/[\s#@]/)[0]} object holding ${literal(arr)}${where}`;
+      }
+      if (arr) return `${v.name} points to the array ${literal(arr)}`;
       if (objects.has(v.ref)) return `${v.name} points to a ${objects.get(v.ref).class} object`;
       return `${v.name} points to ${v.ref}`;
     });
@@ -263,6 +295,10 @@
       maxPrims: 0,
       maxRefs: 0,
       compact: Array.isArray(seg.code) && seg.code.length > 40,
+      chars: false, // any String drawn from its text
+      charSizes: [], // per step: the size of its character boxes (see charSizes)
+      tags: false, // any class name over an array
+      pool: false, // any object in the string pool
     };
     seg.steps.forEach((step) => {
       info.maxVars = Math.max(info.maxVars, (step.vars || []).length);
@@ -276,6 +312,9 @@
         if (a.ruler) info.rulers.add(a.id);
         if (Number.isInteger(a.ghost)) info.ghosts.add(a.id);
         if ((a.values || []).length > 12) info.compact = true;
+        if (a.class) info.tags = true;
+        if (a.pool) info.pool = true;
+        if (isText(a)) info.chars = true;
       });
       (step.objects || []).forEach((o) => {
         if (o.place === 'right') info.right = true;
@@ -285,15 +324,40 @@
         if (isObj(c.a) && isObj(c.b) && has(c.a, 'var') && has(c.b, 'var')) info.varLinks = true;
       });
     });
+    if (info.chars) info.charSizes = charSizes(seg.steps);
     return info;
+  }
+
+  // Character boxes shrink as Strings grow longer, one size for a whole scene: a run of steps
+  // in which each step keeps an object of the one before. So boxes never resize mid-scene, and
+  // a long String in one part of a task does not shrink the next part's boxes.
+  function charSizes(steps) {
+    const ids = steps.map((step) => new Set((step.arrays || []).map((a) => a.id)));
+    const width = (step) => (step.arrays || []).reduce((most, a) => {
+      if (!isText(a) || a.solid || a.mini) return most;
+      const spare = Number.isInteger(a.capacity) ? Math.max(0, a.capacity - textLength(a)) : 0;
+      return Math.max(most, textLength(a) + spare);
+    }, 0);
+    const sizes = [];
+    let start = 0;
+    for (let k = 1; k <= steps.length; k += 1) {
+      if (k < steps.length && Array.from(ids[k]).some((id) => ids[k - 1].has(id))) continue;
+      const most = Math.max(...steps.slice(start, k).map(width));
+      const size = CHAR_SIZES.find(([limit]) => most <= limit)[1];
+      for (let n = start; n < k; n += 1) sizes[n] = size;
+      start = k;
+    }
+    return sizes;
   }
 
   // What can move between two steps: which variables, arrays (and their sizes) and objects exist.
   // Two steps with the same shape only change values, so nothing needs measuring before them.
   function shape(step) {
+    const textShape = (a) => (isText(a) ? `:${a.solid ? `s${a.text.length}` : textLength(a)}:${a.capacity || ''}` +
+      `${a.pool ? 'p' : ''}${a.class ? `n${String(a.class).length}` : ''}${a.note ? 'o' : ''}` : '');
     const arrays = (step.arrays || []).map((a) => (Array.isArray(a.rows)
       ? `${a.id}:${a.rows.map((r) => r.length).join('x')}`
-      : `${a.id}:${(a.values || []).length}:${Number.isInteger(a.ghost) ? 'g' : ''}${a.keys ? 'k' : ''}`));
+      : `${a.id}:${(a.values || []).length}:${Number.isInteger(a.ghost) ? 'g' : ''}${a.keys ? 'k' : ''}${textShape(a)}`));
     return [(step.vars || []).map((v) => v.name).join(','), arrays.join(','),
       (step.objects || []).map((o) => `${o.id}:${(o.fields || []).length}`).join(',')].join('|');
   }
@@ -378,6 +442,7 @@
       root.textContent = '';
       root.classList.add('anim-root');
       if (this.data.task) root.classList.add('anim-task');
+      if (this.data.layout === 'wide') root.classList.add('anim-wide');
       root.setAttribute('role', 'group');
       root.setAttribute('aria-label', `${this.title || 'Animation'}: step-through animation`);
 
@@ -420,7 +485,12 @@
       const arraysCol = make('div', 'anim-col anim-col-arrays');
       this.arraysCol = arraysCol;
       this.arraysList = make('div', 'anim-arrays');
-      arraysCol.append(make('div', 'anim-col-head', 'arrays'), this.arraysList);
+      this.arraysHead = make('div', 'anim-col-head', 'arrays');
+      arraysCol.append(this.arraysHead, this.arraysList);
+      // the string pool: a dashed frame at the top of the column, holding the pooled Strings
+      this.poolBox = make('div', 'anim-pool');
+      this.poolList = make('div', 'anim-pool-list');
+      this.poolBox.append(make('div', 'anim-pool-label', 'string pool'), this.poolList);
       this.rightCol = make('div', 'anim-col anim-col-right');
       top.append(varsCol, arraysCol, this.rightCol);
       this.belowRow = make('div', 'anim-below'); // objects, under the arrays whose boxes point at them
@@ -431,7 +501,9 @@
 
       const consoleBox = make('div', 'anim-console');
       this.out = make('div', 'anim-console-out');
-      consoleBox.append(make('div', 'anim-console-head', 'console'), this.out);
+      this.silent = make('div', 'anim-console-none', 'This code prints nothing.');
+      this.silent.hidden = true;
+      consoleBox.append(make('div', 'anim-console-head', 'console'), this.silent, this.out);
 
       this.caption = make('div', 'anim-caption');
       this.caption.setAttribute('aria-live', 'polite');
@@ -556,6 +628,8 @@
       const reorders = (step.arrays || []).some((a) => Array.isArray(a.keys));
       this.before = moving && (stepShape !== this.shownShape || reorders) ? this.measure() : null;
       this.shownShape = stepShape;
+      const charSize = this.info[s].charSizes[k] || null; // after measuring, so a new size glides too
+      CHAR_SIZES.forEach(([, size]) => this.root.classList.toggle(`anim-chars-${size}`, size === charSize));
       this.showLine(step.line);
       this.updateVars(step);
       this.updateArrays(s, step);
@@ -600,7 +674,8 @@
       if (this.layoutFrame) window.cancelAnimationFrame(this.layoutFrame);
       const root = this.root;
       root.textContent = '';
-      root.classList.remove('anim-root', 'anim-task', 'anim-nocode', 'anim-instant');
+      root.classList.remove('anim-root', 'anim-task', 'anim-nocode', 'anim-instant', 'anim-wide', 'anim-compact');
+      CHAR_SIZES.forEach(([, size]) => root.classList.remove(`anim-chars-${size}`));
       ['role', 'aria-label', 'data-anim-state'].forEach((name) => root.removeAttribute(name));
       if (root.stepper === this) delete root.stepper;
     }
@@ -671,12 +746,20 @@
       const ref = isRef(v);
       holder.classList.toggle('anim-holds-ref', ref);
       holder.classList.toggle('anim-faint', isObj(v) && !ref && Boolean(v.faint));
+      holder.classList.toggle('anim-ws', isObj(v) && !ref && Boolean(v.ws));
       if (ref) {
         const dot = make('span', `anim-dot anim-hue-${this.hues.get(v.ref) || 'blue'}`);
         holder.appendChild(dot);
         return dot;
       }
-      const val = make('span', 'anim-val', valueText(v));
+      const solid = isObj(v) && Boolean(v.solid);
+      const val = make('span', 'anim-val', solid ? null : valueText(v));
+      if (solid) { // a whole String in one box: each line break shows as a faint ↵ and starts a new line
+        String(v.text).split('\n').forEach((line, i, lines) => {
+          if (line) val.appendChild(document.createTextNode(line));
+          if (i < lines.length - 1) val.append(make('span', 'anim-nl', GLYPHS['\n']), document.createTextNode('\n'));
+        });
+      }
       holder.appendChild(val);
       if (isObj(v) && v.num !== undefined && v.num !== null) holder.appendChild(make('span', 'anim-num', v.num));
       return val;
@@ -820,6 +903,7 @@
       this.segTitle.textContent = seg.title || '';
       this.root.classList.toggle('anim-nocode', info.noCode);
       this.root.classList.toggle('anim-compact', info.compact);
+      this.arraysHead.textContent = info.chars ? 'objects' : 'arrays';
       this.code.textContent = '';
       this.currentLine = null;
       this.lines = info.noCode ? [] : seg.code.map((text) => {
@@ -831,9 +915,12 @@
         return line;
       });
       // A fresh picture for every segment.
-      [this.varsList, this.arraysList, this.rightCol, this.belowRow, this.overlay].forEach((n) => {
+      [this.varsList, this.arraysList, this.poolList, this.rightCol, this.belowRow, this.overlay].forEach((n) => {
         n.textContent = '';
       });
+      if (info.pool) this.arraysList.appendChild(this.poolBox); // first in the column
+      this.poolBox.hidden = true;
+      this.stage.classList.toggle('anim-tags', info.tags);
       [this.linkSvg, this.arrowSvg].forEach((n) => {
         while (n.firstChild) n.removeChild(n.firstChild);
       });
@@ -855,7 +942,8 @@
       this.varsList.style.gridTemplateColumns = `repeat(${columns}, max-content)`;
       // The console keeps one height for the whole segment, so nothing jumps as it fills.
       this.out.textContent = '';
-      this.out.style.minHeight = `${Math.min(12, Math.max(3, info.lines)) * 1.5}em`;
+      this.out.style.minHeight = `${Math.min(12, Math.max(info.lines ? 3 : 1, info.lines)) * 1.5}em`;
+      this.silent.hidden = info.lines > 0 || info.noCode; // an example that prints nothing says so
     }
 
     showLine(n) {
@@ -935,7 +1023,10 @@
     updateArrays(s, step) {
       const info = this.info[s];
       const keep = new Set();
-      (step.arrays || []).forEach((a, i) => {
+      const lead = info.pool ? 1 : 0; // the pool frame comes first in the column
+      let heap = 0;
+      let pooled = 0;
+      (step.arrays || []).forEach((a) => {
         const twoD = Array.isArray(a.rows);
         let item = this.arrays.get(a.id);
         if (item && item.twoD !== twoD) {
@@ -949,12 +1040,17 @@
         }
         item.entering = isNew;
         keep.add(a.id);
-        const slot = this.arraysList.children[i];
-        if (slot !== item.el) this.arraysList.insertBefore(item.el, slot || null);
+        const inPool = info.pool && Boolean(a.pool) && !twoD;
+        const list = inPool ? this.poolList : this.arraysList;
+        const slot = list.children[inPool ? pooled : lead + heap];
+        if (inPool) pooled += 1;
+        else heap += 1;
+        if (slot !== item.el) list.insertBefore(item.el, slot || null);
         if (twoD) this.fill2d(item, a, isNew);
         else this.fill1d(item, a, isNew);
         item.data = a;
       });
+      if (info.pool) this.poolBox.hidden = pooled === 0;
       this.arrays.forEach((item, id) => {
         if (keep.has(id)) return;
         this.arrays.delete(id);
@@ -976,29 +1072,45 @@
       const rulerLabel = make('span', 'anim-ruler-label');
       ruler.appendChild(rulerLabel);
       const rings = make('div', 'anim-rings');
-      body.append(badgeRow, boxes, idxRow, markRow, ruler, rings);
+      // the class name, level with the variable names; a note then rides on that line too
+      const tagLine = make('div', 'anim-tag-line');
+      const tag = make('div', 'anim-class-tag');
+      tagLine.appendChild(tag);
+      tagLine.hidden = !info.tags;
+      body.append(tagLine, badgeRow, boxes, idxRow, markRow, ruler, rings);
       const scroller = make('div', 'anim-array-scroll'); // a long array scrolls in its own row
       scroller.classList.toggle('anim-badged', info.badges.has(a.id));
       scroller.appendChild(body);
       const note = make('div', 'anim-note');
-      el.append(scroller, note);
+      if (info.tags) tagLine.appendChild(note);
+      else el.append(note);
+      el.prepend(scroller);
       return {
-        el, body, scroller, badgeRow, boxes, idxRow, markRow, ruler, rulerLabel, rings, note, twoD: false,
+        el, body, scroller, tag, badgeRow, boxes, idxRow, markRow, ruler, rulerLabel, rings, note, twoD: false,
         boxByKey: new Map(), ghost: null, marks: new Map(), badges: new Map(), ringEls: new Map(),
+        spares: [], empty: null, chars: false,
       };
     }
 
     fill1d(item, a, isNew) {
-      const values = Array.isArray(a.values) ? a.values : [];
+      const values = boxValues(a);
+      const text = isText(a);
+      item.chars = text && !a.solid;
+      item.el.classList.toggle('anim-chars', item.chars);
+      item.el.classList.toggle('anim-solid', text && Boolean(a.solid));
+      item.el.classList.toggle('anim-mini', item.chars && Boolean(a.mini));
+      item.el.classList.toggle('anim-dead', Boolean(a.dead));
+      item.tag.textContent = a.class || '';
       item.keyed = Array.isArray(a.keys) && a.keys.length === values.length;
       const keys = item.keyed ? a.keys.map(String) : values.map((_, i) => `#${i}`);
-      const chars = values.reduce((n, v) => Math.max(n, valueChars(v)), 1);
+      const chars = text ? 1 : values.reduce((n, v) => Math.max(n, valueChars(v)), 1);
       item.el.style.setProperty('--anim-chars', String(chars));
       item.el.toggleAttribute('data-wide', chars >= 7);
       const hot = new Set(a.highlight || []);
       const match = new Set(a.match || []);
       const dim = new Set(a.dim || []);
       const keep = new Set();
+      let fresh = 0; // characters added to an existing String or builder arrive left to right
       keys.forEach((key, i) => {
         const v = values[i];
         let box = item.boxByKey.get(key);
@@ -1006,7 +1118,9 @@
           box = { el: make('div', 'anim-box'), value: v, entering: true };
           this.paint(box.el, v);
           item.boxByKey.set(key, box);
-          this.enter(box.el, Math.max(isNew ? i * MS.stagger : 0, this.delays.get(`b:${a.id}:${i}`) || 0));
+          const wait = isNew ? i * MS.stagger : (text ? fresh * MS.stagger : 0);
+          if (!isNew) fresh += 1;
+          this.enter(box.el, Math.max(wait, this.delays.get(`b:${a.id}:${i}`) || 0));
         } else {
           box.entering = false;
           this.change(box.el, box.value, v, this.delays.get(`b:${a.id}:${i}`) || 0);
@@ -1024,6 +1138,30 @@
         item.boxByKey.delete(key);
         box.el.remove();
       });
+      // a StringBuilder's spare room: empty slots after its characters; when it grows, more slots appear
+      const spare = item.chars && Number.isInteger(a.capacity) ? Math.max(0, a.capacity - values.length) : 0;
+      while (item.spares.length > spare) item.spares.pop().remove();
+      while (item.spares.length < spare) {
+        const slot = make('div', 'anim-box anim-spare');
+        if (!isNew) this.enter(slot, MS.glide + (item.spares.length % 40) * 12);
+        item.spares.push(slot);
+      }
+      item.spares.forEach((slot) => {
+        if (slot.parentNode !== item.boxes) item.boxes.appendChild(slot);
+      });
+      // an empty String has no boxes at all: a dashed outline stands for the object
+      const hollow = item.chars && values.length === 0 && spare === 0;
+      if (hollow && !item.empty) {
+        item.empty = make('div', 'anim-box anim-empty');
+        item.empty.appendChild(make('span', 'anim-val', '""'));
+        this.enter(item.empty, 0);
+      }
+      if (hollow) item.boxes.insertBefore(item.empty, item.boxes.firstChild);
+      else if (item.empty) {
+        item.empty.remove();
+        item.empty = null;
+      }
+      item.el.classList.toggle('anim-hollow', hollow);
       // the box one past the end, which does not exist (its place is kept for the whole segment)
       const ghostHere = Number.isInteger(a.ghost);
       if (ghostHere || this.info[this.shownSeg].ghosts.has(a.id)) {
@@ -1149,8 +1287,9 @@
           item.cells.forEach((cell, key) => cells.set(key, geo(cell.el)));
           plans.push({ item, cells });
         } else {
-          const noteWidth = item.note.textContent ? item.note.offsetWidth + 12 : 0;
-          plans.push({ item, boxes: Array.from(item.boxes.children).map(geo), room: room - noteWidth,
+          const noteWidth = item.note.textContent && item.note.parentNode === item.el ? item.note.offsetWidth + 12 : 0;
+          const boxEls = Array.from(item.boxes.children).filter((el) => el !== item.empty);
+          plans.push({ item, boxes: boxEls.map(geo), room: room - noteWidth, empty: item.empty ? geo(item.empty) : null,
             natural: item.body.offsetWidth, scrollLeft: item.scroller.scrollLeft });
         }
       });
@@ -1171,7 +1310,7 @@
             ...(a.match || []).map((p) => cellAt(p, 'match'))].filter(Boolean));
           return;
         }
-        const values = Array.isArray(a.values) ? a.values : [];
+        const values = boxValues(a);
         const ghostAt = item.ghost ? boxes.length - 1 : -1;
         if (boxes[0]) item.el.style.setProperty('--anim-cell-px', `${boxes[0].w}px`);
         // too long for the picture: this array scrolls in its own row, keeping the cursor in view
@@ -1225,7 +1364,8 @@
         });
         const first = boxes[0];
         const last = boxes[values.length - 1];
-        if (first && last) item.ruler.style.width = `${last.x + last.w - first.x}px`;
+        if (plan.empty) item.ruler.style.width = `${plan.empty.w}px`; // an empty String: under its outline
+        else if (first && last) item.ruler.style.width = `${last.x + last.w - first.x}px`;
       });
     }
 
@@ -1419,8 +1559,11 @@
             { duration: MS.pop, delay: 120, easing: SPRING });
         }
         const same = Boolean(c.same);
+        // character against character: boxes sit close together, so the verdicts are smaller
+        const small = [c.a, c.b].every((t) => isObj(t) && has(t, 'array') && Number.isInteger(t.index) &&
+          Boolean((this.arrays.get(String(t.array)) || {}).chars));
         link.path.setAttribute('class', `anim-link ${same ? 'anim-same' : 'anim-differ'}`);
-        link.badge.className = `anim-verdict ${same ? 'anim-same' : 'anim-differ'}`;
+        link.badge.className = `anim-verdict ${same ? 'anim-same' : 'anim-differ'}${small ? ' anim-small' : ''}`;
         link.badge.textContent = '';
         link.badge.appendChild(icon(VERDICTS[same ? 'same' : 'differ'], '0 0 24 24'));
         link.a = this.resolve(c.a);
@@ -1528,8 +1671,11 @@
             d = `M${x1} ${top.b} L${x2} ${low.t}`;
             const upper = link.arrays.find((arr) => arr && arr.el.isConnected && rel(arr.el).b <= low.t + 1);
             const gapTop = upper ? rel(upper.el).b : top.b;
+            // the lower array's own top: above its boxes sits its class name, which the verdict must not cover
+            const lower = link.arrays.find((arr) => arr && arr !== upper && arr.el.isConnected && rel(arr.el).t >= gapTop - 1);
+            const gapBottom = lower ? Math.min(rel(lower.el).t, low.t) : low.t;
             bx = (x1 + x2) / 2;
-            by = (Math.max(gapTop, top.b) + low.t) / 2;
+            by = (Math.max(gapTop, top.b) + gapBottom) / 2;
           } else { // side by side
             const [lft, rgt] = a.l <= b.l ? [a, b] : [b, a];
             d = `M${lft.r} ${lft.t + lft.h / 2} L${rgt.l} ${rgt.t + rgt.h / 2}`;

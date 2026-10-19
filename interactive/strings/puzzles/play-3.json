@@ -1,0 +1,80 @@
+{
+  "id": "play-3",
+  "section": 3,
+  "type": "concat",
+  "title": "Join or add?",
+  "intro": "`+` does two jobs: between two numbers it adds, and the moment either side is a `String` it joins. Java works left to right, one `+` at a time. You are the `+`.",
+  "rounds": [
+    {
+      "exprs": [[1, 2, "3"], [4, 5, "6"], [2, 2, "2"]],
+      "right": "Left to right: the two numbers were added first, and only then did a `String` turn up and join. It prints {shown}.",
+      "why": {
+        "add": "One side is a `String` ({str}), so this `+` joins: {num} is turned into text and the two are stuck together.",
+        "join": "Both sides are `int`s ({l} and {r}), so this `+` is plain addition. Joining only starts once a `String` is involved."
+      }
+    },
+    {
+      "exprs": [["1", 2, 3], ["4", 5, 6], ["x", 1, 2]],
+      "right": "The `String` came first, so every `+` after it joins: it prints {shown}, not a sum.",
+      "why": {
+        "add": "The left side is already a `String` ({str}), so this `+` joins: the result of the last step was text, and text plus a number is text.",
+        "join": "Both sides are `int`s ({l} and {r}), so this `+` adds."
+      }
+    },
+    {
+      "exprs": [["Sum: ", [2, 3]], ["Total: ", [4, 4]], ["Laps: ", [6, 1]]],
+      "prompt": "Brackets first: Java works out a bracketed group before it can use it. Which `+` comes first, and does it add or join?",
+      "right": "The brackets were worked out first, while both sides were still numbers, so it prints {shown}. Without them it would join the digits one by one.",
+      "why": {
+        "add": "One side is a `String` ({str}), so this `+` joins: {num} becomes text.",
+        "join": "Inside the brackets both sides are `int`s ({l} and {r}), and Java works that out before it looks outside: it adds."
+      }
+    },
+    {
+      "type": "judge",
+      "vars": [
+        {"name": "who", "type": "String"},
+        {"name": "km", "type": "double"},
+        {"name": "mins", "type": "int"}
+      ],
+      "sets": [
+        ["Aoife", 2.718, 14],
+        ["Cian", 9.876, 47],
+        ["Niamh", 4.567, 23]
+      ],
+      "asks": [
+        {"call": "String.format", "args": [{"lit": "%s ran %.2f km in %d min"}, "who", "km", "mins"]}
+      ],
+      "prompt": "`String.format` fills each placeholder with the next argument, in order. What does it return?",
+      "right": "`%s` took the String, `%.2f` the double rounded to two decimal places, and `%d` the int: the colours show which argument went where.",
+      "why": {
+        "String.format.unrounded": "`%.2f` shows exactly two digits after the decimal point, rounded; it doesn't print all of the double's digits.",
+        "String.format.cut": "`%.2f` rounds to the nearest hundredth: it doesn't just chop off the digits after the second one.",
+        "*": "Each placeholder takes the next argument in order: `%s` a String, `%.2f` a double with two decimal places, `%d` an int."
+      }
+    },
+    {
+      "type": "judge",
+      "vars": [
+        {"name": "x", "type": "String"},
+        {"name": "y", "type": "String"},
+        {"name": "z", "type": "String"}
+      ],
+      "sets": [
+        ["red", "amber", "green"],
+        ["ebb", "flow", "tide"],
+        ["oak", "ash", "elm"]
+      ],
+      "asks": [
+        {"call": "String.join", "args": [{"lit": "-"}, "x", "y", "z"]}
+      ],
+      "prompt": "`String.join` takes the separator first, then the pieces. What does it return?",
+      "right": "The separator goes between the pieces, never before the first or after the last: three pieces, two separators.",
+      "why": {
+        "String.join.after": "The separator only goes between pieces: there is nothing after the last one for it to separate.",
+        "String.join.around": "The separator only goes between pieces, never at the ends.",
+        "String.join.none": "The first argument, `\"-\"`, is the separator: it goes between every pair of pieces."
+      }
+    }
+  ]
+}

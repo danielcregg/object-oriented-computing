@@ -12,8 +12,9 @@ when the Codespace starts, and VS Code opens the port beside the code.
     POST /api/check/<lab>/<k>    compile and run the student's lab folder, compare with DIY k
     POST /api/trace/<lab>        run the student's Main under the Java debugger, as animation data
     GET  /codespace/<file>       guide.js and guide.css, from this folder
-    GET  anything else           that file of the published site, fetched once per run and
-                                 cached in ~/.cache/lab-guide so the guide still opens offline;
+    GET  anything else           that file of the published site, fetched again after ten
+                                 minutes and cached in ~/.cache/lab-guide so the guide still
+                                 opens offline;
                                  a lab page gets the two files above added to it
 
 The site's address is read from the schedule's lab links, so nothing here names it. The
@@ -84,6 +85,7 @@ TYPES = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
 OWN_FILES = {"guide.js", "guide.css"}
 FETCH_TIMEOUT = 8
 OFFLINE_PAUSE = 30           # after a failed fetch, the cache answers alone for this long
+REFRESH = 600                # a page fetched longer ago than this is fetched again
 CHECK_WAIT = 60              # a check waits this long for the one before it, then says busy
 FETCH_LIMIT = 64 * 1024 * 1024
 
@@ -194,14 +196,15 @@ class _SameSiteRedirects(urllib.request.HTTPRedirectHandler):
 
 
 class Site:
-    """The published site, fetched once per run and cached on disk."""
+    """The published site, cached on disk and fetched again after REFRESH seconds, so a fix
+    pushed during a lab reaches an open Codespace without a restart."""
 
     def __init__(self, base: str, cache: Path):
         self.base = base
         # One cache per site, so a copy whose schedule moves to another site never shows
         # the old one's pages offline.
         self.cache = cache / hashlib.sha256(base.encode()).hexdigest()[:12]
-        self.fresh: set[str] = set()
+        self.fresh: dict[str, float] = {}     # path -> when it was last fetched
         self.locks: dict[str, threading.Lock] = {}
         self.guard = threading.Lock()
         self.down_until = 0.0
@@ -218,7 +221,9 @@ class Site:
         with self.guard:                  # one lock per cached file: /x/ and /x/index.html share one
             lock = self.locks.setdefault(str(target), threading.Lock())
         with lock:
-            if path not in self.fresh and time.monotonic() >= self.down_until:
+            now = time.monotonic()
+            stale = now - self.fresh.get(path, -REFRESH) >= REFRESH
+            if stale and now >= self.down_until:
                 try:
                     request = urllib.request.Request(self.base + path.lstrip("/"),
                                                      headers={"User-Agent": "lab-guide"})
@@ -233,7 +238,7 @@ class Site:
                     part = target.with_name(f".{target.name}.{threading.get_ident()}.part")
                     part.write_bytes(body)
                     part.replace(target)
-                    self.fresh.add(path)
+                    self.fresh[path] = time.monotonic()
                     return "ok", body
                 except urllib.error.HTTPError as err:
                     if err.code == 404:

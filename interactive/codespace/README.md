@@ -30,7 +30,8 @@ puzzles, the progress journey), and adds to **every** lab:
   attribute makes VS Code open it in the editor's browser tab; the student can
   reopen it from the Ports tab.
 - `server.py` (Python standard library only: the Codespace image has Python 3
-  but no pip) fetches the published page for each path once per run and
+  but no pip) fetches the published page for each path, again after ten
+  minutes (so a fix pushed during a lab arrives without a restart), and
   caches it in `~/.cache/lab-guide`, so the guide opens offline too. It adds
   `guide.js` and `guide.css` to a lab page. The site's address comes from the
   schedule's lab links. `/` redirects to the current week's lab.

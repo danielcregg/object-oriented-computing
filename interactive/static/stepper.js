@@ -296,6 +296,7 @@
       maxRefs: 0,
       compact: Array.isArray(seg.code) && seg.code.length > 40,
       chars: false, // any String drawn from its text
+      arrays: false, // any array at all (a traced program may draw only objects)
       charSizes: [], // per step: the size of its character boxes (see charSizes)
       tags: false, // any class name over an array
       pool: false, // any object in the string pool
@@ -306,6 +307,7 @@
       info.maxRefs = Math.max(info.maxRefs, refs);
       info.maxPrims = Math.max(info.maxPrims, (step.vars || []).length - refs);
       if ((step.vars || []).length > 6) info.compact = true;
+      if ((step.arrays || []).length) info.arrays = true;
       (step.arrays || []).forEach((a) => {
         if (a.marks && Object.keys(a.marks).length) info.marks.add(a.id);
         if (a.badges && Object.keys(a.badges).length) info.badges.add(a.id);
@@ -903,7 +905,8 @@
       this.segTitle.textContent = seg.title || '';
       this.root.classList.toggle('anim-nocode', info.noCode);
       this.root.classList.toggle('anim-compact', info.compact);
-      this.arraysHead.textContent = info.chars ? 'objects' : 'arrays';
+      this.arraysHead.textContent = info.chars || ((info.below || info.right) && !info.arrays)
+        ? 'objects' : 'arrays';
       this.code.textContent = '';
       this.currentLine = null;
       this.lines = info.noCode ? [] : seg.code.map((text) => {

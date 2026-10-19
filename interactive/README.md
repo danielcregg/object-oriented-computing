@@ -26,6 +26,9 @@ Every other lab page is built exactly as before.
 - `<lab>/animations/<id>.json` and `<lab>/puzzles/<id>.json` — the content.
   The format is documented at the top of `static/stepper.js` and
   `static/play.js`.
+- `codespace/` — the lab guide inside a student's Codespace: these pages
+  plus **Check my output** and **Watch my code run** on the student's own
+  code. A pilot; its README says how it works and how to roll it out.
 
 ## Rules
 

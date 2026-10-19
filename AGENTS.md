@@ -296,6 +296,9 @@ instructions, scripts, workflows and the practice bank alone.
   section animation replays an example the README already shows; a puzzle
   drills the section's idea, never a DIY answer. Progress lives only in
   the student's browser. Layout, format and preview: `interactive/README.md`.
+  `interactive/codespace/` is a pilot of the same pages INSIDE a student's
+  Codespace, with Check my output and Watch my code run on their own code;
+  its README covers how it starts and what rolling it out needs.
 - `scripts/check_interactive.py` — CI gate for that layer: every placement
   names a real README heading, every file is used, journey labels match the
   DIYs, a task animation shows no code and ends on exactly its DIY's

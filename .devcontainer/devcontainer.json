@@ -49,12 +49,22 @@
           "package.json": true,
           "package-lock.json": true,
           "CLAUDE.md": true,
-          "CLAUDE.local.md": true
+          "CLAUDE.local.md": true,
+          "interactive": true
         }
       }
     }
   },
   "postCreateCommand": "java -version",
+  // The lab guide: the module's lab pages with a "Check my output" button under each
+  // exercise, run on your own code here. It starts with the Codespace and opens beside
+  // the code; if you close it, reopen it from the Ports tab ("Lab guide").
+  "postStartCommand": "bash interactive/codespace/start.sh || true",
+  "portsAttributes": {
+    "8081": { "label": "Lab guide", "onAutoForward": "openPreview" }
+  },
+  // No pop-up for any other port (the guide's "Watch my code run" briefly opens one).
+  "otherPortsAttributes": { "onAutoForward": "silent" },
   // Each time the workspace opens: catch up with your repo on GitHub (what the
   // nightly update committed) and, while the two agree, bring in any newer
   // lecture, lab-instruction or setup fix and save it straight back. It never

@@ -59,6 +59,7 @@ JAVAC_FLAGS = ["-J-XX:+UseSerialGC", "-J-XX:TieredStopAtLevel=1", "-J-XX:-UsePer
 STUDENT_FLAGS = ["-g", "-XDstringConcat=inline"]
 OUTPUT_CAP = 65536
 MESSAGE_LIMIT = 4000
+STRING_CARDS = {"String", "StringBuilder", "StringBuffer"}
 COMPILE_TIMEOUT = 30.0
 SCRUB_ENV = ("JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS", "_JAVA_OPTIONS", "CLASSPATH")
 
@@ -808,9 +809,21 @@ class Animator:
             self.steps.append(last)
         if any(step["arrays"] for step in self.steps):
             self.cards_below()
-        return {"id": "trace", "title": "Your code, step by step",
-                "segments": [{"example": None, "extra": False, "title": self.title,
-                              "code": self.src.lines, "steps": self.steps}]}
+        result = {"id": "trace", "title": "Your code, step by step",
+                  "segments": [{"example": None, "extra": False, "title": self.title,
+                                "code": self.src.lines, "steps": self.steps}]}
+        if self.busy():
+            result["layout"] = "wide"   # the picture across the card, code and console under it
+        return result
+
+    def busy(self) -> bool:
+        """A trace with String cards and many variables or cards: beside the code it would be
+        wider than its panel. Traces without String cards (the Arrays lab's) keep their layout."""
+        cards = [step.get("objects") or [] for step in self.steps]
+        if not any(card.get("class") in STRING_CARDS for row in cards for card in row):
+            return False
+        most_vars = max((len(step.get("vars") or []) for step in self.steps), default=0)
+        return most_vars >= 9 or max(map(len, cards), default=0) >= 6
 
     @staticmethod
     def _printed(state: State) -> str:

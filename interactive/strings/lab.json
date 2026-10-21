@@ -1,26 +1,5 @@
 {
-  "animations": [
-    {
-      "id": "inspecting-a-string",
-      "before": "### DIY 2:"
-    },
-    {
-      "id": "comparing-strings",
-      "before": "### DIY 4:"
-    },
-    {
-      "id": "string-pool",
-      "before": "### DIY 5:"
-    },
-    {
-      "id": "builder-in-place",
-      "before": "### DIY 6:"
-    },
-    {
-      "id": "searching-and-slicing",
-      "before": "### DIY 7:"
-    }
-  ],
+  "animations": [],
   "taskAnimations": [
     {
       "id": "task-diy-1",
@@ -57,14 +36,6 @@
   ],
   "puzzles": [
     {
-      "id": "play-1",
-      "before": "### DIY 1:"
-    },
-    {
-      "id": "play-2",
-      "before": "### DIY 2:"
-    },
-    {
       "id": "play-3",
       "before": "### DIY 3:"
     },
@@ -79,14 +50,6 @@
     {
       "id": "play-6",
       "before": "### DIY 6:"
-    },
-    {
-      "id": "play-7",
-      "before": "### DIY 7:"
-    },
-    {
-      "id": "play-8",
-      "before": "### DIY 8:"
     }
   ],
   "journey": {

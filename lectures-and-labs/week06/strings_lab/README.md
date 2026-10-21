@@ -31,20 +31,6 @@ This lab lives in the package `week06.strings_lab` - this folder. A runnable `Ma
 
 Strings are sequences of characters that power almost every Java application. From user input and configuration to network communication and file handling, mastering strings is essential. Java represents strings with the `String` class, which provides a rich set of built-in capabilities for creating, transforming, and inspecting textual data.
 
-**Why Focus on Strings?**
-
-* **Universal:** Text is everywhere - log messages, prompts, file formats, and user interfaces.
-* **Feature-Rich API:** `String` offers dozens of methods for searching, replacing, slicing, formatting, and more.
-* **Immutable by Design:** Java strings cannot change once created, a feature that simplifies reasoning but affects performance.
-* **Interoperability:** Strings integrate seamlessly with Java's standard library, including collections, streams, and I/O.
-
-**Key Concepts:**
-
-* **String Literal:** Characters enclosed in double quotes, e.g., `"Hello"`.
-* **String Object:** An instance of the `String` class; may be created with literals or with `new`.
-* **Immutability:** String contents never change; method calls return new objects instead.
-* **String Pool:** A JVM-managed cache for literal strings that saves memory.
-
 ### DIY 1: First strings
 
 **Objective:** Prepare your environment and experiment with basic strings.
@@ -150,18 +136,6 @@ String combined = title + " " + topic; // "Java Strings"
 String templated = String.format("%s Lab - %d modules", title, 10);
 ```
 
-### Mermaid Diagram: Concatenation Flow
-
-```mermaid
-flowchart LR
-    A[String A] -->|+| C{Concatenation}
-    B[String B] -->|+| C
-    C --> D[String Result]
-    D -.-> Note["Each + creates a new String<br/>Original strings stay unchanged"]
-    
-    style Note fill:#f5f7fa,stroke:#d1d5db,stroke-dasharray: 5 5
-```
-
 ### DIY 3: Concatenate and format
 
 **Objective:** Experiment with multiple concatenation strategies.
@@ -195,7 +169,6 @@ String comparisons must use methods, not `==`, which only checks whether referen
 * `equals(Object obj)` - case-sensitive equality.
 * `equalsIgnoreCase(String other)` - case-insensitive equality.
 * `compareTo(String other)` - lexicographic comparison (negative, zero, positive).
-* `regionMatches(...)` - compare substrings.
 
 ```java
 String expected = "SUCCESS";
@@ -211,7 +184,6 @@ System.out.println(expected.equalsIgnoreCase(actual)); // true
 1. In `Main.java`'s `main` method, create two String variables `str1` and `str2` both with the value `"Java"`. Use `equals()` to compare them and print the result.
 2. Create two String variables `str3` with value `"Java"` and `str4` with value `"java"`. Use `equalsIgnoreCase()` to compare them and print the result.
 3. Create two String variables `str5` with value `"Java"` and `str6` with value `"Kotlin"`. Use `compareTo()` to compare them alphabetically and print the result (negative means `str5` comes before `str6`).
-4. Create a String variable `str7` and assign it `null`. Before calling any string method on it, add an if statement to check `if (str7 != null)` to avoid a `NullPointerException`.
 
 **Expected output**
 
@@ -219,12 +191,11 @@ System.out.println(expected.equalsIgnoreCase(actual)); // true
 Equal? true
 Equal ignore case? true
 Order (Java vs Kotlin): -1
-Null-safe comparison passed.
 ```
 
 <details><summary>Hint</summary>
 
-`compareTo` works alphabetically: `"Java".compareTo("Kotlin")` is negative because `'J'` comes before `'K'`. In the null test, the `!= null` check must run first - `str7 != null && str7.equals("Java")` can never throw.
+`compareTo` works alphabetically: `"Java".compareTo("Kotlin")` is negative because `'J'` comes before `'K'`.
 
 </details>
 
@@ -256,22 +227,6 @@ String modified = original + " Strings"; // original stays "Java"
 
 * Literals go into the string pool, so two identical literals share one object.
 * `new String(...)` builds a distinct heap object every time, even when a literal with the same text already exists.
-
-### Memory Layout Diagram
-
-```mermaid
-graph TD
-    subgraph StringPool["String Pool"]
-        L1["Hello"]
-        L2["World"]
-    end
-    subgraph Heap
-        S1["String@0x1"]
-        S2["String@0x2"]
-    end
-    L1 -.->|references| S1
-    L2 -.->|references| S2
-```
 
 ### DIY 5: Prove immutability and the pool
 
@@ -361,10 +316,10 @@ Java's `String` class provides diverse utility methods. Understanding their beha
 
 **Categories:**
 
-* **Searching:** `contains`, `indexOf`, `lastIndexOf`.
-* **Slicing:** `substring`, `subSequence`.
-* **Replacement:** `replace`, `replaceAll`, `replaceFirst`.
-* **Trimming:** `trim`, `strip`, `stripIndent` (Java 15+).
+* **Searching:** `contains`, `indexOf`.
+* **Slicing:** `substring`.
+* **Replacement:** `replace`, `replaceAll`.
+* **Trimming:** `trim`.
 * **Splitting:** `split(String regex)`.
 
 ### Example
@@ -405,41 +360,13 @@ For the mask, everything between index `1` and `atIndex` needs replacing - `"*".
 
 ### Explanation
 
-Awareness of frequent pitfalls helps you debug faster and write robust string code.
+Five mistakes cause most string bugs:
 
-**1. Using `==` Instead of `equals`**
-
-```java
-String input = new String("YES");
-System.out.println(input == "YES");    // false
-System.out.println(input.equals("YES")); // true
-```
-
-**2. Ignoring Immutability in Loops**
-
-```java
-String result = "";
-for (int i = 0; i < 1000; i++) {
-	result += i; // each round copies everything built so far, then discards it
-}
-```
-
-**3. Forgetting Null Checks**
-
-```java
-String value = null;
-if (value != null && value.contains("ok")) {
-	System.out.println("Contains ok");
-}
-```
-
-**4. Misusing Regex in `replaceAll`**
-
-`replaceAll` treats the first argument as a regular expression. Use `replace` for literal replacements.
-
-**5. Off-by-One Errors with `substring`**
-
-Remember: `substring(start, end)` includes `start` but excludes `end`.
+* **`==` instead of `equals`** - `==` asks whether two variables point at the same object; `equals` compares the text.
+* **`+` in a loop** - every round copies everything built so far; build in a `StringBuilder` instead.
+* **No null check** - calling any method through `null` throws a `NullPointerException`, so check `!= null` first.
+* **A pattern where you meant plain text** - `replaceAll` reads its first argument as a regular expression; `replace` takes it literally.
+* **Off by one in `substring`** - `substring(start, end)` includes `start` but leaves out `end`.
 
 ### Debugging Tips
 
@@ -510,38 +437,8 @@ Bug 1: compare text with `equals`, never `==`. Bug 2: check `text != null` befor
 
 ## Summary
 
-This lab guided you through essential string concepts:
-
-* Declaring, inspecting, and transforming strings.
-* Comparing strings safely and handling nulls.
-* Understanding immutability, the string pool, and where string objects live, and proving it with identity hash codes.
-* Assembling text with `StringBuilder`, and meeting `StringBuffer`, its synchronised twin.
-* Applying core string methods for real-world tasks, and fixing the classic string bugs.
-
-### Key Takeaways
-
-✅ Strings are immutable; every change creates a new object.
-
-✅ Identity hash codes show that `+` gives you a new String object - the same object always reports the same number, and two different objects usually report different ones.
-
-✅ Avoid `==` for string comparisons - use `equals` or `equalsIgnoreCase`.
-
-✅ `StringBuilder` is the go-to for repeated concatenation or heavy editing; `StringBuffer` shares its API and adds a thread-safety lock you rarely need.
-
-✅ `+` in a loop copies everything built so far on every round, so the work grows with the square of the length; a builder writes each character once.
-
-✅ Always validate inputs to prevent null pointer issues.
-
-✅ Remember substring's inclusive/exclusive indices.
-
-### Best Practices Checklist
-
-✔ Use literals for fixed text; call `intern()` only when measuring memory.
-
-✔ Prefer builders or `String.join` when merging collections or loops.
-
-✔ Guard against `null` before calling string methods.
-
-✔ Document assumptions about casing, whitespace, and locales.
-
-✔ A handful of pieces in one expression? `+` is fine. Assembling inside a loop? Reach for a `StringBuilder`.
+* Strings are immutable: a method that seems to change one returns a new String, so catch the result.
+* Literals are shared through the string pool; `new String(...)` always builds a fresh object, and `intern()` hands back the pooled one.
+* Compare text with `equals` (or `equalsIgnoreCase`), never `==`, and check for `null` before calling a method.
+* Build text in steps with a `StringBuilder` and finish with `toString()`: `+` in a loop copies everything built so far, every round. `StringBuffer` is the same class with a lock for threads.
+* `substring(start, end)` includes `start` and leaves out `end`; `replaceAll` reads a pattern, `replace` plain text.

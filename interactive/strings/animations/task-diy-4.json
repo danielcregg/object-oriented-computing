@@ -6,7 +6,7 @@
     {
       "example": null,
       "extra": false,
-      "title": "Equal text, any case, alphabetical order, and null",
+      "title": "Equal text, any case, and alphabetical order",
       "steps": [
         {
           "caption": "str1 and str2 are both the literal Java. One literal, one pooled object: two arrows to the same String.",
@@ -61,20 +61,12 @@
           "compare": [{"a": {"array": "J", "index": 0}, "b": {"array": "K", "index": 0}, "same": false}]
         },
         {
-          "caption": "str7 holds null: no arrow and no object at all. Calling a method through it would crash the program with a NullPointerException.",
-          "vars": [{"name": "str7", "value": "null"}],
-          "arrays": []
-        },
-        {
-          "caption": "So check that it is not null before calling anything on it. The check skips the call, nothing crashes, and the program reports that it passed.",
-          "print": "Null-safe comparison passed.\n",
-          "vars": [{"name": "str7", "value": "null"}],
-          "arrays": []
-        },
-        {
           "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
-          "vars": [{"name": "str7", "value": "null"}],
-          "arrays": []
+          "vars": [{"name": "str5", "ref": "J"}, {"name": "str6", "ref": "K"}],
+          "arrays": [
+            {"id": "J", "text": "Java", "pool": true, "highlight": [0], "marks": {"0": "J before K"}},
+            {"id": "K", "text": "Kotlin", "pool": true, "highlight": [0]}
+          ]
         }
       ]
     }

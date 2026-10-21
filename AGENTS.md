@@ -221,7 +221,7 @@ instructions, scripts, workflows and the practice bank alone.
   but had 13 exercises: it went to 10 (about 100 typed lines) by merging
   adjacent trivial pairs and handing the student the `Book` class to copy. The
   strings lab held 202 typed lines over 8 exercises (about 2h20 by that bound)
-  and went to 95 (about 1h35), every DIY number kept: its two StringBuilder
+  and went to 90 (about 1h33), every DIY number kept: its two StringBuilder
   parts, an exercise and a guided copy-counting method, became one simpler
   exercise, and the rest shrank. Recalibrate these numbers from a real lab
   session.
@@ -290,16 +290,19 @@ instructions, scripts, workflows and the practice bank alone.
   `pip install markdown`). Also renders `mcq/README.md` to `/mcq/` and
   FAILS if it is missing. A lab with an `interactive/<labUrl folder>/`
   folder also gets that layer on its page (below).
-- `interactive/` — the optional interactive layer of a lab PAGE:
-  step-through animations, puzzles and a progress journey (a ring per
-  section going red to green, badges), drawn by the plain-JS engines in
-  `interactive/static/` from per-lab JSON. Site only: it is not course
-  content, so the sync never ships it, and the README a student follows is
-  unchanged. A task animation shows DIY K's RESULT and never its code (no
-  code panel, captions in words), so it cannot hand over a solution; a
-  section animation replays an example the README already shows; a puzzle
-  drills the section's idea, never a DIY answer. Progress lives only in
-  the student's browser. Layout, format and preview: `interactive/README.md`.
+- `interactive/` — the optional interactive layer of a lab PAGE: step-through
+  animations, puzzles and a progress journey (a ring per section going red to
+  green, badges), drawn by the plain-JS engines in `interactive/static/` from
+  per-lab JSON. Site only: it is not course content, so the sync never ships
+  it, and the README a student follows is unchanged. A task animation shows
+  DIY K's RESULT and never its code (no code panel, captions in words), so it
+  cannot hand over a solution; a section animation replays an example the
+  README already shows; a puzzle drills the section's idea, never a DIY
+  answer. Progress lives only in the student's browser. A section's ring turns
+  green only when its animations are watched and its puzzle solved as well as
+  its DIY passed, so the layer counts against the lab's two hours: keep it
+  small (strings: one task animation per DIY, four puzzles). Layout, format
+  and preview: `interactive/README.md`.
 - `scripts/check_interactive.py` — CI gate for that layer: every placement
   names a real README heading, every file is used, journey labels match the
   DIYs, a task animation shows no code and ends on exactly its DIY's

@@ -6,192 +6,88 @@
     {
       "example": null,
       "extra": false,
-      "title": "Length, first, last and blank, for three strings",
+      "title": "Length, first and last; empty against blank",
       "steps": [
         {
-          "caption": "Three strings to inspect. Each variable points at a String object, with one numbered box per character.",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
+          "caption": "text points at a String of 13 characters, one numbered box each. The space between the words is a character too.",
+          "vars": [{"name": "text", "ref": "T"}],
+          "arrays": [{"id": "T", "text": "Learning Java", "class": "String", "pool": true}]
         },
         {
-          "caption": "Start with the first. Print it between double quotes, after Input:, so you can see exactly what it holds.",
-          "print": "Input: \"Learning Java\"\n",
-          "from": {"array": "N"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {
-              "id": "N",
-              "text": "Learning Java",
-              "class": "String",
-              "pool": true,
-              "highlight": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-            },
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
-        },
-        {
-          "caption": "Its length is the number of characters, the space included: 13.",
+          "caption": "Its length counts every character, the space included: 13.",
           "print": "Length: 13\n",
-          "from": {"array": "N"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true, "ruler": "length 13"},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
+          "from": {"array": "T"},
+          "vars": [{"name": "text", "ref": "T"}],
+          "arrays": [{"id": "T", "text": "Learning Java", "class": "String", "pool": true, "ruler": "length 13"}]
         },
         {
-          "caption": "It is not empty, so it has a first character, at index 0: L.",
+          "caption": "The first character sits at index 0: L.",
           "print": "First: L\n",
-          "from": {"array": "N", "index": 0},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "from": {"array": "T", "index": 0},
+          "vars": [{"name": "text", "ref": "T"}],
           "arrays": [
             {
-              "id": "N",
+              "id": "T",
               "text": "Learning Java",
               "class": "String",
               "pool": true,
               "highlight": [0],
               "marks": {"0": "first"}
-            },
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
+            }
           ]
         },
         {
-          "caption": "The last character sits at index 12, one less than the length: a.",
+          "caption": "The last sits at index 12, one less than the length: a.",
           "print": "Last: a\n",
-          "from": {"array": "N", "index": 12},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "from": {"array": "T", "index": 12},
+          "vars": [{"name": "text", "ref": "T"}],
           "arrays": [
             {
-              "id": "N",
+              "id": "T",
               "text": "Learning Java",
               "class": "String",
               "pool": true,
               "highlight": [12],
               "marks": {"12": "last"}
-            },
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
+            }
           ]
         },
         {
-          "caption": "Blank means nothing but spaces. Trim the spaces off both ends: letters are left, so it is not blank. Then a blank line before the next string.",
-          "print": "Blank? false\n\n",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "caption": "Two more Strings: one with no characters at all, and one holding three spaces.",
+          "vars": [{"name": "text", "ref": "T"}, {"name": "empty", "ref": "E"}, {"name": "spaces", "ref": "W"}],
           "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
+            {"id": "T", "text": "Learning Java", "class": "String", "pool": true},
             {"id": "E", "text": "", "class": "String", "pool": true},
             {"id": "W", "text": "   ", "class": "String", "pool": true}
           ]
         },
         {
-          "caption": "The empty string: nothing at all between the quotes.",
-          "print": "Input: \"\"\n",
+          "caption": "The empty String has no characters, so it is empty. Nothing at all counts as blank too.",
+          "print": "Empty string - empty? true, blank? true\n",
           "from": {"array": "E"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "vars": [{"name": "text", "ref": "T"}, {"name": "empty", "ref": "E"}, {"name": "spaces", "ref": "W"}],
           "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
-        },
-        {
-          "caption": "No characters, so its length is 0.",
-          "print": "Length: 0\n",
-          "from": {"array": "E"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
+            {"id": "T", "text": "Learning Java", "class": "String", "pool": true},
             {"id": "E", "text": "", "class": "String", "pool": true, "ruler": "length 0"},
             {"id": "W", "text": "   ", "class": "String", "pool": true}
           ]
         },
         {
-          "caption": "There is no box 0 to read: asking for one would crash the program. So check for empty first, and print (none) for both instead.",
-          "print": "First: (none)\nLast: (none)\n",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true, "ghost": 0},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
-        },
-        {
-          "caption": "Nothing at all counts as blank too: true. Then the blank line.",
-          "print": "Blank? true\n\n",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
-          ]
-        },
-        {
-          "caption": "Three spaces. You cannot see them when they print, but each one is a character in its own box.",
-          "print": "Input: \"   \"\n",
+          "caption": "Three spaces are three characters, so that String is not empty. But every one of them is a space, so it is blank.",
+          "print": "Three spaces - empty? false, blank? true\n",
           "from": {"array": "W"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "vars": [{"name": "text", "ref": "T"}, {"name": "empty", "ref": "E"}, {"name": "spaces", "ref": "W"}],
           "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
+            {"id": "T", "text": "Learning Java", "class": "String", "pool": true},
             {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true, "highlight": [0, 1, 2]}
-          ]
-        },
-        {
-          "caption": "So its length is 3.",
-          "print": "Length: 3\n",
-          "from": {"array": "W"},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true, "ruler": "length 3"}
-          ]
-        },
-        {
-          "caption": "Its first character is a space, so this line ends in a space you cannot see.",
-          "print": "First:  \n",
-          "from": {"array": "W", "index": 0},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true, "highlight": [0], "marks": {"0": "first"}}
-          ]
-        },
-        {
-          "caption": "The last one, at index 2, is a space too.",
-          "print": "Last:  \n",
-          "from": {"array": "W", "index": 2},
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true, "highlight": [2], "marks": {"2": "last"}}
-          ]
-        },
-        {
-          "caption": "Trim the spaces off both ends and nothing is left, so this one is blank: true.",
-          "print": "Blank? true\n",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
-          "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
-            {"id": "E", "text": "", "class": "String", "pool": true},
-            {"id": "W", "text": "   ", "class": "String", "pool": true}
+            {"id": "W", "text": "   ", "class": "String", "pool": true, "ruler": "length 3", "highlight": [0, 1, 2]}
           ]
         },
         {
           "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
-          "vars": [{"name": "normal", "ref": "N"}, {"name": "empty", "ref": "E"}, {"name": "whitespace", "ref": "W"}],
+          "vars": [{"name": "text", "ref": "T"}, {"name": "empty", "ref": "E"}, {"name": "spaces", "ref": "W"}],
           "arrays": [
-            {"id": "N", "text": "Learning Java", "class": "String", "pool": true},
+            {"id": "T", "text": "Learning Java", "class": "String", "pool": true},
             {"id": "E", "text": "", "class": "String", "pool": true},
             {"id": "W", "text": "   ", "class": "String", "pool": true}
           ]

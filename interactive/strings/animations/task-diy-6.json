@@ -6,244 +6,101 @@
     {
       "example": null,
       "extra": false,
-      "title": "A menu, reversed words, a report, and a race",
+      "title": "Reverse in place, build a menu in a loop",
       "steps": [
         {
-          "caption": "An empty StringBuilder: one object, ready to be written into.",
-          "vars": [{"name": "menu", "ref": "M"}],
-          "arrays": [{"id": "M", "text": "", "class": "StringBuilder"}]
+          "caption": "word points at a StringBuilder holding stressed: one object, eight characters.",
+          "vars": [{"name": "word", "ref": "B"}],
+          "arrays": [{"id": "B", "text": "stressed", "class": "StringBuilder"}]
         },
         {
-          "caption": "Round 1 of a loop from 1 to 3 appends the first numbered item and a line break. A line break is a character too: the ↵ box.",
-          "vars": [{"name": "menu", "ref": "M"}],
-          "arrays": [{"id": "M", "text": "1. Start\n", "class": "StringBuilder"}]
+          "caption": "Reverse it. The builder turns its own characters back to front: the same object, now holding desserts. There is nothing new to catch.",
+          "vars": [{"name": "word", "ref": "B"}],
+          "arrays": [{"id": "B", "text": "desserts", "class": "StringBuilder"}]
+        },
+        {
+          "caption": "Print it after Reversed:.",
+          "print": "Reversed: desserts\n",
+          "from": {"array": "B"},
+          "vars": [{"name": "word", "ref": "B"}],
+          "arrays": [{"id": "B", "text": "desserts", "class": "StringBuilder"}]
+        },
+        {
+          "caption": "Three menu items in an array, and an empty builder for the menu.",
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
+          "arrays": [
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]"},
+            {"id": "M", "text": "", "class": "StringBuilder"}
+          ]
+        },
+        {
+          "caption": "Round 1 of a loop from 1 to 3 appends 1, a dot and a space, the first item, and a line break. A line break is a character too: the ↵ box.",
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
+          "arrays": [
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]", "highlight": [0]},
+            {"id": "M", "text": "1. Start\n", "class": "StringBuilder"}
+          ],
+          "flow": [{"from": {"array": "It", "index": 0}, "to": {"array": "M"}, "text": "Start"}]
         },
         {
           "caption": "Round 2 appends the second item, to the same object.",
-          "vars": [{"name": "menu", "ref": "M"}],
-          "arrays": [{"id": "M", "text": "1. Start\n2. Settings\n", "class": "StringBuilder"}]
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
+          "arrays": [
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]", "highlight": [1]},
+            {"id": "M", "text": "1. Start\n2. Settings\n", "class": "StringBuilder"}
+          ],
+          "flow": [{"from": {"array": "It", "index": 1}, "to": {"array": "M"}, "text": "Settings"}]
         },
         {
           "caption": "Round 3, the last item. Still one object: the arrow never moved.",
-          "vars": [{"name": "menu", "ref": "M"}],
-          "arrays": [{"id": "M", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder"}]
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
+          "arrays": [
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]", "highlight": [2]},
+            {"id": "M", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder"}
+          ],
+          "flow": [{"from": {"array": "It", "index": 2}, "to": {"array": "M"}, "text": "Exit"}]
         },
         {
-          "caption": "Turn the builder into a String and print it under the heading Menu:. Its last line break leaves a blank line after Exit.",
-          "print": "Menu:\n1. Start\n2. Settings\n3. Exit\n\n",
+          "caption": "Insert the heading Menu: and a line break at index 0. Everything already in the builder slides along to make room.",
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
+          "arrays": [
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]"},
+            {
+              "id": "M",
+              "text": "Menu:\n1. Start\n2. Settings\n3. Exit\n",
+              "class": "StringBuilder",
+              "highlight": [0, 1, 2, 3, 4, 5]
+            }
+          ]
+        },
+        {
+          "caption": "Turn the builder into a String and print it.",
+          "print": "Menu:\n1. Start\n2. Settings\n3. Exit\n",
           "from": {"array": "MS"},
-          "vars": [{"name": "menu", "ref": "M"}],
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "M"}],
           "arrays": [
-            {"id": "M", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder"},
-            {"id": "MS", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "String", "solid": true}
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]"},
+            {"id": "M", "text": "Menu:\n1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder"},
+            {"id": "MS", "text": "Menu:\n1. Start\n2. Settings\n3. Exit\n", "class": "String", "solid": true}
           ],
-          "flow": [{"from": {"array": "M"}, "to": {"array": "MS"}, "text": "1. Start ↵ 2. Settings ↵ 3. Exit ↵"}]
-        },
-        {
-          "caption": "A sentence of four words. Split it at each space: an array of four words.",
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}],
-          "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {"id": "Wd", "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""], "class": "String[]"}
+          "flow": [
+            {"from": {"array": "M"}, "to": {"array": "MS"}, "text": "Menu: ↵ 1. Start ↵ 2. Settings ↵ 3. Exit ↵"}
           ]
         },
         {
-          "caption": "Walk the array from the last word to the first, appending each to a new builder: strings first.",
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}, {"name": "reversed", "ref": "Rv"}],
+          "caption": "Change StringBuilder to StringBuffer and run it again. The same calls build the same text, so the output does not change: a StringBuffer only adds a lock, for threads.",
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "Bf"}],
           "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {
-              "id": "Wd",
-              "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""],
-              "class": "String[]",
-              "highlight": [3]
-            },
-            {"id": "Rv", "text": "strings", "class": "StringBuilder"}
-          ],
-          "flow": [{"from": {"array": "Wd", "index": 3}, "to": {"array": "Rv"}, "text": "strings"}]
-        },
-        {
-          "caption": "A single space, then the next word back: love.",
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}, {"name": "reversed", "ref": "Rv"}],
-          "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {
-              "id": "Wd",
-              "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""],
-              "class": "String[]",
-              "highlight": [2]
-            },
-            {"id": "Rv", "text": "strings love", "class": "StringBuilder"}
-          ],
-          "flow": [{"from": {"array": "Wd", "index": 2}, "to": {"array": "Rv"}, "text": "love"}]
-        },
-        {
-          "caption": "Then to.",
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}, {"name": "reversed", "ref": "Rv"}],
-          "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {
-              "id": "Wd",
-              "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""],
-              "class": "String[]",
-              "highlight": [1]
-            },
-            {"id": "Rv", "text": "strings love to", "class": "StringBuilder"}
-          ],
-          "flow": [{"from": {"array": "Wd", "index": 1}, "to": {"array": "Rv"}, "text": "to"}]
-        },
-        {
-          "caption": "And learn, the first word, last. No space after it, so the line does not end in one.",
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}, {"name": "reversed", "ref": "Rv"}],
-          "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {
-              "id": "Wd",
-              "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""],
-              "class": "String[]",
-              "highlight": [0]
-            },
-            {"id": "Rv", "text": "strings love to learn", "class": "StringBuilder"}
-          ],
-          "flow": [{"from": {"array": "Wd", "index": 0}, "to": {"array": "Rv"}, "text": "learn"}]
-        },
-        {
-          "caption": "Print it after Reversed:, then a blank line.",
-          "print": "Reversed: strings love to learn\n\n",
-          "from": {"array": "Rv"},
-          "vars": [{"name": "sentence", "ref": "S"}, {"name": "words", "ref": "Wd"}, {"name": "reversed", "ref": "Rv"}],
-          "arrays": [
-            {"id": "S", "text": "learn to love strings", "class": "String", "pool": true},
-            {"id": "Wd", "values": ["\"learn\"", "\"to\"", "\"love\"", "\"strings\""], "class": "String[]"},
-            {"id": "Rv", "text": "strings love to learn", "class": "StringBuilder"}
-          ]
-        },
-        {
-          "caption": "A report builder. First its title, Report, on a line of its own.",
-          "vars": [{"name": "title", "ref": "T"}, {"name": "report", "ref": "Rp"}],
-          "arrays": [
-            {"id": "T", "text": "Report", "class": "String", "pool": true, "ruler": "length 6"},
-            {"id": "Rp", "text": "Report\n", "class": "StringBuilder", "solid": true}
-          ]
-        },
-        {
-          "caption": "Then the underline: one equals sign for every character of the title. The title has 6, so 6 of them.",
-          "vars": [{"name": "title", "ref": "T"}, {"name": "report", "ref": "Rp"}],
-          "arrays": [
-            {"id": "T", "text": "Report", "class": "String", "pool": true, "ruler": "length 6"},
-            {"id": "Rp", "text": "Report\n======\n", "class": "StringBuilder", "solid": true}
-          ],
-          "flow": [{"from": {"array": "T"}, "to": {"array": "Rp"}, "text": "6 × ="}]
-        },
-        {
-          "caption": "Then three bullet points, appended in a loop.",
-          "vars": [{"name": "title", "ref": "T"}, {"name": "report", "ref": "Rp"}],
-          "arrays": [
-            {"id": "T", "text": "Report", "class": "String", "pool": true, "ruler": "length 6"},
-            {
-              "id": "Rp",
-              "text": "Report\n======\n- Point one\n- Point two\n- Point three\n",
-              "class": "StringBuilder",
-              "solid": true
-            }
-          ]
-        },
-        {
-          "caption": "Print the report, then a blank line.",
-          "print": "Report\n======\n- Point one\n- Point two\n- Point three\n\n",
-          "from": {"array": "Rp"},
-          "vars": [{"name": "title", "ref": "T"}, {"name": "report", "ref": "Rp"}],
-          "arrays": [
-            {"id": "T", "text": "Report", "class": "String", "pool": true, "ruler": "length 6"},
-            {
-              "id": "Rp",
-              "text": "Report\n======\n- Point one\n- Point two\n- Point three\n",
-              "class": "StringBuilder",
-              "solid": true
-            }
-          ]
-        },
-        {
-          "caption": "Copy the menu code and change only the class name, from StringBuilder to StringBuffer. The same calls build the same three items, in a second object.",
-          "vars": [{"name": "menu", "ref": "M2"}, {"name": "buffer", "ref": "Bf"}],
-          "arrays": [
-            {"id": "M2", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder", "solid": true},
-            {"id": "Bf", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuffer", "solid": true}
-          ]
-        },
-        {
-          "caption": "Turn both into Strings and compare their text: identical, so true. The two classes share one set of methods, and a StringBuffer only adds locking, for threads.",
-          "print": "Same menu from StringBuffer? true\n",
-          "vars": [{"name": "menu", "ref": "M2"}, {"name": "buffer", "ref": "Bf"}],
-          "arrays": [
-            {"id": "M2", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuilder", "solid": true},
-            {"id": "Bf", "text": "1. Start\n2. Settings\n3. Exit\n", "class": "StringBuffer", "solid": true}
-          ],
-          "compare": [{"a": {"array": "M2"}, "b": {"array": "Bf"}, "same": true}]
-        },
-        {
-          "caption": "The race: add one letter 50,000 times. With + each round builds a whole new String, copies everything so far into it, and drops the old one.",
-          "vars": [{"name": "text", "ref": "X4"}],
-          "arrays": [
-            {"id": "X1", "text": "a", "class": "String", "dead": true},
-            {"id": "X2", "text": "aa", "class": "String", "dead": true},
-            {"id": "X3", "text": "aaa", "class": "String", "dead": true},
-            {"id": "X4", "text": "aaaa", "class": "String", "note": "49,996 rounds to go"}
-          ]
-        },
-        {
-          "caption": "A StringBuilder writes each letter once, into one object that grows.",
-          "vars": [{"name": "text", "ref": "X4"}, {"name": "builder", "ref": "Y"}],
-          "arrays": [
-            {"id": "X3", "text": "aaa", "class": "String", "dead": true},
-            {"id": "X4", "text": "aaaa", "class": "String", "note": "49,996 rounds to go"},
-            {"id": "Y", "text": "aaaa", "class": "StringBuilder", "note": "49,996 appends to go"}
-          ]
-        },
-        {
-          "caption": "After 50,000 rounds both hold the same 50,000 letters, so the text matches and the length is 50000.",
-          "print": "Same text from both? true\nLength: 50000\n",
-          "from": {"array": "Z"},
-          "vars": [{"name": "text", "ref": "Z"}, {"name": "builder", "ref": "Y2"}],
-          "arrays": [
-            {"id": "Z", "text": "aaaaaaaaaaaaaaaaaaaa…", "class": "String", "solid": true, "ruler": "length 50000"},
-            {
-              "id": "Y2",
-              "text": "aaaaaaaaaaaaaaaaaaaa…",
-              "class": "StringBuilder",
-              "solid": true,
-              "ruler": "length 50000"
-            }
-          ],
-          "compare": [{"a": {"array": "Z"}, "b": {"array": "Y2"}, "same": true}]
-        },
-        {
-          "caption": "The + loop copied more than a billion characters on the way, and the builder wrote 50,000. Time both and print which was faster, not the milliseconds.",
-          "print": "StringBuilder was faster? true\n",
-          "vars": [{"name": "text", "ref": "Z"}, {"name": "builder", "ref": "Y2"}],
-          "arrays": [
-            {"id": "Z", "text": "aaaaaaaaaaaaaaaaaaaa…", "class": "String", "solid": true, "ruler": "length 50000"},
-            {
-              "id": "Y2",
-              "text": "aaaaaaaaaaaaaaaaaaaa…",
-              "class": "StringBuilder",
-              "solid": true,
-              "ruler": "length 50000"
-            }
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]"},
+            {"id": "Bf", "text": "Menu:\n1. Start\n2. Settings\n3. Exit\n", "class": "StringBuffer"}
           ]
         },
         {
           "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
-          "vars": [{"name": "text", "ref": "Z"}, {"name": "builder", "ref": "Y2"}],
+          "vars": [{"name": "items", "ref": "It"}, {"name": "menu", "ref": "Bf"}],
           "arrays": [
-            {"id": "Z", "text": "aaaaaaaaaaaaaaaaaaaa…", "class": "String", "solid": true, "ruler": "length 50000"},
-            {
-              "id": "Y2",
-              "text": "aaaaaaaaaaaaaaaaaaaa…",
-              "class": "StringBuilder",
-              "solid": true,
-              "ruler": "length 50000"
-            }
+            {"id": "It", "values": ["\"Start\"", "\"Settings\"", "\"Exit\""], "class": "String[]"},
+            {"id": "Bf", "text": "Menu:\n1. Start\n2. Settings\n3. Exit\n", "class": "StringBuffer"}
           ]
         }
       ]

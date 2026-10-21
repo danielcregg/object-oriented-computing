@@ -219,8 +219,12 @@ instructions, scripts, workflows and the practice bank alone.
   the call-stack class supplied, one recursive method, and every DIY number
   kept. The arrays lab was already under the budget (about 125 typed lines)
   but had 13 exercises: it went to 10 (about 100 typed lines) by merging
-  adjacent trivial pairs and handing the student the `Book` class to copy.
-  Recalibrate these numbers from a real lab session.
+  adjacent trivial pairs and handing the student the `Book` class to copy. The
+  strings lab held 202 typed lines over 8 exercises (about 2h20 by that bound)
+  and went to 95 (about 1h35), every DIY number kept: its two StringBuilder
+  parts, an exercise and a guided copy-counting method, became one simpler
+  exercise, and the rest shrank. Recalibrate these numbers from a real lab
+  session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–10, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /

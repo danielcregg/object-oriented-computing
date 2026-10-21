@@ -6,7 +6,7 @@
     {
       "example": null,
       "extra": false,
-      "title": "Search, initials, a masked email, CSV parts",
+      "title": "Search, initials and a masked email",
       "steps": [
         {
           "caption": "A sentence, and a keyword in capitals. Searched as they are, POWERFUL would never match powerful.",
@@ -165,37 +165,13 @@
           ]
         },
         {
-          "caption": "A line of values separated by commas. Split it at each comma: the space after each comma stays attached to the next part.",
-          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
-          "arrays": [
-            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true, "highlight": [4, 13]},
-            {"id": "P", "values": ["\"Java\"", "\" Strings\"", "\" Lab\""], "class": "String[]"}
-          ]
-        },
-        {
-          "caption": "Trim each part: the spaces at its ends go. Each trimmed part is a new String.",
-          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
-          "arrays": [
-            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
-            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]", "highlight": [1, 2]}
-          ]
-        },
-        {
-          "caption": "Print the parts inside square brackets, each in double quotes, with a comma and a space between them.",
-          "print": "CSV parts: [\"Java\", \"Strings\", \"Lab\"]\n",
-          "from": {"array": "P"},
-          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
-          "arrays": [
-            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
-            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]"}
-          ]
-        },
-        {
           "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
-          "vars": [{"name": "csv", "ref": "C"}, {"name": "parts", "ref": "P"}],
+          "vars": [{"name": "email", "ref": "E"}, {"name": "atIndex", "value": "4"}],
           "arrays": [
-            {"id": "C", "text": "Java, Strings, Lab", "class": "String", "pool": true},
-            {"id": "P", "values": ["\"Java\"", "\"Strings\"", "\"Lab\""], "class": "String[]"}
+            {"id": "E", "text": "john@example.com", "class": "String", "pool": true},
+            {"id": "Lp", "text": "john", "class": "String"},
+            {"id": "Dm", "text": "@example.com", "class": "String"},
+            {"id": "Ms", "text": "j***@example.com", "class": "String"}
           ]
         }
       ]

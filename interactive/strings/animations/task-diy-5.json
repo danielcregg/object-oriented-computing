@@ -6,7 +6,7 @@
     {
       "example": null,
       "extra": false,
-      "title": "A String never changes, but a builder does",
+      "title": "A String never changes, and literals are shared",
       "steps": [
         {
           "caption": "original points at the literal Hello in the string pool. The tag shows the object's identity number: a number that belongs to that object alone.",
@@ -164,140 +164,18 @@
           "compare": [{"a": {"var": "intern()"}, "b": {"var": "lit1"}, "same": true}]
         },
         {
-          "caption": "Now a StringBuilder holding Hello, with identity number 5190. A builder has spare room: empty slots after its characters.",
-          "vars": [{"name": "builder", "ref": "B"}, {"name": "before", "value": "5190"}],
-          "arrays": [{"id": "B", "text": "Hello", "class": "StringBuilder #5190", "capacity": 21, "color": "teal"}],
-          "flow": [{"from": {"array": "B"}, "to": {"var": "before"}, "text": "5190"}]
-        },
-        {
-          "caption": "Append World: the characters go into the empty slots of the same object. Nothing new is built, and the arrow does not move.",
-          "vars": [{"name": "builder", "ref": "B"}, {"name": "before", "value": "5190"}],
-          "arrays": [
-            {"id": "W", "text": " World", "class": "String", "pool": true},
-            {"id": "B", "text": "Hello World", "class": "StringBuilder #5190", "capacity": 21, "color": "teal"}
-          ],
-          "flow": [
-            {"from": {"array": "W", "index": 0}, "to": {"array": "B", "index": 5}, "text": "␣"},
-            {"from": {"array": "W", "index": 1}, "to": {"array": "B", "index": 6}, "text": "W"},
-            {"from": {"array": "W", "index": 2}, "to": {"array": "B", "index": 7}, "text": "o"},
-            {"from": {"array": "W", "index": 3}, "to": {"array": "B", "index": 8}, "text": "r"},
-            {"from": {"array": "W", "index": 4}, "to": {"array": "B", "index": 9}, "text": "l"},
-            {"from": {"array": "W", "index": 5}, "to": {"array": "B", "index": 10}, "text": "d"}
-          ]
-        },
-        {
-          "caption": "Its identity number afterwards: still 5190. Same object, so true.",
-          "print": "Same builder object after append? true\n",
-          "vars": [
-            {"name": "builder", "ref": "B"},
-            {"name": "before", "value": "5190"},
-            {"name": "after", "value": "5190"}
-          ],
-          "arrays": [
-            {"id": "W", "text": " World", "class": "String", "pool": true},
-            {"id": "B", "text": "Hello World", "class": "StringBuilder #5190", "capacity": 21, "color": "teal"}
-          ],
-          "compare": [{"a": {"var": "before"}, "b": {"var": "after"}, "same": true}],
-          "flow": [{"from": {"array": "B"}, "to": {"var": "after"}, "text": "5190"}]
-        },
-        {
-          "caption": "The builder now holds Hello World.",
-          "print": "Builder now: Hello World\n",
-          "from": {"array": "B"},
-          "vars": [
-            {"name": "builder", "ref": "B"},
-            {"name": "before", "value": "5190"},
-            {"name": "after", "value": "5190"}
-          ],
-          "arrays": [
-            {"id": "W", "text": " World", "class": "String", "pool": true},
-            {"id": "B", "text": "Hello World", "class": "StringBuilder #5190", "capacity": 21, "color": "teal"}
-          ]
-        },
-        {
-          "caption": "A new, empty builder starts with room for 16 characters: its capacity is 16.",
-          "print": "Initial capacity: 16\n",
-          "from": {"array": "G"},
-          "vars": [{"name": "sb", "ref": "G"}],
-          "arrays": [
-            {"id": "G", "text": "", "class": "StringBuilder", "capacity": 16, "mini": true, "note": "capacity 16"}
-          ]
-        },
-        {
-          "caption": "Append characters one at a time, 50 in all. The first 16 fill every empty slot.",
-          "vars": [{"name": "sb", "ref": "G"}],
-          "arrays": [
-            {
-              "id": "G",
-              "text": "aaaaaaaaaaaaaaaa",
-              "class": "StringBuilder",
-              "capacity": 16,
-              "mini": true,
-              "note": "capacity 16",
-              "ruler": "length 16"
-            }
-          ]
-        },
-        {
-          "caption": "The 17th does not fit. The builder makes itself a bigger buffer of 34 slots, copies its characters across, and carries on: still the same object.",
-          "vars": [{"name": "sb", "ref": "G"}],
-          "arrays": [
-            {
-              "id": "G",
-              "text": "aaaaaaaaaaaaaaaaa",
-              "class": "StringBuilder",
-              "capacity": 34,
-              "mini": true,
-              "note": "capacity 34",
-              "ruler": "length 17"
-            }
-          ]
-        },
-        {
-          "caption": "Full again at 34, so the 35th character makes it grow again: 70 slots.",
-          "vars": [{"name": "sb", "ref": "G"}],
-          "arrays": [
-            {
-              "id": "G",
-              "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-              "class": "StringBuilder",
-              "capacity": 70,
-              "mini": true,
-              "note": "capacity 70",
-              "ruler": "length 35"
-            }
-          ]
-        },
-        {
-          "caption": "After 50 characters, 20 slots are still free. The capacity is 70.",
-          "print": "Capacity after 50 appends: 70\n",
-          "from": {"array": "G"},
-          "vars": [{"name": "sb", "ref": "G"}],
-          "arrays": [
-            {
-              "id": "G",
-              "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-              "class": "StringBuilder",
-              "capacity": 70,
-              "mini": true,
-              "note": "capacity 70",
-              "ruler": "length 50"
-            }
-          ]
-        },
-        {
           "caption": "Now write the code that makes this happen, run it with ▶, then press Check my output.",
-          "vars": [{"name": "sb", "ref": "G"}],
+          "vars": [
+            {"name": "lit1", "ref": "L"},
+            {"name": "lit2", "ref": "L"},
+            {"name": "heap1", "ref": "N1"},
+            {"name": "heap2", "ref": "N2"},
+            {"name": "intern()", "ref": "L"}
+          ],
           "arrays": [
-            {
-              "id": "G",
-              "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-              "class": "StringBuilder",
-              "capacity": 70,
-              "mini": true,
-              "note": "capacity 70",
-              "ruler": "length 50"
-            }
+            {"id": "L", "text": "Lab", "class": "String", "pool": true, "color": "blue"},
+            {"id": "N1", "text": "Lab", "class": "String", "color": "pink"},
+            {"id": "N2", "text": "Lab", "class": "String", "color": "purple"}
           ]
         }
       ]

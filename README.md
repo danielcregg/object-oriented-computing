@@ -42,7 +42,7 @@ editing rules live in
 ## Module schedule
 
 <!-- current-week:start -->
-> 🗓️ **Reading week** (no lectures or labs) — week beginning 26 Oct 2026.
+> 🗓️ **Current teaching week: 7 — Encapsulation** (week beginning 02 Nov 2026).
 <!-- current-week:end -->
 
 The schedule is defined once, in [`module/schedule.json`](module/schedule.json);
@@ -58,8 +58,8 @@ generated from it.
 | 4 | **MCQ 1** · held during lab slot | [details](lectures-and-labs/week04/README.md) · [brief](mcq/README.md) | — |
 | 5 | Arrays | [lecture](lectures-and-labs/week05/arrays-lecture.md) | [lab](lectures-and-labs/week05/arrays_lab/README.md) |
 | 6 | Strings | [lecture](lectures-and-labs/week06/strings-lecture.md) | [lab](lectures-and-labs/week06/strings_lab/README.md) |
-| **➡️ —** | Reading week | [details](lectures-and-labs/week06b-reading-week/README.md) | — |
-| 7 | Encapsulation | [lecture](lectures-and-labs/week07/encapsulation-lecture.md) | [lab](lectures-and-labs/week07/encapsulation_lab/README.md) |
+| — | Reading week | [details](lectures-and-labs/week06b-reading-week/README.md) | — |
+| **➡️ 7** | Encapsulation | [lecture](lectures-and-labs/week07/encapsulation-lecture.md) | [lab](lectures-and-labs/week07/encapsulation_lab/README.md) |
 | 8 | **MCQ 2** · held during lab slot | [details](lectures-and-labs/week08/README.md) · [brief](mcq/README.md) | — |
 | 9 | Inheritance | [lecture](lectures-and-labs/week09/inheritance-lecture.md) | [lab](lectures-and-labs/week09/inheritance_lab/README.md) |
 | 10 | Polymorphism | [lecture](lectures-and-labs/week10/polymorphism-lecture.md) | [lab](lectures-and-labs/week10/polymorphism_lab/README.md) |

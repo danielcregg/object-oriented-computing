@@ -15,7 +15,7 @@
         "Splitting a large program into many small source files so each class is easier to find"
       ],
       "answer": 0,
-      "explanation": "Encapsulation is two moves made together: bundle state and behaviour into one unit (the class), and hide the state so all access goes through methods you choose to expose. Same-name methods and receiving members from another class describe overloading and inheritance, which are different ideas."
+      "explanation": "Encapsulation means two things: bundle the data and the methods that use it into one unit (the class), and hide the data, so that other code can reach it only through the methods the class makes public. Same-name methods and receiving members from another class describe overloading and inheritance, which are different ideas."
     },
     {
       "id": "encapsulation-002",
@@ -36,7 +36,7 @@
       "id": "encapsulation-003",
       "difficulty": "easy",
       "type": "concept",
-      "question": "One pillar of OOP is summed up as: objects guard their own data behind a small public face. Which pillar is it?",
+      "question": "One pillar of OOP is summed up as: bundle the data and the methods that use it in one class, and hide the data. Which pillar is it?",
       "code": null,
       "options": [
         "Inheritance",
@@ -225,7 +225,7 @@
         "The compiler refuses to accept a private field unless a getter and a setter are provided"
       ],
       "answer": 1,
-      "explanation": "Even an empty setter is a checkpoint you can staff later: the day rules are needed, you add them in one place and not one caller changes. A public field can never be upgraded that way. There is no speed benefit, and the compiler never demands getters or setters."
+      "explanation": "Every change already goes through the setter, so the day a rule is needed you add it inside that one method, and no code that calls the setter has to change. A public field gives you no such place to add a rule. There is no speed benefit, and the compiler never demands getters or setters."
     },
     {
       "id": "encapsulation-016",
@@ -270,7 +270,7 @@
         "Keep it private and add a comment stating that it is read-only"
       ],
       "answer": 0,
-      "explanation": "A getter with no setter splits reading from writing: the world may look, but changes can only happen through whatever controlled methods the class itself offers. A field exposed directly is all-or-nothing; whoever can read it can also write it."
+      "explanation": "A getter with no setter lets other classes read the value but gives them no way to change it; only the class's own methods can. A public field is all or nothing: any code that can read it can also overwrite it."
     },
     {
       "id": "encapsulation-019",
@@ -345,7 +345,7 @@
         "The compiler removes field assignments from stack traces, so the responsible line cannot appear in them"
       ],
       "answer": 0,
-      "explanation": "Assignment is not an event: no method runs when a public field is written, so there is no single place to validate, log, or set a breakpoint, and any code that can see the field could be the culprit. Forcing every change through one setter gives one door, one guard, and one place to look."
+      "explanation": "Assignment is not an event: no method runs when a public field is written, so there is no single place to validate, log, or set a breakpoint, and any code that can see the field could be the culprit. When every change goes through one setter instead, there is exactly one place to check the value, log it, or set a breakpoint."
     },
     {
       "id": "encapsulation-024",
@@ -420,7 +420,7 @@
         "0"
       ],
       "answer": 3,
-      "explanation": "The getter returns a reference to the internal array, not a copy, so view and the private scores variable point at the same object and view[0] = 0 rewrites the private data. private seals the field itself, not the object it refers to; a capsule leaks if its getters hand out references to internal mutable state."
+      "explanation": "The getter returns a reference to the internal array, not a copy, so view and the private scores variable point at the same object and view[0] = 0 rewrites the private data. private protects the variable itself, not the array it refers to, so a getter that returns a private array lets other code change it; return a copy instead."
     },
     {
       "id": "encapsulation-029",
@@ -450,7 +450,7 @@
         "ADA then ada"
       ],
       "answer": 1,
-      "explanation": "String is immutable, a capsule with no write gates: toUpperCase() cannot change the original, so it returns a new String instead. name still refers to ada while loud refers to the new ADA; that unchangeability is what makes Strings safe to share anywhere."
+      "explanation": "String is immutable: its characters are private and no String method changes them, so toUpperCase() cannot change the original and returns a new String instead. name still refers to ada while loud refers to the new ADA; that unchangeability is what makes Strings safe to share anywhere."
     },
     {
       "id": "encapsulation-031",

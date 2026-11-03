@@ -267,7 +267,7 @@ class Lecturer extends Person { }
 
 ## The four pillars - you are here
 
-- Recall: OOP stands on four pillars, and **encapsulation** - private fields behind public gates - is pillar one.
+- Recall: OOP stands on four pillars, and **encapsulation** - private fields, used only through public methods - is pillar one.
 
 <div class="pillars">
 <div class="pillar done"><span class="pname">Encapsulation</span><span class="pwk">pillar 1 · done ✓</span></div>
@@ -336,7 +336,7 @@ public class Person {
 }
 ```
 
-- Private field, public gates - **encapsulation**, unchanged. It's about to matter.
+- Private field, public methods - **encapsulation**, unchanged. It's about to matter.
 - Notice what's *missing*: nothing here mentions inheritance. Being extended costs the parent **nothing**, and it never knows.
 
 ---
@@ -417,7 +417,7 @@ public class Main {
 
 ---
 
-<!-- Speaker notes: ~0:18. Flagged `no-compile` - the compiler error is the whole point, so make the room commit to a prediction before revealing it. The wrong answer comes from conflating inherited with accessible: students expect `Employee` to read `age` directly simply because the field exists inside every `Employee` object, forgetting that inheritance does not grant private access. Contrast this with `emp.getAge()` on the previous slide, which reached the same field through the public gate - the access-versus-existence gap resurfaces as an MCQ trap and is the direct motivation for `protected`. -->
+<!-- Speaker notes: ~0:18. Flagged `no-compile` - the compiler error is the whole point, so make the room commit to a prediction before revealing it. The wrong answer comes from conflating inherited with accessible: students expect `Employee` to read `age` directly simply because the field exists inside every `Employee` object, forgetting that inheritance does not grant private access. Contrast this with `emp.getAge()` on the previous slide, which reached the same field through the public getter - the access-versus-existence gap resurfaces as an MCQ trap and is the direct motivation for `protected`. -->
 
 ## Predict: does this compile?
 
@@ -831,7 +831,7 @@ class Cat extends Mammal {
 | Exactly one parent | Every class except `Object` has exactly **one** direct superclass; write no `extends` and that superclass is `Object`. |
 | Children unlimited | A superclass can have any number of subclasses - but it never knows about them, and never names them. |
 | Constructors | Not members → never inherited. Reachable via `super(...)`, which must be the **first statement** of a subclass constructor. |
-| `private` members | Inherited storage, no direct access - the subclass goes through the parent's `public`/`protected` gates. |
+| `private` members | Inherited storage, no direct access - the subclass goes through the parent's `public`/`protected` methods. |
 | Every chain ends at `Object` | `toString`, `equals`, `hashCode` arrive from the top of every tree - that's why every object answers them. |
 
 ---

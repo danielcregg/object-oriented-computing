@@ -10,22 +10,99 @@ source: authored
 ---
 
 <style>
-/* Deck-local visual system: capsule, gates, pillars, visibility matrix -
-   all drawn in CSS, no images. Base components:
-   .mem/.callout/.legend/.kicker. */
-section .mem {
-  display: flex; margin: 34px 0 10px 0;
-  font-family: 'Cascadia Code', Consolas, monospace;
+/* Deck-local diagrams, all drawn in CSS (no images): the title capsule,
+   code in another class calling into a class, the four-pillars strip, the
+   access-modifier table, and variables pointing at arrays. The shared
+   components (.mem/.callout/.legend/.kicker) come from the theme.
+   Colours: blue = private data, orange = public methods, green = code that
+   compiles, red = code the compiler rejects. */
+section .mem { display: flex; margin: 34px 0 10px 0; font-family: 'Cascadia Code', Consolas, monospace; }
+
+/* title slide: the class drawn as a capsule, one half holding the private
+   instance variable and the other the public method, each half labelled */
+section .hero { width: 860px; margin: 20px 0 0 0; }
+section .hero .h-top { text-align: center; font-size: 18px; color: #A9B6C4; line-height: 1.35; }
+section .hero .h-top b {
+  display: block; font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 24px; font-weight: 600; color: #FFFFFF;
+}
+section .hero .h-arrow { display: block; text-align: center; color: #E76F00; font-size: 28px; line-height: 1.15; }
+section .hero .h-pill { display: flex; border: 3px solid #FFFFFF; border-radius: 999px; overflow: hidden; }
+section .hero .h-var, section .hero .h-meth {
+  flex: 1; padding: 18px 10px; text-align: center;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 22px;
+}
+section .hero .h-var { background: #33698C; color: #FFFFFF; }
+section .hero .h-meth { background: #FDEFD9; color: #B94E00; font-weight: 600; }
+section .hero .h-notes { display: flex; }
+section .hero .h-notes div { flex: 1; text-align: center; font-size: 17px; color: #A9B6C4; line-height: 1.35; }
+section .hero .h-notes b { display: block; font-size: 20px; color: #FFFFFF; }
+section.lead .hero ~ p { max-width: 900px; margin-top: 26px; text-wrap: balance; }
+
+/* public methods (orange pills) and private data (blue box), shared by the
+   two class diagrams below */
+section .meth {
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px; font-weight: 600;
+  background: #FDEFD9; border: 2px solid #E76F00; color: #B94E00;
+  border-radius: 999px; padding: 6px 18px; white-space: nowrap; justify-self: start;
+}
+section .meth.missing { background: #F1EFEA; border: 2px dashed #8B8471; color: #8B8471; font-weight: 400; }
+section .data {
+  background: #E7F0F7; border: 2px solid #33698C; border-radius: 14px; padding: 12px 20px;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 20px; color: #1E3A5F;
+}
+section .data small {
+  display: block; margin-bottom: 4px;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px;
+  text-transform: uppercase; letter-spacing: 0.06em; color: #33698C;
 }
 
-/* title-slide capsule pill */
-section .pill {
-  display: inline-flex; align-self: flex-start; margin: 26px 0 8px 0;
-  border-radius: 999px; overflow: hidden; border: 2px solid #7FB4D8;
-  font-family: 'Cascadia Code', Consolas, monospace; font-size: 21px;
+/* "the fix" slide: three lines of code in another class, each pointing at
+   what it reaches inside BankAccount */
+section .scene {
+  display: grid; grid-template-columns: 340px 54px 250px 1fr;
+  grid-template-rows: auto 70px 70px 70px; row-gap: 14px; align-items: center;
+  margin: 24px 0 6px 0;
 }
-section .pill .ph-l { background: #101B26; color: #9DB4C8; padding: 13px 24px 13px 30px; }
-section .pill .ph-r { background: #E76F00; color: #FFFFFF; padding: 13px 30px 13px 24px; font-weight: 600; }
+section .scene .sc-h { grid-row: 1; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: #8B8471; }
+section .scene .sc-h.k {
+  grid-column: 3 / 5; padding-left: 24px; text-transform: none; letter-spacing: 0;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 20px; font-weight: 600; color: #33698C;
+}
+section .scene .wall {
+  grid-column: 3 / 5; grid-row: 2 / 5; align-self: stretch;
+  margin: -10px 0 -10px -14px; border: 3px solid #33698C; border-radius: 60px; background: #FFFFFF;
+}
+section .scene .call {
+  grid-column: 1; font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px; color: #1E2833;
+  background: #EAF6EC; border: 2px solid #1E7A34; border-radius: 10px; padding: 6px 12px;
+}
+section .scene .call small {
+  display: block; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #1E7A34;
+}
+section .scene .call.no { background: #FBEDEB; border-color: #C0392B; }
+section .scene .call.no small { color: #C0392B; }
+section .scene .arr { grid-column: 2; text-align: center; font-size: 30px; color: #1E7A34; }
+section .scene .arr.no { color: #C0392B; }
+section .scene .meth { grid-column: 3; z-index: 1; margin-left: 14px; }
+section .scene .stop { grid-column: 3; z-index: 1; margin-left: 14px; font-size: 17px; font-weight: 600; color: #C0392B; }
+section .scene .data { grid-column: 4; grid-row: 2 / 5; z-index: 1; margin-right: 30px; }
+section .scene .r2 { grid-row: 2; }
+section .scene .r3 { grid-row: 3; }
+section .scene .r4 { grid-row: 4; }
+
+/* a class on its own, with every public method it offers */
+section .capsule {
+  position: relative; display: flex; align-items: center; gap: 36px;
+  width: 860px; margin: 26px auto 14px auto; padding: 26px 44px;
+  border: 3px solid #33698C; border-radius: 70px; background: #FFFFFF;
+}
+section .capsule .k {
+  position: absolute; top: -16px; left: 64px; padding: 0 10px; background: #FBFAF7;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 20px; font-weight: 600; color: #33698C;
+}
+section .capsule .ms { display: flex; flex-direction: column; gap: 12px; }
+section .capsule .data { flex: 1; }
 
 /* four-pillars strip - the canonical OOP roadmap */
 section .pillars { display: flex; gap: 18px; margin: 34px 0 16px 0; }
@@ -56,67 +133,20 @@ section .pillar .p-chip {
   font-size: 15px; font-weight: 600; padding: 2px 12px; letter-spacing: 0.03em;
 }
 
-/* the capsule: sealed private core, public gates on the boundary,
-   outside code knocking at the gates */
-section .cap-scene { display: flex; align-items: center; gap: 124px; margin: 34px 0 8px 0; }
-section .cap-scene.solo { justify-content: center; gap: 0; }
-section .cap-callers { display: flex; flex-direction: column; gap: 30px; flex: 0 0 318px; }
-section .knock {
-  font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px;
-  background: #FFFFFF; border: 2px solid #33698C; border-radius: 10px;
-  padding: 10px 14px; color: #1E2833; position: relative;
-}
-section .knock .k-note {
-  display: block; margin-top: 4px;
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #1E7A34;
-}
-section .knock::after {
-  content: '⟶'; position: absolute; right: -50px; top: 50%; transform: translateY(-50%);
-  font-size: 30px; color: #33698C;
-}
-section .knock.bad { border-color: #C0392B; background: #FBEDEB; }
-section .knock.bad .k-note { color: #C0392B; }
-section .knock.bad::after { color: #C0392B; }
-section .capsule {
-  flex: 1; display: flex; align-items: center; gap: 30px;
-  border: 3px solid #33698C; border-radius: 76px; background: #FFFFFF;
-  padding: 26px 34px 26px 0; min-height: 230px;
-}
-section .cap-scene.solo .capsule { flex: 0 0 780px; padding-left: 0; margin-left: 58px; }
-section .gates { display: flex; flex-direction: column; gap: 13px; margin-left: -58px; }
-section .gate {
-  font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px;
-  background: #FDEFD9; border: 2px solid #E76F00; color: #B94E00; font-weight: 600;
-  border-radius: 999px; padding: 8px 20px; white-space: nowrap; text-align: center;
-}
-section .gate.no {
-  background: #F1EFEA; border: 2px dashed #8B8471; color: #8B8471; font-weight: 400;
-}
-section .core {
-  flex: 1; background: #16222E; border-radius: 18px; padding: 18px 24px;
-  color: #E8ECF1; font-family: 'Cascadia Code', Consolas, monospace; font-size: 19px;
-}
-section .core .core-cap {
-  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.08em;
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #7FB4D8;
-}
-section .core .fld { padding: 4px 0; }
-section .core .fld::before { content: '• '; color: #E76F00; }
-
-/* access-modifier visibility matrix */
+/* access-modifier table */
 section table.vmatrix {
   border-collapse: separate; border-spacing: 0;
-  margin: 20px auto 10px auto; font-size: 23px;
+  margin: 16px auto 8px auto; font-size: 23px;
 }
 section table.vmatrix th {
   background: #16222E; color: #E8ECF1; text-align: center;
-  font-family: 'Cascadia Code', Consolas, monospace; font-size: 19px; font-weight: 600;
-  padding: 10px 24px; border: none;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px; font-weight: 600;
+  padding: 10px 20px; border: none;
 }
 section table.vmatrix th:first-child { border-radius: 12px 0 0 0; text-align: left; padding-left: 20px; }
 section table.vmatrix th:last-child { border-radius: 0 12px 0 0; }
 section table.vmatrix td {
-  text-align: center; padding: 9px 24px;
+  text-align: center; padding: 8px 20px;
   border: none; border-bottom: 1px solid #E5E1D6; background: #FFFFFF;
 }
 section table.vmatrix td.kw {
@@ -131,10 +161,24 @@ section table.vmatrix tr:last-child td:last-child { border-radius: 0 0 12px 0; }
 section table.vmatrix .mchip {
   display: inline-block; margin-left: 12px; padding: 1px 10px; border-radius: 999px;
   font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; font-weight: 600;
+  background: #E7F0F7; color: #33698C;
 }
-section table.vmatrix .mchip.hero { background: #E76F00; color: #FFFFFF; }
-section table.vmatrix .mchip.soon { background: #E7F0F7; color: #33698C; }
+
+/* variables pointing at arrays: two variables sharing ONE array, or each
+   with an array of its own */
+section .refs { display: flex; align-items: center; gap: 4px; margin: 40px 0 6px 0; }
+section .refs .mem, section .rows .mem { margin: 0; }
+/* right-aligned, and close together, so both arrows end on the array */
+section .refs .vars { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+section .var { font-family: 'Cascadia Code', Consolas, monospace; font-size: 21px; font-weight: 600; color: #33698C; white-space: nowrap; }
+section .var small { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 400; color: #8B8471; }
+section .var::after { content: ' ⟶'; color: #E76F00; }
+section .rows { display: flex; flex-direction: column; gap: 14px; margin: 22px 0 6px 0; }
+section .rows .row { display: flex; align-items: center; gap: 4px; }
+section .rows .var { min-width: 120px; }
 </style>
+
+<!-- Speaker notes: ~0:00. The capsule is the whole lecture in one picture. Point at the three labels in order: the class is the capsule, the private instance variable is the data hidden inside it, and the public method is how other classes get at that data. Every later slide is one of those three ideas in code. -->
 
 <!-- _class: lead -->
 <!-- _paginate: false -->
@@ -143,237 +187,254 @@ section table.vmatrix .mchip.soon { background: #E7F0F7; color: #33698C; }
 
 # Encapsulation
 
-<div class="pill">
-<span class="ph-l">private double balance</span><span class="ph-r">public deposit()</span>
+<div class="hero">
+<div class="h-top"><b>class BankAccount</b>the class is the capsule: one unit that holds the data and the method together</div>
+<span class="h-arrow">↓</span>
+<div class="h-pill"><div class="h-var">private double balance;</div><div class="h-meth">public double getBalance()</div></div>
+<div class="h-notes">
+<div><span class="h-arrow">↑</span><b>private instance variable</b>the data, hidden inside the class</div>
+<div><span class="h-arrow">↑</span><b>public method</b>other classes call it to get the balance</div>
+</div>
 </div>
 
-One door. One guard.
+Encapsulation: keep the data and the methods that use it together in one class, and hide the data.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open on the disaster. Read the assignment line slowly; let "no alarm" hang before advancing. -->
+<!-- Speaker notes: ~0:01. Problem-first hook. Before revealing the last two bullets, ask the room what should stop the -500 line; the answer the lecture builds is "the class itself". The lab's first section opens with this same BankAccount, and DIY 1 repeats the experiment on a Student class. -->
 
-## A quiet line of code
+## Problem: a public variable takes any value
 
-- Your team ships a banking app. One class holds the money:
+- In this class, the instance variable `balance` is `public`:
 
 ```java
 public class BankAccount {
-    public String owner;
-    public double balance;     // public: anyone, anywhere, can touch it
+    public double balance;
 }
 ```
 
-* It works. For months. Then, one Tuesday, deep inside a million-line codebase:
+- So code in any other class can set it to any value, even one that makes no sense:
 
 <!-- no-compile -->
 ```java
-account.balance = -1_000_000;   // some file. some line. some Tuesday.
+BankAccount account = new BankAccount();
+account.balance = -500;                 // compiles and runs: nothing checks the value
+System.out.println(account.balance);    // prints -500.0
 ```
 
-* No compile error. No exception. No log entry. **The money is just… gone.**
+* Our bank never allows a negative balance, but `BankAccount` has no way to stop that line.
+* **Encapsulation** fixes this: hide the variable, and let other classes change it only through methods that check the value.
 
 ---
 
-## Who do you call?
+<!-- Speaker notes: ~0:04. The whole lecture on one slide: private data, public methods, and the compiler enforcing the line between them. Read the three rows top to bottom. Leave the other access modifiers for later; private and public are all this slide needs. -->
 
-- Somewhere, one line wrote a poisoned value. Your job: find it.
-* You search the codebase for `.balance` - **40,000 matches**.
-* Any one of them had the power. **Every line is a suspect.**
-* And nothing recorded the change, because *assignment is not an event* - no code runs when a public field is written.
+## The fix: private data, public methods
 
-<div class="callout"><strong>The wish:</strong> what if the field were unreachable - and every change had to walk through <strong>one method</strong>? One door. One guard. One place to put a breakpoint.</div>
+- Make `balance` **private** and give the class **public methods**. Other classes can then use the balance only by calling those methods:
 
----
-
-## The idea - the capsule
-
-- Seal the data inside the class. Punch **gates** through the wall - public methods - and guard them.
-
-<div class="cap-scene">
-<div class="cap-callers">
-<div class="knock">app.deposit(50.0);<span class="k-note">knocks at a gate - allowed in</span></div>
-<div class="knock bad">app.balance = -1;<span class="k-note">no gate there - refused: compile error</span></div>
-</div>
-<div class="capsule">
-<div class="gates">
-<div class="gate">deposit(double)</div>
-<div class="gate">withdraw(double)</div>
-<div class="gate">getBalance()</div>
-</div>
-<div class="core">
-<div class="core-cap">private - sealed core</div>
-<div class="fld">double balance</div>
-<div class="fld">String owner</div>
-</div>
-</div>
+<div class="scene">
+<div class="sc-h">code in another class</div>
+<div class="sc-h k">class BankAccount</div>
+<div class="wall"></div>
+<div class="call r2">account.deposit(100);<small>✓ compiles: deposit() is public</small></div>
+<div class="arr r2">⟶</div>
+<div class="meth r2">deposit(double)</div>
+<div class="call r3">account.getBalance();<small>✓ compiles: getBalance() is public</small></div>
+<div class="arr r3">⟶</div>
+<div class="meth r3">getBalance()</div>
+<div class="call no r4">account.balance = -500;<small>✗ compile error: balance is private</small></div>
+<div class="arr no r4">⟶</div>
+<div class="stop r4">✗ cannot reach balance</div>
+<div class="data"><small>private instance variable</small>double balance</div>
 </div>
 
-<p class="legend">private fields = the sealed core · public methods = guarded gates · outside code knocks - it never reaches in</p>
+<p class="legend">orange = public methods: any class can call them · blue = a private instance variable: only code inside BankAccount can use it</p>
+
+* `deposit()` can check the amount before it changes `balance`, so a negative deposit is simply ignored.
 
 ---
 
 ## Agenda
 
-- The four pillars of OOP - your map for everything ahead
-- What encapsulation means: **bundle** + **hide**
-- Access modifiers - Java's four visibility settings
-- The recipe: private fields, public getters and setters
-- Three powers you gain: the guard, one-way glass, the disguise
-- `BankAccount`, done properly - and a leak to avoid
-- Why it pays: protection, flexibility, maintainability
+- The four pillars of OOP
+- What encapsulation means
+- Access modifiers: `private`, default, `protected`, `public`
+- How to encapsulate a class: private instance variables, public getters and setters
+- Three reasons to use getters and setters
+- Coding example: `BankAccount`
+- Getters that return an array: defensive copies
+- Benefits of encapsulation
 
 ---
 
-<!-- Speaker notes: ~0:07. This strip is the canonical four-pillars overview. Spend a full minute here. -->
+<!-- Speaker notes: ~0:07. The canonical four-pillars overview: spend a full minute here. Name inheritance, polymorphism and abstraction once each and move on; each is a topic of its own. -->
 
 ## The four pillars of OOP
 
-- Everything in OOP hangs off **four big ideas**:
+- Object-oriented programming (OOP) is built on **four main ideas**, called its four pillars:
 
 <div class="pillars">
-<div class="pillar now"><span class="p-chip">this lecture</span><span class="p-name">Encapsulation</span><span class="p-line">objects guard their own data behind a small public face</span><span class="p-wk">pillar 1</span></div>
-<div class="pillar"><span class="p-name">Inheritance</span><span class="p-line">build new classes on top of existing ones</span><span class="p-wk">pillar 2</span></div>
-<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call, many different behaviours</span><span class="p-wk">pillar 3</span></div>
-<div class="pillar"><span class="p-name">Abstraction</span><span class="p-line">expose the what, hide the how</span><span class="p-wk">pillar 4</span></div>
+<div class="pillar now"><span class="p-chip">this lecture</span><span class="p-name">Encapsulation</span><span class="p-line">bundle the data and the methods that use it in one class, and hide the data</span><span class="p-wk">pillar 1</span></div>
+<div class="pillar"><span class="p-name">Inheritance</span><span class="p-line">build a new class from an existing class</span><span class="p-wk">pillar 2</span></div>
+<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call can behave differently for different objects</span><span class="p-wk">pillar 3</span></div>
+<div class="pillar"><span class="p-name">Abstraction</span><span class="p-line">show what an object does, hide how it does it</span><span class="p-wk">pillar 4</span></div>
 </div>
 
-- Encapsulation goes **first** because the other three build on classes that protect their own state.
-- The strip returns as each pillar arrives - watch the highlight move right.
+- Encapsulation comes **first** because the other three pillars build on classes that protect their own data.
 
 ---
 
-## What "encapsulation" means
+## What encapsulation means
 
-- In English: to *encapsulate* is to seal something inside a capsule.
-- In OOP it is **two moves**, made together:
+<!-- _class: code-sm -->
 
-* **Bundle** - keep the data (fields) and the code that operates on it (methods) in one unit: the class.
-* **Hide** - make the fields `private`, so the *only* way in is through the methods you chose to expose.
+- In English, to **encapsulate** something is to enclose it, as if in a capsule. In Java, encapsulation means two things:
 
-<div class="callout"><strong>Definition for your notes:</strong> encapsulation is bundling state and behaviour into a single class while restricting direct access to the object's internals. The hiding half has its own name - <strong>data hiding</strong>.</div>
+* **Bundle:** put the data (the instance variables, also called fields) and the methods that use that data together in one unit, the class.
+* **Hide:** make the instance variables `private`, so other classes can use them only through the class's public methods.
+
+```java
+public class BankAccount {
+    private double balance;           // the data: a private instance variable
+
+    public double getBalance() {      // a public method that uses the data
+        return balance;
+    }
+}
+```
+
+* Hiding the instance variables is called **data hiding**. It is the key step of encapsulation, so the two terms are often used to mean the same thing.
 
 ---
 
-<!-- Speaker notes: ~0:12. The matrix is a reference students will screenshot - walk it row by row, top (strictest) to bottom (loosest). -->
+<!-- Speaker notes: ~0:12. Reference slide students will photograph: walk it row by row, from the strictest (private) to the loosest (public). The point to land is 3 keywords but 4 levels, because default has no keyword. Packages and subclasses need only the one-line explanation in the legend. -->
 
-## Access modifiers - the visibility dial
+## Access modifiers
 
-- Java enforces the capsule with **keywords**. Every member gets one of four visibility levels:
+- An **access modifier** is a keyword written before an instance variable or a method. It decides which code may use that member directly.
+- Java has **3 access modifier keywords** but **4 levels of access**: writing no keyword gives the fourth level, called **default**.
 
 <table class="vmatrix">
 <thead>
-<tr><th>modifier</th><th>same class</th><th>same package</th><th>subclass<br>(other pkg)</th><th>everywhere</th></tr>
+<tr><th>modifier</th><th>same class</th><th>same package</th><th>subclass in<br>another package</th><th>everywhere</th></tr>
 </thead>
 <tbody>
-<tr><td class="kw">private<span class="mchip hero">your default</span></td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td></tr>
-<tr><td class="kw">(default)</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
-<tr><td class="kw">protected<span class="mchip soon">inheritance</span></td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td></tr>
+<tr><td class="kw">private<span class="mchip">use for instance variables</span></td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td></tr>
+<tr><td class="kw">default (no keyword)</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
+<tr><td class="kw">protected<span class="mchip">used with inheritance</span></td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">✗</td></tr>
 <tr><td class="kw">public</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
 </tbody>
 </table>
 
-<p class="legend">✓ = code there may touch the member directly · ✗ = compile error · (default) = you wrote no keyword at all</p>
+<p class="legend">✓ = code there can use it directly · ✗ = compile error · package = a folder of classes · subclass = a class that inherits from this one</p>
 
 ---
 
-## Which one do I write?
+## Which access modifier should I use?
 
-- **`private`** - from today, your default for **every field**. This is the capsule wall.
-- **`public`** - for the methods you *mean* the world to call: the gates.
-- **`protected`** - also visible to subclasses. Meaningless until **inheritance** arrives.
-- **(default)** - package-only; what you get by forgetting a keyword. Treat it as an accident, not a choice.
+- **Instance variables: always `private`.** This is the "hide" part of encapsulation.
+- **Methods that other classes need to call: `public`.**
+- **A helper method that only its own class uses: `private`.**
+- **`protected`** lets subclasses use a member. It is only needed with inheritance.
+- **Default (no keyword)** opens a member to every class in the same package. It usually happens because someone forgot to write a keyword, so always write one.
 
-<div class="callout"><strong>House rule:</strong> start everything <code>private</code>; promote to <code>public</code> only with a reason you can say out loud.</div>
+<div class="callout"><strong>Rule of thumb:</strong> make every instance variable <code>private</code>, and make a method <code>public</code> only if other classes need to call it.</div>
 
 ---
 
-<!-- Speaker notes: ~0:17. Predict beat right after the visibility matrix. Expect some to say it compiles: the mental model is that `Account` and `Main` sharing one file makes them close enough to the same class, so the field should still be reachable. Unlike the other predict slides in this deck, the `no-compile` marker is literal here - this is the one snippet that genuinely fails to build, resolving the opening hook (`A quiet line of code`) into a concrete compiler error. `private` scopes to the class, never the file or the package - the matrix just drew that line, and this is its first real test. -->
+<!-- Speaker notes: ~0:17. Predict beat. Two wrong answers come up. Some say it compiles because 50.0 is a sensible balance: they think private only blocks bad values, when it blocks every direct access whatever the value. Others say it compiles because both classes are in one file: they think private means private to the file, when it means private to the class. Lab DIY 1 produces the same compile error on a Student's fields, and where a private member is visible is MCQ material. -->
 
 ## Predict: does this compile?
 
 <!-- no-compile -->
 ```java
-class Account {
+class BankAccount {
     private double balance;
 }
 
 class Main {
     public static void main(String[] args) {
-        Account a = new Account();
-        a.balance = 50.0;                  // ?
+        BankAccount account = new BankAccount();
+        account.balance = 50.0;          // 50.0 is a sensible balance
     }
 }
 ```
 
-* **No** - `balance has private access in Account`. The compiler refuses the assignment.
-* That is the hook resolved: the 3 a.m. mystery write is now a **red underline before the program even runs**.
-* Remember: errors live at compile time or run time. `private` *drags this bug from run time to compile time* - from "found by a victim, weeks later" to "found by you, instantly".
+* **No.** The compiler stops with `error: balance has private access in BankAccount`.
+* `private` blocks every direct use from another class, whatever the value, even when both classes are in one file.
+* So the compiler now catches a wrong value before the program ever runs.
 
 ---
 
-<!-- Speaker notes: ~0:20. Mechanics movement. The recipe is mechanical on purpose - tempo up, this is muscle memory. -->
+<!-- Speaker notes: ~0:20. The recipe is mechanical, so take it at pace: it is muscle memory, and lab DIY 3 (Temperature) drills exactly this shape. Spend the time on this.email = email: leaving out "this." is the classic bug, because the parameter is assigned to itself and the instance variable stays null. -->
 
-## The recipe
+## How to encapsulate a class
 
-- Two steps, the same every time:
+- Two steps, the same for every class:
 
 ```java
 public class Student {
-    private String email;                  // 1. make every field private
+    private String email;                  // step 1: make the instance variable private
 
-    public String getEmail() {             // 2. a public getter to read it…
+    public String getEmail() {             // step 2: a public getter, to read it
         return email;
     }
 
-    public void setEmail(String email) {   //    …and a public setter to change it
+    public void setEmail(String email) {   // step 2: a public setter, to change it
         this.email = email;
     }
 }
 ```
 
-- `this.email` is the field; plain `email` is the parameter. `this.` breaks the tie when the names clash.
+- In the setter, `this.email` is the instance variable and `email` on its own is the parameter. `this.` tells them apart because they have the same name.
 
 ---
 
-## From the outside
+<!-- Speaker notes: ~0:22. Accessor and mutator are the formal names used in documentation and in MCQs. Demo the VS Code generator if time allows: it writes exactly the methods on the previous slide. -->
 
-- Callers never see the field - they knock:
+## Getter and setter methods
+
+- A **getter** returns the current value of a private instance variable. Its other name is an **accessor** method.
+- A **setter** changes the value of a private instance variable. Its other name is a **mutator** method.
+- Their names are `get` or `set` + the variable's name with a capital first letter: `getEmail()`, `setEmail(...)`.
+- Code in another class uses them like this:
 
 <!-- no-compile -->
 ```java
-Student s = new Student();          // Student as defined on the last slide
-s.setEmail("ada@example.com");      // write - through the gate
-System.out.println(s.getEmail());   // read - through the gate
+Student s = new Student();
+s.setEmail("ada@example.com");      // the setter stores the email
+System.out.println(s.getEmail());   // the getter returns it: prints ada@example.com
 ```
 
-- The ritual names: `get` / `set` + the field name, capitalised - `getEmail`, `setEmail`.
-- Formal words you'll meet in docs and exams: getters are **accessors**, setters are **mutators**.
-- Your IDE writes these for you: right-click → *Source Action…* → *Generate Getters and Setters*.
+- VS Code can write them for you: right-click inside the class → *Source Action...* → *Generate Getters and Setters*.
 
 ---
 
-<!-- Speaker notes: ~0:26. The heart of the lecture. Voice the objection with full sincerity - half the room is already thinking it. -->
+<!-- Speaker notes: ~0:25. Voice the objection sincerely: half the room is already thinking it. The next five slides answer it, one small class per reason. -->
 
-## The fair objection
+## Why not just make the variable public?
 
-- Look at that setter again. It checks nothing. It just… assigns.
+- A setter such as `setEmail` only stores the value it is given, so it can look no better than a public variable.
 
-* "So it's a public field with **extra steps**?"
-* Fair - *today*. But a plain setter is an **empty checkpoint**: the day you need rules, you staff it - and not one caller has to change.
-* A public field can never be upgraded. A gate can.
-* Three powers you get from routing everything through methods: **the guard**, **one-way glass**, **the disguise**.
+* The difference: every change now goes through **one method**. You can add rules to that method later, and the code that calls it does not change.
+* Getters and setters give you three things a public variable cannot:
+* **1. Validation**: a setter can check a value before it stores it.
+* **2. Read-only values**: give a variable a getter but no setter.
+* **3. Freedom to change the inside**: change how a class stores its data without changing the code that uses the class.
 
 ---
 
-## Power 1 - the guard (validation)
+<!-- Speaker notes: ~0:27. The rule lives inside the class, next to the data it protects, so it is written once. Lab section 4 does the same with a validateAge helper, and lab DIY 4 has students write a validateGrade check of their own. -->
+
+## Reason 1: a setter can check the value
 
 <!-- _class: code-sm -->
 
-- House rule: player usernames hold at most **10 characters**. Enforce it *where the data lives*:
+- Rule: a username can have at most **10 characters**. The setter makes sure of it:
 
 ```java
-public class Player {
+public class Person {
     private String username;
 
     public String getUsername() {
@@ -382,7 +443,7 @@ public class Player {
 
     public void setUsername(String username) {
         if (username.length() > 10) {
-            this.username = username.substring(0, 10);   // too long? keep the first 10
+            this.username = username.substring(0, 10);   // too long: keep only the first 10 characters
         } else {
             this.username = username;
         }
@@ -390,57 +451,68 @@ public class Player {
 }
 ```
 
-- Garbage is stopped **at the door**. No code anywhere can put an 11-character name in that field.
+- The only way to set `username` is through this setter, so no `Person` can ever hold a username longer than 10 characters.
 
 ---
 
-<!-- Speaker notes: ~0:30. Predict beat closing out Power 1. Expect some to say `theRedRhino` unchanged: they read `setUsername` as a plain assignment and never mentally run the `if` inside it, the exact skepticism `The fair objection` raised two slides ago about setters being pointless ceremony. The `no-compile` tag is only a fragment marker here, not a verdict - paste this under the `Player` class from the previous slide and it compiles and runs fine, printing `theRedRhin`. This is the guard paying off for real, and a direct MCQ target: trace the conditional, do not assume a setter is a no-op. -->
+<!-- Speaker notes: ~0:29. Predict beat. The common wrong answer is theRedRhino, unchanged: students read setUsername as a plain assignment and never run the if inside it. A few predict an exception, thinking substring fails on a long String. Count the 11 characters aloud, then trace the if. Validation inside setters is MCQ material. -->
 
 ## Predict: what prints?
 
+- In `Person`, `setUsername()` keeps only the first 10 characters of a longer username:
+
 <!-- no-compile -->
 ```java
-Player p = new Player();                // Player from the last slide
+Person p = new Person();
 p.setUsername("theRedRhino");           // 11 characters
 System.out.println(p.getUsername());
 ```
 
-* `theRedRhin` - the guard trimmed the 11th character on the way in.
-* The caller wrote one thing; the object stored the **legal version**. No `if` at the call site.
-* That `if` exists **once**, inside the setter - not 40,000 times across the codebase.
+* `theRedRhin`: `"theRedRhino"` has 11 characters, so the setter stored only the first 10.
+* The check is written **once**, inside the setter. The code that calls `setUsername()` needs no `if` of its own.
 
 ---
 
-## Power 2 - one-way glass (read-only)
+<!-- Speaker notes: ~0:31. Read-only is the simplest of the three reasons: leave the setter out. The compiler's message for the last line is "cannot find symbol", naming setStudentId; show it if you run this live. -->
+
+## Reason 2: no setter means read-only
 
 <!-- _class: code-sm -->
 
-- A public field is all-or-nothing: whoever can read it can **write** it.
-- Methods split the two. Provide the getter. **Withhold the setter.**
+- A student's ID number should never change after the student is created, so `Student` gets a getter for it but **no setter**:
 
 ```java
-public class Odometer {
-    private int km;
+public class Student {
+    private int studentId;
 
-    public int getKm() {                       // the world may look…
-        return km;
+    public Student(int studentId) {
+        this.studentId = studentId;        // the ID is set once, when the object is created
     }
 
-    public void drive(int distance) {          // …but change arrives only
-        if (distance > 0) { km += distance; }  //    through the rules
+    public int getStudentId() {
+        return studentId;
     }
 }
 ```
 
-- `km` is readable everywhere, writable nowhere - it can only ever count up, legally.
+<!-- no-compile -->
+```java
+Student s = new Student(1234);
+System.out.println(s.getStudentId());     // other classes can read the ID: prints 1234
+s.setStudentId(99);                       // compile error: there is no setStudentId method
+```
+
+- A getter with no setter makes a value **read-only** for every other class.
 
 ---
 
-## Power 3 - the disguise (swap the internals)
+<!-- Speaker notes: ~0:33. Version 1 is the plain recipe. Ask the room to remember the three lines that use Person: they come back, unchanged, on the next slide. -->
+
+## Reason 3: change how data is stored
 
 <!-- _class: code-sm -->
 
-- Version 1 stores middle names as one `String`:
+- Version 1 of `Person` stores all of a person's middle names in one `String`:
 
 ```java
 public class Person {
@@ -456,125 +528,127 @@ public class Person {
 }
 ```
 
-- The **public face** is just two signatures: `String getMiddleNames()` and `void setMiddleNames(String)`.
-- Requirements change: we now need the names individually. Time to gut the insides…
-
----
-
-## The disguise (continued)
-
-- Same face, new insides:
-
-```java
-public class Person {
-    private String[] middleNames = {};             // now an array!
-
-    public String getMiddleNames() {
-        return String.join(" ", middleNames);      // array → one String, on the way out
-    }
-
-    public void setMiddleNames(String names) {
-        this.middleNames = names.trim().split("\\s+");   // String → array, on the way in
-    }
-}
-```
-
-- Same two signatures - so **every caller compiles and runs, unchanged and unaware**.
-- A public field could never do this: its *type* is its contract. A method's contract is only its signature.
-
----
-
-<!-- Speaker notes: ~0:38. Capstone movement. Slow down: this class is the lab exercise and the exam staple. -->
-
-## `BankAccount`, done properly
-
-<style scoped>
-section pre { font-size: 17px !important; line-height: 1.25 !important; padding: 10px 18px !important; margin: 6px 0 !important; }
-section pre code { font-size: 17px !important; line-height: 1.25 !important; }
-</style>
-
-- Constructor sets the opening state; getters expose reads; **guards** rule every write:
-
-```java
-public class BankAccount {
-    private String owner;
-    private double balance;
-
-    public BankAccount(String owner, double openingBalance) {
-        this.owner = owner;
-        this.balance = openingBalance;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-    public double getBalance() {
-        return balance;
-    }
-    public void deposit(double amount) {
-        if (amount > 0) { balance += amount; }                    // guard: no fake deposits
-    }
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) { balance -= amount; }   // guard: no overdrafts
-    }
-}
-```
-
----
-
-## Look closer - there is no `setBalance`
-
-<div class="cap-scene solo">
-<div class="capsule">
-<div class="gates">
-<div class="gate">deposit(double)</div>
-<div class="gate">withdraw(double)</div>
-<div class="gate">getBalance()</div>
-<div class="gate no">setBalance - never built</div>
-</div>
-<div class="core">
-<div class="core-cap">private - sealed core</div>
-<div class="fld">double balance</div>
-<div class="fld">String owner</div>
-</div>
-</div>
-</div>
-
-- The most important gate is the one you **didn't build**: balance moves *only* through legal transactions.
-- Getters and setters are the common case, not the rule. The rule: **public methods = the operations you intend to allow** - nothing more.
-
----
-
-<!-- Speaker notes: ~0:43. Predict beat that exercises both guards in one trace. Expect `75.0` as the wrong answer: some will let `deposit(-50)` succeed - as if only `withdraw` needs bounds-checking, since an overdraft feels like the only real danger - landing on `50.0` before correctly blocking the `500` withdrawal and adding the `25`. The `no-compile` tag here just flags a fragment reusing `BankAccount` from two slides back, not broken code - it runs fine once appended to that class. This is the last confidence-builder before the next slide punctures it: the object stays valid through every guard here, the exact false security the escaping-reference twist exploits. -->
-
-## Predict: what prints?
-
-- Using `BankAccount` from two slides back:
+- Code in another class uses it like this:
 
 <!-- no-compile -->
 ```java
-BankAccount acct = new BankAccount("Anna", 100.00);
-acct.deposit(-50);
-acct.withdraw(500);
-acct.deposit(25);
-System.out.println(acct.getBalance());
+Person p = new Person();
+p.setMiddleNames("Mary Alice");
+System.out.println(p.getMiddleNames());           // prints Mary Alice
 ```
-
-* `125.0` - walk it: `deposit(-50)` fails the `amount > 0` guard → still `100.0`.
-* `withdraw(500)` fails `amount <= balance` → still `100.0`.
-* `deposit(25)` passes → `125.0`. The guards never announced themselves - the object simply **stayed valid**.
 
 ---
 
-<!-- Speaker notes: ~0:46. The twist. Give them real time to commit to 70 - the wrong answer is the whole lesson. -->
+<!-- Speaker notes: ~0:35. The misconception: students expect every caller to change when a private variable's type changes. Callers only ever see the method signatures, so nothing outside the class notices. split(" ") and String.join(" ", ...) do the conversion; keep the focus on the unchanged calls, not on those two methods. Changing the inside without breaking other code is the flexibility benefit, and MCQ material. -->
 
-## Predict: it's private, so it's safe… right?
+## Reason 3: version 2 stores an array
+
+<!-- _class: code-sm -->
+
+- Version 2 stores the middle names in an array. Only the inside of `Person` changes:
+
+```java
+public class Person {
+    private String[] middleNames;                      // {"Mary", "Alice"}
+
+    public String getMiddleNames() {
+        return String.join(" ", middleNames);          // array to one String: "Mary Alice"
+    }
+
+    public void setMiddleNames(String middleNames) {
+        this.middleNames = middleNames.split(" ");     // one String to an array
+    }
+}
+```
+
+* The getter and setter are called exactly as before, so the code that used version 1 still compiles and still prints `Mary Alice`.
+* Other classes depend only on the public methods. With a public `middleNames` variable, every class that used it would break when its type changed.
+
+---
+
+<!-- Speaker notes: ~0:38. The worked example for the hour: every idea so far in one class. Read it top to bottom: private data, the constructor, the getter, then the two methods that check before they change anything. -->
+
+## Coding example: BankAccount
+
+<!-- _class: code-sm -->
+
+- A complete encapsulated class: a private instance variable, a constructor, a getter, and two methods that check every change:
+
+```java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double openingBalance) {
+        this.balance = openingBalance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) { balance += amount; }                      // only a positive amount
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) { balance -= amount; } // never more than the balance
+    }
+}
+```
+
+---
+
+<!-- Speaker notes: ~0:40. The most important method in BankAccount is the one that is not written. Students who have just learned "a getter and a setter for every variable" over-apply it; this slide corrects that before the lab. -->
+
+## BankAccount has no setBalance()
+
+<div class="capsule">
+<span class="k">class BankAccount</span>
+<div class="ms">
+<div class="meth">deposit(double)</div>
+<div class="meth">withdraw(double)</div>
+<div class="meth">getBalance()</div>
+<div class="meth missing">setBalance(double): not written</div>
+</div>
+<div class="data"><small>private instance variable</small>double balance</div>
+</div>
+
+- The balance can only change through `deposit()` and `withdraw()`, and both check the amount first.
+- You do not have to write a getter and a setter for every variable. Write only the public methods the class should offer: a `setBalance()` would let any class set any balance again.
+
+---
+
+<!-- Speaker notes: ~0:42. Predict beat that runs both checks. Expect 75.0 from students who treat deposit(-50) as taking 50 out, and -425.0 from students who assume withdraw always runs. Walk each line against the check in its method; the object stays valid without the caller doing anything. -->
+
+## Predict: what prints?
+
+- In `BankAccount`, `deposit()` adds only a positive amount, and `withdraw()` takes money out only if the amount is positive and no more than the balance:
+
+<!-- no-compile -->
+```java
+BankAccount account = new BankAccount(100.0);
+account.deposit(-50);
+account.withdraw(500);
+account.deposit(25);
+System.out.println(account.getBalance());
+```
+
+* `125.0`.
+* `deposit(-50)` is ignored (not positive) and `withdraw(500)` is ignored (more than the balance), so the balance stays `100.0`.
+* `deposit(25)` is added: `100.0 + 25 = 125.0`.
+
+---
+
+<!-- Speaker notes: ~0:45. Give the room time to commit to 70: the wrong answer is the lesson. The faulty model is that private protects everything the variable leads to. It protects only the variable itself; the array it refers to can be changed by any code holding a reference to that array. -->
+
+## Predict: a getter that returns an array
 
 <!-- _class: code-sm -->
 
 ```java
 class Gradebook {
     private int[] scores = {70, 80, 90};
+
     public int[] getScores() {
         return scores;
     }
@@ -584,28 +658,46 @@ class Main {
     public static void main(String[] args) {
         Gradebook g = new Gradebook();
         int[] view = g.getScores();
-        view[0] = 0;                           // scribble on what the getter gave us
-        System.out.println(g.getScores()[0]);  // ?
+        view[0] = 0;                              // change the array the getter returned
+        System.out.println(g.getScores()[0]);     // what prints?
     }
 }
 ```
 
-* Prints **0**. The field was private - and the caller changed it anyway.
-* You know why: an array variable is an **arrow**. The getter handed out *the arrow to the sealed core*.
+* `0`. The private array changed, even though `scores` is `private`.
 
 ---
 
-## Patch the leak - hand out copies, not arrows
+<!-- Speaker notes: ~0:46. Recall from arrays that an array variable stores a reference, not the values. Point at both arrows reaching the same three boxes; that shared array is the whole bug. -->
 
+## Why it printed 0: one array, two variables
+
+- An array variable does not hold the values. It holds a **reference**: an arrow to where the array is in memory.
+- `return scores;` hands out a copy of that arrow, not a copy of the array. So `view` and `scores` point at the **same** array:
+
+<div class="refs">
+<div class="vars">
+<div class="var">scores <small>(private, in Gradebook)</small></div>
+<div class="var">view <small>(in main)</small></div>
+</div>
 <div class="mem">
-<div class="name">scores</div>
-<div class="name">view</div>
 <div class="cell hot"><span class="idx">0</span>0</div>
 <div class="cell"><span class="idx">1</span>80</div>
 <div class="cell"><span class="idx">2</span>90</div>
 </div>
+</div>
 
-<p class="legend">the leak: two arrows, ONE array - "view" reaches straight into the private boxes</p>
+<p class="legend">two variables, ONE array: view[0] = 0 changed the array that the private variable scores points at</p>
+
+* `private` stops other classes from using the variable `scores`. It does not stop them changing the array, once a getter has handed them an arrow to it.
+
+---
+
+<!-- Speaker notes: ~0:48. Lab DIY 4 has students see this leak (its test prints 0) and then fix it with Arrays.copyOf (it prints 88). Arrays.copyOf was met with arrays; here it gets its encapsulation job. -->
+
+## Fix: return a copy of the array
+
+<!-- _class: code-sm -->
 
 ```java
 import java.util.Arrays;
@@ -614,48 +706,57 @@ public class Gradebook {
     private int[] scores = {70, 80, 90};
 
     public int[] getScores() {
-        return Arrays.copyOf(scores, scores.length);   // new boxes - the core stays sealed
+        return Arrays.copyOf(scores, scores.length);   // a new array with the same values
     }
 }
 ```
 
-- A capsule is only sealed if its gates never hand out **arrows to the inside**. Return copies of mutable state - this is called a *defensive copy*.
+<div class="rows">
+<div class="row"><div class="var">scores</div><div class="mem"><div class="cell">70</div><div class="cell">80</div><div class="cell">90</div></div></div>
+<div class="row"><div class="var">view</div><div class="mem"><div class="cell hot">0</div><div class="cell">80</div><div class="cell">90</div></div></div>
+</div>
+
+<p class="legend">two variables, two arrays: view[0] = 0 changes only the copy, and the private array stays {70, 80, 90}</p>
+
+- A copy returned like this is called a **defensive copy**. Return one whenever a getter would otherwise hand out a private array.
 
 ---
 
-<!-- Speaker notes: ~0:52. Landing movement - backward link to Strings, forward link to inheritance, then benefits and out. -->
+<!-- Speaker notes: ~0:50. A class the students already use turns out to be encapsulated: private data and no methods that change it, so a String can never change. -->
 
-## You've been trusting a capsule for weeks
+## String: an encapsulated class
 
-- `String` is encapsulation taken to the limit: its characters live in a private array - and there is **no setter at all**.
+- `String` keeps its characters in a **private** array, and it has **no method that changes them**:
 
 ```java
 String name = "ada";
 String loud = name.toUpperCase();
 
-System.out.println(name);   // ada - the original is untouched
-System.out.println(loud);   // ADA - every "change" is a new String
+System.out.println(name);   // ada - the original String has not changed
+System.out.println(loud);   // ADA - toUpperCase() returned a new String
 ```
 
-- That's *why* Strings never change: **immutable = a capsule with no write gates**.
-- No guards to get wrong, nothing to leak - which is what makes Strings safe to share anywhere. Sealing data isn't paranoia; it's what makes objects trustworthy.
+- An object that can never change after it is created is called **immutable**. `String` is immutable because of encapsulation: private data, and no setters.
 
 ---
 
-## What the wall buys you
+<!-- Speaker notes: ~0:52. These three benefits, by these names, are what MCQ questions on encapsulation's benefits ask about. Pair each benefit with its example from this lecture. -->
 
-- **Protection** - the guard: invalid state is stopped at the door, once, where the data lives.
-- **Flexibility** - the disguise: internals can be rebuilt while every caller compiles on, unaware.
-- **Maintainability** - one address: when `balance` is wrong, the suspect list is *one class*, not 40,000 lines.
-* Next pillar: the wall grows a family entrance - **inheritance** lets one class build on another, and `protected`, the modifier we parked today, finally earns its row in the matrix.
+## Benefits of encapsulation
+
+- **Data protection:** methods can check a value before storing it, so an object never holds invalid data.
+  - *Example: the username in `Person` is never longer than 10 characters.*
+- **Flexibility:** you can change how a class stores its data without breaking the code that uses the class, as long as its public methods stay the same.
+  - *Example: `Person` moved its middle names from a `String` to an array.*
+- **Maintainability:** each class looks after its own data, so the code is organised and easier to understand, and a change to a class stays inside that class.
 
 ---
 
 ## Summary
 
-- Encapsulation = **bundle** state and behaviour into a class + **hide** the state: `private` fields behind a small public face - *data hiding*.
-- Four visibility levels: `private` → (default) → `protected` → `public`. Fields start `private`, always; `protected` waits for inheritance.
-- The recipe: private fields, public `getX()` / `setX(...)`, with `this.field` to out-rank a clashing parameter name.
-- Plain getters and setters are empty checkpoints you staff later: the **guard** validates, **one-way glass** gives a getter and withholds the setter, the **disguise** swaps internals behind unchanged signatures.
-- Sometimes the best gate is none at all - `deposit`/`withdraw` with no `setBalance` - and gates must never hand out arrows to private arrays: return **defensive copies**.
-- Immutable `String` is the extreme case: a sealed capsule with no write gates - encapsulation at maximum.
+- **Encapsulation** bundles the instance variables and the methods that use them into one class, and hides the instance variables. Hiding them is called **data hiding**.
+- Java has 3 access modifier keywords and 4 levels of access: `private` (same class only), default (no keyword: same package), `protected` (same package and subclasses) and `public` (everywhere).
+- To encapsulate a class, make its instance variables `private` and add public **getters** (accessors) and **setters** (mutators).
+- Getters and setters let a class **validate** values, make a value **read-only** (a getter but no setter), and **change how it stores its data** without breaking other code.
+- Write only the methods a class needs: `BankAccount` has no `setBalance()`.
+- A getter should never return a private array itself: return a **defensive copy** made with `Arrays.copyOf`.

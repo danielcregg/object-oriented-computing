@@ -23,6 +23,9 @@ section {
     #DED8C9 86px, #DED8C9 88px,
     #FBFAF7 88px, #FBFAF7 100%);
   padding: 56px 72px 56px 122px;
+  /* Cascadia Code would draw <= as a single "≤" glyph and ... as "…";
+     beginners copy what they see, so every character shows as typed */
+  font-variant-ligatures: none;
   justify-content: flex-start !important;
   align-content: flex-start !important;
   align-items: stretch !important;
@@ -64,6 +67,13 @@ section pre code .hljs-string { color: #F0B26B; }
 section pre code .hljs-keyword { color: #7FB4D8; }
 section pre code .hljs-title, section pre code .hljs-built_in { color: #A8D3EE; }
 section pre code .hljs-comment { color: #7C8B99; }
+/* the default theme colours these tokens for a light background (dark
+   red types, dark blue numbers and names), unreadable on this dark panel */
+section pre code .hljs-type { color: #A8D3EE; }
+section pre code .hljs-number { color: #B5CEA8; }
+section pre code .hljs-literal { color: #7FB4D8; }
+section pre code .hljs-meta { color: #C9A7E8; }
+section pre code .hljs-operator, section pre code .hljs-variable, section pre code .hljs-params { color: #E8ECF1; }
 section table { margin: 10px 0 18px 0; border-collapse: collapse; font-size: 24px; }
 section table th {
   font-family: 'Cascadia Code', Consolas, monospace; font-weight: 600;

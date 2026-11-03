@@ -115,14 +115,13 @@ slot. Examines the weeks since MCQ 1: arrays, strings, and encapsulation.
 [Slides](../lectures-and-labs/week09/inheritance-lecture.md) ·
 [Lab](../lectures-and-labs/week09/inheritance_lab/README.md)
 
-Definition and terminology (superclass/subclass, is-a), implementing
-inheritance with `extends`, and a worked coding example. The `Object`
-class at the root of every hierarchy. The types of inheritance (single,
-multilevel, hierarchical — and why Java does multiple inheritance only via
-interfaces), class-hierarchy case studies (vehicles, animals), and how to
-identify a genuine inheritance situation. Constructors under inheritance
-and the `super` keyword, invoking superclass constructors, benefits, and
-key Java facts.
+Definition and terminology (superclass/subclass, is-a, the UML class
+diagram), implementing inheritance with `extends`, and why private members
+are not inherited (`protected` as the alternative). The `Object` class at
+the root of every hierarchy. The types of inheritance (single, multilevel,
+hierarchical and hybrid, and why Java has multiple inheritance only through
+interfaces), a vehicle hierarchy that mixes them, and the is-a / has-a test.
+Constructors under inheritance and the `super` keyword, then the benefits.
 
 ## Polymorphism
 
@@ -146,9 +145,9 @@ What abstraction is and how it differs from encapsulation, with real-life
 examples. Java's two mechanisms: abstract classes (abstract vs concrete
 classes and methods, the consequences of declaring a method abstract) and
 interfaces (definition, implementation, what an interface can contain,
-real-world examples). The comparison ladder — class vs interface, interface
-vs abstract class, concrete vs abstract vs interface — plus why interfaces
-exist and the benefits of abstraction.
+implementing several at once). One table comparing a concrete class, an
+abstract class and an interface, when to use which, and the benefits of
+abstraction.
 
 ## MCQ 3 *(one third)*
 

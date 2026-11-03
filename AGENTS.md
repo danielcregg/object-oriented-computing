@@ -196,9 +196,10 @@ instructions, scripts, workflows and the practice bank alone.
 - **Size a lab to a two-hour slot, and judge it by COMPOSITION, not
   length.** The number that matters is the fraction of a DIY's numbered
   steps that ask the student to write their own code, rather than handing
-  them a fence to copy. Across the eight labs that ratio now runs 94–100%,
-  except abstraction at 70% (it was 38%, with 163 supplied lines to type,
-  until its exercises were rewritten as specifications). Supplying a class is
+  them a fence to copy. Across the eight labs that ratio now runs 94–100%:
+  abstraction, the outlier, was 38% (163 supplied lines to type) until its
+  exercises were rewritten as specifications, then 70%, and 95% since its
+  rewrite of 2026-11-03. Supplying a class is
   fine as *starting material* an exercise then builds on; it is not fine as
   the exercise. When a lab runs long, cut transcription before you cut
   exercises. **A lab has no extension, bonus or optional exercises or
@@ -228,6 +229,13 @@ instructions, scripts, workflows and the practice bank alone.
   over 5 exercises (about 1h33) and went to 68 over 4 (about 1h08): validation
   and defensive copies, the two gates of one capsule, became one exercise on
   one class, and a course-code check that needed a regular expression went.
+  The inheritance lab held 199 typed lines over 7 exercises (about 2h13) and
+  went to 106 (about 1h35), every DIY number kept: unused getters and setters
+  went, the Vehicle family grows by one small class per exercise, constructors
+  first appear in DIY 6, and the private-access and missing-`super()` errors
+  are read from the compiler. The abstraction lab held 239 typed lines over 5
+  exercises (about 2h21) and went to 109 (about 1h29), every DIY number kept:
+  the exercises now build on each other, and DIY 5 keeps the payroll decision.
   Recalibrate these numbers from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–10, sub-heading

@@ -187,9 +187,10 @@ instructions, scripts, workflows and the practice bank alone.
   number. Renumber sections if you must, never DIYs (that repo and the
   lectures' speaker notes name them), and grep the labs for prose pointers
   such as "section 4" when you do: `check_links.py` reads anchors, not prose.
-  The one time DIYs were renumbered was arrays, 13 to 10 on 2026-10-05, before
-  any student reached that week; the solutions repo and one speaker note
-  moved with it.
+  DIYs have been renumbered twice, each time before any student reached the
+  lab: arrays went from 13 to 10 on 2026-10-05 (the solutions repo and one
+  speaker note moved with it), and encapsulation's DIY 5 merged into DIY 4
+  on 2026-11-03.
   **Every DIY has a hint** — six were missing and were written on
   2026-08-10; do not add an exercise without one.
 - **Size a lab to a two-hour slot, and judge it by COMPOSITION, not
@@ -223,8 +224,11 @@ instructions, scripts, workflows and the practice bank alone.
   strings lab held 202 typed lines over 8 exercises (about 2h20 by that bound)
   and went to 90 (about 1h33), every DIY number kept: its two StringBuilder
   parts, an exercise and a guided copy-counting method, became one simpler
-  exercise, and the rest shrank. Recalibrate these numbers from a real lab
-  session.
+  exercise, and the rest shrank. The encapsulation lab held 121 typed lines
+  over 5 exercises (about 1h33) and went to 68 over 4 (about 1h08): validation
+  and defensive copies, the two gates of one capsule, became one exercise on
+  one class, and a course-code check that needed a regular expression went.
+  Recalibrate these numbers from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–10, sub-heading
   vocabulary differs per lab (`Code Example` / `Real-World Example` /

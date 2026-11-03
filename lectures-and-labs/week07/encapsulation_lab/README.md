@@ -8,14 +8,13 @@
 - Use the `public` and `private` access modifiers to control the visibility of class members, and see the effect first-hand in VS Code's IntelliSense.
 - Hide an object's data behind private fields so external code cannot corrupt its state.
 - Provide controlled read and write access to private fields with getter and setter methods.
-- Validate data in both constructors and setters, reusing the validation logic through private helper methods.
+- Validate data in both constructors and setters through one private helper method, and return a defensive copy so that a getter never hands out a private array.
 
 ## Table of Contents
 1. [Access Modifiers](#1-access-modifiers)
 2. [Data Hiding](#2-data-hiding)
 3. [Getters and Setters](#3-getters-and-setters)
-4. [Data Validation](#4-data-validation)
-5. [Defensive Copies](#5-defensive-copies)
+4. [Validation and Defensive Copies](#4-validation-and-defensive-copies)
 
 ## Getting started
 
@@ -254,225 +253,57 @@ System.out.println("Temperature: " + temp.getCelsius() + "°C");
 
 </details>
 
-## 4. Data Validation
+## 4. Validation and Defensive Copies
 
-Validation ensures that the data inside an object remains correct and meaningful. When encapsulating data, validation can occur in different stages of an object's lifecycle:
- - **Constructor validation** ensures that objects are created in a valid state from the beginning.
- - **Setter validation** ensures only valid data is stored when fields are modified after object creation.
+Private fields leave a class with two gates to guard: what comes **in** through its constructor and setters, and what goes **out** through its getters.
 
-This is where encapsulation truly shines - by controlling access through methods, we can ensure data is always valid before it's stored.
+### Guarding the way in: validation
 
-### Example 1: Validation logic in a constructor and setter (Code Duplication)
-```java
-public class Student {
-    private int age;
-
-    // Constructor with validation logic
-    public Student(int age) {
-        if (age < 16 || age > 100) {
-            System.out.println("Invalid age input: must be between 16 and 100 inclusive. Age set to 16.");
-            this.age = 16;   // fall back to a valid age so the object is never left invalid
-        } else {
-            this.age = age;
-        }
-    }
-
-    // Setter with validation logic
-    public void setAge(int age) {
-        if (age < 16 || age > 100) {
-            System.out.println("Invalid age input: must be between 16 and 100 inclusive. Age set to 16.");
-            this.age = 16;
-        } else {
-            this.age = age;
-        }
-    }
-    
-    public int getAge() {
-        return age;
-    }
-} 
-```
-
-**Problem**: Notice how the validation logic is duplicated in both the constructor and setter. This violates the DRY (Don't Repeat Yourself) principle.
-
-### Example 2: Using Validation Helpers (Best Practice)
-
-Using helper methods avoids duplication of validation logic between constructors and setters, improving maintainability and reducing bugs.  
+Validate in the constructor, so that an object starts valid, and in every setter, so that it stays valid. Write the check once, in a private helper method, and call it from both - one rule, in one place:
 
 ```java
 public class Student {
     private int age;
 
-    /* Constructor is a kind of setter too. It initially sets the value of object fields. It too
-       can use the same validation as the setter method */  
     public Student(int age) {
         this.age = validateAge(age);
     }
-    
+
     public void setAge(int age) {
         this.age = validateAge(age);
     }
 
-    // Private internal validation method just usable in this class by the constructor and the setter  
+    // One check, used by the constructor and the setter alike
     private int validateAge(int age) {
         if (age < 16 || age > 100) {
-            System.out.println("Invalid age input: must be between 16 and 100 inclusive. Age set to 16.");
-            return 16; // If invalid input is received we must return a valid age to keep the object state valid.
+            System.out.println("Invalid age " + age + ": must be between 16 and 100. Age set to 16.");
+            return 16;   // fall back to a valid age so the object is never left invalid
         }
         return age;
     }
-    
+
     public int getAge() {
         return age;
     }
 }
 ```
 
-### Visual Representation
-```mermaid
-graph TD
-    A[Input Data] -->|Validate| B{Valid?}
-    B -->|Yes| C[Update Field]
-    B -->|No| D[Print Error]
-    
-    E[Constructor/Setter] -->|Uses| F[Validation Helper]
-    F -->|Valid| G[Update Field]
-    F -->|Invalid| H[Print Error]
-```
+### Guarding the way out: defensive copies
 
-### DIY 4: Grade book
+A getter can undo all of that. When a private field is an array, a getter that returns it hands the caller an arrow to the object's own array, not a copy of the values:
 
-Create a `Grade` class that:
-
-1. Has these private fields:
-   - `studentName` (String)
-   - `numericGrade` (int)
-   - `courseCode` (String)
-2. Implements these validation helper methods:
-   - `validateStudentName(String name)` - Returns the name if not empty, otherwise returns "Unknown" and prints an error
-   - `validateGrade(int grade)` - Returns the grade if within range (0-100), otherwise returns 0 and prints an error
-   - `validateCourseCode(String code)` - Returns the code if it matches a pattern like "CS101" (2-4 letters followed by 3 digits), otherwise returns "UNKNOWN" and prints an error
-3. Uses the helpers in both:
-   - the constructor (which should accept all three parameters)
-   - the setter methods
-4. Provides getter methods for all fields.
-
-Example structure:
-
-```java
-public class Grade {
-    private String studentName;
-    private int numericGrade;
-    private String courseCode;
-
-    // TODO: Add constructor that uses validation helpers
-
-    // TODO: Add getters for all fields
-
-    // TODO: Add setters that use validation helpers
-
-    // TODO: Add validation helper methods (private)
-}
-```
-
-Then test your `Grade` class in `Main.java`:
-
-5. Create a valid `Grade` object.
-6. Create an invalid `Grade` object (with a grade of 150).
-7. Use setters to try setting invalid values.
-8. Use getters to display the current state.
-
-**Expected output**
-
-```text
-=== Valid Grade ===
-Student: John Doe
-Grade: 85
-Course: CS101
-
-=== Invalid Grade (150) ===
-Invalid grade: must be between 0 and 100. Grade set to 0.
-Student: Jane Smith
-Grade: 0
-Course: MATH201
-
-=== Testing Invalid Setters ===
-Invalid student name: cannot be empty. Name set to "Unknown".
-Invalid grade: must be between 0 and 100. Grade set to 0.
-Invalid course code format. Code set to "UNKNOWN".
-Student: Unknown
-Grade: 0
-Course: UNKNOWN
-```
-
-<details>
-<summary>Hint</summary>
-
-Example test code for your `main` method:
-
-<!-- no-compile -->
-```java
-// Valid grade
-Grade grade1 = new Grade("John Doe", 85, "CS101");
-System.out.println("=== Valid Grade ===");
-System.out.println("Student: " + grade1.getStudentName());
-System.out.println("Grade: " + grade1.getNumericGrade());
-System.out.println("Course: " + grade1.getCourseCode());
-
-// Invalid grade (150)
-System.out.println("\n=== Invalid Grade (150) ===");
-Grade grade2 = new Grade("Jane Smith", 150, "MATH201");
-System.out.println("Student: " + grade2.getStudentName());
-System.out.println("Grade: " + grade2.getNumericGrade());
-System.out.println("Course: " + grade2.getCourseCode());
-
-// Testing invalid setters
-System.out.println("\n=== Testing Invalid Setters ===");
-Grade grade3 = new Grade("Bob Jones", 75, "ENG202");
-grade3.setStudentName("");
-grade3.setNumericGrade(-50);
-grade3.setCourseCode("INVALID");
-System.out.println("Student: " + grade3.getStudentName());
-System.out.println("Grade: " + grade3.getNumericGrade());
-System.out.println("Course: " + grade3.getCourseCode());
-```
-
-</details>
-
-## 5. Defensive Copies
-
-Sections 1-4 hid every field behind `private` and routed every read and write through a method. That closes the front door - but there is a side door hiding in plain sight. If a private field is an array (or any other mutable object) and a getter returns that field directly, the caller does not receive a snapshot of the data - they receive the exact array the object uses internally. Every access still goes through the getter, and no code anywhere ever assigns to the field directly - yet mutating that array from the outside changes the private field too.
-
-### Example: An Array Field That Leaks
 ```java
 public class Gradebook {
     private int[] scores = {70, 80, 90};
 
     public int[] getScores() {
-        return scores;
+        return scores;   // the caller gets the SAME array
     }
 }
 ```
 
-### What Can Go Wrong?
-The getter looks safe - `scores` is `private`, and `getScores()` is the only way to reach it. But an array variable does not hold values, it holds an **arrow** pointing at them. `getScores()` hands the caller that exact arrow, not a copy of what it points to:
+After `int[] view = gradebook.getScores();` and `view[0] = 0;`, the private field has changed: `gradebook.getScores()[0]` prints `0`, although no code ever assigned to `scores` and no check ever ran. The fix is to hand out a **defensive copy**, a new array with the same values, so that the caller can only ever change its own array:
 
-```java
-class Main {
-    public static void main(String[] args) {
-        Gradebook gradebook = new Gradebook();
-        int[] view = gradebook.getScores();
-
-        view[0] = 0;                            // scribble on what the getter gave us
-
-        System.out.println(gradebook.getScores()[0]);
-    }
-}
-```
-
-No line here ever writes `gradebook.scores`. No compiler error, no exception - `gradebook.getScores()[0]` now prints `0`, not `70`. The private field changed anyway.
-
-### The Solution: Return a Copy
 ```java
 import java.util.Arrays;
 
@@ -480,69 +311,43 @@ public class Gradebook {
     private int[] scores = {70, 80, 90};
 
     public int[] getScores() {
-        return Arrays.copyOf(scores, scores.length);   // new array - the original stays sealed
+        return Arrays.copyOf(scores, scores.length);   // a new array: the original stays sealed
     }
 }
 ```
 
-`Arrays.copyOf` builds a brand-new array holding the same values and hands out an arrow to *that* instead. The caller can still scribble on the array it received - but that array is no longer the one `Gradebook` keeps for itself. Returning a copy of mutable state like this is called a **defensive copy**.
+### DIY 4: Report card
 
-### Visual Representation
-```mermaid
-graph TD
-    A["getScores() returns scores directly"] -->|"view is the SAME array"| B["view[0] = 0"]
-    B -->|"mutates the shared array"| C["private scores field changes too - LEAK"]
-    D["getScores() returns Arrays.copyOf(scores, ...)"] -->|"view is a NEW array"| E["view[0] = 0"]
-    E -->|"mutates only the copy"| F["private scores field is unaffected - SEALED"]
-```
+Create a `ReportCard` class that guards both gates:
 
-### DIY 5: Report card leak
+1. Give it a private field `int[] grades`.
+2. Add a private helper `int validateGrade(int grade)` that returns the grade when it is between 0 and 100; otherwise it prints `Invalid grade <grade>: must be between 0 and 100. Set to 0.` and returns 0.
+3. Add a constructor that takes an `int[]` of grades, makes `grades` a new array of the same length, and fills it by passing each value through `validateGrade`.
+4. Add `setGrade(int index, int grade)`, which stores `validateGrade(grade)` at that index.
+5. Add `getGrades()`, returning the `grades` field itself for now.
 
-**Part 1: Build the leak**
+Then test it in `Main.java`'s `main`:
 
-1. Create a `ReportCard` class with a private field `int[] grades` initialized to `{88, 91, 76}`.
-2. Add a getter `getGrades()` that returns the `grades` field directly.
-3. In `Main.java`'s `main` method, create a `ReportCard` object.
-4. Print `reportCard.getGrades()[0]` - this is the value before anything touches it.
-5. Call `getGrades()`, store the result in a local `int[] view`, then set `view[0] = 0;`.
-6. Print `reportCard.getGrades()[0]` again. Even though no code anywhere wrote `reportCard.grades = ...`, the private field changed.
-
-**Part 2: Patch it with a defensive copy**
-
-7. Add `import java.util.Arrays;` to the top of your `ReportCard` file.
-8. Change `getGrades()` so it returns `Arrays.copyOf(grades, grades.length)` instead of `grades` directly.
-9. Run the exact same lines from Part 1 (steps 3-6) again, unchanged.
-10. Compare the two runs: the second `getGrades()[0]` no longer changes, because `view` now points at a copy, not the original array.
+6. Create a `ReportCard` from `new int[] {88, 150, 76}`, then call `setGrade(2, -5)`.
+7. Print the grades with `Arrays.toString(card.getGrades())`, labelled as shown below.
+8. Leak test: store `card.getGrades()` in an `int[] view`, set `view[0] = 0;`, then print `card.getGrades()[0]`. It prints `0`: the private array changed from outside, past every check.
+9. Change `getGrades()` to return `Arrays.copyOf(grades, grades.length)` and run again. The leak test now prints `88`.
 
 **Expected output**
 
 ```text
-=== Before the fix ===
-Before: 88
-After:  0
-
-=== After the fix ===
-Before: 88
-After:  88
+Invalid grade 150: must be between 0 and 100. Set to 0.
+Invalid grade -5: must be between 0 and 100. Set to 0.
+Grades: [88, 0, 0]
+After the leak test: 88
 ```
+
+*This is the run after step 9's fix; before it, the last line prints `0`.*
 
 <details>
 <summary>Hint</summary>
 
-Example test code for your `main` method - run it once against the leaky `ReportCard`, then again, unchanged, against the patched one:
-
-<!-- no-compile -->
-```java
-ReportCard reportCard = new ReportCard();
-System.out.println("Before: " + reportCard.getGrades()[0]);
-
-int[] view = reportCard.getGrades();
-view[0] = 0;
-
-System.out.println("After:  " + reportCard.getGrades()[0]);
-```
-
-The only thing that changes between Part 1 and Part 2 is the body of `getGrades()` inside `ReportCard` - this test code stays identical both times.
+`validateGrade` has the same shape as `validateAge` above: an `if` that prints the message and returns `0`, otherwise `return grade;`. In the constructor, `grades = new int[values.length];` makes the new array, then a `for` loop stores `validateGrade(values[i])` in each box - and because it is a new array, the caller's own array is never shared either. `Main.java` needs `import java.util.Arrays;` for `Arrays.toString`, and so does `ReportCard` once its getter returns `Arrays.copyOf(grades, grades.length)`. Before the fix, `view` and `grades` are two arrows to ONE array, which is why writing through `view` changes the field.
 
 </details>
 
@@ -551,7 +356,6 @@ This lab covered the essential concepts of encapsulation in Java:
 1. **Access modifiers** and their effect on visibility - seeing how `public` and `private` control what can be accessed
 2. **Data hiding** using private fields - understanding why we protect our data
 3. **Controlled access** through getters and setters - learning how to safely expose data
-4. **Data validation** for maintaining integrity - ensuring data remains valid throughout an object's lifecycle
-5. **Defensive copies** of array fields - returning a copy so callers cannot change what is inside
+4. **Validation and defensive copies** - guarding what comes in (the constructor and setters, through one private helper) and what goes out (getters that return copies of arrays)
 
 By mastering these concepts, you can write more robust, maintainable, and secure Java applications. Encapsulation is not just a good practice - it's essential for professional software development.

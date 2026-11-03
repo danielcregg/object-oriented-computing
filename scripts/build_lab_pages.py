@@ -115,6 +115,8 @@ STYLE = """<style>
   pre code .hljs-title, pre code .hljs-built_in { color: #A8D3EE; }
   pre code .hljs-comment { color: #7C8B99; }
   pre.mermaid { background: #FFFFFF; border: 1px solid var(--rule); text-align: center; }
+  /* diagram arrows animate through linkStyle; a reader who asks for less motion gets them still */
+  @media (prefers-reduced-motion: reduce) { pre.mermaid svg * { animation: none !important; } }
   table { border-collapse: collapse; margin: 14px 0; font-size: 15.5px; }
   th { font-family: var(--mono); text-align: left; color: var(--slate);
        border-bottom: 2px solid var(--ink); padding: 7px 22px 7px 6px; }

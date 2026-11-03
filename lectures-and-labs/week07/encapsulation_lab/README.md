@@ -78,12 +78,29 @@ public class BankAccount {
 
 ### Visual Representation
 ```mermaid
-graph LR
-    A[Main Class] -->|public balance| B[Can Access Directly]
-    A -->|private balance| C[Cannot Access Directly]
-    A -->|public methods| D[Must Use Methods]
-    D -->|Controlled Access| E[private balance]
+flowchart TB
+    M["🧑‍💻 Main"]
+    subgraph acct ["BankAccount object"]
+        D["🚪 public deposit()<br/>🚪 public getBalance()"]
+        B["🔒 private balance"]
+    end
+    M -- "account.balance = -500<br/>❌ does not compile" --x B
+    M -- "✅ account.deposit(100)" --> D
+    D -- "only if amount > 0" --> B
+    classDef caller fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    classDef gate fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+    classDef vault fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef check fill:#ede9fe,stroke:#7c3aed,stroke-width:1.5px,color:#4c1d95
+    classDef copy fill:#d1fae5,stroke:#059669,stroke-width:1.5px,color:#064e3b
+    class M caller
+    class D gate
+    class B vault
+    style acct fill:#94a3b81f,stroke:#94a3b8,stroke-dasharray:4 3,color:#64748b
+    linkStyle 0 stroke:#dc2626,stroke-width:2px,stroke-dasharray:5 4
+    linkStyle 1,2 stroke:#059669,stroke-width:2px,stroke-dasharray:9 5,stroke-dashoffset:900,animation:dash 25s linear infinite
 ```
+
+*How to read the diagrams in this lab: blue 🔒 boxes are private data, amber 🚪 boxes are public methods and grey boxes are code outside the class. A moving green arrow is a way in that works; a red dashed arrow ending in ✕ is one the compiler refuses.*
 
 ### DIY 1: Access modifier demonstration
 
@@ -152,10 +169,30 @@ public class Counter {
 
 ### Visual Representation
 ```mermaid
-graph TD
-    A[External Code] -->|Cannot Access| B[private count]
-    A -->|Can Access| C[public methods]
-    C -->|Can Access| B
+flowchart TB
+    X["🧑‍💻 External code"]
+    subgraph counter ["Counter object"]
+        I["🚪 public increment()"]
+        S["🚪 public displayCount()"]
+        C["🔒 private count"]
+    end
+    X -- "counter.count = 99<br/>❌ does not compile" --x C
+    X -- "✅ increment()" --> I
+    I -- "count++" --> C
+    X -- "✅ displayCount()" --> S
+    S -. "reads" .-> C
+    classDef caller fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    classDef gate fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+    classDef vault fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef check fill:#ede9fe,stroke:#7c3aed,stroke-width:1.5px,color:#4c1d95
+    classDef copy fill:#d1fae5,stroke:#059669,stroke-width:1.5px,color:#064e3b
+    class X caller
+    class I,S gate
+    class C vault
+    style counter fill:#94a3b81f,stroke:#94a3b8,stroke-dasharray:4 3,color:#64748b
+    linkStyle 0 stroke:#dc2626,stroke-width:2px,stroke-dasharray:5 4
+    linkStyle 1,2 stroke:#059669,stroke-width:2px,stroke-dasharray:9 5,stroke-dashoffset:900,animation:dash 25s linear infinite
+    linkStyle 3 stroke:#059669,stroke-width:2px
 ```
 
 ### DIY 2: Secret message
@@ -213,10 +250,20 @@ public class Person {
 ### Visual Representation
 ```mermaid
 sequenceDiagram
-    External Code->>+Person: setName("John")
-    Person->>-Person: name = "John"
-    External Code->>+Person: getName()
-    Person-->>-External Code: "John"
+    autonumber
+    participant E as 🧑‍💻 External code
+    participant P as 👤 Person (🔒 private name)
+    rect rgba(217, 119, 6, 0.15)
+        Note over E,P: ✏️ Write through the setter
+        E->>+P: setName("John")
+        P->>P: name = "John"
+        P-->>-E: returns
+    end
+    rect rgba(5, 150, 105, 0.15)
+        Note over E,P: 📖 Read through the getter
+        E->>+P: getName()
+        P-->>-E: "John"
+    end
 ```
 
 ### DIY 3: Temperature converter
@@ -314,6 +361,33 @@ public class Gradebook {
         return Arrays.copyOf(scores, scores.length);   // a new array: the original stays sealed
     }
 }
+```
+
+### Visual Representation
+
+```mermaid
+flowchart TB
+    IN["✏️ constructor<br/>setGrade()"]
+    V{"validateGrade<br/>0 to 100?"}
+    G["🔒 private int[] grades"]
+    OUT["🚪 getGrades()"]
+    U["🧑‍💻 Main"]
+    IN --> V
+    V -- "✅ valid" --> G
+    V -- "❌ invalid: 0 instead" --> G
+    G -- "📋 Arrays.copyOf" --> OUT
+    OUT -- "only a copy" --> U
+    classDef caller fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    classDef gate fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+    classDef vault fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef check fill:#ede9fe,stroke:#7c3aed,stroke-width:1.5px,color:#4c1d95
+    classDef copy fill:#d1fae5,stroke:#059669,stroke-width:1.5px,color:#064e3b
+    class U caller
+    class IN,OUT gate
+    class V check
+    class G vault
+    linkStyle 0,1,3,4 stroke:#059669,stroke-width:2px,stroke-dasharray:9 5,stroke-dashoffset:900,animation:dash 25s linear infinite
+    linkStyle 2 stroke:#dc2626,stroke-width:2px
 ```
 
 ### DIY 4: Report card

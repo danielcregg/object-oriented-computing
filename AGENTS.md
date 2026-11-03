@@ -413,9 +413,25 @@ instructions, scripts, workflows and the practice bank alone.
   look still overrides them in its own `<style>`, which wins because it
   comes after the theme. The only tracked deck image is week-01's
   About-Me banner: the lecturer's ATU work contact details, kept on
-  purpose so students can reach him. Lab READMEs use
-  ```mermaid fences, rendered natively by GitHub and client-side on the
-  lab pages.
+  purpose so students can reach him.
+  Lab READMEs use ```mermaid fences, which render in three places: the lab
+  page (client-side, the Mermaid version pinned in `build_lab_pages.py`, theme
+  neutral on a white panel), VS Code's built-in Markdown preview (its own
+  bundled Mermaid, themed to match the editor, light or dark) and GitHub (a
+  version we do not control). So colour with `classDef`/`class`, `style` and
+  `linkStyle`, giving every node its own fill, border and text colour so that
+  it reads on white and dark backgrounds alike; use emoji for icons (no icon
+  font loads in these renderers); and turn a chart `flowchart TB` once
+  left-to-right would run past about 700px, or the lab page shrinks its text.
+  Animate an arrow only through `linkStyle` (`stroke-dasharray:9
+  5,stroke-dashoffset:900,animation:dash 25s linear infinite`), never with
+  edge ids (`A e1@--> B` with `e1@{ animate: true }`): a Mermaid older than
+  11.5 cannot parse those and loses the whole diagram, while the `linkStyle`
+  form simply draws a still dashed arrow there. The encapsulation lab's
+  diagrams set the colour language: grey for code outside the class, amber for
+  public methods, blue for private data, purple for a check, green arrows for
+  the way in that works, and a red dashed arrow ending in an x for access the
+  compiler refuses.
 - Topic decks (weeks 2+) share one flow: title (lead + kicker) →
   problem-first hook (1-2 slides) → "the idea" → agenda → context (the
   four-pillars strip on OOP-pillar weeks) → concepts with worked examples

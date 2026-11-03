@@ -276,7 +276,7 @@
       "id": "inheritance-019",
       "difficulty": "easy",
       "type": "concept",
-      "question": "A superclass field should be hidden from unrelated classes but directly accessible inside every subclass. Which access modifier achieves exactly this?",
+      "question": "Which access modifier lets every subclass use a superclass field directly, while still giving the field less access than public?",
       "code": null,
       "options": [
         "private",
@@ -285,7 +285,7 @@
         "static"
       ],
       "answer": 2,
-      "explanation": "A subclass can see the public and protected members of its superclass; protected opens a member to subclasses while keeping it closed to unrelated classes. A private member is hidden even from subclasses, and static is not an access modifier."
+      "explanation": "A protected member can be used directly in every subclass, and also by the other classes in the same package, but not by all code the way a public one can. A private member is hidden even from subclasses, and static is not an access modifier."
     },
     {
       "id": "inheritance-020",
@@ -394,18 +394,18 @@
     },
     {
       "id": "inheritance-027",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "type": "code",
-      "question": "What happens when this code is compiled?",
-      "code": "class Vehicle {\n    private String type;\n    Vehicle(String type) {\n        this.type = type;\n    }\n}\nclass Car extends Vehicle {\n    private int doors;\n    Car(String type, int doors) {\n        this.doors = doors;\n        super(type);\n    }\n}",
+      "question": "Which of the two marked lines fails to compile?",
+      "code": "class Person {\n    private String name;\n    protected int age;\n}\n\nclass Student extends Person {\n    public void show() {\n        System.out.println(age);     // line A\n        System.out.println(name);    // line B\n    }\n}",
       "options": [
-        "It compiles; statement order inside a constructor does not matter",
-        "It compiles, but doors is initialised twice at runtime",
-        "It fails to compile because a subclass constructor may not assign its own fields",
-        "It fails to compile because super(type) must be the first statement in the Car constructor"
+        "Only line A - a protected field can be used only inside the class that declares it",
+        "Only line B - name is private to Person, but Student may use the protected field age",
+        "Neither - a subclass inherits every field of its superclass, private ones included",
+        "Both - a subclass can reach the fields of its superclass only through public methods"
       ],
-      "answer": 3,
-      "explanation": "A super(...) call must be the very first statement of a subclass constructor, because the superclass must be initialised before the subclass part runs. Placing this.doors = doors before it is a compile-time error."
+      "answer": 1,
+      "explanation": "Line B fails with error: name has private access in Person. Private members are not inherited: every Student object still has a name field, but only code inside Person can use it directly, so Student would need a public method of Person, such as a getter, to read it. Line A compiles, because a protected member can be used directly in a subclass."
     },
     {
       "id": "inheritance-028",

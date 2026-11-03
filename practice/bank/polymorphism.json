@@ -171,16 +171,16 @@
       "id": "polymorphism-012",
       "difficulty": "hard",
       "type": "code",
-      "question": "What does this program print?",
-      "code": "static void fun(int a)    { System.out.println(\"int\"); }\nstatic void fun(double a) { System.out.println(\"double\"); }\n\npublic static void main(String[] args) {\n    fun(5);\n    fun(5.0);\n    fun('A');\n}",
+      "question": "What happens with this code?",
+      "code": "class Animal {\n    void speak() { System.out.println(\"Animal sound\"); }\n}\nclass Dog extends Animal {\n    void speak(String mood) { System.out.println(\"Woof, \" + mood); }\n}\n\n// in main:\nAnimal a = new Dog();\na.speak();",
       "options": [
-        "It does not compile - there is no fun(char) overload for fun('A')",
-        "int, double, double - the char promotes to the larger double type",
-        "int, int, int - all three literals are treated as int",
-        "int, double, int - the char is widened to int, the more specific type"
+        "It prints Woof, null - speak(String) overrides speak(), and mood is given the value null",
+        "It does not compile - the call a.speak() leaves out the String argument that Dog's version needs",
+        "It prints Animal sound - speak(String) has different parameters, so it does not override speak()",
+        "It does not compile - a subclass may not declare a second method with the name speak"
       ],
-      "answer": 3,
-      "explanation": "fun(5) exactly matches fun(int) and the double literal 5.0 matches fun(double). There is no fun(char), so 'A' must be widened. Both fun(int) and fun(double) could take it, and Java chooses the more specific one, fun(int), because an int can always be widened to a double but not the other way round. All three choices are fixed at compile time."
+      "answer": 2,
+      "explanation": "Overriding needs the same signature, and speak(String) has a different parameter list from speak(). So Dog does not override speak(): it inherits speak() from Animal unchanged and adds speak(String) beside it. Dog now has two methods with the same name and different signatures, which is overloading. The call a.speak() therefore runs the speak() in Animal. Writing @Override above speak(String) would have turned the mistake into a compile error."
     },
     {
       "id": "polymorphism-013",
@@ -379,33 +379,33 @@
     },
     {
       "id": "polymorphism-026",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "type": "code",
       "question": "What does this program print?",
-      "code": "class Base {\n    static void whoAmI() { System.out.println(\"Base\"); }\n}\nclass Sub extends Base {\n    static void whoAmI() { System.out.println(\"Sub\"); }\n}\n\npublic class Trap {\n    public static void main(String[] args) {\n        Base b = new Sub();\n        b.whoAmI();\n    }\n}",
+      "code": "class Animal {\n    void speak() { System.out.println(\"Animal sound\"); }\n}\nclass Dog extends Animal {\n    @Override\n    void speak() { System.out.println(\"Woof\"); }\n}\nclass Cat extends Animal {\n    @Override\n    void speak() { System.out.println(\"Meow\"); }\n}\n\npublic class Main {\n    static void makeItSpeak(Animal a) {\n        a.speak();\n    }\n\n    public static void main(String[] args) {\n        makeItSpeak(new Cat());\n        makeItSpeak(new Dog());\n    }\n}",
       "options": [
-        "Sub - the object is a Sub, so dynamic dispatch selects Sub's method",
-        "Nothing - it fails to compile because static methods cannot be redefined in a subclass",
-        "Sub, then Base - both versions execute in order",
-        "Base - static methods are bound using the reference type at compile time"
+        "Animal sound, then Animal sound - the parameter's type, Animal, picks the speak() that runs",
+        "Meow, then Woof - each call runs the speak() of the object that is passed to makeItSpeak",
+        "Nothing - it does not compile, because a Cat or a Dog cannot be passed as an Animal",
+        "Animal sound and Meow, then Animal sound and Woof - the Animal version runs first each time"
       ],
-      "answer": 3,
-      "explanation": "Static methods belong to the class, not to any object, so no dynamic dispatch happens: the reference type Base decides at compile time. Sub's identically-named static method hides Base's rather than overriding it."
+      "answer": 1,
+      "explanation": "Passing new Cat() to a parameter of type Animal is an upcast, which happens automatically, so the code compiles. Inside makeItSpeak, the parameter a has the reference type Animal, but the JVM runs the speak() of the object it refers to: Meow for the Cat, then Woof for the Dog. An overriding method replaces the inherited speak(); the Animal version does not run as well. So one method with an Animal parameter works for every subclass."
     },
     {
       "id": "polymorphism-027",
       "difficulty": "hard",
       "type": "concept",
-      "question": "Why do static methods not participate in runtime polymorphism?",
+      "question": "Dog and Cat both extend Animal, and pet is a variable of type Animal. What does the cast in Dog d = (Dog) pet; do when that line runs?",
       "code": null,
       "options": [
-        "Static methods always execute faster, so the JVM skips the dispatch step to save time",
-        "Static methods are implicitly final and can never be redeclared in a subclass",
-        "Dynamic dispatch chooses a body using the actual object's type, and a static method belongs to a class rather than to any object",
-        "Static methods can only be called from other static methods, where no objects exist"
+        "It turns the object into a Dog, giving it the fields and methods that a Dog has",
+        "It changes the declared type of the variable pet to Dog for the rest of the method",
+        "Nothing - it only tells the compiler to accept the line, and the JVM ignores it",
+        "It checks the object, and throws a ClassCastException if it is not really a Dog"
       ],
-      "answer": 2,
-      "explanation": "Dynamic dispatch chooses the method from the object that a call is made on. A static call is not made on an object, so the reference (class) type decides at compile time. A subclass redeclaring the same static method produces hiding, not overriding, and marking it @Override is a compile error."
+      "answer": 3,
+      "explanation": "A cast never changes an object. When the line runs, the JVM checks the object that pet refers to. If it really is a Dog, d now refers to that same object, through a variable of type Dog. If it is anything else, such as a Cat, the line throws a ClassCastException. The variable pet keeps its type, Animal. Because the check happens at run time, a wrong downcast compiles and fails only when it runs, which is why an instanceof test should come first."
     },
     {
       "id": "polymorphism-028",

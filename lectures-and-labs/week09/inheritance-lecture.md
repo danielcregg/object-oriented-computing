@@ -10,15 +10,13 @@ source: authored
 ---
 
 <style>
-/* Deck-local visual system: family trees, the constructor ladder, the pillar
-   strip and the is-a/has-a card - all drawn in CSS, no image files. */
-section .kicker {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 17px; color: #E76F00; letter-spacing: 0.05em;
-}
+/* Deck-local diagrams, all drawn in CSS (no image files): class trees
+   (UML style: the arrowhead sits at the superclass), the four-pillars strip,
+   the four types of inheritance, the multiple-inheritance merge and the
+   is-a / has-a panels. */
 section .legend { font-size: 17px; color: #8B8471; margin-top: 4px; text-align: center; }
 
-/* - family trees: root at the top, arrowhead at the parent - */
+/* class trees: superclass at the top, arrowhead at the superclass */
 section .tree {
   display: flex; flex-direction: column; align-items: center;
   margin: 20px 0 6px 0; font-family: 'Cascadia Code', Consolas, monospace;
@@ -56,12 +54,26 @@ section .tkid::after {
 section .tkid:first-child::after { left: 50%; }
 section .tkid:last-child::after { right: 50%; }
 section .tkid:only-child::after { display: none; }
-section .tree.tight { margin: 12px 0 4px 0; }
-section .tree.tight .tnode { padding: 3px 16px; font-size: 20px; }
+section .tree.tight { margin: 10px 0 4px 0; }
+section .tree.tight .tnode { padding: 3px 12px; font-size: 18px; min-width: 70px; }
 section .tree.tight .tdown { height: 20px; }
+section .tree.tight .tkid { padding: 20px 6px 0 6px; }
+section .tree.tight .tkid::before { height: 20px; }
 section .tcap { text-align: center; font-size: 18px; color: #46536B; margin: 10px 0 0 0; }
 
-/* - the forbidden shape: two parents merging into one child - */
+/* two columns: code or a table on the left, a diagram on the right */
+section .side2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 28px; align-items: center; }
+section .side2 pre { margin: 6px 0; }
+section .side2 table { margin: 6px 0; font-size: 21px; }
+section .side2.narrow { grid-template-columns: 190px minmax(0, 1fr); }
+
+/* the four types of inheritance, one small tree each */
+section .types { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 12px; margin: 18px 0 6px 0; }
+section .type { border: 2px solid #DED8C9; border-radius: 12px; background: #FFFFFF; padding: 10px 8px 12px; display: flex; flex-direction: column; align-items: center; }
+section .type .tname { margin: 0; font-family: 'Cascadia Code', Consolas, monospace; font-size: 21px; font-weight: 600; color: #33698C; }
+section .type .tdesc { margin: 8px 0 0 0; font-size: 17px; line-height: 1.3; color: #46536B; text-align: center; }
+
+/* multiple inheritance: two superclasses merging into one subclass */
 section .trow2 { display: flex; gap: 60px; justify-content: center; }
 section .trow2 .tnode { min-width: 170px; }
 section .tmerge { width: 230px; height: 54px; position: relative; }
@@ -82,56 +94,37 @@ section .tmerge .ah {
 section .tmerge .ah.l { left: -7px; }
 section .tmerge .ah.r { right: -7px; }
 
-/* - the four-pillar strip - */
-section .pillars { display: flex; gap: 16px; margin: 26px 0 14px 0; }
+/* four-pillars strip - the canonical OOP roadmap */
+section .pillars { display: flex; gap: 18px; margin: 34px 0 16px 0; }
 section .pillar {
-  flex: 1; border: 2px solid #33698C; border-radius: 10px;
-  padding: 16px 8px 13px; text-align: center; background: #FFFFFF;
+  flex: 1; display: flex; flex-direction: column;
+  border: 2px solid #33698C; border-radius: 12px;
+  background: #FFFFFF; padding: 18px 16px 14px; position: relative;
 }
-section .pillar .pname { font-family: 'Cascadia Code', Consolas, monospace; font-weight: 600; font-size: 21px; }
-section .pillar .pwk { display: block; font-size: 16px; color: #8B8471; margin-top: 6px; }
-section .pillar.done { background: #F4F0E6; }
-section .pillar.now { background: #FDEFD9; border-color: #E76F00; }
-section .pillar.now .pname { color: #B94E00; }
-section .pillar.soon { border-style: dashed; opacity: 0.8; }
-
-/* - the constructor ladder - */
-section .ladder { display: grid; grid-template-columns: 200px 1fr 200px; column-gap: 20px; margin: 20px 0 6px 0; }
-section .floors { display: flex; flex-direction: column; gap: 16px; }
-section .floor {
-  display: flex; align-items: center; border: 2px solid #33698C;
-  border-radius: 9px; background: #FFFFFF; padding: 9px 14px;
+section .pillar .p-name {
+  display: block; margin-bottom: 8px;
   font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 22px; font-weight: 600; color: #33698C;
 }
-section .floor.hot { background: #FDEFD9; border-color: #E76F00; }
-section .floor .fname { flex: 1; text-align: center; font-size: 21px; }
-section .chip {
-  display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
-  align-items: center; justify-content: center; font-size: 17px; font-weight: 600;
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+section .pillar .p-line { display: block; flex: 1; font-size: 18px; color: #46536B; line-height: 1.35; }
+section .pillar .p-wk {
+  display: block; margin-top: 12px;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 15px; color: #AFA893;
 }
-section .chip.up { background: #33698C; color: #FFFFFF; }
-section .chip.dn { background: #E76F00; color: #FFFFFF; }
-section .rail { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-section .rail .arrowline { position: relative; width: 2px; height: 110px; background: #33698C; }
-section .rail.dn .arrowline { background: #E76F00; }
-section .rail.up .arrowline::before {
-  content: ''; position: absolute; top: -2px; left: -5px;
-  border-left: 6px solid transparent; border-right: 6px solid transparent;
-  border-bottom: 10px solid #33698C;
+section .pillar.now {
+  border-color: #E76F00; background: #FDEFD9;
+  box-shadow: 0 4px 14px rgba(231, 111, 0, 0.18);
 }
-section .rail.dn .arrowline::after {
-  content: ''; position: absolute; bottom: -2px; left: -5px;
-  border-left: 6px solid transparent; border-right: 6px solid transparent;
-  border-top: 10px solid #E76F00;
+section .pillar.now .p-name { color: #B94E00; }
+section .pillar.now .p-wk { color: #B94E00; }
+section .pillar .p-chip {
+  position: absolute; top: -14px; left: 14px;
+  background: #E76F00; color: #FFFFFF; border-radius: 999px;
+  font-size: 15px; font-weight: 600; padding: 2px 12px; letter-spacing: 0.03em;
 }
-section .rail .rlabel { font-size: 16px; color: #46536B; text-align: center; }
 
-/* - side-by-side halves & the is-a/has-a card - */
+/* is-a / has-a panels */
 section .duo { display: flex; gap: 30px; margin: 18px 0 6px 0; }
-section .duo .half { flex: 1; display: flex; flex-direction: column; align-items: center; }
-section .duo .tree { margin: 8px 0 4px 0; }
-section .duo .tnode { font-size: 19px; padding: 5px 14px; }
 section .panel {
   flex: 1; border: 2px solid #DED8C9; border-radius: 12px;
   padding: 14px 16px; background: #FFFFFF;
@@ -156,7 +149,10 @@ section.lead .tnode { background: rgba(255,255,255,0.07); border-color: #7FB4D8;
 section.lead .tdown::before { border-bottom-color: #7FB4D8; }
 section.lead .tdown::after { background: #7FB4D8; }
 section.lead .tkid::before, section.lead .tkid::after { background: #7FB4D8; }
+section.lead .legend { color: #A9B6C4; text-align: left; }
 </style>
+
+<!-- Speaker notes: ~0:00. The tree is the whole lecture in one picture: Person holds the shared code once, and Student and Lecturer extend it. Point out that the arrowheads sit at Person, the class being extended; every later diagram draws arrows the same way. -->
 
 <!-- _class: lead -->
 <!-- _paginate: false -->
@@ -174,20 +170,53 @@ section.lead .tkid::before, section.lead .tkid::after { background: #7FB4D8; }
 </div>
 </div>
 
-Write it once. Every child gets it.
+<p class="legend">Student and Lecturer extend Person: each arrow points at the class being extended</p>
+
+Inheritance: a new class reuses the code of an existing class, and adds only what is new.
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open on the duplication pain - they'll recognise the classic Person class on sight. Let the pasted comments land before the fragment. -->
+<!-- Speaker notes: ~0:01. Problem-first hook. Ask the room how many places a rename of name would touch before revealing the bullets. -->
 
-## A true story
+## Problem: the same code in two classes
 
-<style scoped>
-section pre { padding: 14px 20px; margin: 10px 0; font-size: 18px; line-height: 1.35; }
-section pre code { font-size: 18px; }
-</style>
+<!-- _class: code-sm -->
 
-- Your timetable app needs **students** and **lecturers** - and every one of them has a name and an age.
+- Without inheritance, `Student` and `Lecturer` repeat the same code:
+
+```java
+class Student {
+    private String name;
+    private int age;
+    public String getName() {
+        return name;
+    }
+}
+
+class Lecturer {
+    private String name;          // the same instance variables again
+    private int age;
+    public String getName() {     // and the same method again
+        return name;
+    }
+}
+```
+
+* Every change must be made in both copies: rename `name` to `fullName` and you must edit both classes.
+* **Inheritance** fixes this: the shared code is written once, in one class.
+
+---
+
+<!-- Speaker notes: ~0:04. The whole idea in one slide. Stress that Student and Lecturer are now one line each, yet a Student still has a name and a getName() method. -->
+
+## The idea: write the shared code once
+
+<!-- _class: code-sm -->
+
+- Put the shared code in one class, `Person`. `Student` and `Lecturer` then **extend** `Person`:
+
+<div class="side2">
+<div>
 
 ```java
 class Person {
@@ -198,44 +227,12 @@ class Person {
     }
 }
 
-class Student {
-    private String name;            // pasted
-    private int age;                // pasted
-    public String getName() {       // pasted
-        return name;
-    }
-}
-
-// class Lecturer { ...the same three members, a third time... }
-```
-
-* Three classes. The same three members. **Hand-pasted, twice.**
-
----
-
-## Then the requirement changes
-
-- Small ask from the registrar: rename `name` to `fullName`. Easy - it's *one field*.
-
-* Edit #1 - `Person`. Done.
-* Edit #2 - `Student`. Done.
-* Edit #3 - `Lecturer`… you were sure you did it. You didn't.
-* And nothing fails loudly - the three classes don't even *know* they're copies of each other. The bug waits.
-* Every duplicated line is **copy-paste debt** - and today it fell due. **There has to be a better way.**
-
----
-
-## The idea
-
-- Move the common part **up** into one class. Write it **once**. Let the others **inherit** it.
-
-```java
-class Person { /* name, age, getters -- written ONCE */ }
-
-class Student  extends Person { }
+class Student extends Person { }
 class Lecturer extends Person { }
 ```
 
+</div>
+<div>
 <div class="tree">
 <div class="tnode hot">Person</div>
 <div class="tdown"></div>
@@ -244,84 +241,84 @@ class Lecturer extends Person { }
 <div class="tkid"><div class="tnode">Lecturer</div></div>
 </div>
 </div>
+<p class="legend">the shared code lives in Person only</p>
+</div>
+</div>
 
-<p class="legend">one copy of the common code · two one-line classes · rename a field? one edit</p>
-
-* `extends` is the whole trick - everything `Person` has, `Student` and `Lecturer` now have too.
+* `extends Person` means: every `Student` and every `Lecturer` has a name, an age and the `getName()` method, without writing them again.
+* A change to the shared code is now made once, in `Person`.
 
 ---
 
 ## Agenda
 
-- The four pillars - where inheritance sits
-- is-a: the relationship, the arrow, the names
-- `extends` - Person and Employee, the classic pair
-- `Object`: the ancestor of everything
-- The five shapes of inheritance - and the forbidden one
-- Vehicles, animals, and is-a vs has-a
-- Constructors: the ancestor ladder and `super`
+- The four pillars of OOP
+- What inheritance is: the is-a relationship and its names
+- `extends`: an `Employee` that inherits from `Person`
+- Private members and `protected`
+- The `Object` class
+- Types of inheritance, and why Java has no multiple inheritance
+- is-a or has-a: when to use inheritance
+- Constructors and the `super` keyword
+- Benefits of inheritance
 
 ---
 
-<!-- Speaker notes: ~0:07. Orientation movement - place today on the four-pillar map, then define the relationship precisely. -->
+<!-- Speaker notes: ~0:07. The four-pillars overview again, with inheritance highlighted. Keep it to a minute: polymorphism and abstraction are topics of their own. -->
 
-## The four pillars - you are here
+## The four pillars of OOP
 
-- Recall: OOP stands on four pillars, and **encapsulation** - private fields, used only through public methods - is pillar one.
+- Object-oriented programming (OOP) is built on **four main ideas**. Inheritance is the second:
 
 <div class="pillars">
-<div class="pillar done"><span class="pname">Encapsulation</span><span class="pwk">pillar 1 · done ✓</span></div>
-<div class="pillar now"><span class="pname">Inheritance</span><span class="pwk">pillar 2 · today</span></div>
-<div class="pillar soon"><span class="pname">Polymorphism</span><span class="pwk">pillar 3</span></div>
-<div class="pillar soon"><span class="pname">Abstraction</span><span class="pwk">pillar 4</span></div>
+<div class="pillar"><span class="p-name">Encapsulation</span><span class="p-line">bundle the data and the methods that use it in one class, and hide the data</span><span class="p-wk">pillar 1</span></div>
+<div class="pillar now"><span class="p-chip">this lecture</span><span class="p-name">Inheritance</span><span class="p-line">build a new class from an existing class</span><span class="p-wk">pillar 2</span></div>
+<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call can behave differently for different objects</span><span class="p-wk">pillar 3</span></div>
+<div class="pillar"><span class="p-name">Abstraction</span><span class="p-line">show what an object does, hide how it does it</span><span class="p-wk">pillar 4</span></div>
 </div>
 
-- Today is pillar two - the load-bearing one: polymorphism only exists **because of** inheritance.
+- Polymorphism, the third pillar, is only possible because of inheritance.
 
 ---
 
-## The definition
+<!-- Speaker notes: ~0:09. Reference slide: the names on the left are all used interchangeably in books and exams, so students should recognise every one. The diagram style is a UML class diagram; the arrow direction (from subclass to superclass) is the detail students most often draw backwards. -->
 
-- **Inheritance**: the mechanism by which one class **acquires the fields and methods** of another.
-- It expresses an **is-a** relationship: an `Employee` *is a* `Person`.
+## What inheritance is
 
+- **Inheritance**: one class (the **subclass**) gets the instance variables and methods of another class (the **superclass**), and adds its own.
+- It models an **is-a** relationship: an `Employee` *is a* `Person`. Test it by saying "X is a Y" out loud: if it is true, inheritance fits.
+
+<div class="side2">
+<div>
+
+| The class that is extended | The class that extends it |
+|---|---|
+| **superclass** | **subclass** |
+| base class | derived class |
+| parent class | child class |
+| | extended class |
+
+</div>
+<div>
 <div class="tree">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
 <div class="tnode hot">Employee</div>
 </div>
-
-<p class="legend">the arrowhead always sits at the parent - the child points up and says "I am one of those"</p>
-
-- The **sentence test**: say "*X is a Y*" out loud. Sounds true? Inheritance fits. Sounds silly? It doesn't. We'll weaponise this shortly.
-
----
-
-## The names everyone uses
-
-```java
-class Superclass {
-    // fields and methods every child should share
-}
-
-class Subclass extends Superclass {
-    // only what makes THIS child different
-}
-```
-
-| The class that gives | The class that receives |
-|---|---|
-| **superclass** | **subclass** |
-| base class | derived / extended class |
-| parent class | child class |
-
-- Docs, exams and Stack Overflow rotate freely through all six - perfect synonyms.
+<p class="legend">a UML class diagram: the arrow points from the subclass (Employee) to its superclass (Person)</p>
+</div>
+</div>
 
 ---
 
-<!-- Speaker notes: ~0:12. The extends movement - Person/Employee: the familiar Person class, the familiar getters. -->
+<!-- Speaker notes: ~0:12. The worked example of extends. Count the methods aloud: Employee's file has two, an Employee object has four. Lab DIY 1 builds exactly this shape with Animal and Dog. -->
 
-## Meet the parent - a plain Person
+## extends: Employee inherits from Person
+
+<!-- _class: code-sm -->
+
+<div class="side2">
+<div>
 
 ```java
 public class Person {
@@ -330,94 +327,49 @@ public class Person {
     public int getAge() {
         return age;
     }
-    public void setAge(int a) {
-        this.age = a;
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
 ```
 
-- Private field, public methods - **encapsulation**, unchanged. It's about to matter.
-- Notice what's *missing*: nothing here mentions inheritance. Being extended costs the parent **nothing**, and it never knows.
+</div>
+<div>
 
----
-
-## One word - extends
-
-<style scoped>
-section pre { padding: 12px 18px; margin: 8px 0; font-size: 17px; line-height: 1.3; }
-section pre code { font-size: 17px; }
-</style>
-
+<!-- no-compile -->
 ```java
-class Person {                      // previous slide, unchanged
-    private int age;
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int a) {
-        this.age = a;
-    }
-}
-
 public class Employee extends Person {
     private String role;
+
     public String getRole() {
         return role;
     }
-    public void setRole(String r) {
-        this.role = r;
+
+    public void setRole(String role) {
+        this.role = role;
     }
-    // no age, no getAge, no setAge -- Employee has all three anyway
 }
 ```
 
-* `Employee` declares one field and two methods - but delivers two fields and four methods. `extends` wrote the other half.
+</div>
+</div>
 
----
+- Code in another class can call all four methods on an `Employee`:
 
-## Run it
-
-<style scoped>
-section pre { padding: 8px 16px; margin: 4px 0; font-size: 13px; line-height: 1.25; }
-section pre code { font-size: 13px; }
-</style>
-
+<!-- no-compile -->
 ```java
-class Person {
-    private int age;
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int a) {
-        this.age = a;
-    }
-}
-
-class Employee extends Person {
-    private String role;
-    public String getRole() {
-        return role;
-    }
-    public void setRole(String r) {
-        this.role = r;
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Employee emp = new Employee();
-        emp.setAge(25);                          // inherited
-        emp.setRole("Developer");                // Employee's own
-        System.out.println(emp.getAge() + " : " + emp.getRole());
-    }
-}
+Employee emp = new Employee();
+emp.setAge(25);                                              // inherited from Person
+emp.setRole("Developer");                                    // Employee's own method
+System.out.println(emp.getAge() + " : " + emp.getRole());    // prints 25 : Developer
 ```
 
-* Prints `25 : Developer` - two of those calls ran code `Employee` never wrote.
+* `Employee` writes only the `role` code. It inherits `getAge()` and `setAge()` from `Person`.
 
 ---
 
-<!-- Speaker notes: ~0:18. Flagged `no-compile` - the compiler error is the whole point, so make the room commit to a prediction before revealing it. The wrong answer comes from conflating inherited with accessible: students expect `Employee` to read `age` directly simply because the field exists inside every `Employee` object, forgetting that inheritance does not grant private access. Contrast this with `emp.getAge()` on the previous slide, which reached the same field through the public getter - the access-versus-existence gap resurfaces as an MCQ trap and is the direct motivation for `protected`. -->
+<!-- Speaker notes: ~0:15. Predict beat. The common wrong answer is "yes": students reason that the age field exists inside every Employee object, so Employee code must be able to use it. Private means private to the class that declares it, and subclasses are other classes. Lab DIY 4 hits this exact error and fixes it with protected. -->
 
 ## Predict: does this compile?
 
@@ -431,34 +383,30 @@ class Person {
         return age;
     }
 }
+
 class Employee extends Person {
     public boolean canRetire() {
-        return age > 65;      // <-- does THIS line compile?
+        return age > 65;                 // does this line compile?
     }
 }
 ```
 
-* **No.** `age` has private access in `Person` - the child cannot touch it.
-* `Employee` **inherits the room but not the key** - the `age` box exists in every `Employee` object, but `private` keeps access inside `Person`.
-* The fix that always works: `return getAge() > 65;`.
-* **`protected`** exists for exactly this - open to subclasses, closed to strangers.
+* **No**: `error: age has private access in Person`.
+* **Private members are not inherited.** Every `Employee` object still has an age, but only code inside `Person` can use `age` by name.
+* The fix: call the public getter, `return getAge() > 65;`. Declaring `age` as **protected** in `Person` would also work: subclasses can use a protected member directly.
 
 ---
 
-<!-- Speaker notes: ~0:20. Object movement - the array-printing gibberish finally gets explained. Enjoy the reveal. -->
+<!-- Speaker notes: ~0:18. Students have printed an object or an array and seen text like this before; this is where it comes from. The exact hexadecimal number changes from run to run. Lab DIY 5 calls toString() and hashCode() on a class that declares neither. -->
 
-## The ancestor of everything - Object
+## The Object class
 
-```java
-class Person { }              // you wrote no extends...
+<!-- _class: code-sm -->
 
-Person p = new Person();
-System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
-```
+- A class with no `extends` automatically extends **`Object`** (from the package `java.lang`). So every class has exactly **one** direct superclass, and every chain of classes ends at `Object`.
 
-- Write no `extends` and Java adds one: **every class descends from `java.lang.Object`**.
-- That gibberish is `Object`'s `toString()` - the very one you see when printing an array. `equals` and `hashCode` ride along too.
-
+<div class="side2 narrow">
+<div>
 <div class="tree tight">
 <div class="tnode hot">Object</div>
 <div class="tdown"></div>
@@ -466,101 +414,78 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 <div class="tdown"></div>
 <div class="tnode">Employee</div>
 </div>
+</div>
+<div>
 
-<p class="legend">every chain of extends ends at Object - no exceptions, no orphans</p>
+```java
+class Person { }               // no extends, so Person extends Object
 
----
+Person p = new Person();
+System.out.println(p);         // prints something like Person@1b6d3586
+```
 
-<!-- Speaker notes: ~0:24. Shapes movement - five names, four small trees, one forbidden. The names are pure recognition marks for MCQs. -->
+</div>
+</div>
 
-## The five shapes of inheritance
-
-- One keyword - `extends` - but the **trees** it grows have names:
-
-| Shape | The tree | Java classes? |
-|---|---|---|
-| Single | one parent, one child | yes |
-| Multilevel | a child of a child - a chain | yes |
-| Hierarchical | many children, one parent | yes |
-| Hybrid | any mix of the above | yes |
-| **Multiple** | **one child, two parents** | **no - interfaces only** |
-
-- Next three slides: one small tree each, all grown from our university.
+- So every object has the methods of `Object`, such as `toString()`, `equals()`, `hashCode()` and `getClass()`.
+- `Person@1b6d3586` is what the `toString()` method of `Object` returns: the class name, then a code for the object.
 
 ---
 
-## Single & multilevel
+<!-- Speaker notes: ~0:21. Four names for four shapes; they are recognition marks for MCQ questions. Read each arrow as "is a" to check a tree. Lab DIY 3 builds a multilevel chain and DIY 4 adds a hierarchical branch. -->
 
-- Read every arrow aloud as "**is a**" - if the whole tree reads true, the design is sound.
+## Types of inheritance
 
-<div class="duo">
-<div class="half">
-<p class="tcap"><strong>single</strong> - one extends</p>
-<div class="tree">
+- Classes that use `extends` form a tree. Its shape has a name, and Java allows all four of these:
+
+<div class="types">
+<div class="type"><p class="tname">Single</p>
+<div class="tree tight">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
 <div class="tnode hot">Student</div>
 </div>
-<p class="tcap"><code>class Student extends Person</code></p>
-</div>
-<div class="half">
-<p class="tcap"><strong>multilevel</strong> - the chain</p>
-<div class="tree">
+<p class="tdesc">one class extends one class</p></div>
+<div class="type"><p class="tname">Multilevel</p>
+<div class="tree tight">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
 <div class="tnode">Employee</div>
 <div class="tdown"></div>
 <div class="tnode hot">Lecturer</div>
 </div>
-<p class="tcap"><code>class Lecturer extends Employee</code></p>
+<p class="tdesc">a chain: Lecturer extends Employee, which extends Person</p></div>
+<div class="type"><p class="tname">Hierarchical</p>
+<div class="tree tight">
+<div class="tnode">Person</div>
+<div class="tdown"></div>
+<div class="tkids">
+<div class="tkid"><div class="tnode hot">Student</div></div>
+<div class="tkid"><div class="tnode hot">Employee</div></div>
 </div>
 </div>
-
-* `Lecturer` inherits **both** floors above it: everything from `Employee` *and* everything from `Person`. The chain delivers.
-
----
-
-## Hierarchical & hybrid
-
-<div class="duo">
-<div class="half">
-<p class="tcap"><strong>hierarchical</strong> - siblings share a parent</p>
-<div class="tree">
+<p class="tdesc">several classes extend the same class</p></div>
+<div class="type"><p class="tname">Hybrid</p>
+<div class="tree tight">
 <div class="tnode">Person</div>
 <div class="tdown"></div>
 <div class="tkids">
 <div class="tkid"><div class="tnode">Student</div></div>
-<div class="tkid"><div class="tnode">Employee</div></div>
-<div class="tkid"><div class="tnode">Alumni</div></div>
+<div class="tkid"><div class="tnode">Employee</div><div class="tdown"></div><div class="tnode hot">Lecturer</div></div>
 </div>
 </div>
-<p class="tcap">three classes <code>extends Person</code></p>
-</div>
-<div class="half">
-<p class="tcap"><strong>hybrid</strong> - a mix in one program</p>
-<div class="tree">
-<div class="tnode">Person</div>
-<div class="tdown"></div>
-<div class="tkids">
-<div class="tkid"><div class="tnode">Student</div></div>
-<div class="tkid">
-<div class="tnode">Employee</div>
-<div class="tdown"></div>
-<div class="tnode">Lecturer</div>
-</div>
-</div>
-</div>
-<p class="tcap">hierarchical + multilevel at once</p>
-</div>
+<p class="tdesc">a mix of the types above in one program</p></div>
 </div>
 
-- Real systems are nearly always hybrid - the names matter less than reading each arrow correctly.
+- In a multilevel chain, the class at the bottom inherits from every class above it: a `Lecturer` gets the members of `Employee` and of `Person`.
 
 ---
 
-## Multiple - the forbidden shape
+<!-- Speaker notes: ~0:24. The one shape Java refuses. The diamond problem is the reason to remember, and the MCQ wording for it is exactly "the same method inherited from more than one superclass". Interfaces get a lecture of their own; here they are only named. -->
 
-- Tempting: a paid PhD demonstrator *is a* `Student` **and** *is an* `Employee`…
+## Multiple inheritance is not allowed
+
+- **Multiple inheritance**: one class inheriting from more than one superclass. For example:
 
 <div class="tree">
 <div class="trow2">
@@ -573,19 +498,23 @@ System.out.println(p);        // Person@1b6d3586 -- whose toString() is that?
 
 <!-- no-compile -->
 ```java
-class TeachingAssistant extends Student, Employee { }   // one child, two parents?
+class TeachingAssistant extends Student, Employee { }    // compile error
 ```
 
-* Java **refuses**: a class extends **exactly one** class. Multiple inheritance of classes does not exist in Java.
-* Why: if both parents defined `getRole()`, which one would the child inherit? Java won't guess (the classic *diamond problem*).
-* The legal route is **interfaces** - multiple inheritance of *type*, without the ambiguity.
+* A Java class can extend only **one** class.
+* Why: if `Student` and `Employee` both had a `getRole()` method, `TeachingAssistant` would inherit two different versions, and Java could not choose. This is called the **diamond problem**.
+* Java does let one class implement several **interfaces**: that is the only kind of multiple inheritance Java has.
 
 ---
 
-<!-- Speaker notes: ~0:33. Case-study movement - two familiar worlds, then the discriminator card that catches the classic design mistake. -->
+<!-- Speaker notes: ~0:27. A worked hierarchy that mixes two types, so students practise naming them. Ask the room for the type before each reveal. The lab's vehicle classes grow the same way. -->
 
-## Case study - vehicles
+## Example: a vehicle hierarchy
 
+- General classes go at the top, more specific classes below them:
+
+<div class="side2">
+<div>
 <div class="tree">
 <div class="tnode">Vehicle</div>
 <div class="tdown"></div>
@@ -598,6 +527,8 @@ class TeachingAssistant extends Student, Employee { }   // one child, two parent
 <div class="tkid"><div class="tnode">Truck</div></div>
 </div>
 </div>
+</div>
+<div>
 
 ```java
 class Vehicle { }
@@ -606,133 +537,81 @@ class Truck extends Vehicle { }
 class SportsCar extends Car { }
 ```
 
-- **General at the top, specific at the bottom** - each step down *adds* detail, never removes it. The whole diagram is four lines of Java.
+</div>
+</div>
+
+* **Hierarchical**: `Car` and `Truck` both extend `Vehicle`.
+* **Multilevel**: `SportsCar` extends `Car`, which extends `Vehicle`, so a `SportsCar` inherits from both.
+* Together, the whole tree is **hybrid**: a mix of the two types.
 
 ---
 
-## Case study - animals
+<!-- Speaker notes: ~0:30. The design question behind every extends. The classic mistake is to extend a class just to reuse its code when the true relationship is "has a". Lab DIY 7 has students make this call for themselves. -->
 
-<div class="tree">
-<div class="tnode">Animal</div>
-<div class="tdown"></div>
-<div class="tkids">
-<div class="tkid">
-<div class="tnode">Mammal</div>
-<div class="tdown"></div>
-<div class="tkids">
-<div class="tkid"><div class="tnode">Dog</div></div>
-<div class="tkid"><div class="tnode">Cat</div></div>
-</div>
-</div>
-<div class="tkid"><div class="tnode">Bird</div></div>
-</div>
-</div>
+## is-a or has-a: when to use inheritance
 
-- One tree - three shapes hiding in it. Find them:
-
-* Single? `Bird extends Animal`.
-* Multilevel? `Dog` → `Mammal` → `Animal` - so a `Dog` inherits from **both**.
-* Hierarchical? `Dog` and `Cat` are siblings under `Mammal`. And every arrow passes the sentence test - the tree is sound.
-
----
-
-## is-a or has-a - the arrow you draw
-
-- The classic design bug: reaching for `extends` when the truth is *containment*. Run the **sentence test** first.
+- Say the sentence out loud. If "X **is a** Y" is true, use inheritance. If "X **has a** Y" is true instead, give X a field of type Y:
 
 <div class="duo">
 <div class="panel">
-<p class="ptitle">is-a → inheritance</p>
+<p class="ptitle">is-a: use extends</p>
 <div class="tree">
 <div class="tnode">Vehicle</div>
 <div class="tdown"></div>
 <div class="tnode hot">Car</div>
 </div>
-<p class="tcap"><code>class Car extends Vehicle</code></p>
+<p class="tcap">a Car is a Vehicle<br><code>class Car extends Vehicle</code></p>
 </div>
 <div class="panel">
-<p class="ptitle">has-a → a field inside</p>
+<p class="ptitle">has-a: use a field</p>
 <div class="holder">Car<div class="inner">Engine</div></div>
-<p class="tcap"><code>class Car { private Engine engine; }</code></p>
+<p class="tcap">a Car has an Engine<br><code>class Car { private Engine engine; }</code></p>
 </div>
 </div>
-
-<p class="legend">a Car IS a Vehicle → extends · a Car HAS an Engine → field - different truth, different drawing</p>
 
 ---
 
-<!-- Speaker notes: ~0:40. Quick-fire across three pairs, and `SportsCar`/`Car` in the middle is the one to watch, not the two has-a examples either side of it: coming straight off the warning on the previous slide against reaching for `extends` when the truth is containment, expect some in the room to overcorrect and call this one has-a too, doubting a textbook is-a case simply because inheritance was just flagged as dangerous. Make the point that the sentence test cuts both ways - it confirms `extends` exactly as often as it rules it out. The lab always hands students a pre-decided hierarchy to build; this is the only point in the hour where they have to make the has-a/is-a call themselves, which is exactly the shape MCQ scenario questions take. -->
+<!-- Speaker notes: ~0:32. Quick-fire predict beat; watch SportsCar and Car in the middle. Straight after the warning on the previous slide, some students overcorrect and call it has-a too. The sentence test confirms extends exactly as often as it rules it out. MCQ scenario questions take this shape. -->
 
-## Predict: extends - or field?
+## Predict: extends or a field?
 
-- Sentence test, out loud, quick fire:
+- Say each sentence out loud, then decide:
 
 - `Car` and `Engine`?
 
-* **has-a** - "a Car is an Engine" is nonsense. `Engine` becomes a field.
+* **Field** (has-a): "a Car is an Engine" is false, but "a Car has an Engine" is true.
 
 - `SportsCar` and `Car`?
 
-* **is-a** - `class SportsCar extends Car`.
+* **extends** (is-a): a SportsCar is a Car, so `class SportsCar extends Car`.
 
 - `Library` and `Book`?
 
-* **has-a** - a library isn't a book; it *holds* thousands of them (an array of them, most likely).
-* When genuinely torn: prefer **has-a**. A field is easy to change later - `extends` is a public promise that X is a Y, forever.
+* **Field** (has-a): a library is not a book; it holds many books, for example in an array field.
+* If you are unsure, use a field. A field is easy to change later; `extends` is much harder to undo once other code relies on it.
 
 ---
 
-<!-- Speaker notes: ~0:43. Constructor movement - slow right down. Ladder plus two predicts; this is MCQ-favourite territory. -->
+<!-- Speaker notes: ~0:35. Slow down from here: the constructor rules are where most marks are lost. Members versus constructors is the distinction to land; the next two slides apply it. -->
 
 ## Constructors are not inherited
 
-<!-- _class: code-sm -->
+- A class's **members** are its instance variables and its methods. A subclass inherits members.
+- A **constructor is not a member**, so a subclass never inherits its superclass's constructors. Each class writes its own.
+- A subclass constructor always **calls a superclass constructor first**, with `super(...)`.
+- If a constructor does not start with `super(...)`, Java adds `super();` as its first line. That calls the superclass constructor that takes no arguments.
 
-- Fields and methods are **members** of a class - and members are what inheritance copies down.
-- **Constructors are not members.** `Person`'s constructor never becomes `Student`'s constructor.
-
-```java
-class Person {
-    Person() {
-        System.out.println("Person built");
-    }
-}
-
-class Student extends Person {
-    // no constructor arrives down here -- and yet...
-    // new Student() WILL print "Person built". Watch.
-}
-```
-
-- Not inherited - but not unreachable either: a subclass constructor **calls** its parent's constructor. Every single time.
+<div class="callout"><strong>So:</strong> creating a subclass object always runs a superclass constructor too, and the superclass part of the object is set up first.</div>
 
 ---
 
-## The ancestor ladder
-
-- One `new Student()` - **three** constructors run. The call climbs the ladder; the bodies run back down.
-
-<div class="ladder">
-<div class="rail up"><div class="arrowline"></div><div class="rlabel">the climb - <br>every constructor's<br>first act: call the parent</div></div>
-<div class="floors">
-<div class="floor"><span class="chip up">3</span><span class="fname">Object()</span><span class="chip dn">4</span></div>
-<div class="floor"><span class="chip up">2</span><span class="fname">Person()</span><span class="chip dn">5</span></div>
-<div class="floor hot"><span class="chip up">1</span><span class="fname">new Student()</span><span class="chip dn">6</span></div>
-</div>
-<div class="rail dn"><div class="arrowline"></div><div class="rlabel">the run - <br>bodies execute top-down:<br>oldest finishes first</div></div>
-</div>
-
-<p class="legend">1 new Student() starts · 2 its hidden super() enters Person() · 3 Person's super() enters Object() · 4 Object's body runs · 5 Person's body runs · 6 Student's body runs last</p>
-
-<div class="callout"><strong>Oldest finishes first.</strong> A child constructor never runs its body until every ancestor above it is fully built.</div>
-
----
-
-<!-- Speaker notes: ~0:47. This is the ladder diagram from the previous slide made concrete - expect two wrong predictions in the room: `Student ready` alone, from treating the constructor call like an ordinary method call that runs only the body you named, or the two lines in the wrong order, from assuming the class named in the `new` expression must finish building first. Point back to the ladder rather than re-explaining the mechanism from scratch; the diagram is the reason this prediction is answerable at all. Construction order is the most heavily tested fact in this section, and this exact two-class pair returns broken on the next slide once `Person` loses its no-arg constructor. -->
+<!-- Speaker notes: ~0:37. Predict beat. Two wrong answers: "Student ready" alone, from treating the constructor like an ordinary method that runs only the code you named; and the two lines in the wrong order, from assuming the class named in new must finish first. Point back to the hidden super(); on the previous slide. -->
 
 ## Predict: what prints?
 
-<!-- _class: code-xs -->
+<!-- _class: code-sm -->
+
+- `main` runs `new Student();` with these two classes:
 
 ```java
 class Person {
@@ -740,107 +619,96 @@ class Person {
         System.out.println("Person ready");
     }
 }
+
 class Student extends Person {
     Student() {
         System.out.println("Student ready");
     }
 }
-public class Main {
-    public static void main(String[] args) {
-        new Student();
-    }
-}
 ```
 
-* `Person ready` - then `Student ready`. The parent **always** goes first.
-* But nobody called `Person()`… Java inserted an invisible **`super();`** as line one of `Student()`.
-* Strictly, **three** constructors ran - `Object`'s went first of all, silently.
+* `Person ready`, then `Student ready`.
+* `Student()` never calls `Person()` in its code, but Java added `super();` as its first line, so `Person()` runs first.
+* Constructors run from the top of the tree down: `Object()`, then `Person()`, then `Student()`.
 
 ---
 
-<!-- Speaker notes: ~0:49. Flagged `no-compile` - get the room to name the exact failing line before revealing it, since the natural wrong guesses are that the fault sits inside the new `Person` constructor, or that an empty `Student() { }` body is a harmless no-op that cannot fail. Both guesses miss where Java quietly inserts work into that empty-looking body - let the reveal do the explaining rather than pre-empting it. This is a bug students will hit in their own labs the moment they add any constructor to a class that used to rely on a default one, and it is exactly the kind of gotcha MCQs target; the fix is one slide away. -->
+<!-- Speaker notes: ~0:40. Predict beat. Get the room to name the failing line. The usual wrong guesses are the Person constructor, or that an empty Student() { } cannot fail. The hidden super(); is the culprit. Students hit this in their own lab code as soon as they give a superclass its first constructor with parameters; lab DIY 6 practises the fix. -->
 
 ## Predict: which line breaks?
 
 <!-- _class: code-sm -->
 
-- One change: `Person` now **demands a name** - its only constructor.
+- Now the only constructor in `Person` needs a name:
 
 <!-- no-compile -->
 ```java
 class Person {
     private String name;
-    Person(String name) {                       // the ONLY constructor
+
+    Person(String name) {                   // the only constructor
         this.name = name;
     }
 }
 
 class Student extends Person {
-    Student() { }                               // <-- boom. But why?
+    Student() { }                           // does this line compile?
 }
 ```
 
-* The `Student() { }` line - its invisible `super();` asks `Person` for a no-arg constructor, and there isn't one.
-* An old rule strikes again: declaring `Person(String)` **cost `Person` its free default constructor**.
-* The fix: call the parent **yourself**, with arguments - next slide.
+* `Student() { }` fails. Java adds `super();` to it, which looks for `Person()` with no arguments, and there is none.
+* Java gives a class a no-argument constructor only when the class declares no constructors at all. `Person` declares `Person(String)`, so it has no `Person()`.
+* The fix is to call `super(...)` with an argument yourself.
 
 ---
 
-## super - speaking to your parent
+<!-- Speaker notes: ~0:43. The fix from the previous slide, then the second use of super. super.method() previews overriding, which polymorphism develops; here it only needs recognising. The first-statement rule holds in Java 21, the version the Codespaces use: javac 21 rejects a statement before super(...) with "flexible constructors is not supported". Java 25 relaxed it, so a student on a newer JDK can put statements that do not use the object before super(...) and see it compile. -->
+
+## The super keyword
 
 <!-- _class: code-sm -->
 
 ```java
-class Mammal {
-    int age;
-    Mammal(int age) {
-        this.age = age;
+class Person {
+    private String name;
+
+    Person(String name) {
+        this.name = name;
     }
 }
-class Cat extends Mammal {
-    Cat(int age) {
-        super(age);   // pass it up -- MUST be the first statement
+
+class Student extends Person {
+    Student(String name) {
+        super(name);          // calls Person(String): must be the first statement
     }
 }
 ```
 
-- `super(...)` invokes the superclass constructor - write it, or accept the invisible no-arg version. **First statement, always.**
-- `super.member` picks the parent's version when names collide - a preview of *overriding*.
-- There is no `super.super` - you may speak to your parent, never *past* them to an ancestor.
+- `super(...)` calls a constructor of the superclass. It must be the **first statement** in the subclass constructor.
+- `super.methodName()` calls the superclass's version of a method, when the subclass has its own method with the same name.
+- `super` reaches only the direct superclass: `super.super` is not allowed.
 
 ---
 
-<!-- Speaker notes: ~0:53. Landing movement - pay off the hook explicitly; the facts table is revision fuel. -->
+<!-- Speaker notes: ~0:46. The three benefits by name: reusability, organisation, flexibility. Pair each with its example. Data protection is a benefit of encapsulation, not of inheritance. -->
 
-## Why inheritance earns its keep
+## Benefits of inheritance
 
-- **Reuse** - the hook, paid off: name, age and the getters written **once**; `fullName` renamed **once**. Copy-paste debt: cancelled.
-- **Organisation** - common code has one home at the top of the tree; every class states only its *difference*.
-- **Flexibility** - code written for `Person` accepts `Student`, `Lecturer` and `Employee` without edits - any subclass, forever.
-
-* That last superpower has a name - **polymorphism** - and it deserves an hour of its own.
-
----
-
-<!-- _class: dense -->
-
-## Facts to keep - the fine print
-
-| Fact | Detail |
-|---|---|
-| Exactly one parent | Every class except `Object` has exactly **one** direct superclass; write no `extends` and that superclass is `Object`. |
-| Children unlimited | A superclass can have any number of subclasses - but it never knows about them, and never names them. |
-| Constructors | Not members → never inherited. Reachable via `super(...)`, which must be the **first statement** of a subclass constructor. |
-| `private` members | Inherited storage, no direct access - the subclass goes through the parent's `public`/`protected` methods. |
-| Every chain ends at `Object` | `toString`, `equals`, `hashCode` arrive from the top of every tree - that's why every object answers them. |
+- **Code reusability:** shared code is written once, in the superclass, instead of being copied into every class.
+  - *Example: `name`, `age` and `getName()` are written only in `Person`.*
+- **Better organisation:** related classes form a tree, with the general code at the top and the specific code below.
+- **Flexibility:** code written for a superclass works with every subclass.
+  - *Example: a method with a `Person` parameter also accepts a `Student` or a `Lecturer`.*
 
 ---
 
 ## Summary
 
-- Inheritance moves shared code **up**: `class Child extends Parent` acquires the parent's fields and methods - written once, fixed once, copy-paste debt cancelled.
-- The relationship is **is-a**, checked with the sentence test; the drawn arrowhead always sits at the parent. is-a → `extends`; has-a → a **field**.
-- Superclass = base = parent; subclass = child = derived. Every class has exactly **one** direct superclass, and every chain ends at **`Object`** - source of `toString` and `equals`.
-- Legal tree shapes: single, multilevel, hierarchical, hybrid. **Multiple inheritance of classes is forbidden** - interfaces fill that gap.
-- Constructors are **not inherited**: every subclass constructor starts with `super(...)` - written or invisible - so construction climbs to `Object` and bodies run back down, **oldest first**.
-- If the parent has no no-arg constructor, the invisible `super()` breaks the build - call `super(args)` yourself, as the first statement.
+<!-- _class: dense -->
+
+- **Inheritance**: a subclass gets the instance variables and methods of its superclass and adds its own, written `class Sub extends Super`. It models an **is-a** relationship. Superclass = base class = parent class; subclass = derived class = child class.
+- **Private members are not inherited**: a subclass uses them through the superclass's public methods. A `protected` member can be used by subclasses directly.
+- Every class has exactly **one** direct superclass (`Object` if you write no `extends`), so every object has `toString()`, `equals()`, `hashCode()` and `getClass()`. A superclass can have any number of subclasses.
+- Types: single, multilevel, hierarchical and hybrid. **Multiple inheritance** of classes is not allowed (the diamond problem); a class can implement several interfaces instead.
+- Use `extends` when "X is a Y" is true; use a field when "X has a Y" is true.
+- **Constructors are not inherited.** Every subclass constructor first calls a superclass constructor with `super(...)` (Java adds `super();` if you leave it out), which must be its first statement.

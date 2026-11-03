@@ -270,7 +270,7 @@
         "It fails to compile because age has private access in Person"
       ],
       "answer": 3,
-      "explanation": "Private members are not inherited in an accessible way: the age storage exists inside every Employee object, but only Person's own code can touch it, so the line age > 65 is a compile error. The fix is to use the public getter: return getAge() > 65."
+      "explanation": "Private members are not inherited: every Employee object still has an age, but only Person's own code can use age by name, so the line age > 65 is a compile error. The fix is to use the public getter: return getAge() > 65."
     },
     {
       "id": "inheritance-019",
@@ -390,7 +390,7 @@
         "Person must be declared abstract before another class may extend it"
       ],
       "answer": 1,
-      "explanation": "Every subclass constructor starts with an implicit super() unless you write a super call yourself, and declaring Person(String) cost Person its free no-arg default constructor. The hidden super() finds no matching constructor, so compilation fails; the fix is for Student() to call super(...) explicitly with a String."
+      "explanation": "Every subclass constructor starts with an implicit super() unless you write a super call yourself, and Java gives a class a no-argument constructor only when the class declares no constructors, so declaring Person(String) leaves Person without one. The hidden super() finds no matching constructor, so compilation fails; the fix is for Student() to call super(...) explicitly with a String."
     },
     {
       "id": "inheritance-027",
@@ -420,7 +420,7 @@
         "Four: Student(), Person(), Object() and Main()"
       ],
       "answer": 2,
-      "explanation": "Each constructor first calls its superclass constructor, and every inheritance chain ends at Object, so the call climbs from Student() to Person() to Object() and three constructors run, oldest finishing first. No Main object is ever created, so no Main constructor runs."
+      "explanation": "Each constructor first calls its superclass constructor, and every inheritance chain ends at Object, so Student() calls Person(), which calls Object(): three constructors run, and their bodies run from Object's down to Student's. No Main object is ever created, so no Main constructor runs."
     },
     {
       "id": "inheritance-029",
@@ -435,7 +435,7 @@
         "It fails to compile because a subclass may not redefine a superclass method"
       ],
       "answer": 0,
-      "explanation": "Using multiple super keywords to reach an ancestor beyond the direct superclass is not permitted, so super.super.describe() is a compile error. A subclass may speak to its parent with super, but never skip past it to a grandparent."
+      "explanation": "Using multiple super keywords to reach an ancestor beyond the direct superclass is not permitted, so super.super.describe() is a compile error. super reaches only the direct superclass, never a class further up the tree."
     },
     {
       "id": "inheritance-030",

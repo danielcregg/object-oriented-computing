@@ -10,74 +10,100 @@ source: authored
 ---
 
 <style>
-/* Deck-local visual system: contract & class cards, drawn in CSS - no images.
-   Visual grammar: SOLID = machinery included · DASHED = signature only. */
-section .card-row {
-  display: flex; gap: 30px; justify-content: center; align-items: flex-start;
-  margin: 24px 0 10px 0;
+/* Deck-local diagrams, all drawn in CSS (no images): the title's method,
+   split into its signature and its hidden body; the abstract class Animal
+   above its two subclasses; the four-pillars strip; and code set in two
+   columns. The shared components (.callout/.legend/.kicker) come from the
+   theme. Colours: blue = a class, dashed orange = an abstract method (a
+   signature with no body), green = code that compiles, red = code the
+   compiler rejects. */
+
+/* title slide: one method, its signature shown and its body hidden */
+section .hero { width: 900px; margin: 24px 0 0 0; }
+section .hero .h-pill { display: flex; border: 3px solid #FFFFFF; border-radius: 999px; overflow: hidden; }
+section .hero .h-sig, section .hero .h-body {
+  padding: 18px 12px; text-align: center;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 22px;
 }
-section .ccard {
-  min-width: 240px; background: #FFFFFF;
-  border: 2px solid #33698C; border-radius: 10px;
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 19px; color: #1E2833; overflow: hidden;
+section .hero .h-sig { flex: 1.3; background: #FDEFD9; color: #B94E00; font-weight: 600; }
+section .hero .h-body { flex: 1; color: #7F95A8; border-left: 3px dashed #7F95A8; }
+section .hero .h-notes { display: flex; }
+section .hero .h-notes div { text-align: center; font-size: 17px; color: #A9B6C4; line-height: 1.35; }
+section .hero .h-notes div:first-child { flex: 1.3; }
+section .hero .h-notes div:last-child { flex: 1; }
+section .hero .h-notes b { display: block; font-size: 20px; color: #FFFFFF; }
+section .hero .h-arrow { display: block; text-align: center; color: #E76F00; font-size: 28px; line-height: 1.15; }
+section.lead .hero ~ p { max-width: 900px; margin-top: 26px; text-wrap: balance; }
+
+/* a class drawn as a card: its name, then its methods */
+section .card {
+  background: #FFFFFF; border: 2px solid #33698C; border-radius: 10px; overflow: hidden;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 19px; color: #1E2833;
 }
-section .ccard .hdr {
-  padding: 8px 18px; border-bottom: 2px solid #33698C;
-  font-weight: 600; color: #33698C; background: #EFF4F8;
-}
-section .ccard .m { padding: 7px 18px 6px 18px; }
-section .ccard .m.hollow {
-  margin: 6px 12px; padding: 4px 10px;
-  border: 2px dashed #E76F00; border-radius: 7px;
+section .card .hdr { padding: 7px 18px; border-bottom: 2px solid #33698C; font-weight: 600; color: #33698C; background: #EFF4F8; }
+section .card .m { padding: 8px 18px; }
+section .card .m.abs {
+  margin: 8px 12px; padding: 4px 12px; border: 2px dashed #E76F00; border-radius: 7px;
   background: #FDEFD9; color: #B94E00;
 }
-section .ccard.iface { border-style: dashed; border-color: #E76F00; background: #FFFBF2; }
-section .ccard.iface .hdr {
-  border-bottom-style: dashed; border-bottom-color: #E76F00;
-  color: #B94E00; background: #FDEFD9;
+section .card .m small { margin-left: 10px; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #8B8471; }
+
+/* the fix slide: an abstract class above its subclasses, each with the
+   verdict on creating an object of it */
+section .tree { display: flex; flex-direction: column; align-items: center; margin: 16px 0 6px 0; }
+section .tree .top { display: flex; align-items: center; gap: 30px; }
+section .tree .down { margin: 4px 0; font-size: 17px; color: #8B8471; }
+section .tree .down b { color: #33698C; font-size: 24px; font-weight: 400; margin: 0 10px; }
+section .tree .kids { display: flex; gap: 48px; }
+section .tree .kid { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+section .verdict {
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 18px; color: #1E2833;
+  background: #EAF6EC; border: 2px solid #1E7A34; border-radius: 10px; padding: 5px 14px;
 }
-section .ccard.ghost { border-color: #C9C2B2; background: #F6F4EE; color: #8B8471; }
-section .ccard.ghost .hdr { border-bottom-color: #C9C2B2; color: #8B8471; background: #EFECE3; }
-section .contract-fig { margin: 22px 0 8px 0; }
-section .contract-fig .card-row { margin: 0; }
-section .impl-row { display: flex; gap: 44px; justify-content: center; }
-section .impl { display: flex; flex-direction: column; align-items: center; }
-section .impl .stem { width: 0; height: 28px; border-left: 3px dashed #E76F00; }
-section .pillars { display: flex; gap: 18px; margin: 24px 0 12px 0; }
-section .pillars .pill {
-  flex: 1; text-align: center; padding: 13px 6px 11px 6px;
-  background: #FFFFFF; border: 2px solid #33698C; border-radius: 10px;
+section .verdict small { display: block; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: #1E7A34; }
+section .verdict.no { background: #FBEDEB; border-color: #C0392B; }
+section .verdict.no small { color: #C0392B; }
+
+/* four-pillars strip - the canonical OOP roadmap */
+section .pillars { display: flex; gap: 18px; margin: 34px 0 16px 0; }
+section .pillar {
+  flex: 1; display: flex; flex-direction: column;
+  border: 2px solid #33698C; border-radius: 12px;
+  background: #FFFFFF; padding: 18px 16px 14px; position: relative;
+}
+section .pillar .p-name {
+  display: block; margin-bottom: 8px;
   font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 21px; color: #33698C;
+  font-size: 22px; font-weight: 600; color: #33698C;
 }
-section .pillars .pill small {
-  display: block; font-size: 15px; color: #8B8471; margin-top: 3px;
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 400;
+section .pillar .p-line { display: block; flex: 1; font-size: 18px; color: #46536B; line-height: 1.35; }
+section .pillar .p-wk {
+  display: block; margin-top: 12px;
+  font-family: 'Cascadia Code', Consolas, monospace; font-size: 15px; color: #AFA893;
 }
-section .pillars .pill.today { background: #FDEFD9; border-color: #E76F00; color: #B94E00; font-weight: 600; }
-section .pillars .pill.today small { color: #B94E00; }
-section .choose { display: flex; flex-direction: column; gap: 13px; margin: 22px 0 10px 0; }
-section .choose .opt {
-  display: grid; grid-template-columns: minmax(0, 1.5fr) auto minmax(0, 0.5fr);
-  gap: 20px; align-items: center;
-  background: #FFFFFF; border: 1px solid #DED8C9; border-radius: 10px;
-  padding: 11px 20px; font-size: 21px; color: #46536B;
+section .pillar.now {
+  border-color: #E76F00; background: #FDEFD9;
+  box-shadow: 0 4px 14px rgba(231, 111, 0, 0.18);
 }
-section .choose .opt .verdict {
-  font-family: 'Cascadia Code', Consolas, monospace; font-size: 20px; font-weight: 600;
-  padding: 6px 14px; border-radius: 8px; text-align: center; white-space: nowrap;
+section .pillar.now .p-name { color: #B94E00; }
+section .pillar.now .p-wk { color: #B94E00; }
+section .pillar .p-chip {
+  position: absolute; top: -14px; left: 14px;
+  background: #E76F00; color: #FFFFFF; border-radius: 999px;
+  font-size: 15px; font-weight: 600; padding: 2px 12px; letter-spacing: 0.03em;
 }
-section .choose .opt .v-conc { border: 2px solid #33698C; color: #33698C; background: #EFF4F8; }
-section .choose .opt .v-abs { border: 2px solid #33698C; border-bottom: 3px dashed #E76F00; color: #33698C; background: #FFFFFF; }
-section .choose .opt .v-int { border: 2px dashed #E76F00; color: #B94E00; background: #FDEFD9; }
-section .choose .opt .ex {
-  font-family: 'Cascadia Code', Consolas, monospace;
-  font-size: 18px; color: #8B8471; text-align: right;
-}
-section.lead .ccard { background: rgba(255,255,255,0.07); border-color: #E7975A; color: #F4F1E8; }
-section.lead .ccard .hdr { background: rgba(231,111,0,0.18); border-bottom-color: #E7975A; color: #F0B26B; }
+
+/* code in two columns: a class on the left, the class that extends it on the right */
+section .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+section .two pre { margin: 0 0 8px 0; }
+
+/* the comparison table, smaller so that all seven rows fit */
+section.cmp table { font-size: 18px; margin: 4px 0 0 0; }
+section.cmp table th { font-size: 17px; padding: 6px 16px 6px 6px; }
+section.cmp table td { padding: 6px 16px 6px 6px; vertical-align: top; }
 </style>
+
+<!-- Speaker notes: ~0:00. The title picture is the lecture's definition in one line of code. Read it left to right: the signature is everything other code needs to call the method, and the body is the part abstraction hides. Every later slide is a way of writing a signature without its body: an abstract method, or a method in an interface. -->
 
 <!-- _class: lead -->
 <!-- _paginate: false -->
@@ -86,480 +112,353 @@ section.lead .ccard .hdr { background: rgba(231,111,0,0.18); border-bottom-color
 
 # Abstraction
 
-<div class="card-row">
-<div class="ccard iface">
-<div class="hdr">what the driver sees</div>
-<div class="m">accelerate();</div>
-<div class="m">brake();</div>
-<div class="m">steer(angle);</div>
+<div class="hero">
+<div class="h-pill"><div class="h-sig">public int add(int a, int b)</div><div class="h-body">return a + b;</div></div>
+<div class="h-notes">
+<div><span class="h-arrow">↑</span><b>method signature</b>what other code needs to call the method</div>
+<div><span class="h-arrow">↑</span><b>method body</b>how the method works: abstraction hides it</div>
 </div>
 </div>
 
-Hide the machinery. Expose the contract.
+Abstraction: show what a method does (its signature), and hide how it does it (its body).
 
 ---
 
-<!-- Speaker notes: ~0:00. Cold open, no agenda yet. Ask the room: hands up if you checked your spark timing on the way in. Let the final fragment land in silence before advancing. -->
+<!-- Speaker notes: ~0:01. Problem-first hook. Before revealing the bullets, ask the room what a plain Animal's makeSound() should print: every answer names a particular kind of animal, which is the point. The lab's first code example is this Animal made abstract, with Dog and Cat. -->
 
-## How did you get here this morning?
+## Problem: a plain Animal makes no sense
 
-- You (or your bus driver) operated a machine of roughly **30,000 parts** - at speed, in traffic, legally.
-- Combustion timing? Fuel-air ratios? The clutch's friction curve?
+- `Animal` needs a `makeSound()` method, but no sound fits every animal:
 
-* You used **pedals and a wheel**.
-* You have never once watched your engine run. You drove anyway. Everyone does.
-* The car exposes a **contract**; the engine is the **implementation** you never see.
-* You depended on the contract, not the machinery. **That idea has a name.**
+```java
+public class Animal {
+    public void makeSound() {
+        System.out.println("...");      // which sound? It depends on the animal
+    }
+}
+```
+
+- And nothing stops code creating a plain `Animal`, which is no kind of animal at all:
+
+<!-- no-compile -->
+```java
+Animal a = new Animal();     // compiles and runs
+a.makeSound();               // prints ...
+```
+
+* Every real animal is a particular kind, such as a dog or a cat: `Animal` is only the general idea.
+* **Abstraction** fixes this: `makeSound()` gets no body, and the compiler refuses `new Animal()`.
 
 ---
 
-## The big idea
+<!-- Speaker notes: ~0:04. The idea of the hour in one picture. Point at the dashed method first: a signature with no body. Then follow it down: each subclass writes the body. Then the verdicts: the general class has no objects, its subclasses do. Lab DIY 1 builds this same shape with Shape, Circle and Square, and has students try new Shape(...) to see the compile error. -->
 
-- **Abstraction** - hide the implementation details; expose only what callers need.
+## The fix: an abstract class
 
-<div class="card-row">
-<div class="ccard iface">
-<div class="hdr">the contract - you see this</div>
-<div class="m">accelerate();</div>
-<div class="m">brake();</div>
-<div class="m">steer(angle);</div>
+- Declare `Animal` **abstract**, and its `makeSound()` with **no body**. Each subclass must then write its own `makeSound()`:
+
+<div class="tree">
+<div class="top">
+<div class="card"><div class="hdr">abstract class Animal</div><div class="m abs">makeSound();<small>no body</small></div></div>
+<div class="verdict no">new Animal()<small>✗ compile error: Animal is abstract</small></div>
 </div>
-<div class="ccard ghost">
-<div class="hdr">the machinery - you never do</div>
-<div class="m">spark timing · fuel maps</div>
-<div class="m">torque curves · 30,000 parts</div>
+<div class="down"><b>↓</b>extends<b>↓</b></div>
+<div class="kids">
+<div class="kid"><div class="card"><div class="hdr">class Dog extends Animal</div><div class="m">makeSound(): prints Woof</div></div><div class="verdict">new Dog()<small>✓ compiles</small></div></div>
+<div class="kid"><div class="card"><div class="hdr">class Cat extends Animal</div><div class="m">makeSound(): prints Meow</div></div><div class="verdict">new Cat()<small>✓ compiles</small></div></div>
 </div>
 </div>
 
-<p class="legend">you drive against the left card - engineers may replace the right card at will</p>
+<p class="legend">dashed orange = an abstract method: a signature with no body, which each subclass must write</p>
 
-* Petrol became electric: the machinery was **replaced wholesale** - the pedals didn't move.
-* This hour: how Java lets **your classes** make the same offer.
+* So there are dogs and cats, but never a plain animal.
 
 ---
 
 ## Agenda
 
-- Where abstraction fits - the four pillars
-- Abstraction in code - and versus encapsulation
-- Tool 1: `abstract` classes and methods - half-built on purpose
-- Tool 2: interfaces - the pure contract
-- Choosing: concrete vs abstract vs interface
-- Benefits - and completing the set
+- The four pillars of OOP
+- What abstraction means, and how it differs from encapsulation
+- Abstract classes and abstract methods
+- The rules for abstract methods
+- Interfaces: writing one and implementing one
+- A class can implement many interfaces
+- Abstract class or interface: which to use
+- Benefits of abstraction
 
 ---
 
-<!-- Speaker notes: ~0:06. Arc moment - four pillars were promised; this is the last one. Milk the "set complete" beat, it pays off again on the summary slide. -->
+<!-- Speaker notes: ~0:06. The canonical four-pillars overview: name each pillar once and move on. Land the last bullet, because it explains why abstraction needs the other ideas already in place: without inheritance an abstract class is useless, and interfaces are one way to get polymorphism (overriding in subclasses is the other). -->
 
-## The four pillars - completing the set
+## The four pillars of OOP
 
-- OOP makes a promise: it stands on **four pillars**. Three are already yours:
+- Object-oriented programming (OOP) is built on **four main ideas**, called its four pillars:
 
 <div class="pillars">
-<div class="pill">Encapsulation<small>✓ collected</small></div>
-<div class="pill">Inheritance<small>✓ collected</small></div>
-<div class="pill">Polymorphism<small>✓ collected</small></div>
-<div class="pill today">Abstraction<small>today - the last one</small></div>
+<div class="pillar"><span class="p-name">Encapsulation</span><span class="p-line">bundle the data and the methods that use it in one class, and hide the data</span><span class="p-wk">pillar 1</span></div>
+<div class="pillar"><span class="p-name">Inheritance</span><span class="p-line">build a new class from an existing class</span><span class="p-wk">pillar 2</span></div>
+<div class="pillar"><span class="p-name">Polymorphism</span><span class="p-line">one method call can behave differently for different objects</span><span class="p-wk">pillar 3</span></div>
+<div class="pillar now"><span class="p-chip">this lecture</span><span class="p-name">Abstraction</span><span class="p-line">show what an object does, hide how it does it</span><span class="p-wk">pillar 4</span></div>
 </div>
 
-* Today we take the final pillar. **After this hour, the set is complete.**
-* And you have used it all along - **every time you called a method without reading its source.**
+- Abstraction uses two of the other pillars: an abstract class is only useful through **inheritance**, and an interface is a way to get **polymorphism**.
 
 ---
 
-## Abstraction, in code
+<!-- Speaker notes: ~0:09. The lecture's definition: abstraction hides the implementation details (the body) of methods and shows only their signatures. The everyday examples take ten seconds each; the point is that you use all three without knowing how they work. Which keyword Java uses for abstraction is MCQ material. -->
 
-- A full **method** carries its machinery - signature *and* body:
+## What abstraction means
+
+- **Abstraction** means showing what a method does and hiding how it does it:
 
 ```java
-public int add(int a, int b) {
-    return a + b;
+public int add(int a, int b) {    // the signature: what the method is called and what it takes
+    return a + b;                 // the body: how it does its job
 }
 ```
 
-- Abstraction keeps only the **method signature** - what callers see, no body:
+- Abstraction keeps only the signature. With no body, the method ends with a semicolon:
 
 <!-- no-compile -->
 ```java
 public int add(int a, int b);
 ```
 
-<div class="callout"><strong>One line, two halves.</strong> The signature is the <strong>contract</strong>; the body is the <strong>machinery</strong>. Abstraction is the art of showing the first and hiding the second.</div>
+- Code that calls `add` needs only the signature, just as you use a TV remote's volume button, email's Send button or a calculator's ÷ key without seeing how they work.
+- Java's keyword for abstraction is **`abstract`**, used for abstract classes and abstract methods. Java also has **interfaces**.
 
 ---
+
+<!-- Speaker notes: ~0:12. The common confusion is that the two pillars are one idea because both hide something. Separate them by what they hide: data on the left, method bodies on the right. The difference is MCQ material. -->
 
 ## Abstraction vs encapsulation
 
-* Both pillars **hide** - they differ in *what* they hide.
-* **Encapsulation** hides **data**: `private` fields, reachable only through getters and setters.
-* **Abstraction** hides **implementation**: method bodies, reachable only through signatures - built with abstract classes and interfaces.
+- Both pillars hide something, but they hide different things:
 
-<div class="callout"><strong>Same instinct, different target.</strong> Encapsulation guards the <strong>state</strong>. Abstraction guards the <strong>how</strong>.</div>
-
----
-
-## You already trust abstraction
-
-* **Remote control** - you press volume-up; the infrared protocol is not your problem.
-* **Email** - you write and click send; the relays, queues and spam filters underneath stay invisible.
-* **Calculator** - you press `÷` and read the answer; the division algorithm never shows itself.
-* Each is a simple **interface** wrapped around **implementation you never see** - and you trust all three without a second thought.
+| | Encapsulation | Abstraction |
+|---|---|---|
+| What it hides | **data**: the instance variables | **how methods work**: their bodies |
+| How | `private` instance variables, used through public getters and setters | abstract classes and interfaces: an abstract method has a signature but no body |
+| Example | `private double balance;` | `public abstract void makeSound();` |
 
 ---
 
-## Java's two tools
+<!-- Speaker notes: ~0:14. The rule list, at pace. Spend the time on "cannot be instantiated": students read abstract as "has no code", when an abstract class can be full of working code and still have no objects of its own. Lab DIY 1 has students trigger exactly this compile error. -->
 
-- Java builds abstraction with two constructs - here is the rest of the hour in one picture:
+## Abstract classes
 
-<div class="card-row">
-<div class="ccard">
-<div class="hdr">abstract class</div>
-<div class="m">stop() { ... }</div>
-<div class="m hollow">fuelType();</div>
-</div>
-<div class="ccard iface">
-<div class="hdr">interface</div>
-<div class="m">draw();</div>
-<div class="m">area();</div>
-</div>
-</div>
+- An **abstract class** has the keyword `abstract` in its declaration, before the keyword `class`:
 
-<p class="legend">solid = machinery included · dashed = signature only, machinery owed</p>
+```java
+public abstract class Animal {
+    // instance variables, constructors and methods, like any class
+}
+```
 
-* **Tool 1 - the `abstract` keyword**: classes deliberately left half-built; subclasses finish them.
-* **Tool 2 - interfaces**: contracts with no machinery at all; classes sign them and deliver.
+- An abstract class **cannot be instantiated**: no object of it can be created. `new Animal()` gives the compile error `Animal is abstract; cannot be instantiated`.
+- To use an abstract class, another class must **inherit** from it, with `extends`.
+- It can have instance variables, constructors and methods with bodies, like any class, and it **may or may not** contain abstract methods.
+- A class that can be instantiated is called a **concrete** class.
 
 ---
 
-<!-- Speaker notes: ~0:14. Tool 1 movement. The rules land across four slides - declaration, the mix, the punctuation, the chain. Keep naming the model: "half-built on purpose". -->
+<!-- Speaker notes: ~0:17. Two things to drill. First the ending: a semicolon instead of braces is the whole difference, and empty braces { } are not the same thing, because that is a concrete method with an empty body. Second the word order: access modifier, then abstract, then the return type. Write a wrong order on the board and let the room fix it; the keyword order is MCQ material. -->
 
-## Tool 1 - the abstract class
+## Abstract methods
 
-- The `abstract` keyword sits **before `class`** in the declaration:
+- An **abstract method** has a signature but **no body**: instead of braces, it ends with a semicolon. A **concrete method** has a body:
+
+```java
+public abstract class Animal {
+    public abstract void makeSound();      // abstract method: no body, ends with ;
+
+    public void sleep() {                  // concrete method: has a body
+        System.out.println("Zzz");
+    }
+}
+```
+
+- The keyword `abstract` goes **after** the access modifier and **before** the return type.
+- Make a method abstract when every subclass must have it, but each subclass needs its own body: a `Dog` makes a different sound from a `Cat`.
+
+---
+
+<!-- Speaker notes: ~0:19. Predict beat. The common wrong answer is a compile error on the first line: students see the abstract class's name in front of v and think it breaks the no-objects rule. The rule is only about new: the object here is a Car, and a Vehicle variable may hold any concrete subclass. A few expect fuelType() to fail because Vehicle gives it no body; the call runs the body of the object's own class. The example generalises: cars and trucks differ in colour, shape, engine and purpose, but share tyres, an engine, steering and gears, and Vehicle keeps only that shared part. Lab DIY 5's Employee and Manager have this shape, with a constructor added. -->
+
+## Predict: what prints?
+
+<!-- _class: code-sm -->
+
+- `Vehicle` keeps only what every vehicle shares, and `Car` extends it:
+
+<div class="two">
+<div>
 
 ```java
 public abstract class Vehicle {
-    // fields, constructors, methods -- just like any class
+    public void stop() {
+        System.out.println("Braking");
+    }
+
+    public abstract String fuelType();
 }
 ```
 
-* Declaring a class `abstract` imposes **one rule**: it cannot be instantiated - to use it, another class must **inherit** it.
+</div>
+<div>
 
 <!-- no-compile -->
 ```java
-Vehicle v = new Vehicle();   // compile error: Vehicle is abstract
-```
-
-* An ordinary, instantiable class is a **concrete** class. `abstract` says: *don't build this one - build from it.*
-
----
-
-## Half-built on purpose
-
-- Inside, an abstract class **mixes finished and unfinished**:
-
-<div class="card-row">
-<div class="ccard">
-<div class="hdr">abstract class Vehicle</div>
-<div class="m">int wheels</div>
-<div class="m">stop() { ... }</div>
-<div class="m hollow">fuelType();</div>
-<div class="m hollow">describe();</div>
-</div>
-</div>
-
-<p class="legend">solid = built once, shared by every subclass · dashed = a blank the subclass must fill</p>
-
-* It **may or may not** contain abstract methods - even with zero, it still cannot be instantiated.
-* The dashed lines are **homework for subclasses** - and the compiler collects the homework.
-
----
-
-## Abstract methods - read the punctuation
-
-<!-- _class: code-sm -->
-
-- An **abstract method** is a signature ending in a **semicolon** - no braces, no body:
-
-```java
-public abstract class Shape {
-    public abstract double area();   // semicolon -- no body
-}
-```
-
-- A **concrete method** ships with its machinery attached:
-
-```java
-public class Square {
-    private double side;
-    public double area() {
-        return side * side;
-    }
-}
-```
-
-<div class="callout"><strong>Keyword order:</strong> <code>abstract</code> sits after the access modifier, before the return type. Then read the ending: <code>{ }</code> = built, <code>;</code> = a promise someone else must keep.</div>
-
----
-
-## The homework rule
-
-* Even **one** abstract method forces the whole class to be declared `abstract` - the compiler won't let a half-built class pose as finished.
-* A subclass inheriting abstract methods has exactly two options: **implement them all**, or stay `abstract` and pass the homework down.
-* The chain must end: **some descendant** eventually implements everything - or the family never produces a single object.
-
-<!-- _class: code-sm -->
-
-```java
-abstract class A {
-    abstract void m();
-}
-abstract class B extends A { }         // legal: B passes the homework on
-class C extends B {                    // the chain ends -- C is concrete
-    void m() { }
-}
-```
-
----
-
-## Finding the abstraction
-
-* A `Car` and a `Truck` differ in colour, shape, engine and purpose - that is what makes them distinct.
-* Yet both have tyres, an engine, steering and gears; both travel; both are operated the same way.
-* **What single concept keeps the shared part and drops the particulars?**
-* **`Vehicle`** - the general idea of a car or a truck: it retains the common attributes and behaviour, and eliminates everything specific to one kind.
-
----
-
-## Vehicle, in code
-
-- Shared machinery lives **once** in the parent; every child fills in the blank:
-
-<!-- _class: code-sm -->
-
-```java
-abstract class Vehicle {
-    private int wheels = 4;                // every subclass object has one
-    public void stop() {                   // shared code
-        System.out.println("Braking...");
-    }
-    public abstract String fuelType();     // the blank every child fills
-}
-
-class Car extends Vehicle {
+public class Car extends Vehicle {
+    @Override
     public String fuelType() {
         return "petrol";
     }
 }
-class Truck extends Vehicle {
-    public String fuelType() {
-        return "diesel";
-    }
-}
 ```
-
-- `Car` and `Truck` are concrete: homework done, `new` allowed.
-
----
-
-<!-- Speaker notes: ~0:27. Predict beat, the first compile-error test of the hour. Expect a good share of the room to guess it compiles, reasoning that since nothing ever calls `area()` an empty body cannot hurt - that is a runtime mental model, and Java checks every concrete class finishes its inherited homework at compile time whether or not the method is ever invoked, which is exactly why the fence above it carries the `no-compile` marker. This is the direct payoff of the homework rule two slides back, and the same all-or-nothing rule resurfaces when interfaces demand every method be implemented too. -->
-
-## Predict: does this compile?
 
 <!-- no-compile -->
 ```java
-abstract class Shape {
-    public abstract double area();
-}
-
-class Triangle extends Shape {
-    // nothing here yet
-}
+Vehicle v = new Car();
+v.stop();
+System.out.println(v.fuelType());
 ```
 
-* **No.** `Triangle` inherited a blank and left it blank - *Triangle is not abstract and does not override abstract method area()*.
-* Fix 1: give `Triangle` an `area()` body - homework done, concrete class.
-* Fix 2: declare `Triangle` abstract too - and pass the homework to *its* subclasses.
+</div>
+</div>
+
+* `Braking`, then `petrol`.
+* `v` has the type `Vehicle` but holds a `Car`, which is allowed: a variable of an abstract class's type can hold any concrete subclass.
+* `stop()` is inherited from `Vehicle`, and `fuelType()` runs the body that `Car` wrote.
 
 ---
 
-<!-- Speaker notes: ~0:29. Tool 2 movement - the deeper half. The contract diagram is the signature visual of the deck; spend a full minute on it. -->
+<!-- Speaker notes: ~0:22. The two consequences of declaring a method abstract. Walk the code top to bottom: Pet is legal only because it is abstract too, and Dog is where the chain has to end. Ask what happens if Dog leaves makeSound() out: that is the next slide. What a subclass must be when it leaves an abstract method out is MCQ material. -->
 
-## Tool 2 - the interface
+## Rules for abstract methods
 
-- Push abstraction to its limit: a type that is **all contract, no machinery**.
+<!-- _class: code-sm -->
+
+- If a class has **at least one** abstract method, the class **must** be declared abstract.
+- A class that extends an abstract class must either **override every abstract method** it inherits, or **be declared abstract** itself:
 
 ```java
-public interface RemoteControl {
-    void volumeUp();     // a semicolon and a promise
-    void volumeDown();   // no braces anywhere in sight
+abstract class Animal {
+    public abstract void makeSound();
+}
+
+abstract class Pet extends Animal {     // allowed: Pet is abstract, so it may leave makeSound() out
+}
+
+class Dog extends Pet {                 // Dog is concrete, so it must override makeSound()
+    @Override
+    public void makeSound() {
+        System.out.println("Woof");
+    }
 }
 ```
 
-* An interface is a **completely abstract class**: it contains **method signatures** (and, since Java 8, optional `default` methods with bodies - later).
-* You can never instantiate one. Classes **implement** it; other interfaces **extend** it.
-* It is a **contract**: any class that signs must deliver **every** method - which is also how interfaces power polymorphism.
+- Eventually a subclass has to write every abstract method. Otherwise none of the classes could ever be instantiated.
 
 ---
 
-## One contract, many machines
+<!-- Speaker notes: ~0:25. Predict beat. Expect yes from students who think Cat inherits makeSound() from Animal and so has one: what it inherits is a signature with no body, which a concrete class may not keep. Others argue that nothing ever calls makeSound() on a Cat, a run-time view; the compiler checks every concrete class whether or not the method is ever called. Lab DIY 2 produces the same message for a method that an interface asks for. -->
 
-<div class="contract-fig">
-<div class="card-row">
-<div class="ccard iface">
-<div class="hdr">interface Drawable</div>
-<div class="m">draw();</div>
-</div>
-</div>
-<div class="impl-row">
-<div class="impl"><div class="stem"></div><div class="ccard"><div class="hdr">class Circle</div><div class="m">draw() { arcs }</div></div></div>
-<div class="impl"><div class="stem"></div><div class="ccard"><div class="hdr">class ProgressBar</div><div class="m">draw() { bars }</div></div></div>
-<div class="impl"><div class="stem"></div><div class="ccard"><div class="hdr">class ChessPiece</div><div class="m">draw() { glyphs }</div></div></div>
-</div>
-</div>
+## Predict: does this compile?
 
-<p class="legend">dashed = the contract · solid = machinery · a stem means "implements"</p>
+- `Animal` is an abstract class whose one method, `makeSound()`, is abstract. `Cat` extends it:
 
-* The implementers are **unrelated** - no shared parent, nothing in common but the promise.
-* Hold a `Drawable`, call `draw()` - **which machinery answers is not your problem.**
+<!-- no-compile -->
+```java
+class Cat extends Animal {
+    public void sleep() {
+        System.out.println("Zzz");
+    }
+}
+```
+
+* **No.** The compiler stops with `error: Cat is not abstract and does not override abstract method makeSound() in Animal`.
+* `Cat` inherits `makeSound()` as a signature with no body, and a concrete class cannot have a method with no body.
+* Two fixes: give `Cat` its own `makeSound()`, or declare `Cat` abstract too.
 
 ---
 
-## Writing an interface down
+<!-- Speaker notes: ~0:28. The second tool. Use the word contract exactly as the slide defines it, all hour. Animated extends Drawable is the one example of an interface inheriting another: interfaces extend other interfaces and never implement them, which is MCQ material. -->
+
+## Interfaces
+
+- An **interface** is like an abstract class in which **every** method is abstract:
+
+```java
+public interface Drawable {
+    void draw();                                 // a signature: no body
+}
+
+public interface Animated extends Drawable {     // extends another interface
+    void animate();
+}
+```
+
+- An interface **cannot be instantiated**: `new Drawable()` is a compile error.
+- It is declared with the keyword `interface`. A class **implements** it, with `implements`, and another interface **extends** it, with `extends`.
+- An interface is a **contract**: a class that implements it promises to write a body for every method the interface lists.
+
+---
+
+<!-- Speaker notes: ~0:31. The implicit modifiers are the most-tested facts about interfaces: say each one aloud while pointing at its comment. method1 and method2 are declared identically; writing public abstract is allowed but adds nothing. Default and static methods get one sentence: they exist, they have bodies, and the lab does not need them. -->
+
+## Inside an interface
+
+- Everything inside an interface gets modifiers that you do not have to write:
 
 ```java
 public interface ExampleInterface {
-    double PI = 3.1415;              // implicitly public static final
+    double PI = 3.1415;                  // a constant: implicitly public static final
 
-    void method1();                  // implicitly public abstract
-    public abstract void method2();  // identical meaning, spelled out
+    void method1();                      // implicitly public abstract
+    public abstract void method2();      // the same, written out in full
 }
 ```
 
-* Declared with the `interface` keyword - and like a class, it may be `public`.
-* Constants are **implicitly `public static final`** - write one line, get all three for free.
-* Methods are **implicitly `public abstract`** - both spellings above mean exactly the same thing.
+- An interface can contain **constants**, **method signatures**, **default** and **static** methods (which have bodies, since Java 8), and **nested types** (a class declared inside it).
+- An interface has **no constructors** and **no instance variables**: every variable in it is a constant.
 
 ---
 
-## Signing the contract
+<!-- Speaker notes: ~0:34. Three rules to land: every method, the exact signature, and public. @Override is not required, but it makes the compiler check that the signature matches, so use it every time. Lab DIY 2 has students write this shape for a GameCharacter interface. -->
+
+## Implementing an interface
 
 <!-- _class: code-sm -->
 
-- `implements` puts a class under contract:
-
-```java
-interface ExampleInterface {
-    void method1();
-    void method2();
-}
-
-public class ExampleClass implements ExampleInterface {
-    @Override public void method1() {
-        System.out.println("method 1");
-    }
-    @Override public void method2() {
-        System.out.println("method 2");
-    }
-}
-```
-
-* The class must implement **all** the interface's abstract methods - with the **exact same signatures** - before it can be instantiated.
-
----
-
-## The payoff - contracts are types
-
-<!-- _class: code-sm -->
+- `Circle` implements `Drawable`, so it must give `draw()` a body:
 
 ```java
 interface Drawable {
     void draw();
 }
-class Circle implements Drawable {
-    @Override public void draw() {
+
+public class Circle implements Drawable {
+    @Override
+    public void draw() {
         System.out.println("Drawing a circle");
     }
 }
-class Demo {
-    public static void main(String[] args) {
-        Drawable d = new Circle();   // typed by the contract
-        d.draw();                    // prints: Drawing a circle
-    }
-}
 ```
 
-* The variable's type is the **contract**; the object behind it is the **machinery**.
-* Swap in any other implementer tomorrow - this code does not change. *(Petrol to electric, again.)*
+- A class that implements an interface must implement **all** of its abstract methods before it can be instantiated.
+- Each method must have **exactly the same signature** (the same name and parameters) as in the interface, and it must be `public`.
 
 ---
 
-## Why interfaces exist
+<!-- Speaker notes: ~0:36. Predict beat, and the one most likely to slip past. Expect yes: speak() has the right name and parameters, and leaving out an access modifier is legal everywhere else. The faulty model is that only the name and parameters must match; the method must also be public, because the interface's version is implicitly public and an implementing method may not be less visible. Lab DIY 2 has students delete public and read this exact error. -->
 
-* A class `extends` **one** parent - but `implements` **as many interfaces as it likes**:
+## Predict: does this compile?
 
-<!-- _class: code-sm -->
-
-```java
-interface Wearable {
-    void wear();
-}
-interface Chargeable {
-    void charge();
-}
-
-class Smartwatch implements Wearable, Chargeable {
-    public void wear() {
-        System.out.println("On the wrist");
-    }
-    public void charge() {
-        System.out.println("Charging...");
-    }
-}
-```
-
-* Each `implements` is a **promise** - a contract the compiler enforces in full.
-* And because contracts are types, interfaces are Java's cleanest route to **polymorphism**.
-
----
-
-## What fits inside an interface
-
-- Constants - implicitly `public static final`
-- Method signatures - implicitly `public abstract`
-- `default` methods - **with** a body *(Java 8+)*
-- `static` methods - **with** a body *(Java 8+)*
-- Nested types
-
-<!-- _class: code-sm -->
-
-```java
-interface MediaPlayer {
-    int MAX_VOLUME = 11;               // constant
-    void play();                       // signature
-    default void pause() {             // Java 8+
-        System.out.println("Paused");
-    }
-    static String version() {          // Java 8+
-        return "2.0";
-    }
-}
-```
-
----
-
-<!-- Speaker notes: ~0:41. Predict beat, and the one most likely to slip past as correct. Expect the room to say it compiles, since `Dog` defines a `speak()` with the right name, parameters and return type and reads as a normal override - the trap is that nothing about missing an access modifier looks wrong, because default access is legal Java everywhere else; only against a `public` interface contract does it become a silent narrowing the compiler will not allow. The fence carries the `no-compile` marker for exactly that reason, and a dropped `public` on an implementing method is a recurring, easy-to-miss mistake well beyond this one slide. -->
-
-## Predict: spot the broken promise
-
-- `Speaker` demands a `speak()` - and `Dog` delivers one. Or does it?
+- `Speaker` is an interface with one method, `void speak();`. `Dog` implements it:
 
 <!-- no-compile -->
 ```java
-interface Speaker {
-    void speak();
-}
-
 class Dog implements Speaker {
     void speak() {
         System.out.println("Woof");
@@ -567,111 +466,126 @@ class Dog implements Speaker {
 }
 ```
 
-* **It does not compile.** Interface methods are implicitly **`public`** - `Dog`'s version has default access, and an override may never **weaken** access.
+* **No.** The compiler stops with `error: speak() in Dog cannot implement speak() in Speaker`, because of `attempting to assign weaker access privileges; was public`.
+* Methods in an interface are implicitly **public**. In `Dog`, `speak()` has no access modifier, so it gets default access, which is weaker than public.
 * The fix is one word: `public void speak()`.
-* Rule of thumb: implementing methods are always **`public`**.
 
 ---
 
-<!-- Speaker notes: ~0:43. Choosing movement - this is what assessments ask. The ledger fast, the decision card slow, the full map as a take-home reference. -->
+<!-- Speaker notes: ~0:39. This is the main reason interfaces exist: Java has no multiple inheritance of classes, and interfaces are how one class takes on several types. How many interfaces a class may implement is MCQ material. Lab DIY 3 has Circle extend Shape and implement Drawable, and DIY 4's Wizard implements two interfaces. -->
 
-<!-- _class: dense -->
+## A class can implement many interfaces
 
-<style scoped>table { font-size: 17px; } td, th { padding: 6px 12px 6px 4px; }</style>
+<!-- _class: code-sm -->
 
-## class vs interface - the ledger
+- A class can **extend only one** class, but it can **implement as many interfaces as it needs**, separated by commas:
 
-| Aspect | Class | Interface |
-|---|---|---|
-| Keyword | `class` | `interface` |
-| Instantiation | Yes - `new` creates objects | Never - implemented, not instantiated |
-| Multiple inheritance | No - `extends` one class only | Yes - a class can `implements` many |
-| Inheriting | `extends` a class, `implements` interfaces | `extends` other interfaces; never a class |
-| Constructors | Yes | No |
-| Member access | Any modifier | Implicitly `public` |
-| Variables | Any kind | Implicitly `public static final` |
-| Methods | Concrete (abstract only in `abstract` classes) | Implicitly abstract *(Java 8+: `default` / `static` bodies)* |
+<div class="two">
+<div>
 
----
+```java
+interface Flyable {
+    void fly();
+}
 
-## Choosing - the decision card
+interface Swimmable {
+    void swim();
+}
+```
 
-<div class="choose">
-<div class="opt"><span>A <strong>finished thing</strong>, ready to build and use?</span><span class="verdict v-conc">concrete class</span><span class="ex">Car · User</span></div>
-<div class="opt"><span><strong>Close relatives</strong> sharing state and code - but the base idea is too vague to exist alone?</span><span class="verdict v-abs">abstract class</span><span class="ex">Animal</span></div>
-<div class="opt"><span>A <strong>capability</strong> that unrelated classes can adopt?</span><span class="verdict v-int">interface</span><span class="ex">Flyable</span></div>
 </div>
-
-<p class="legend">a generic "animal" can't exist, but every Dog reuses its machinery · Flyable fits Bird, Airplane, Superman</p>
-
-* Need behaviour from **multiple sources**? Only interfaces stack - `extends` one, `implements` many.
-* Want to ship **default behaviour and instance fields** with the type? Abstract class - its home turf.
-* Defining a **type for anyone**, anywhere in any hierarchy? That is the interface's whole job.
-
----
-
-<!-- _class: dense -->
-
-<style scoped>table { font-size: 15px; } td, th { padding: 5px 10px 5px 4px; }</style>
-
-## The full map
-
-| Feature | Concrete class | Abstract class | Interface |
-|---|---|---|---|
-| Definition | Standard class, fully built | Declared `abstract` - deliberately unfinished | A pure contract of behaviour |
-| Instantiation | Yes - `new Student()` | No - never directly | No - never directly |
-| Methods | All have bodies | Mix of abstract and concrete | Implicitly abstract *(Java 8+: `default` / `static` bodies)* |
-| Inheritance limit | `extends` one class | `extends` one class | A class can `implements` many - multiple inheritance of type |
-| Variables (state) | Any kind | Instance fields allowed - can hold state | Implicitly `public static final` - constants only |
-| Constructors | Yes | Yes - run by subclasses via `super()` | No |
-| Access modifiers | Any | Any | Implicitly `public` *(Java 9+: `private` helpers)* |
-| Keyword | `class Name` | `abstract class Name` | `interface Name` |
-| Relationship | *is-a* | *is-a* (partially built) | *can-do* - a capability: `Runnable`, `Serializable` |
-
----
-
-<!-- Speaker notes: ~0:51. Predict beat that ties the hour together: one snippet combines the Tool 1 instantiation rule with Tool 2 contract polymorphism. Expect line 1 to slip through anyway: it has almost the same surface shape as line 2 right below it (`Vehicle` on the left, `new` on the right), and the one fact that makes it illegal - that `Vehicle` was declared `abstract` - is stated only in the prose above the fence, nowhere in the code itself. Lines 3 and 4 directly replay the earlier contracts-are-types slide, and the whole fence carries the `no-compile` marker because line 1 alone is enough to fail compilation, even though lines 2 to 4 are individually fine. -->
-
-## Predict: which lines compile?
-
-- `Vehicle` is abstract, `Car` extends it; `Circle` implements `Drawable`:
+<div>
 
 <!-- no-compile -->
 ```java
-Vehicle v = new Vehicle();   // line 1
-Vehicle c = new Car();       // line 2
-Drawable d = new Circle();   // line 3
-d.draw();                    // line 4
+class Duck implements Flyable, Swimmable {
+    @Override
+    public void fly() {
+        System.out.println("The duck flies");
+    }
+
+    @Override
+    public void swim() {
+        System.out.println("The duck swims");
+    }
+}
 ```
 
-* Line 1 - **compile error**: `Vehicle` is abstract; a half-built thing cannot be built.
-* Line 2 - **fine**: `Car` is concrete, and a parent type can hold any of its children.
-* Lines 3 and 4 - **fine**: a contract type holding an implementer. Prints `Drawing a circle`.
+</div>
+</div>
+
+- `Duck` must write a body for every method of both interfaces.
+- A class can extend one class and implement interfaces in the same declaration, `extends` first: `class Duck extends Animal implements Flyable, Swimmable`.
 
 ---
 
-<!-- Speaker notes: ~0:54. Benefits at pace - the electric-car callback does the heavy lifting. Then land the summary: the four-pillar strip returns, fully lit. -->
+<!-- Speaker notes: ~0:41. Predict beat. Two wrong answers come up. Some say the first line does not compile because an interface cannot be instantiated: the new is on Circle, and only the variable's type is Drawable. Others expect Drawing a circle twice, thinking d stays a circle; each call runs the draw() of the object d holds at that moment. Lab DIY 4's takeTurn(GameCharacter character) is this idea as a method parameter, and how interfaces give polymorphism is MCQ material. -->
 
-## Why abstraction wins
+## Predict: what prints?
 
-* **Less complexity, easier maintenance** - callers read three signatures, not three hundred lines; frequently changing machinery is separated from the stable contract.
-* **The Open/Closed principle** - *open* to extension: add new implementers any time; *closed* to modification: code depending only on the contract never needs editing. That is the petrol-to-electric swap.
-* **Class-level protection** - what `private` does for a field, `abstract` does for a whole class: it protects the class from wrong use.
-* **Safety** - the compiler enforces the story end to end: no instantiating half-built classes, no signing a contract without delivering every method.
+- `Circle` and `Square` both implement `Drawable`. Their `draw()` methods print `Drawing a circle` and `Drawing a square`:
+
+<!-- no-compile -->
+```java
+Drawable d = new Circle();
+d.draw();
+d = new Square();
+d.draw();
+```
+
+* `Drawing a circle`, then `Drawing a square`.
+* `d` has the interface type `Drawable`, so it can hold an object of **any** class that implements `Drawable`.
+* Each call runs the `draw()` of the object that `d` holds at that moment. This is how interfaces give **polymorphism**: objects of different classes, used through one interface type.
+
+---
+
+<!-- Speaker notes: ~0:44. Reference slide to photograph: one table for all three kinds of class. Read it column by column, then point at the rows that are MCQ material: creating objects with new, constructors, and how a class uses each one (it extends one class, but implements many interfaces). -->
+
+## Class vs abstract class vs interface
+
+<!-- _class: cmp -->
+
+| | Concrete class | Abstract class | Interface |
+|---|---|---|---|
+| Keyword | `class` | `abstract class` | `interface` |
+| Objects with `new`? | yes | no | no |
+| Methods | all have a body | abstract (no body) and concrete (with a body) | implicitly `public abstract`; since Java 8 also `default` and `static` methods, with bodies |
+| Variables | any kind | any kind, including instance variables | constants only: implicitly `public static final` |
+| Constructors | yes | yes, run by subclasses through `super(...)` | no |
+| How a class uses it | `extends`: one class only | `extends`: one class only | `implements`: as many as it needs |
+| Relationship | "is-a" | "is-a": a `Dog` is an `Animal` | "can-do": a `Duck` can fly |
+
+---
+
+<!-- Speaker notes: ~0:47. One example per kind of class. The box holds the questions to ask when designing; lab DIY 5 has students make this decision twice and write their reason in a comment. -->
+
+## Which one should I use?
+
+- **Concrete class:** the class is finished and ready to be used as an object. *Examples: `Car`, `User`.*
+- **Abstract class:** closely related classes share code and instance variables, but the general idea is too vague to exist on its own. *Example: `Animal`: there is no plain animal, only particular kinds such as `Dog`.*
+- **Interface:** a capability that unrelated classes might share. *Example: `Flyable` fits a `Bird`, an `Airplane` and `Superman`.*
+
+<div class="callout"><strong>Rules of thumb:</strong> a class needs behaviour from several sources → interfaces, because a class can extend only one class. Related classes should share working methods and instance variables → an abstract class. A type for many classes, including unrelated ones → an interface.</div>
+
+---
+
+<!-- Speaker notes: ~0:50. Pair each benefit with its example from this lecture. Slow down for the Open/Closed Principle: lab DIY 4 adds a Wizard without changing takeTurn, which is the principle in practice. -->
+
+## Benefits of abstraction
+
+- **Less complexity, easier maintenance:** code that uses `Drawable` needs to know only `draw()`, not how each class draws. Code that changes often (the bodies) is kept apart from code that stays the same (the signatures).
+- **The Open/Closed Principle:** a program is *open* to new features and *closed* to changes in the code that already works.
+  - *Open:* add a feature by writing a new class that implements the interface, such as a `Triangle` that implements `Drawable`.
+  - *Closed:* code that uses only the interface, such as `d.draw()`, does not change when that class is added.
+- **Protection and safety:** `private` protects a class's data, and `abstract` protects how a class is used: the compiler refuses to create an object of an abstract class, such as a plain `Animal`.
 
 ---
 
 ## Summary
 
-<div class="pillars">
-<div class="pill today">Encapsulation<small>hide the data</small></div>
-<div class="pill today">Inheritance<small>share what's common</small></div>
-<div class="pill today">Polymorphism<small>one call, many forms</small></div>
-<div class="pill today">Abstraction<small>hide the machinery</small></div>
-</div>
-
-- **The set is complete** - encapsulation hides your data, inheritance shares what's common, polymorphism lets one call take many forms, and abstraction hides the machinery behind a contract.
-- An `abstract` class is **half-built on purpose**: concrete methods are shared, abstract ones (`;`, no braces) are homework - and nobody gets `new` until a descendant finishes all of it.
-- An **interface is all contract**: methods implicitly `public abstract`, constants implicitly `public static final` - and one class can sign many.
-- **Choosing**: finished thing → concrete class · close relatives sharing state and defaults → abstract class · one capability for unrelated classes → interface.
-- Above all: **depend on the contract, not the machinery** - it is why petrol and electric drive exactly the same.
+- **Abstraction** shows what a method does (its signature) and hides how it does it (its body). Encapsulation hides data instead.
+- An **abstract class** cannot be instantiated and is used through `extends`. It can have instance variables, constructors, and both abstract and concrete methods.
+- An **abstract method** has no body and ends with `;`. A class with one must be abstract, and each subclass must override it or be abstract too.
+- An **interface** lists method signatures (implicitly `public abstract`) and constants (implicitly `public static final`), with no constructors. A class `implements` it and writes every method as `public`; an interface `extends` other interfaces.
+- A class extends **one** class but can implement **many** interfaces. A variable of an interface type can hold an object of any class that implements it.
+- Abstract class: close relatives that share code ("is-a"). Interface: a capability that unrelated classes share ("can-do").

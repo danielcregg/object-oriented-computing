@@ -36,16 +36,16 @@
       "id": "abstraction-003",
       "difficulty": "easy",
       "type": "concept",
-      "question": "To drive a car you use only the pedals, gear shift and steering wheel, and you never see how the engine works. In abstraction terms, what do the pedals and wheel represent?",
+      "question": "When you press a TV remote's volume button, the volume goes up, but you never see how the TV does it. In abstraction terms, what does the button stand for?",
       "code": null,
       "options": [
-        "The implementation, because they are the parts that physically make the car move",
-        "Encapsulated private data belonging to the car",
-        "The exposed interface (the contract) through which the hidden implementation is used",
-        "An abstract method, because the driver must supply their own body for it"
+        "The implementation, because it is the part that makes the volume change",
+        "Encapsulated private data belonging to the TV",
+        "The part you use, like a method signature, while how it works stays hidden",
+        "An abstract method, because the person pressing it must supply its own body"
       ],
       "answer": 2,
-      "explanation": "The controls are the simple interface the driver depends on, while the engine and transmission are the hidden implementation. Abstraction means using something through its contract without ever seeing the machinery underneath."
+      "explanation": "The button is all you need to use, like a method's signature, while how the TV changes the volume stays hidden, like a method's body. Abstraction means using something without seeing how it works."
     },
     {
       "id": "abstraction-004",
@@ -60,7 +60,7 @@
         "Abstract classes and interfaces"
       ],
       "answer": 3,
-      "explanation": "Java implements abstraction through the abstract keyword (abstract classes and abstract methods) and through interfaces, which are fully abstract contracts. Getters, setters and access modifiers are the tools of encapsulation instead."
+      "explanation": "Java implements abstraction through the abstract keyword (abstract classes and abstract methods) and through interfaces, in which every method is abstract. Getters, setters and access modifiers are the tools of encapsulation instead."
     },
     {
       "id": "abstraction-005",
@@ -150,7 +150,7 @@
         "It fails to compile: an interface cannot be instantiated"
       ],
       "answer": 3,
-      "explanation": "Interfaces are pure contracts and can never be instantiated with new; they can only be implemented by classes or extended by other interfaces. Only a concrete implementing class could be instantiated and assigned to a Playable variable."
+      "explanation": "An interface can never be instantiated with new; they can only be implemented by classes or extended by other interfaces. Only a concrete implementing class could be instantiated and assigned to a Playable variable."
     },
     {
       "id": "abstraction-011",
@@ -180,7 +180,7 @@
         "Yes, but calling area() on a Triangle throws an exception at run time"
       ],
       "answer": 1,
-      "explanation": "A subclass that inherits an abstract method has exactly two options: provide a body for it, or be declared abstract and pass the obligation on. Triangle does neither, so compilation fails."
+      "explanation": "A subclass that inherits an abstract method has exactly two options: provide a body for it, or be declared abstract itself, leaving the method to its own subclasses. Triangle does neither, so compilation fails."
     },
     {
       "id": "abstraction-013",
@@ -195,7 +195,7 @@
         "Yes, but only C is usable; A and B are removed by the compiler"
       ],
       "answer": 2,
-      "explanation": "An abstract subclass may leave inherited abstract methods unimplemented and pass them down. The chain is legal because some descendant (here C) eventually implements everything; otherwise the family could never produce a single object."
+      "explanation": "An abstract subclass may leave inherited abstract methods unimplemented, so B is legal, and C, which is concrete, writes m(). Some subclass must eventually write every abstract method; otherwise none of the classes could ever be instantiated."
     },
     {
       "id": "abstraction-014",
@@ -315,7 +315,7 @@
         "It fails to compile because Circle should use extends, not implements"
       ],
       "answer": 2,
-      "explanation": "An interface is a valid reference type: the variable is typed by the contract while the object supplies the implementation. The call d.draw() runs Circle's method and prints Drawing a circle."
+      "explanation": "An interface can be the type of a variable: d has the type Drawable, and the Circle object it holds supplies the body. The call d.draw() runs Circle's method and prints Drawing a circle."
     },
     {
       "id": "abstraction-022",
@@ -360,7 +360,7 @@
         "Only if Wearable and Chargeable extend a common parent interface"
       ],
       "answer": 0,
-      "explanation": "Multiple interfaces are listed after implements, separated by commas; this is Java's multiple inheritance of type. Smartwatch honours both contracts by giving every declared method a public implementation."
+      "explanation": "Multiple interfaces are listed after implements, separated by commas; this is Java's multiple inheritance of type. Smartwatch compiles because it gives every method of both interfaces a public body."
     },
     {
       "id": "abstraction-025",
@@ -420,7 +420,7 @@
         "It prints \"Playing radio\" then throws an exception because Radio has no pause()"
       ],
       "answer": 1,
-      "explanation": "A default method (Java 8+) ships a ready-made body with the interface, so implementers only have to supply the abstract methods, here just play(). Radio inherits pause() from the interface and the call prints Paused."
+      "explanation": "A default method (Java 8 and later) has a body written in the interface itself, so an implementing class has to write only the abstract methods, here just play(). Radio inherits pause() from the interface and the call prints Paused."
     },
     {
       "id": "abstraction-029",
@@ -435,7 +435,7 @@
         "The Open/Closed Principle: the system is open to extension through new implementations but closed to modification of existing client code"
       ],
       "answer": 3,
-      "explanation": "Open/Closed says software should be open for extension but closed for modification. Because the client codes against the stable interface contract, new implementers can be added at any time while the existing client code stays untouched."
+      "explanation": "Open/Closed says software should be open for extension but closed for modification. Because NotificationManager uses only the interface, new classes that implement it can be added at any time, and NotificationManager itself never has to change."
     },
     {
       "id": "abstraction-030",
@@ -480,7 +480,7 @@
         "Implementations passed to it are excused from implementing the interface's other methods"
       ],
       "answer": 0,
-      "explanation": "Programming to an interface means the method depends only on the contract, so every implementer, including ones written later, is accepted automatically. This keeps code flexible and reusable and is the mechanism behind the Open/Closed Principle."
+      "explanation": "Programming to an interface means the method depends only on the interface, so every class that implements it, including classes written later, is accepted without any change to the method. This keeps code flexible and reusable and is the mechanism behind the Open/Closed Principle."
     }
   ]
 }

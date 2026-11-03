@@ -2,68 +2,30 @@
 
 ## What you'll learn
 
-- Explain abstraction - hiding complex details while showing only what's needed - and why it leads to cleaner, better-organized code
-- Write abstract classes that act as blueprints for related objects, and extend them with concrete subclasses
-- Define interfaces as contracts and implement them in your own classes
-- Choose between an abstract class ("is-a") and an interface ("can-do") when designing a program
-- Program to an interface so new implementations can be added without changing existing code (the Open/Closed Principle)
+**Abstraction** means showing what a method does while hiding how it does it: code that calls a method needs only its signature (its name and parameters), not its body. Java gives you two tools for it, abstract classes and interfaces. By the end of this lab you will be able to:
+
+- Write an abstract class, and extend it with concrete subclasses that each write its abstract methods
+- Write an interface, and implement it in your own classes
+- Write a class that extends one class and implements one or more interfaces
+- Program to an interface: write a method that accepts any class implementing an interface, so that new classes can be added without changing it (the Open/Closed Principle)
+- Choose between an abstract class ("is-a") and an interface ("can-do") for a design
 
 ## Table of Contents
 1. [Abstract Classes](#1-abstract-classes)
 2. [Interfaces](#2-interfaces)
 3. [Abstract Classes vs. Interfaces](#3-abstract-classes-vs-interfaces)
-4. [Practical Applications](#4-practical-applications)
+4. [Programming to an Interface](#4-programming-to-an-interface)
 5. [Choosing the Right Tool](#5-choosing-the-right-tool)
 
 ## Getting started
 
-This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class or an interface, give it its own file beside `Main.java`: `Shape.java`, `Circle.java` and `Square.java` for DIY 1, `GameCharacter.java`, `Hero.java` and `Villain.java` for DIY 2, and so on. Every new file starts with the package line you see in `Main.java`. When a step gives you a whole `Main` class to test with, keep the `package` line at the top of the file.
+This lab lives in the package `week11.abstraction_lab` - this folder. A runnable `Main.java` is already here: open this folder in VS Code or your Codespace, click ▶ on `Main.java` to check your setup works. Use this one `Main.java` throughout the lab to create and test your objects; replace its test code as each exercise develops the program. When an exercise asks you to define a class or an interface, give it its own file beside `Main.java`: `Shape.java`, `Circle.java` and `Square.java` for DIY 1, `GameCharacter.java` and `Hero.java` for DIY 2, and so on. Every new file starts with the package line you see in `Main.java`. The exercises build on each other, so keep every class you write: later exercises use them again.
 
 ## 1. Abstract Classes
 
-### Real-World Example
-Think about driving a car. To drive a car, you only need to know about:
-- The steering wheel
-- The pedals (gas and brake)
-- The gear shift
-
-You don't need to know how the engine works, how the transmission functions, or how the electrical system operates. This is abstraction - hiding complex details while showing only what's necessary to use something.
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4CAF50', 'primaryTextColor': '#fff', 'primaryBorderColor': '#2E7D32', 'lineColor': '#FF9800', 'secondaryColor': '#2196F3', 'tertiaryColor': '#E3F2FD'}}}%%
-flowchart TB
-    subgraph visible["🚗 What You See"]
-        style visible fill:#E8F5E9,stroke:#4CAF50,stroke-width:3px,color:#1B5E20
-        SW["🎡 Steering Wheel"]
-        P["🦶 Pedals"]
-        GS["⚙️ Gear Shift"]
-    end
-    
-    subgraph hidden["🔧 Hidden Complexity"]
-        style hidden fill:#FFEBEE,stroke:#EF5350,stroke-width:3px,color:#B71C1C
-        E["🔥 Engine"]
-        T["⚡ Transmission"]
-        ES["🔌 Electrical System"]
-        FS["⛽ Fuel System"]
-        BS["🛑 Brake System"]
-    end
-    
-    SW --> hidden
-    P --> hidden
-    GS --> hidden
-    
-    classDef visibleClass fill:#C8E6C9,stroke:#4CAF50,stroke-width:2px,color:#1B5E20
-    classDef hiddenClass fill:#FFCDD2,stroke:#EF5350,stroke-width:2px,color:#B71C1C
-    
-    class SW,P,GS visibleClass
-    class E,T,ES,FS,BS hiddenClass
-```
-
-> **Key Concept:** Abstraction is like the dashboard of a car - it shows you only what you need to operate the vehicle while hiding all the complex machinery underneath.
-
 ### What is an Abstract Class?
 
-An abstract class is a blueprint that defines what related objects should do, but cannot be instantiated directly. It can contain both complete methods (concrete) and incomplete methods (abstract) that subclasses must implement.
+An **abstract class** is a class declared with the keyword `abstract`. It cannot be instantiated: `new` cannot create an object of it, so it exists only to be extended. Like any class, it can hold instance variables, constructors and complete methods (with a body), which every subclass shares. It can also declare **abstract methods**: a signature ending in a semicolon, with no body. Every concrete (non-abstract) subclass must implement each abstract method it inherits.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#3F51B5', 'primaryTextColor': '#1A237E', 'primaryBorderColor': '#283593', 'lineColor': '#E91E63', 'secondaryColor': '#00BCD4', 'tertiaryColor': '#E8EAF6'}}}%%
@@ -95,37 +57,8 @@ flowchart TB
 ```
 
 ### Code Example: Animal Sounds
-Let's create a simple system for animal sounds:
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#9C27B0', 'primaryTextColor': '#4A148C', 'primaryBorderColor': '#6A1B9A', 'lineColor': '#FF9800', 'secondaryColor': '#03A9F4', 'tertiaryColor': '#E1BEE7', 'classText': '#4A148C'}}}%%
-classDiagram
-    class Animal {
-        <<abstract>>
-        #String name
-        #int age
-        +Animal(String name, int age)
-        +makeSound()* void
-        +introduce() void
-    }
-    
-    class Dog {
-        +Dog(String name, int age)
-        +makeSound() void
-    }
-    
-    class Cat {
-        +Cat(String name, int age)
-        +makeSound() void
-    }
-    
-    Animal <|-- Dog : extends
-    Animal <|-- Cat : extends
-    
-    note for Animal "🔷 Abstract Class\nCannot be instantiated directly\nContains abstract method makeSound()"
-    note for Dog "🐕 Concrete Class\nmakeSound() → 'Woof! Woof!'"
-    note for Cat "🐱 Concrete Class\nmakeSound() → 'Meow!'"
-```
+Every animal makes a sound, but no one sound fits every animal, so `makeSound()` is abstract and each subclass writes its own:
 
 ```java
 // This is our abstract class - it defines what all animals can do
@@ -228,7 +161,7 @@ classDiagram
     note for Square "🟦 Area = side × side"
 ```
 
-1. Create an abstract class named `Shape`. This is the first abstract class you will write in this lab, so - unlike every abstract class and interface from here on - it is given to you complete: copy it into a new file called `Shape.java` and read through it before moving on. The point of copying it is to see exactly where the `abstract` keyword goes on both the class and the method; every abstract class and interface after this one, you write yourself from a specification:
+1. Copy this abstract class into a new file `Shape.java`. It is the only class in this lab you are given complete: notice where `abstract` goes, on the class and on `getArea()`.
 ```java
 public abstract class Shape {
     protected String color;
@@ -257,27 +190,14 @@ public abstract class Shape {
    - Add a constructor that takes `color` and `sideLength` as parameters
    - Implement the `getArea()` method using the formula: `sideLength × sideLength`
 
-4. Update `Main.java` to test your shapes:
-<!-- no-compile -->
-```java
-public class Main {
-    public static void main(String[] args) {
-        // Use Shape references (polymorphism)
-        Shape circle = new Circle("Red", 5.0);
-        Shape square = new Square("Blue", 4.0);
-        
-        // Test the circle below by calling the getArea() and displayColor() methods
+4. In `Main.java`'s `main`, create a red circle of radius `5.0` and a blue square of side `4.0`, each in a variable of type `Shape`: `Shape circle = new Circle("Red", 5.0);`. For each shape, print its area with the label shown below, then call its `displayColor()`.
 
-        
-        // Test the square below by calling the getArea() and displayColor() methods
-  
-    }
-}
-```
+5. Check the rule: add `Shape shape = new Shape("Green");` to `main` and run. The compiler stops with `error: Shape is abstract; cannot be instantiated`. Delete that line again.
 
-> **Note:** We use `Shape` as the reference type (`Shape circle = ...`) instead of `Circle` to demonstrate polymorphism - the same principle shown in the Animal example above.
+> **Note:** The variables have type `Shape`, not `Circle` or `Square`. A variable of an abstract class's type can hold an object of any of its concrete subclasses, just like `Animal spot = new Dog("Spot", 3);` above.
 
 **Expected output**
+
 ```text
 Circle area: 78.53981633974483
 I am Red in color
@@ -287,83 +207,25 @@ I am Blue in color
 
 <details><summary>Hint</summary>
 
-Use `Math.PI * radius * radius` for the circle's area. To print an area with a label, use `System.out.println("Circle area: " + circle.getArea());` - and the same idea for the square.
+The first line of each constructor passes the color up to `Shape`'s constructor: `super(color);`. Use `Math.PI * radius * radius` for the circle's area. To print an area with a label, use `System.out.println("Circle area: " + circle.getArea());` - and the same idea for the square.
 
 </details>
 
 ## 2. Interfaces
 
-### Real-World Example
-Think of a power outlet. Any device with the right plug can connect to it, regardless of what the device does. The power outlet is like an interface - it defines a standard way of connecting.
+### What is an Interface?
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#00BCD4', 'primaryTextColor': '#006064', 'primaryBorderColor': '#0097A7', 'lineColor': '#FF5722', 'secondaryColor': '#FF9800', 'tertiaryColor': '#E0F7FA'}}}%%
-flowchart LR
-    subgraph interface["🔌 INTERFACE (Power Outlet)"]
-        style interface fill:#E0F7FA,stroke:#00BCD4,stroke-width:3px,color:#006064
-        I["Standard Connection<br/>Contract"]
-    end
-    
-    subgraph devices["🏠 DEVICES"]
-        style devices fill:#FFF3E0,stroke:#E65100,stroke-width:3px,color:#BF360C
-        D1["💻 Laptop"]
-        D2["📱 Phone Charger"]
-        D3["🔌 Lamp"]
-        D4["📺 TV"]
-    end
-    
-    D1 --> |"implements"| I
-    D2 --> |"implements"| I
-    D3 --> |"implements"| I
-    D4 --> |"implements"| I
-    
-    classDef interfaceNode fill:#B2EBF2,stroke:#00ACC1,stroke-width:2px,color:#006064
-    classDef deviceNode fill:#FFE0B2,stroke:#E65100,stroke-width:2px,color:#BF360C
-    
-    class I interfaceNode
-    class D1,D2,D3,D4 deviceNode
-```
+An **interface** is like an abstract class in which every method is abstract: it lists method signatures, each ending in a semicolon, with no bodies. You declare it with the keyword `interface` instead of `class`. Its methods are implicitly `public abstract`, so you do not write those words, and any variable in an interface is a constant (implicitly `public static final`). An interface has no constructors and cannot be instantiated. (Since Java 8 an interface may also contain `default` and `static` methods, which do have bodies, but every method in this lab's interfaces is abstract.)
 
-> **Key Concept:** An interface is like a contract - any class that "signs" the contract (implements the interface) promises to provide specific behaviors.
+A class **implements** an interface with the keyword `implements`. It must then give every method the interface lists a body, with exactly the same signature, and make each of those methods `public`. An interface works like a contract: a class that implements it promises to provide every one of its methods.
 
-### Simple Code Example: Musical Instruments
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E91E63', 'primaryTextColor': '#880E4F', 'primaryBorderColor': '#C2185B', 'lineColor': '#9C27B0', 'secondaryColor': '#4CAF50', 'tertiaryColor': '#FCE4EC', 'classText': '#880E4F'}}}%%
-classDiagram
-    class MusicalInstrument {
-        <<interface>>
-        +play() void
-        +stop() void
-        +tune() void
-    }
-    
-    class Piano {
-        +play() void
-        +stop() void
-        +tune() void
-    }
-    
-    class Guitar {
-        +play() void
-        +stop() void
-        +tune() void
-    }
-    
-    MusicalInstrument <|.. Piano : implements
-    MusicalInstrument <|.. Guitar : implements
-    
-    note for MusicalInstrument "🎵 Interface Contract\nDefines WHAT instruments can do\n(not HOW they do it)"
-    note for Piano "🎹 play() → 'Piano playing beautiful music'"
-    note for Guitar "🎸 play() → 'Guitar strumming chords'"
-```
+### Code Example: Musical Instruments
 
 ```java
-// The interface defines what methods musical instruments must have
+// The interface lists the methods every musical instrument must have
 public interface MusicalInstrument {
     void play();
     void stop();
-    void tune();
 }
 
 // A piano that implements the MusicalInstrument interface
@@ -372,15 +234,10 @@ public class Piano implements MusicalInstrument {
     public void play() {
         System.out.println("Piano playing beautiful music");
     }
-    
+
     @Override
     public void stop() {
         System.out.println("Piano stopped playing");
-    }
-    
-    @Override
-    public void tune() {
-        System.out.println("Piano being tuned");
     }
 }
 
@@ -390,62 +247,39 @@ public class Guitar implements MusicalInstrument {
     public void play() {
         System.out.println("Guitar strumming chords");
     }
-    
+
     @Override
     public void stop() {
         System.out.println("Guitar stopped playing");
     }
-    
-    @Override
-    public void tune() {
-        System.out.println("Guitar strings being tuned");
-    }
 }
 ```
 
-### DIY 2: Simple Game Characters
-Create a simple game character system:
+### DIY 2: Simple Game Character
+Create an interface for game characters, and one character that implements it:
 
-1. Create an interface named `GameCharacter` with three method signatures that every character must provide - no bodies, just the signatures, exactly like `MusicalInstrument` above:
+1. Create an interface named `GameCharacter` with two method signatures, written like `MusicalInstrument` above (no bodies):
    - `void move()` - no parameters, returns nothing
    - `void speak()` - no parameters, returns nothing
-   - `void useItem()` - no parameters, returns nothing
 
-2. Create two types of characters that implement this interface:
-   - `Hero` - implements methods with heroic behavior (e.g., "Hero charges forward!", "For justice!", "Hero uses health potion!")
-   - `Villain` - implements methods with villainous behavior (e.g., "Villain sneaks in shadows!", "You'll never stop me!", "Villain uses poison!")
+2. Create a class named `Hero` that implements `GameCharacter`: its `move()` prints `Hero charges forward!` and its `speak()` prints `For justice!`.
 
-3. Test your characters in `Main.java`:
-<!-- no-compile -->
-```java
-public class Main {
-    public static void main(String[] args) {
-        // Create game characters
-        GameCharacter hero = new Hero();
-        GameCharacter villain = new Villain();
-        
-        // Test the hero below by calling move(), speak(), and useItem()
+3. In `main`, create a `Hero` in a variable of type `GameCharacter` (`GameCharacter hero = new Hero();`), then call its `move()` and its `speak()`.
 
-        
-        // Test the villain below by calling move(), speak(), and useItem()
+4. Check that interface methods must be public: delete the word `public` from `Hero`'s `speak()` and run. The compiler stops with `error: speak() in Hero cannot implement speak() in GameCharacter` and the reason `attempting to assign weaker access privileges; was public`. Put `public` back.
 
-    }
-}
-```
+5. Check that every method must be implemented: delete the whole `speak()` method from `Hero` and run. The compiler stops with `error: Hero is not abstract and does not override abstract method speak() in GameCharacter`. Undo the deletion.
 
 **Expected output**
+
 ```text
 Hero charges forward!
 For justice!
-Hero uses health potion!
-Villain sneaks in shadows!
-You'll never stop me!
-Villain uses poison!
 ```
 
 <details><summary>Hint</summary>
 
-Write `GameCharacter` the same way `MusicalInstrument` is written above: `public interface GameCharacter { void move(); void speak(); void useItem(); }` - each line is a signature ending in a semicolon, no body. Then follow the `Piano` and `Guitar` pattern for the classes: declare `public class Hero implements GameCharacter { ... }`, and give each of `move()`, `speak()`, and `useItem()` an `@Override` implementation that prints the character's line.
+Write `GameCharacter` the same way `MusicalInstrument` is written above: `public interface GameCharacter {`, then one signature per line, each ending in a semicolon. Then follow the `Piano` pattern: `public class Hero implements GameCharacter { ... }`, with an `@Override public void` method for each of `move()` and `speak()` that prints the hero's line.
 
 </details>
 
@@ -490,6 +324,10 @@ flowchart TB
     class I1,I2,I3,I4,I5,I6 interfaceNode
 ```
 
+*\*An interface can still hold constants: variables that are implicitly `public static final`.*
+
+A class can **extend only one** class, but it can **implement as many interfaces as it needs**, and it can do both at once: `extends` comes first, then `implements`, with several interfaces separated by commas, as in `public class Dog extends Animal implements Playable, Trainable`.
+
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#009688', 'primaryTextColor': '#004D40', 'primaryBorderColor': '#00796B', 'lineColor': '#FF9800', 'secondaryColor': '#E91E63', 'tertiaryColor': '#E0F2F1'}}}%%
 flowchart LR
@@ -523,153 +361,40 @@ flowchart LR
     class PLAY,TRAIN interfaceNode
 ```
 
-### Example: Pet Care System
+### DIY 3: Drawable Circle
+`Circle` from DIY 1 already extends `Shape`, and a class can extend only one class. To make circles drawable as well, `Circle` will also implement an interface:
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#8BC34A', 'primaryTextColor': '#33691E', 'primaryBorderColor': '#689F38', 'lineColor': '#FF5722', 'secondaryColor': '#03A9F4', 'tertiaryColor': '#DCEDC8', 'classText': '#33691E'}}}%%
-classDiagram
-    class Playable {
-        <<interface>>
-        +play() void
-        +rest() void
-    }
-    
-    class Pet {
-        <<abstract>>
-        #String name
-        #int age
-        +Pet(String name, int age)
-        +eat()* void
-        +makeSound()* void
-        +sleep() void
-    }
-    
-    class Dog {
-        +Dog(String name, int age)
-        +eat() void
-        +makeSound() void
-        +play() void
-        +rest() void
-    }
-    
-    Pet <|-- Dog : extends
-    Playable <|.. Dog : implements
-    
-    note for Pet "🐾 Abstract Class\nDog IS-A Pet"
-    note for Playable "🎾 Interface\nDog CAN play"
-    note for Dog "🐕 Concrete Class\nInherits from Pet\nImplements Playable"
-```
+1. Create an interface named `Drawable` with one method signature: `void draw()` - no parameters, returns nothing.
 
-```java
-// Interface for things pets can do
-public interface Playable {
-    void play();
-    void rest();
-}
+2. Change the first line of `Circle` so that it still extends `Shape` and also implements `Drawable`.
 
-// Abstract class for all pets
-public abstract class Pet {
-    protected String name;
-    protected int age;
-    
-    public Pet(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-    
-    public abstract void eat();
-    public abstract void makeSound();
-    
-    public void sleep() {
-        System.out.println(name + " is sleeping...");
-    }
-}
+3. Add a `draw()` method to `Circle` that prints the word `Drawing a`, the circle's `color` and the word `circle`, with a space between each, so that a red circle prints `Drawing a Red circle`. `Circle` can use `color` directly because it inherits that `protected` instance variable from `Shape`.
 
-// A dog is a pet that can play
-public class Dog extends Pet implements Playable {
-    public Dog(String name, int age) {
-        super(name, age);
-    }
-    
-    @Override
-    public void eat() {
-        System.out.println(name + " is eating dog food");
-    }
-    
-    @Override
-    public void makeSound() {
-        System.out.println("Woof!");
-    }
-    
-    @Override
-    public void play() {
-        System.out.println(name + " is playing fetch");
-    }
-    
-    @Override
-    public void rest() {
-        System.out.println(name + " is resting after play");
-    }
-}
-```
-
-### DIY 3: School System
-Create a simple school system:
-
-1. Create an interface named `Teachable` with two method signatures:
-   - `void study()` - no parameters, returns nothing
-   - `void doHomework()` - no parameters, returns nothing
-
-2. Create an abstract class named `Person`:
-   - Add a `name` instance variable (type `String`, `protected`)
-   - Add an `age` instance variable (type `int`, `protected`)
-   - Add a constructor that takes `name` and `age` as parameters and assigns them to the two fields
-   - Declare an abstract method `introduce()` that returns nothing - give it no body, just the signature ending in a semicolon; each subclass must supply its own version
-
-3. Create a `Student` class that extends `Person` and implements `Teachable`:
-   - Add a constructor that takes `name` and `age` parameters
-   - Implement the `introduce()` method (e.g., "Hi, I'm [name] and I'm [age] years old")
-   - Implement the `study()` method (e.g., "[name] is studying hard!")
-   - Implement the `doHomework()` method (e.g., "[name] is doing homework...")
-
-4. Test your `Student` class in `Main.java`:
-<!-- no-compile -->
-```java
-public class Main {
-    public static void main(String[] args) {
-        // Create a student
-        Student student = new Student("Alice", 20);
-        
-        // Test the student below by calling introduce(), study(), and doHomework()
-
-    }
-}
-```
+4. In `main`, create a red circle of radius `5.0` in a variable of type `Circle`, call its `draw()`, then print its area labelled as in DIY 1.
 
 **Expected output**
+
 ```text
-Hi, I'm Alice and I'm 20 years old
-Alice is studying hard!
-Alice is doing homework...
+Drawing a Red circle
+Circle area: 78.53981633974483
 ```
 
 <details><summary>Hint</summary>
 
-Write `Teachable` the same way `Playable` is written above - just method signatures ending in semicolons, no bodies. Write `Person` the same shape as `Pet` above: `protected` fields, a constructor that assigns them, then `public abstract void introduce();` with a semicolon instead of a body. `Student` then uses both keywords in one declaration: `public class Student extends Person implements Teachable`. Its constructor should call `super(name, age)` to pass the values up to `Person`.
+The first line of `Circle` becomes `public class Circle extends Shape implements Drawable {` - `extends` always comes before `implements`. The rest of `Circle` stays as it was; you only add an `@Override public void draw()` method. A `Circle` is now both a `Shape` and a `Drawable`, so `Shape s = circle;` and `Drawable d = circle;` would both compile.
 
 </details>
 
-## 4. Practical Applications
+## 4. Programming to an Interface
 
 ### Why Program to an Interface?
-When you write methods that accept an interface as a parameter, you can pass ANY class that implements that interface. This means:
-- You can add new implementations without changing existing code
-- Your code becomes more flexible and reusable
-- Testing becomes easier (you can create mock implementations)
+When a method's parameter type is an interface, you can pass it an object of ANY class that implements that interface. This means:
+- One method works with every class that implements the interface, including classes written after the method
+- You add a new kind of object by writing a new class, without changing code that already works
 
-### The SOLID Principles: Open/Closed Principle
+### The Open/Closed Principle
 
-This approach follows one of the most important software design principles - the **Open/Closed Principle (OCP)**, which is the "O" in **SOLID**:
+This follows a well-known software design principle, the **Open/Closed Principle**:
 
 > **"Software entities should be open for extension, but closed for modification."**
 
@@ -677,275 +402,72 @@ What does this mean in practice?
 
 | Concept | Meaning | Example |
 |---------|---------|---------|
-| **Open for Extension** | You can add new functionality | Add a new `EmailService` class that implements `MessageService` |
-| **Closed for Modification** | You don't need to change existing code | The `NotificationManager` class doesn't need ANY changes to work with the new `EmailService` |
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#673AB7', 'primaryTextColor': '#311B92', 'primaryBorderColor': '#512DA8', 'lineColor': '#4CAF50', 'secondaryColor': '#FF9800', 'tertiaryColor': '#EDE7F6'}}}%%
-flowchart LR
-    subgraph solid["🏗️ OPEN/CLOSED PRINCIPLE"]
-        style solid fill:#EDE7F6,stroke:#673AB7,stroke-width:3px,color:#311B92
-        
-        subgraph closed["🔒 CLOSED for Modification"]
-            style closed fill:#FFEBEE,stroke:#EF5350,stroke-width:2px,color:#B71C1C
-            NM["NotificationManager<br/>Never needs to change!"]
-        end
-        
-        subgraph open["🔓 OPEN for Extension"]
-            style open fill:#E8F5E9,stroke:#4CAF50,stroke-width:2px,color:#1B5E20
-            NEW1["+ EmailService"]
-            NEW2["+ SlackService"]
-            NEW3["+ TelegramService"]
-            NEW4["+ Any Future Service!"]
-        end
-        
-        open --> |"implements<br/>MessageService"| closed
-    end
-    
-    classDef closedNode fill:#FFCDD2,stroke:#EF5350,stroke-width:2px,color:#B71C1C
-    classDef openNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#1B5E20
-    
-    class NM closedNode
-    class NEW1,NEW2,NEW3,NEW4 openNode
-```
+| **Open for Extension** | You can add new functionality | Add a new `Wizard` class that implements `GameCharacter` |
+| **Closed for Modification** | You don't need to change existing code | A method that takes a `GameCharacter` works with the new `Wizard` without ANY changes |
 
 > **Why is this important?** In real-world applications, modifying existing code can introduce bugs. By following the Open/Closed Principle, you can add new features without risking breaking what already works!
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#00BCD4', 'primaryTextColor': '#006064', 'primaryBorderColor': '#0097A7', 'lineColor': '#4CAF50', 'secondaryColor': '#FF9800', 'tertiaryColor': '#E0F7FA'}}}%%
-flowchart TB
-    subgraph concept["📱 PROGRAMMING TO AN INTERFACE"]
-        style concept fill:#E0F7FA,stroke:#00BCD4,stroke-width:3px,color:#006064
-        
-        METHOD["sendNotification(MessageService service)"]
-        
-        subgraph implementations["Any Implementation Works!"]
-            style implementations fill:#E8F5E9,stroke:#4CAF50,stroke-width:2px,color:#1B5E20
-            SMS["📱 SMS"]
-            WA["💬 WhatsApp"]
-            EMAIL["📧 Email"]
-            SLACK["💼 Slack"]
-        end
-        
-        SMS --> METHOD
-        WA --> METHOD
-        EMAIL --> METHOD
-        SLACK --> METHOD
-    end
-    
-    classDef methodNode fill:#B2EBF2,stroke:#00ACC1,stroke-width:2px,color:#006064
-    classDef implNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#1B5E20
-    
-    class METHOD methodNode
-    class SMS,WA,EMAIL,SLACK implNode
-```
+### DIY 4: Taking Turns
+In a game, every character takes its turn the same way: it moves, then it speaks. Write that once, for any `GameCharacter`:
 
-### DIY 4: Messaging System
-Create a messaging system that demonstrates programming to an interface:
+1. In `Main.java`, beside `main`, write a method `public static void takeTurn(GameCharacter character)` that calls `character.move()` and then `character.speak()`. Its parameter's type is the interface `GameCharacter`, so it accepts a `Hero`, or an object of any other class that implements `GameCharacter`.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#9C27B0', 'primaryTextColor': '#4A148C', 'primaryBorderColor': '#7B1FA2', 'lineColor': '#FF9800', 'secondaryColor': '#4CAF50', 'tertiaryColor': '#F3E5F5', 'classText': '#4A148C'}}}%%
-classDiagram
-    class MessageService {
-        <<interface>>
-        +sendMessage(String message) void
-        +receiveMessage() String
-    }
-    
-    class WhatsAppService {
-        +sendMessage(String message) void
-        +receiveMessage() String
-    }
-    
-    class SMSService {
-        +sendMessage(String message) void
-        +receiveMessage() String
-    }
-    
-    MessageService <|.. WhatsAppService : implements
-    MessageService <|.. SMSService : implements
-    
-    note for MessageService "📨 Interface\nDefines messaging contract"
-    note for WhatsAppService "💬 WhatsApp Implementation"
-    note for SMSService "📱 SMS Implementation"
-```
+2. In `main`, call `takeTurn(new Hero());`.
 
-1. Create an interface named `MessageService` with two method signatures:
-   - `void sendMessage(String message)` - takes a `String` parameter, returns nothing
-   - `String receiveMessage()` - no parameters, returns a `String`
+3. Now add a new kind of character without changing `takeTurn`: create a class `Wizard` that implements **two** interfaces, `GameCharacter` and your `Drawable` from DIY 3. Its `move()` prints `Wizard teleports!`, its `speak()` prints `Abracadabra!` and its `draw()` prints `Drawing a wizard`.
 
-2. Create a `WhatsAppService` class that implements `MessageService`:
-   - Implement `sendMessage()` to print: "WhatsApp: Sending message - [message]"
-   - Implement `receiveMessage()` to return: "WhatsApp: New message received!"
-
-3. Create an `SMSService` class that implements `MessageService`:
-   - Implement `sendMessage()` to print: "SMS: Sending text - [message]"
-   - Implement `receiveMessage()` to return: "SMS: New text received!"
-
-4. Create a `NotificationManager` class with one method:
-   - `sendNotification(MessageService service, String message)` - takes a `MessageService` and a `String`, returns nothing. The parameter type is the interface, not any particular class - that is the whole point of this exercise, since it means this one method will work with `WhatsAppService`, `SMSService`, or any future class that implements `MessageService`. Its body, in order:
-     1. Print `Preparing to send notification...`
-     2. Call `service.sendMessage(message)`
-     3. Print `Notification sent successfully!`
-
-5. Test everything in `Main.java`:
-<!-- no-compile -->
-```java
-public class Main {
-    public static void main(String[] args) {
-        // Create the notification manager
-        NotificationManager manager = new NotificationManager();
-        
-        // Create different messaging services
-        MessageService whatsapp = new WhatsAppService();
-        MessageService sms = new SMSService();
-        
-        // Use the SAME method with DIFFERENT implementations!
-        System.out.println("--- Sending via WhatsApp ---");
-        manager.sendNotification(whatsapp, "Hello from WhatsApp!");
-        
-        System.out.println();
-        
-        System.out.println("--- Sending via SMS ---");
-        manager.sendNotification(sms, "Hello from SMS!");
-        
-        // Test receiving messages
-        System.out.println();
-        System.out.println(whatsapp.receiveMessage());
-        System.out.println(sms.receiveMessage());
-    }
-}
-```
+4. In `main`, after the hero's turn, create a `Wizard` in a variable of type `Wizard`, pass it to `takeTurn`, then call its `draw()`.
 
 **Expected output**
+
 ```text
---- Sending via WhatsApp ---
-Preparing to send notification...
-WhatsApp: Sending message - Hello from WhatsApp!
-Notification sent successfully!
-
---- Sending via SMS ---
-Preparing to send notification...
-SMS: Sending text - Hello from SMS!
-Notification sent successfully!
-
-WhatsApp: New message received!
-SMS: New text received!
+Hero charges forward!
+For justice!
+Wizard teleports!
+Abracadabra!
+Drawing a wizard
 ```
 
 <details><summary>Hint</summary>
 
-Write `MessageService` the same way `Playable` is written above - just the two signatures, no bodies. Watch the difference between them: `sendMessage()` prints its line with `System.out.println`, but `receiveMessage()` must `return` its String - `main` does the printing. For `NotificationManager`, the parameter list `sendNotification(MessageService service, String message)` is the one line that matters: type the parameter as the interface `MessageService`, not as `WhatsAppService` or `SMSService`.
+List both interfaces after `implements`, separated by a comma: `public class Wizard implements GameCharacter, Drawable { ... }`, and give it all three methods. `takeTurn(wizard)` compiles because a `Wizard` is a `GameCharacter`. Keep the wizard in a `Wizard` variable: through a `GameCharacter` variable you could call only `move()` and `speak()`, so `draw()` would not compile. Notice that `takeTurn` did not change when `Wizard` was added: that is the Open/Closed Principle.
 
 </details>
-
-> **Key Takeaway:** The `NotificationManager.sendNotification()` method doesn't care whether it receives a `WhatsAppService` or `SMSService` - it just knows how to work with any `MessageService`. This is the power of programming to an interface!
 
 ## 5. Choosing the Right Tool
 
 ### DIY 5: Choosing the Right Tool
 
-In DIY 1 to DIY 4, every exercise told you upfront whether to write an abstract class or an interface. In real design work nobody tells you - that decision is yours to make, using the same reasoning as the class vs. interface comparison earlier in this lab. Below are three scenarios. For each one, decide whether the shared type (or types) should be an abstract class or an interface, write your decision as a one-line comment directly above its declaration in the form `// Decision: abstract class - <your one-sentence reason>` or `// Decision: interface - <your one-sentence reason>`, and then implement it.
+In DIY 1 to DIY 4 the lab told you whether to write an abstract class or an interface. In real design work nobody tells you: you decide, using the comparison in section 3. For each type below, write your decision as a one-line comment directly above its declaration, in the form `// Decision: abstract class - <your one-sentence reason>` or `// Decision: interface - <your one-sentence reason>`.
 
-1. **Scenario: payment methods.** An online shop's checkout accepts `CreditCard` and `PayPalPayment`. The two share no data and no code at all - the only thing they have in common is that the checkout can ask either one to authorize a payment and produce a receipt label. Decide what the shared type `PaymentMethod` should be, then build it:
-   - `PaymentMethod` declares two behaviours: `authorize(double amount)` (returns nothing) and `receiptLabel()` (returns a `String`)
-   - `CreditCard` provides its own version of both: `authorize(amount)` prints `Authorizing card payment of $` immediately followed by the amount; `receiptLabel()` returns `Credit Card`
-   - `PayPalPayment` provides its own version too: `authorize(amount)` prints `Redirecting to PayPal for $` immediately followed by the amount; `receiptLabel()` returns `PayPal`
+1. **Look back at `Drawable`** (DIY 3 and DIY 4). Add your decision comment above its declaration: why does it have to be an interface, not an abstract class? Think about what `Circle` already extends, and what a `Wizard` has in common with a shape.
 
-2. **Scenario: payroll.** A company's payroll system tracks `Manager` and `Developer` records. Every employee, of either kind, has a `name` and an `annualSalary`, and every employee clocks in exactly the same way - but each role calculates its year-end bonus differently. There is no such thing as a bare, generic employee on this payroll; every real record is specifically a `Manager` or a `Developer`, yet the two are close enough relatives that duplicating `name`, `annualSalary` and clock-in behaviour in both of them would be wasteful. Decide what the shared type `Employee` should be, then build it:
+2. **Scenario: payroll.** A company's payroll system will track several kinds of employee, starting with managers. Every employee, of any kind, has a `name` and an `annualSalary` and clocks in exactly the same way, but each kind works out its year-end bonus differently. There is no such thing as a plain employee: every record is a specific kind, such as a `Manager`. Decide what the shared type `Employee` should be, add your decision comment, then build it:
    - `Employee` has a `protected String name` and a `protected double annualSalary`, a constructor that takes both and assigns them, a `clockIn()` method that prints the name followed by ` clocked in`, and a `bonus()` method (returns `double`) with no body of its own - each subclass must supply it
    - `Manager` reuses `Employee`'s fields and constructor; its own `bonus()` returns `annualSalary` multiplied by `0.20`
-   - `Developer` reuses the same fields and constructor; its own `bonus()` returns `annualSalary` multiplied by `0.10`
 
-3. **Scenario: smart devices.** A gadget shop stocks devices with independent capabilities: some devices can be worn, some can be charged on a dock, and a few, like a `FitnessTracker`, can do both. A device that can be worn has nothing structurally in common with one that can be charged - they are completely unrelated capabilities that happen to combine in some products. Decide what `Wearable` and `Chargeable` should each be, then build all three types:
-   - `Wearable` declares one behaviour: `wear()` (returns nothing)
-   - `Chargeable` declares one behaviour: `charge()` (returns nothing)
-   - `FitnessTracker` needs both behaviours at once: `wear()` prints `FitnessTracker strapped to your wrist`; `charge()` prints `FitnessTracker charging on the dock`. Check the class vs. interface comparison earlier in this lab for how many classes you may `extends`, versus how many you may `implements`.
-
-4. Test everything in `Main.java`:
-<!-- no-compile -->
-```java
-public class Main {
-    public static void main(String[] args) {
-        // Payment methods
-        PaymentMethod card = new CreditCard();
-        PaymentMethod paypal = new PayPalPayment();
-
-        // Test card below: call authorize(120.0), then print "Receipt: " + its receiptLabel()
-
-
-        // Test paypal below: call authorize(45.5), then print "Receipt: " + its receiptLabel()
-
-
-        // Payroll
-        Employee manager = new Manager("Priya", 60000.0);
-        Employee developer = new Developer("Sam", 50000.0);
-
-        // Test manager below: call clockIn(), then print "Bonus: " + its bonus()
-
-
-        // Test developer below: call clockIn(), then print "Bonus: " + its bonus()
-
-
-        // Smart devices
-        FitnessTracker tracker = new FitnessTracker();
-
-        // Test tracker below: call wear(), then call charge()
-
-    }
-}
-```
+3. In `main`, create a `Manager` named `Priya` with an annual salary of `60000.0`, in a variable of type `Employee`. Call its `clockIn()`, then print `Bonus: ` followed by its `bonus()`.
 
 **Expected output**
+
 ```text
-Authorizing card payment of $120.0
-Receipt: Credit Card
-Redirecting to PayPal for $45.5
-Receipt: PayPal
 Priya clocked in
 Bonus: 12000.0
-Sam clocked in
-Bonus: 5000.0
-FitnessTracker strapped to your wrist
-FitnessTracker charging on the dock
 ```
 
 <details><summary>Hint</summary>
 
-For each shared type, ask: does it need to hold state and share a constructor with close relatives (`protected` fields, `super(...)`) - or does it only need to guarantee that otherwise-unrelated classes can do the same thing? The first is an abstract class; the second is an interface. A class can `extends` only one class, but it can `implements` several, separated by commas: `class FitnessTracker implements Wearable, Chargeable { ... }`. Whichever you choose, every method the concrete class supplies still needs `@Override`.
+For each shared type, ask: does it need to hold state and share a constructor with close relatives (`protected` fields, `super(...)`)? Then it is an abstract class, because an interface can have neither instance variables nor constructors. Does it only need to promise that otherwise unrelated classes can all do the same thing? Then it is an interface, and a class that already extends another class can still implement it. `Manager`'s constructor passes both values up with `super(name, annualSalary);`.
 
 </details>
 
 ## Summary
-Through these examples and exercises, we've learned that:
-- Abstraction helps hide complex details
-- Abstract classes provide a blueprint for related objects
-- Interfaces define what actions an object can perform
-- Both help write cleaner, more organized code
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1565C0', 'primaryTextColor': '#FFFFFF', 'primaryBorderColor': '#0D47A1', 'lineColor': '#2E7D32', 'secondaryColor': '#E65100', 'tertiaryColor': '#1565C0', 'fontSize': '16px'}}}%%
-mindmap
-    root((🎯 ABSTRACTION))
-        🔷 Abstract Classes
-            IS-A Relationship
-            Share Common Code
-            Single Inheritance
-            Can Have Constructors
-            Can Have State
-        🟡 Interfaces
-            CAN-DO Relationship
-            Define Contracts
-            Multiple Implementations
-            No Constructors
-            No Instance State
-        🎨 Benefits
-            Hide Complexity
-            Cleaner Code
-            Better Organization
-            Easier Maintenance
-            Flexible Design
-```
+Through these exercises you have:
+- Written abstract classes, which cannot be instantiated, share their instance variables, constructors and complete methods with their subclasses, and leave each abstract method for every concrete subclass to write (DIY 1, DIY 5)
+- Written an interface, which lists method signatures that any class can promise to implement (DIY 2)
+- Combined the two: a class extends at most one class, but can implement many interfaces (DIY 3, DIY 4)
+- Programmed to an interface, so that a new class worked with code that never changed (DIY 4)
+- Chosen between an abstract class and an interface, and said why (DIY 5)
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4CAF50', 'primaryTextColor': '#1B5E20', 'primaryBorderColor': '#388E3C', 'lineColor': '#333', 'secondaryColor': '#9C27B0', 'tertiaryColor': '#E8F5E9'}}}%%
@@ -984,8 +506,6 @@ flowchart TD
 
 | Scenario | Use | Example |
 |----------|-----|---------|
-| Classes share code & state | 🔷 Abstract Class | `Animal` → `Dog`, `Cat` |
-| Unrelated classes, same behavior | 🟡 Interface | `Flyable` → `Bird`, `Airplane` |
-| Both shared code AND shared behavior | 🔷🟡 Both | `Pet` + `Playable` → `Dog` |
-
-Remember: Start simple, and add complexity only when needed!
+| Classes share code & state | 🔷 Abstract Class | `Shape` → `Circle`, `Square` |
+| Unrelated classes, same behavior | 🟡 Interface | `Drawable` → `Circle`, `Wizard` |
+| Both shared code AND shared behavior | 🔷🟡 Both | `Shape` + `Drawable` → `Circle` |

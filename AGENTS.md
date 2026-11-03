@@ -236,6 +236,9 @@ instructions, scripts, workflows and the practice bank alone.
   are read from the compiler. The abstraction lab held 239 typed lines over 5
   exercises (about 2h21) and went to 109 (about 1h29), every DIY number kept:
   the exercises now build on each other, and DIY 5 keeps the payroll decision.
+  The polymorphism lab held 211 typed lines over 6 exercises (about 2h13) and
+  went to 103 (about 1h30), every DIY number kept: the supplied animal classes
+  went from 117 lines to 30, and exercises lost what repeated earlier ones.
   Recalibrate these numbers from a real lab session.
 - Lab sections are NOT uniform below that top-level formula, and that is
   tolerated rather than intended: section counts run 5–10, sub-heading

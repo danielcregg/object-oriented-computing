@@ -15,7 +15,7 @@
         "Changing shape - an object switching to a different class while the program runs"
       ],
       "answer": 2,
-      "explanation": "Poly means many and morphe means form: one call, many forms. A Java object never changes its class at run time, and a class has only one direct superclass - the many forms are the different behaviours a single call can produce depending on the object."
+      "explanation": "Poly means many and morphe means form. In Java, the many forms are the different things one method call can do, depending on the object it is called on. An object never changes its class while the program runs, and a class has only one direct superclass."
     },
     {
       "id": "polymorphism-002",
@@ -30,7 +30,7 @@
         "Attaching an access modifier to a method declaration"
       ],
       "answer": 0,
-      "explanation": "Binding links a call site to the body that executes for it. Java draws that link at compile time for overloaded methods (early or static binding) and at run time for overridden methods (late or dynamic binding)."
+      "explanation": "Binding links a method call to the method body that runs for it. Java draws that link at compile time for overloaded methods (early or static binding) and at run time for overridden methods (late or dynamic binding)."
     },
     {
       "id": "polymorphism-003",
@@ -45,7 +45,7 @@
         "Dynamic method dispatch"
       ],
       "answer": 1,
-      "explanation": "With overloading, the compiler picks the right method just by looking at the method name and the argument types at the call site, so the call is bound before the program ever runs. Overriding and dynamic dispatch are resolved at run time by the JVM."
+      "explanation": "With overloading, the compiler picks the right method just by looking at the method name and the types of the arguments in the call, so the call is bound before the program ever runs. Overriding and dynamic dispatch are resolved at run time by the JVM."
     },
     {
       "id": "polymorphism-004",
@@ -150,7 +150,7 @@
         "The method name"
       ],
       "answer": 2,
-      "explanation": "A signature is only the name plus the parameter count, types, and order. Because the return type is excluded, two methods that differ only in return type have the same signature and can never be told apart at a call site."
+      "explanation": "A signature is only the name plus the parameter count, types, and order. Because the return type is excluded, two methods that differ only in return type have the same signature, so the compiler could never tell which one a call means."
     },
     {
       "id": "polymorphism-011",
@@ -177,10 +177,10 @@
         "It does not compile - there is no fun(char) overload for fun('A')",
         "int, double, double - the char promotes to the larger double type",
         "int, int, int - all three literals are treated as int",
-        "int, double, int - the char widens to int, the nearest fit"
+        "int, double, int - the char is widened to int, the more specific type"
       ],
       "answer": 3,
-      "explanation": "fun(5) exactly matches fun(int) and the double literal 5.0 matches fun(double). There is no fun(char), so 'A' widens to the nearest fitting type, and int beats double, so the third call prints int. All three choices are fixed at compile time."
+      "explanation": "fun(5) exactly matches fun(int) and the double literal 5.0 matches fun(double). There is no fun(char), so 'A' must be widened. Both fun(int) and fun(double) could take it, and Java chooses the more specific one, fun(int), because an int can always be widened to a double but not the other way round. All three choices are fixed at compile time."
     },
     {
       "id": "polymorphism-013",
@@ -255,7 +255,7 @@
         "Upcasts are only permitted inside the subclass's own methods, where they are known to be safe"
       ],
       "answer": 1,
-      "explanation": "Subclass-to-superclass conversion is guaranteed by the inheritance contract, so Java does it silently. A superclass reference might point to anything in the hierarchy, so a downcast is a promise the compiler cannot verify - it compiles the cast and the JVM checks the actual object at run time."
+      "explanation": "Every subclass object is also an object of its superclass, so an upcast can never fail and Java does it automatically. A superclass variable might refer to an object of any of its subclasses, so the compiler cannot check that a downcast will work: it compiles the cast, and the JVM checks the actual object at run time."
     },
     {
       "id": "polymorphism-018",
@@ -300,7 +300,7 @@
         "No - a subclass may not declare methods that its superclass lacks"
       ],
       "answer": 2,
-      "explanation": "@Override asks the compiler to verify that the method genuinely overrides an inherited one. Animal has no speek(), so compilation fails - exactly the safety net the annotation provides. (speek would not overload speak either: overloads must share one name.)"
+      "explanation": "@Override asks the compiler to check that the method really overrides an inherited one. Animal has no speek(), so compilation fails, which is exactly the check @Override is for. (speek would not overload speak either: overloads must share one name.)"
     },
     {
       "id": "polymorphism-021",
@@ -405,7 +405,7 @@
         "Static methods can only be called from other static methods, where no objects exist"
       ],
       "answer": 2,
-      "explanation": "Dynamic dispatch answers the question: what object is this call landing on? A static call has no receiver object, so the reference (class) type decides at compile time. A subclass redeclaring the same static method produces hiding, not overriding, and marking it @Override is a compile error."
+      "explanation": "Dynamic dispatch chooses the method from the object that a call is made on. A static call is not made on an object, so the reference (class) type decides at compile time. A subclass redeclaring the same static method produces hiding, not overriding, and marking it @Override is a compile error."
     },
     {
       "id": "polymorphism-028",

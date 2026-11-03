@@ -128,13 +128,12 @@ Constructors under inheritance and the `super` keyword, then the benefits.
 [Slides](../lectures-and-labs/week10/polymorphism-lecture.md) ·
 [Lab](../lectures-and-labs/week10/polymorphism_lab/README.md)
 
-The two kinds of polymorphism. Compile-time: method signatures and
-overloading, with worked examples. Runtime: method overriding, why it must
-bind at runtime (dynamic dispatch), and overloading vs overriding compared.
-Then the payoff: upcasting and downcasting, why upcasting is useful
-(treating a mixed array/list of subtypes uniformly), downcasting safely,
-and a full program that demonstrates everything together. Ends with
-benefits and a recap.
+The two kinds of polymorphism and binding. Compile-time: method signatures
+and overloading. Run-time: method overriding, dynamic method dispatch, why it
+must be resolved at run time, and overloading vs overriding compared. Then
+upcasting and downcasting, one array of a superclass type for many
+subclasses, and `instanceof` before a downcast. Ends with the benefits and a
+summary.
 
 ## Abstraction
 

@@ -4,12 +4,12 @@
 
 By the end of this lab you will be able to:
 
-- Explain inheritance and the "Is-A" relationship, and use `extends` to let one class acquire the fields and methods of another
-- Describe a class hierarchy using the core terminology: superclass (parent class) and subclass (child class)
-- Recognise single, multilevel and hierarchical inheritance, and explain why Java does not support multiple inheritance of classes
-- Explain the role of `Object` as the root superclass that every Java class implicitly inherits from
-- Initialise inherited state correctly by chaining constructors with the `super` keyword
-- Open a superclass field to its subclasses with `protected`, and choose between inheritance and containment using the is-a / has-a sentence test
+- Use `extends` so that one class (the subclass) acquires the fields and methods of another (the superclass), and explain the "Is-A" relationship this expresses
+- Explain why a subclass cannot use its superclass's `private` fields directly, and reach them through inherited public methods or by making the field `protected`
+- Recognise single, multilevel, hierarchical and hybrid inheritance, and explain why Java does not allow multiple inheritance of classes
+- Explain the role of `Object` as the superclass of every class that does not name one
+- Pass values to a superclass constructor with `super(...)`, and explain the compiler error you get without it
+- Choose between inheritance and a field using the is-a / has-a sentence test
 
 ## Table of Contents
 
@@ -29,46 +29,50 @@ This lab lives in the package `week09.inheritance_lab` - this folder. A runnable
 
 ### Explanation
 
-Inheritance is a fundamental principle in object-oriented programming (OOP) that allows a new class (subclass) to inherit properties and methods from an existing class (superclass). This promotes code reusability and logical organisation of classes. The subclass inherits characteristics (fields and methods) from the superclass, allowing you to create specialised classes based on more general ones.
+Inheritance is the mechanism by which one class acquires the fields and methods of another class. In Java you write it with the keyword `extends`: `class Employee extends Person` gives `Employee` the fields and methods of `Person`, and `Employee` can add fields and methods of its own.
 
-An **"Is-A"** relationship is established between the subclass and superclass. For example, an Employee is a Person; hence, Employee can inherit from Person.
+Inheritance expresses an **"Is-A"** relationship: an Employee is a Person, so `Employee` can extend `Person`. It brings three benefits: **code reuse** (what every Person has is written once, in `Person`, instead of being copied into each class that needs it), **better organisation** (shared code has one home, at the top of the hierarchy) and **flexibility** (code written to work with a `Person` also works with every subclass of `Person`).
+
+A subclass does **not** inherit the `private` members of its superclass. Every `Employee` object still contains a `name`, because an Employee is a Person, but only `Person`'s own code can use the field `name` directly. Code written inside `Employee` reaches the name through the public methods it does inherit, `getName()` and `setName()`.
 
 ### Example
 
-<!-- no-compile -->
 ```java
 public class Person {
     private String name;
 
-    public String getName() { 
-        return name; 
+    public String getName() {
+        return name;
     }
 
-    public void setName(String name) { 
-        this.name = name; 
+    public void setName(String name) {
+        this.name = name;
     }
 }
 
 public class Employee extends Person {
     private int employeeId;
 
-    public int getEmployeeId() { 
-        return employeeId; 
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployeeId(int id) { 
-        this.employeeId = id; 
+    public void setEmployeeId(int id) {
+        this.employeeId = id;
     }
-}
-
-// Example usage (e.g. in `Main.java`)
-public static void main(String[] args) {
-    Employee e = new Employee();
-    e.setName("Alice");
-    e.setEmployeeId(123);
-    System.out.println("Employee: " + e.getName() + ", ID: " + e.getEmployeeId());
 }
 ```
+
+Using it in `Main.java`'s `main` method:
+
+```java
+Employee e = new Employee();
+e.setName("Alice");       // inherited from Person
+e.setEmployeeId(123);     // declared in Employee
+System.out.println("Employee: " + e.getName() + ", ID: " + e.getEmployeeId());
+```
+
+This prints `Employee: Alice, ID: 123`. `Employee` declares two methods, and an `Employee` object can also use the two it inherits from `Person`.
 
 ### Visual Representation
 
@@ -87,43 +91,24 @@ classDiagram
     }
 ```
 
+This is a UML class diagram, the usual way to draw classes and their inheritance. Each box is a class: its name, then its fields, then its methods (`-` means private, `+` means public). The arrow with the hollow triangle points from the subclass to its superclass.
+
 ### DIY 1: Animals
 
-1. Create an `Animal` class in this package with:
-   - A `private` field `species` (String).
-   - Getter and setter methods for the `species` field.
-2. Create a `Dog` class that `extends` (i.e. inherits from) `Animal`, with:
-   - A `private` field `name` (String).
-   - Getter and setter methods for the `name` field.
-3. In `Main.java`'s `main` method, create an instance of `Dog`, call `setSpecies()` and `setName()`, then print both values to the terminal using `getSpecies()` and `getName()`.
+1. Create an `Animal` class with a `private` field `name` (String) and a getter and setter for it.
+2. Create a `Dog` class that `extends` `Animal`, with one method, `bark()`, that prints the dog's name followed by ` says Woof!`. Write it first with the field itself, `System.out.println(name + " says Woof!");`. It does not compile, and the error is `name has private access in Animal`.
+3. Change `name` to `getName()` in that line. `getName()` is public, so `Dog` inherits it, and the line now compiles.
+4. In `Main.java`'s `main` method, create a `Dog`, give it the name `Rex` with `setName()`, then call `bark()`.
 
 **Expected output**
 
 ```text
-Species: Canine
-Name: Rex
+Rex says Woof!
 ```
-
-(Sample values shown - use any species and name you like.)
 
 <details><summary>Hint</summary>
 
-Only `Dog` needs the `extends` keyword - it picks up `species` and its getter and setter from `Animal` automatically. Suggested design:
-
-```mermaid
-classDiagram
-    Animal <|-- Dog
-    class Animal {
-        - String species
-        + getSpecies() String
-        + setSpecies(species: String) void
-    }
-    class Dog {
-        - String name
-        + getName() String
-        + setName(name: String) void
-    }
-```
+Only `Dog` needs the `extends` keyword. Inside `Dog`, call `getName()` with nothing in front of it, just as you would call a method that `Dog` declared itself.
 
 </details>
 
@@ -131,10 +116,10 @@ classDiagram
 
 ### Explanation
 
-- **Superclass (Parent Class):** The class from which properties and methods are inherited. It represents a general concept.
-- **Subclass (Child Class):** The class that inherits from the superclass. It represents a specialised version of the superclass.
+- **Superclass** (also called the **parent class** or **base class**): the class whose fields and methods are inherited. It represents the general idea.
+- **Subclass** (also called the **child class**, **derived class** or **extended class**): the class that inherits them. It represents a more specialised version, and can add fields and methods of its own.
 
-Inheritance establishes a hierarchy between classes, where the subclass extends the functionality of the superclass.
+In `class Car extends Vehicle`, `Vehicle` is the superclass and `Car` is the subclass. Inheritance arranges classes in a hierarchy, with each superclass above its subclasses.
 
 ### DIY 2: Vehicles
 
@@ -199,7 +184,7 @@ classDiagram
 ```
 
 #### Multilevel Inheritance
-Chain of inheritance where subclass becomes superclass for another class.
+A chain of inheritance, where a subclass is itself the superclass of another class. Here `Dog` inherits from `Mammal`, and through `Mammal` from `Animal`, so a `Dog` object can call `eat()`, `breathe()` and `bark()`.
 
 ```java
 public class Animal {
@@ -238,46 +223,24 @@ classDiagram
 
 ### DIY 3: Electric Car
 
-Create (or evolve from DIY 2) the classes listed below in this package, building a multilevel inheritance chain:
+Add a third level to your DIY 2 classes, making a multilevel chain. Keep `Vehicle` and `Car` exactly as they are.
 
-1. `Vehicle` (superclass):
-   - Private field: `String type`.
-   - Constructor: `Vehicle(String type)` to initialise `type`.
-   - Getter and setter for `type`.
-   - Method: `void move()` that prints a short message, e.g. "The <type> is moving".
-2. `Car` (subclass of `Vehicle`):
-   - Private field: `int doors`.
-   - Constructor: `Car(String type, int doors)` which calls `super(type)`.
-   - Getter and setter for `doors`.
-   - Method: `void honk()` that prints a short message, e.g. "Beep!".
-3. `ElectricCar` (subclass of `Car`):
-   - Private field: `int batteryCapacity` (e.g. in kWh).
-   - Constructor: `ElectricCar(String type, int doors, int batteryCapacity)` which calls `super(type, doors)`.
-   - Getter and setter for `batteryCapacity`.
-   - Method: `void charge()` that prints a short message, e.g. "Charging...".
-4. In `Main.java`'s `main` method:
-   - Create an instance of `ElectricCar` using the constructor.
-   - Call `move()`, `honk()`, and `charge()` on the instance.
-   - Use the getters to retrieve and print the `type`, `doors`, and `batteryCapacity` values.
-
-Keep the method implementations simple - print statements are fine. The key skill here is using `extends` and `super(...)` correctly to pass values up the inheritance chain.
+1. Create a class `ElectricCar` that extends `Car`, with one method, `charge()`, that prints "Charging..."
+2. In `Main.java`'s `main` method, create an `ElectricCar` and call `move()`, `playRadio()` and `charge()` on it.
 
 **Expected output**
 
 ```text
-The electric car is moving
-Beep!
+The vehicle is moving.
+Playing radio.
 Charging...
-Type: electric car
-Doors: 4
-Battery capacity: 75 kWh
 ```
 
-(Sample values - yours will match whatever you pass to the constructor.)
+`ElectricCar` declares one method, but your test calls three on it: `charge()` is its own, `playRadio()` comes from `Car`, one level up, and `move()` comes from `Vehicle`, two levels up.
 
 <details><summary>Hint</summary>
 
-The first statement of each subclass constructor must be its `super(...)` call: `ElectricCar` hands `type` and `doors` up to `Car`, and `Car` hands `type` up to `Vehicle`. Each class initialises only its own field.
+`ElectricCar` names only its direct superclass: `public class ElectricCar extends Car`. It reaches `Vehicle` through `Car`, so `move()` arrives without `ElectricCar` mentioning `Vehicle` at all.
 
 </details>
 
@@ -341,39 +304,28 @@ classDiagram
     }
 ```
 
-Java doesn't support multiple inheritance with classes to avoid:
-1. Ambiguity when same method exists in multiple parent classes
-2. Complexity in method resolution
-3. Potential naming conflicts
-
-Instead, Java provides interfaces for implementing multiple inheritance of behaviour.
+Java does not allow it: a class extends only one class, so `class ClassC extends ClassA, ClassB` does not compile. If `ClassA` and `ClassB` both had a method with the same name, `ClassC` would inherit two versions of it and a call would be ambiguous; this is known as the **diamond problem**. Java does support multiple inheritance of type: a class can implement more than one interface.
 
 ### DIY 4: Motorbike
 
-Add a `Motorbike` class to the DIY 3 hierarchy to demonstrate hierarchical inheritance, where multiple subclasses share the same superclass:
+Add a second subclass to `Vehicle`, beside `Car`. Two subclasses sharing one superclass is hierarchical inheritance.
 
-1. Create `Motorbike` extending `Vehicle` (do **not** extend `Car`), with:
-   - Private field: `boolean hasSidecar`.
-   - Constructor: `Motorbike(String type, boolean hasSidecar)` which calls `super(type)`.
-   - Getter and setter for `hasSidecar`.
-   - Method: `void ride()` that prints "Riding the " followed by the superclass field `type` **read directly** - not through `getType()` - and then indicates whether it has a sidecar.
-2. That direct read will not compile yet: `type` is `private` in `Vehicle`, so javac reports `type has private access in Vehicle`. Change `Vehicle`'s `type` field from `private` to `protected` and compile again. `protected` is the access level to reach for here because it opens the field to the subclasses (`Car`, `ElectricCar`, `Motorbike`) while keeping it closed to every unrelated class - `private` locks the family out, and `public` hands the field to the whole program.
-3. In `Main.java`'s `main` method, declare the variable with the subclass as its type - `Motorbike m = new Motorbike("motorbike", false);` - then call `m.move()` and `m.ride()`. `Motorbike` never declares `move()`; it inherits it from `Vehicle`, exactly as `Car` does.
-
-This shows hierarchical inheritance: multiple subclasses (`Car`, `Motorbike`, etc.) can extend the same superclass (`Vehicle`). Together, DIY 3 and DIY 4 combine multilevel and hierarchical inheritance in one hierarchy - sometimes called hybrid inheritance.
+1. Create a class `Motorbike` that extends `Vehicle` (**not** `Car`), with one method, `ride()`, that prints "Riding the motorbike."
+2. In `Main.java`'s `main` method, create a `Motorbike` and call `move()` and `ride()` on it.
+3. Add a line that calls `playRadio()` on your motorbike and compile. The error is `cannot find symbol`: `playRadio()` is declared in `Car`, and a Motorbike is not a Car. Each subclass inherits from `Vehicle`, never from its sibling. Delete that line again.
 
 **Expected output**
 
 ```text
-The motorbike is moving
-Riding the motorbike (no sidecar)
+The vehicle is moving.
+Riding the motorbike.
 ```
 
-(Exact wording will vary with your messages.)
+Your `Vehicle` family now combines two types of inheritance: `Vehicle`, `Car` and `ElectricCar` form a multilevel chain, and `Car` and `Motorbike` under `Vehicle` are hierarchical. A hierarchy that combines more than one type is called **hybrid inheritance**.
 
 <details><summary>Hint</summary>
 
-`Motorbike` never declares `move()` - it comes down from `Vehicle`, which is also where `type` lives. A subclass inherits a `private` field's storage but not the right to touch it; `protected` is the access level that says "family only". Suggested design for the full hierarchy from DIY 3 and DIY 4:
+`Motorbike` extends `Vehicle` directly, just as `Car` does, so both inherit `move()`, and neither inherits anything from the other. The whole family as a UML class diagram, with this exercise's new class in amber:
 
 ```mermaid
 classDiagram
@@ -381,29 +333,21 @@ classDiagram
     Car <|-- ElectricCar
     Vehicle <|-- Motorbike
     class Vehicle {
-        # String type
-        + getType() String
-        + setType(type: String) void
         + move()
     }
     class Car {
-        - int doors
-        + getDoors() int
-        + setDoors(doors: int) void
-        + honk()
+        + playRadio()
     }
     class ElectricCar {
-        - int batteryCapacity
-        + getBatteryCapacity() int
-        + setBatteryCapacity(capacity: int) void
         + charge()
     }
     class Motorbike {
-        - boolean hasSidecar
-        + hasSidecar() boolean
-        + setHasSidecar(hasSidecar: boolean) void
         + ride()
     }
+    style Vehicle fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    style Car fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    style ElectricCar fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    style Motorbike fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
 ```
 
 </details>
@@ -412,7 +356,7 @@ classDiagram
 
 ### Explanation
 
-Every class in Java ultimately inherits from `Object` - it is the root superclass of the entire class hierarchy. Even when you write a class with no `extends` clause, it implicitly extends `Object`, which is why methods such as `toString()`, `equals()` and `hashCode()` are available on every object you create.
+Every class in Java except `Object` itself has exactly one direct superclass. If a class does not name one with `extends`, its superclass is `Object`, a class in the `java.lang` package (so its full name is `java.lang.Object`). Every chain of `extends` therefore ends at `Object`, the root of the whole class hierarchy, and every object you create has `Object`'s methods, such as `toString()`, `equals()`, `hashCode()` and `getClass()`.
 
 ### Visual Representation
 
@@ -431,30 +375,22 @@ classDiagram
 
 ### DIY 5: Implicit Inheritance
 
-1. Create a class `Gadget` - do not specify a superclass.
-2. In `Main.java`'s `main` method, create an instance of `Gadget` and print the result of calling `toString()` on it.
-3. Type the variable name followed by a dot (`.`) and look at the list of methods your editor suggests - call one more method inherited from `Object` (e.g. `hashCode()`) and print its result.
+1. Create a class `Gadget` with no `extends` and nothing between its braces.
+2. In `Main.java`'s `main` method, create a `Gadget` called `g`. On the next line type `g.` and read the list of methods your editor suggests: `equals`, `getClass`, `hashCode`, `toString` and more. `Gadget` declares none of them; it inherited them all from `Object`. Delete the `g.` again.
+3. Print `g.toString()` and run. You see something like `week09.inheritance_lab.Gadget@7a81197d`: the `toString()` that `Gadget` inherited from `Object` prints the class's full name, an `@` and a hexadecimal number that differs from machine to machine.
+4. Change that line to print `g.getClass().getSuperclass()` and run again. `getClass()`, another method from `Object`, gives the class the object was made from, and `getSuperclass()` gives that class's superclass.
 
 **Expected output**
 
 ```text
-week09.inheritance_lab.Gadget@7a81197d
-2055281021
+class java.lang.Object
 ```
 
-(The hex code and hash number will differ on your machine - they identify your particular object.)
+(At step 3, the one line your program printed was `Object`'s `toString()` text instead.)
 
 <details><summary>Hint</summary>
 
-You never wrote `toString()` or `hashCode()`, so where do they come from? Suggested design:
-
-```mermaid
-classDiagram
-    Object <|-- Gadget
-    class Gadget {
-        + toString() String
-    }
-```
+If no list appears after you type `g.`, press Ctrl+Space. Java prints a class as the word `class` and its full name, so the output says that `Gadget`'s superclass is `java.lang.Object`, although `Gadget.java` never mentions it.
 
 </details>
 
@@ -462,18 +398,14 @@ classDiagram
 
 ### Explanation
 
-In Java inheritance, constructors play a crucial role in object initialization. When you create an instance of a subclass:
+Constructors are **not** inherited, because a constructor is not a member of a class (fields and methods are). A subclass has only its own constructors (if it declares none, Java gives it one with no parameters), and each of them first calls a superclass constructor, so that the superclass part of the object is set up before the rest.
 
-1. The superclass constructor must be called first before the subclass constructor executes
-2. If not explicitly called, Java automatically calls the no-argument constructor of the superclass
-3. Use the `super()` keyword to call a specific superclass constructor
-4. The `super()` call must be the first statement in the subclass constructor
+1. Write `super(...)` with arguments to call a particular superclass constructor and pass it values.
+2. The `super(...)` call must be the first statement in the subclass constructor.
+3. If you write no `super(...)`, Java inserts an invisible `super();` there, which calls the superclass constructor that takes no parameters.
+4. So if the superclass has no constructor without parameters, the subclass constructor must call `super(...)` with arguments itself, or it does not compile.
 
-Key points to remember:
-
-- Every constructor must invoke a constructor from its superclass, either explicitly or implicitly
-- If the superclass doesn't have a no-argument constructor, the subclass must explicitly call a superclass constructor using `super()`
-- The `super` keyword can also be used to access superclass methods and fields
+`super` has a second use: `super.methodName()` calls the superclass's version of a method when the subclass has its own method with the same name.
 
 ### Example
 
@@ -496,6 +428,8 @@ public class Employee extends Person {
 }
 ```
 
+`name` is `protected` in this `Person`. A `protected` member can be used by subclasses (and by the other classes in the same package); a `private` one only by `Person`'s own code.
+
 ### Visual Representation
 
 ```mermaid
@@ -510,46 +444,21 @@ sequenceDiagram
 
 ### DIY 6: School Management
 
-1. Create a `Person` class with:
-   - Private fields: `name` (String) and `age` (int).
-   - A constructor that initializes both fields.
-   - Getters and setters for the fields.
-2. Create a `Student` class that extends `Person` with:
-   - A private field: `studentId` (String).
-   - A constructor that initializes `name`, `age`, and `studentId`.
-   - Getters and setters for its field.
-3. In `Main.java`'s `main` method, create instances of both `Person` and `Student`, and print the details of both using the getter methods.
+1. Create a `Person` class with a `private` field `name` (String) and a constructor `Person(String name)` that stores it. Give it no other constructor.
+2. Create a `Student` class that extends `Person`, with a `private` field `studentId` (String) and a constructor `Student(String name, String studentId)`. Its first statement is `super(name);`, which runs `Person`'s constructor with that name; then it stores `studentId`.
+3. Give `Student` a method `printDetails()` that prints `"Student: " + name + ", ID: " + studentId`. It does not compile: `name has private access in Person`. In `Person`, change `name` from `private` to `protected`, and compile again.
+4. In `Main.java`'s `main` method, create a student with `new Student("Bob", "S12345")` and call `printDetails()` on it.
+5. Delete (or comment out) the `super(name);` line and compile. The error is `constructor Person in class Person cannot be applied to given types`: without a `super(...)` of your own, Java calls `super();`, and `Person` has no constructor without parameters. Put the line back.
 
 **Expected output**
 
 ```text
-Person: Alice, Age: 30
-Student: Bob, Age: 20, ID: S12345
+Student: Bob, ID: S12345
 ```
-
-(Sample values - print whichever details you passed to the constructors.)
 
 <details><summary>Hint</summary>
 
-`Student`'s constructor must start with `super(name, age)` so `Person` initialises its fields first. Suggested design:
-
-```mermaid
-classDiagram
-    Person <|-- Student
-    class Person {
-        - String name
-        - int age
-        + getName() String
-        + setName(name: String) void
-        + getAge() int
-        + setAge(age: int) void
-    }
-    class Student {
-        - String studentId
-        + getStudentId() String
-        + setStudentId(id: String) void
-    }
-```
+In `Student`'s constructor, `super(name);` comes first, then `this.studentId = studentId;`. Making `name` `protected` is one fix for the private-access error; DIY 1 used the other, a public getter, which works while the field stays `private`.
 
 </details>
 
@@ -557,62 +466,63 @@ classDiagram
 
 ### Explanation
 
-`extends` is not the only way to connect two classes, and reaching for it by reflex is the classic design bug. Before you write `extends`, run the **sentence test**: say "an X **is a** Y" out loud. If the sentence is true, inheritance is right and Y goes *above* X as its superclass. If the truth is really "an X **has a** Y", then Y goes *inside* X as a field.
+`extends` is not the only way to connect two classes. Before you write `extends`, use the **sentence test**: say "an X **is a** Y" out loud. If the sentence is true, inheritance fits, and Y is the superclass of X. If the true sentence is "an X **has a** Y", give X a field of type Y instead.
 
 | Pair | Say it out loud | Relationship | In Java |
 |---|---|---|---|
 | `Employee`, `Person` | "an Employee is a Person" - true | is-a | `class Employee extends Person` |
 | `Car`, `Engine` | "a Car is an Engine" - nonsense | has-a | `class Car { private Engine engine; }` |
 
-The two do different work for you. Inheritance hands the subclass the whole superclass menu automatically. Containment hands you nothing automatically: the outer class holds the other object in a field and **delegates** - it asks the field to do the job. When you are genuinely torn, prefer has-a. A field is easy to change later; `extends` is a public promise that X is a Y, and you cannot take it back.
+With inheritance, the subclass gets the superclass's public methods automatically. With has-a, the outer class gets nothing automatically: it keeps the other object in a field and calls that object's methods, which is called **delegation**. If you cannot decide, prefer has-a: a field is easy to change later, but once other code relies on X being a Y, `extends` is hard to undo.
 
 ### DIY 7: Is-a or has-a?
 
-1. For each pair below, run the sentence test and write your answer as a comment in `Main.java` - is it **is-a** (use `extends`) or **has-a** (make it a field)?
+1. For each pair below, run the sentence test and write your answer as a comment in `Main.java`: is it **is-a** (use `extends`) or **has-a** (make it a field)?
    - `Car` and `Engine`
    - `Dog` and `Animal`
    - `Library` and `Book`
    - `Square` and `Shape`
-2. Implement one of the **has-a** pairs. Write a `Book` class with a private `String title`, a constructor that sets it, a getter, and a `void read()` method that prints "Reading " followed by the title. Then write a `Library` class with a private `String name` **and a private `Book featured` field**. `Library`'s constructor takes a library name and a book title, and builds its own `Book` from that title. Give `Library` a `void showFeatured()` method that prints the library name followed by " features one book today:" and then delegates the rest of the job to the book by calling `featured.read()`.
-3. Implement one of the **is-a** pairs. Write a `Shape` class with a `void describe()` method that prints "I am a shape" (if you typed in the `Shape` example from section 4, just add the method to it). Then write `Square extends Shape` with a private `double side`, a constructor that sets it, and a `void printSide()` method that prints "My side is " followed by the side. `Square` writes no `describe()` of its own.
-4. In `Main.java`'s `main` method, create a `Library` named "ATU Library" featuring "The Hobbit" and call `showFeatured()`. Then create a `Square` with side `4.0` and call `describe()` followed by `printSide()`. That `describe()` call is the proof of the is-a link: `Square` never declared the method.
+2. Implement the `Library` and `Book` pair. Write a `Book` class with a private `String title`, a constructor that sets it, and a `void read()` method that prints "Reading " followed by the title.
+3. Write a `Library` class with a private `Book` field called `featured`, a constructor `Library(Book featured)` that stores it, and a `void showFeatured()` method that prints "Featured book:" and then hands the rest of the job to the book by calling `featured.read()`.
+4. In `Main.java`'s `main` method, create a `Book` titled "The Hobbit", create a `Library` with that book, and call `showFeatured()`.
 
 **Expected output**
 
 ```text
-ATU Library features one book today:
+Featured book:
 Reading The Hobbit
-I am a shape
-My side is 4.0
 ```
+
+Compare this with DIY 1. `Dog` got `getName()` and `setName()` from `Animal` without writing them, because a Dog is an Animal. `Library` gets nothing from `Book`: it holds a `Book` and asks it to do the work.
 
 <details><summary>Hint</summary>
 
-The sentence test is the whole exercise: can you say "an X **is a** Y" without lying? "a Square is a Shape" - fine, so `Square extends Shape`. "a Library is a Book" - nonsense; a library *holds* books, so `Book` becomes a field inside `Library`. Work the other two the same way, out loud.
-
-Then watch what each relationship gives you. `Square` gets `describe()` for free - inheritance copies the parent's whole menu down. `Library` gets nothing for free: it holds a `Book` and has to ask it, `featured.read()`, which is exactly what delegation means. Suggested design:
+"A Square is a Shape" is true, so `Square extends Shape`. "A Library is a Book" is false: a library holds books, so `Book` becomes a field inside `Library`. Inside `Library`, `featured` is a `Book`, so `featured.read()` runs the book's own method. The two relationships in a UML class diagram, where the hollow triangle means is-a and the hollow diamond means has-a:
 
 ```mermaid
 classDiagram
+    Animal <|-- Dog : is-a
     Library o-- Book : has-a
-    Shape <|-- Square : is-a
-    class Library {
+    class Animal {
         - String name
+        + getName() String
+        + setName(name: String) void
+    }
+    class Dog {
+        + bark() void
+    }
+    class Library {
         - Book featured
         + showFeatured() void
     }
     class Book {
         - String title
-        + getTitle() String
         + read() void
     }
-    class Shape {
-        + describe() void
-    }
-    class Square {
-        - double side
-        + printSide() void
-    }
+    style Animal fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    style Dog fill:#f3f4f6,stroke:#6b7280,stroke-width:1.5px,color:#111827
+    style Library fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
+    style Book fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f
 ```
 
 </details>
@@ -621,12 +531,9 @@ classDiagram
 
 In this lab you covered:
 
-- Definition and Basics of Inheritance
-- Terminology
-- Single and Multilevel Inheritance
-- Hierarchical and Multiple Inheritance
-- The Object Class
-- Constructors in Inheritance
-- Is-A or Has-A
-
-Happy coding! Remember to test your classes and understand how inheritance affects the behaviour and structure of your objects.
+- **Inheritance**: `class Dog extends Animal` gives `Dog` the fields and methods of `Animal` (an is-a relationship). `private` members are not inherited: a subclass reaches them through public methods, or the superclass makes them `protected`.
+- **Terminology**: superclass (parent, base class) and subclass (child, derived class).
+- **Types**: single, multilevel, hierarchical and hybrid. Java does not allow multiple inheritance of classes.
+- **`Object`** is the superclass of every class that names no other.
+- **Constructors are not inherited**: a subclass constructor calls `super(...)`, or Java inserts `super();`.
+- **Is-a or has-a**: is-a means `extends`; has-a means a field.

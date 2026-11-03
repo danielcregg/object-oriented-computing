@@ -311,7 +311,7 @@ class Lecturer extends Person { }
 
 ---
 
-<!-- Speaker notes: ~0:12. The worked example of extends. Count the methods aloud: Employee's file has two, an Employee object has four. Lab DIY 1 builds exactly this shape with Animal and Dog. -->
+<!-- Speaker notes: ~0:12. The worked example of extends. Count the methods aloud: Employee's file has two, an Employee object has four. Lab DIY 1 builds the same shape: Dog extends Animal and uses the inherited getName() and setName(). -->
 
 ## extends: Employee inherits from Person
 
@@ -369,7 +369,7 @@ System.out.println(emp.getAge() + " : " + emp.getRole());    // prints 25 : Deve
 
 ---
 
-<!-- Speaker notes: ~0:15. Predict beat. The common wrong answer is "yes": students reason that the age field exists inside every Employee object, so Employee code must be able to use it. Private means private to the class that declares it, and subclasses are other classes. Lab DIY 4 hits this exact error and fixes it with protected. -->
+<!-- Speaker notes: ~0:15. Predict beat. The common wrong answer is "yes": students reason that the age field exists inside every Employee object, so Employee code must be able to use it. Private means private to the class that declares it, and subclasses are other classes. Lab DIY 1 hits this exact error and fixes it with the inherited getter; DIY 6 hits it again in Student and fixes it with protected. -->
 
 ## Predict: does this compile?
 
@@ -397,7 +397,7 @@ class Employee extends Person {
 
 ---
 
-<!-- Speaker notes: ~0:18. Students have printed an object or an array and seen text like this before; this is where it comes from. The exact hexadecimal number changes from run to run. Lab DIY 5 calls toString() and hashCode() on a class that declares neither. -->
+<!-- Speaker notes: ~0:18. Students have printed an object or an array and seen text like this before; this is where it comes from. The exact hexadecimal number changes from run to run. Lab DIY 5 prints toString() for a class that declares nothing, then prints its superclass: class java.lang.Object. -->
 
 ## The Object class
 
@@ -662,7 +662,7 @@ class Student extends Person {
 
 ---
 
-<!-- Speaker notes: ~0:43. The fix from the previous slide, then the second use of super. super.method() previews overriding, which polymorphism develops; here it only needs recognising. The first-statement rule holds in Java 21, the version the Codespaces use: javac 21 rejects a statement before super(...) with "flexible constructors is not supported". Java 25 relaxed it, so a student on a newer JDK can put statements that do not use the object before super(...) and see it compile. -->
+<!-- Speaker notes: ~0:43. The fix from the previous slide, then the second use of super. super.method() previews overriding, which polymorphism develops; here it only needs recognising. The first-statement rule holds in Java 21, the version the Codespaces use, where javac rejects any statement placed before super(...). Java 25 relaxed it, so a student on a newer JDK can put statements that do not use the object before super(...) and see it compile. -->
 
 ## The super keyword
 

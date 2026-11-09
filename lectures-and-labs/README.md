@@ -24,8 +24,8 @@ file → *Open Preview*.
 | 5 | Arrays | [lecture](week05/arrays-lecture.md) | [lab](week05/arrays_lab/README.md) |
 | 6 | Strings | [lecture](week06/strings-lecture.md) | [lab](week06/strings_lab/README.md) |
 | — | Reading week | [details](week06b-reading-week/README.md) | — |
-| **➡️ 7** | Encapsulation | [lecture](week07/encapsulation-lecture.md) | [lab](week07/encapsulation_lab/README.md) |
-| 8 | **MCQ 2** · held during lab slot | [details](week08/README.md) · [brief](../mcq/README.md) | — |
+| 7 | Encapsulation | [lecture](week07/encapsulation-lecture.md) | [lab](week07/encapsulation_lab/README.md) |
+| **➡️ 8** | **MCQ 2** · held during lab slot | [details](week08/README.md) · [brief](../mcq/README.md) | — |
 | 9 | Inheritance | [lecture](week09/inheritance-lecture.md) | [lab](week09/inheritance_lab/README.md) |
 | 10 | Polymorphism | [lecture](week10/polymorphism-lecture.md) | [lab](week10/polymorphism_lab/README.md) |
 | 11 | Abstraction | [lecture](week11/abstraction-lecture.md) | [lab](week11/abstraction_lab/README.md) |
